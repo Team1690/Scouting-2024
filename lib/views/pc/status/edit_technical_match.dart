@@ -66,8 +66,7 @@ Future<Match> fetchTechnicalMatch(
   final QueryResult<Match> result = await client.query(
     QueryOptions<Match>(
       //TODO add json parsing and create a Match containing the data
-      parserFn: (final Map<String, dynamic> technicalMatch) =>
-          Match(robotMatchStatusId: -1),
+      parserFn: (final Map<String, dynamic> technicalMatch) => Match(context),
       document: gql(query),
       variables: <String, dynamic>{
         "team_id": teamForQuery.id,
