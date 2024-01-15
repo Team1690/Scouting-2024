@@ -15,7 +15,7 @@ const List<String> allianceMembers = <String>[
 ];
 String graphqlSyntax(final bool isSubscription) => """
 ${isSubscription ? "subscription" : "query"} FetchMatches{
-  matches(order_by:[{match_type:{order:asc}},{match_number:asc}]){
+  schedule_matches(order_by:[{match_type:{order:asc}},{match_number:asc}]){
     ${allianceMembers.map(
           (final String e) => """$e{
       id
@@ -42,7 +42,7 @@ List<LightTeam> fromJson(final dynamic json, final String color) {
 }
 
 List<ScheduleMatch> parserFn(final Map<String, dynamic> matches) =>
-    (matches["matches"] as List<dynamic>)
+    (matches["schedule_matches"] as List<dynamic>)
         .map(
           (final dynamic e) => ScheduleMatch(
             happened: e["happened"] as bool,
