@@ -100,8 +100,6 @@ class _UserInputState extends State<UserInput> {
         initialFlag = true;
       });
     }
-    final Map<int, String> startingPosProvider =
-        IdProvider.of(context).startingPositionIds.idToName;
     final int notOnFieldId = IdProvider.of(context)
         .robotMatchStatus
         .nameToId["Didn't come to field"]!;
@@ -209,28 +207,9 @@ class _UserInputState extends State<UserInput> {
                     ),
                     Visibility(
                       visible: match.robotMatchStatusId != notOnFieldId,
-                      child: Column(
+                      child: const Column(
                         children: <Widget>[
-                          SectionDivider(label: "Robot Placement"),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Selector<int>(
-                            options: startingPosProvider.keys.toList(),
-                            placeholder: "Choose a starting position",
-                            value: match.startingPositionId,
-                            makeItem: (final int index) =>
-                                startingPosProvider[index]!,
-                            onChange: ((final int currentValue) =>
-                                match.startingPositionId = currentValue),
-                            validate: (final int? submmission) =>
-                                match.robotMatchStatusId == notOnFieldId
-                                    ? null
-                                    : submmission.onNull(
-                                        "Please pick a starting position",
-                                      ),
-                          ),
-                          const SizedBox(
+                          SizedBox(
                             height: 15,
                           ),
                         ],
