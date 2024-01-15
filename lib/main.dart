@@ -23,9 +23,8 @@ void main() async {
     "climb", //TODO change the names of these tables if needed
     "drivetrain",
     "drivemotor",
-    "robot_match_status",
+    "robot_field_status",
     "fault_status",
-    "_2024_starting_position",
     "defense",
   ], <String>[
     "match_type",
@@ -35,10 +34,8 @@ void main() async {
   final Map<String, int> driveTrains = enums["drivetrain"]!;
   final Map<String, int> driveMotors = enums["drivemotor"]!;
   final Map<String, int> matchTypes = enums["match_type"]!;
-  final Map<String, int> robotMatchStatuses = enums["robot_match_status"]!;
+  final Map<String, int> robotFieldStatuses = enums["robot_field_status"]!;
   final Map<String, int> faultStatus = enums["fault_status"]!;
-  final Map<String, int> startingPositionIds =
-      enums["_2024_starting_position"]!;
   final Map<String, int> defense = enums["defense"]!;
   final List<ScheduleMatch> matches = await fetchMatches();
   final List<LightTeam> teams = await fetchTeams();
@@ -52,8 +49,7 @@ void main() async {
       drivetrainIds: driveTrains,
       climbIds: climbs,
       driveMotorIds: driveMotors,
-      robotMatchStatusIds: robotMatchStatuses,
-      startingPositionIds: startingPositionIds,
+      robotFieldStatusIds: robotFieldStatuses,
       defense: defense,
     ),
   );
