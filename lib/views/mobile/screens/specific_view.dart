@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
+import "package:graphql/client.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/views/mobile/auto_path.dart";
 import "package:scouting_frontend/views/mobile/dropdown_line.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
@@ -102,6 +104,19 @@ class _SpecificState extends State<Specific> {
                           vars.isRematch = !vars.isRematch;
                         });
                       },
+                    ),
+                    const SizedBox(height: 15.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<AutoPath>(
+                            builder: (final BuildContext buildContext) =>
+                                const AutoPath(),
+                          ),
+                        );
+                      },
+                      child: const Text("Create Auto Path"),
                     ),
                     const SizedBox(height: 15.0),
                     DropdownLine<String>(
