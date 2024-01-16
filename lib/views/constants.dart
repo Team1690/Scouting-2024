@@ -29,6 +29,10 @@ final ThemeData darkModeTheme = ThemeData.dark().copyWith(
   ),
   buttonTheme: const ButtonThemeData(buttonColor: primaryColor),
 );
+const double fieldWidth = 16.4846;
+const double fieldheight = 8.1026;
+
+const double autoFieldWidth = fieldWidth - 5.87248;
 
 bool isPC(final BuildContext context) {
   /*switch (Theme.of(context).platform) {
