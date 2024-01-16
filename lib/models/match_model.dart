@@ -1,7 +1,6 @@
 import "package:flutter/cupertino.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
-import "package:scouting_frontend/models/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 
@@ -52,7 +51,7 @@ class Match implements HasuraVars {
     final bool Function()? isRematch,
     final ScheduleMatch? Function()? scheduleMatch,
     final String? Function()? name,
-    final int Function()? robotMatchStatusId,
+    final int Function()? robotFieldStatusId,
     final int Function()? autoAmp,
     final int Function()? autoAmpMissed,
     final int Function()? autoSpeaker,
@@ -71,8 +70,8 @@ class Match implements HasuraVars {
         scheduleMatch:
             scheduleMatch != null ? scheduleMatch() : this.scheduleMatch,
         name: name != null ? name() : this.name,
-        robotFieldStatusId: robotMatchStatusId != null
-            ? robotMatchStatusId()
+        robotFieldStatusId: robotFieldStatusId != null
+            ? robotFieldStatusId()
             : this.robotFieldStatusId,
         autoAmp: autoAmp != null ? autoAmp() : this.autoAmp,
         autoAmpMissed:
