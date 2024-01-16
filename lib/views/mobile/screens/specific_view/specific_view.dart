@@ -112,7 +112,7 @@ class _SpecificState extends State<Specific> {
                     const SizedBox(height: 15.0),
                     ElevatedButton(
                       onPressed: () async {
-                        fieldImage = await getField();
+                        fieldImage = await getField(true);
                         if (fieldImage != null) {
                           unawaited(
                             Navigator.push(
@@ -321,9 +321,9 @@ mutation A(\$defense_amount_id: Int, \$defense: String, \$drivetrain_and_driving
           ),
         ),
       );
-  Future<ui.Image> getField() async {
-    final ByteData data =
-        await rootBundle.load("lib/assets/frc_2024_field.png");
+  Future<ui.Image> getField(final bool isRed) async {
+    final ByteData data = await rootBundle
+        .load("lib/assets/frc_2024_field_${isRed ? "red" : "blue"}.png");
     final ui.Codec codec =
         await ui.instantiateImageCodec(data.buffer.asUint8List());
     final ui.FrameInfo frameInfo = await codec.getNextFrame();
