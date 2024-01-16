@@ -1,4 +1,8 @@
+import "dart:async";
+import "dart:ui" as ui;
+
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
@@ -34,7 +38,7 @@ class _SpecificState extends State<Specific> {
     0: IdProvider.of(context).defense.nameToId["Half Defense"]!,
     1: IdProvider.of(context).defense.nameToId["Full Defense"]!,
   };
-
+  ui.Image? fieldImage;
   @override
   Widget build(final BuildContext context) => GestureDetector(
         onTap: node.unfocus,
@@ -107,14 +111,19 @@ class _SpecificState extends State<Specific> {
                     ),
                     const SizedBox(height: 15.0),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<AutoPath>(
-                            builder: (final BuildContext buildContext) =>
-                                const AutoPath(),
-                          ),
-                        );
+                      onPressed: () async {
+                        fieldImage = await getField();
+                        if (fieldImage != null) {
+                          unawaited(
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<AutoPath>(
+                                builder: (final BuildContext buildContext) =>
+                                    AutoPath(fieldBackground: fieldImage!),
+                              ),
+                            ),
+                          );
+                        }
                       },
                       child: const Text("Create Auto Path"),
                     ),
@@ -312,4 +321,12 @@ mutation A(\$defense_amount_id: Int, \$defense: String, \$drivetrain_and_driving
           ),
         ),
       );
+  Future<ui.Image> getField() async {
+    final ByteData data =
+        await rootBundle.load("lib/assets/frc_2024_field.png");
+    final ui.Codec codec =
+        await ui.instantiateImageCodec(data.buffer.asUint8List());
+    final ui.FrameInfo frameInfo = await codec.getNextFrame();
+    return frameInfo.image;
+  }
 }

@@ -1,8 +1,13 @@
+import "dart:ui" as ui;
+
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
 
 class AutoPath extends StatefulWidget {
-  const AutoPath({super.key});
+  const AutoPath({required this.fieldBackground});
+  final ui.Image fieldBackground;
 
   @override
   State<AutoPath> createState() => _AutoPathState();
@@ -50,10 +55,13 @@ class _AutoPathState extends State<AutoPath> {
                 },
                 child: ListenableBuilder(
                   listenable: path,
-                  builder: (final BuildContext context, final Widget? widget) =>
+                  builder: (final BuildContext context, final Widget? e) =>
                       RepaintBoundary(
                     child: CustomPaint(
-                      painter: DrawingCanvas(sketch: path.value),
+                      painter: DrawingCanvas(
+                        sketch: path.value,
+                        fieldBackground: widget.fieldBackground,
+                      ),
                     ),
                   ),
                 ),
@@ -86,11 +94,23 @@ class _AutoPathState extends State<AutoPath> {
 }
 
 class DrawingCanvas extends CustomPainter {
-  DrawingCanvas({required this.sketch});
+  DrawingCanvas({required this.sketch, required this.fieldBackground});
   final Sketch sketch;
+  final ui.Image fieldBackground;
 
   @override
-  void paint(final Canvas canvas, final Size size) {
+  void paint(final Canvas canvas, final Size size) async {
+    canvas.drawImageRect(
+      fieldBackground,
+      Rect.fromLTWH(
+        0,
+        0,
+        fieldBackground.width.toDouble(),
+        fieldBackground.height.toDouble(),
+      ),
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      Paint(),
+    );
     final List<Offset> points = sketch.points;
     if (points.isEmpty) return;
 
