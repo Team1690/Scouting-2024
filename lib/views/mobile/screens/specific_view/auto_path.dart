@@ -2,8 +2,7 @@ import "dart:ui" as ui;
 
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
+import "package:scouting_frontend/views/constants.dart";
 
 class AutoPath extends StatefulWidget {
   const AutoPath({required this.fieldBackground});
@@ -26,9 +25,10 @@ class _AutoPathState extends State<AutoPath> {
         children: <Widget>[
           Builder(
             builder: (final BuildContext context) => Container(
-              width: 1000,
-              height: 500,
-              color: Colors.white,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width *
+                  fieldheight /
+                  autoFieldWidth,
               child: Listener(
                 onPointerDown: (final PointerDownEvent pointerEvent) {
                   if (!pathDone) {
@@ -128,9 +128,9 @@ class DrawingCanvas extends CustomPainter {
       );
     });
     final Paint paint = Paint()
-      ..color = Colors.black
+      ..color = Colors.white
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 10
+      ..strokeWidth = 6
       ..style = PaintingStyle.stroke;
     canvas.drawPath(path, paint);
   }
