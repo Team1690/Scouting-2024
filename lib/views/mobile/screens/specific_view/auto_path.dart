@@ -3,6 +3,7 @@ import "dart:ui" as ui;
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
 
 class AutoPath extends StatefulWidget {
   const AutoPath({required this.fieldBackground});
@@ -85,6 +86,31 @@ class _AutoPathState extends State<AutoPath> {
                   ),
                 ),
               ),
+              const SizedBox(
+                width: 15,
+              ),
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (final BuildContext dialogContext) => SelectPath(
+                      fieldBackground: widget.fieldBackground,
+                      pathes: <List<ui.Offset>>[
+                        //This will be replaced by the actual saved pathes from Specific View (from db)
+                        List<Offset>.from(path.value.points),
+                        List<Offset>.from(path.value.points),
+                        List<Offset>.from(path.value.points),
+                      ],
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.save_as),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    Colors.blue,
+                  ),
+                ),
+              ),
             ],
           ),
         ],
@@ -94,8 +120,11 @@ class _AutoPathState extends State<AutoPath> {
 }
 
 class DrawingCanvas extends CustomPainter {
-  DrawingCanvas({required this.sketch, required this.fieldBackground});
-  final Sketch sketch;
+  DrawingCanvas({
+    required this.sketch,
+    required this.fieldBackground,
+  });
+  final Sketch? sketch;
   final ui.Image fieldBackground;
 
   @override
@@ -111,28 +140,29 @@ class DrawingCanvas extends CustomPainter {
       Rect.fromLTWH(0, 0, size.width, size.height),
       Paint(),
     );
-    final List<Offset> points = sketch.points;
-    if (points.isEmpty) return;
+    final List<Offset> points = sketch?.points ?? <ui.Offset>[];
+    if (points.isNotEmpty) {
+      final Path path = Path();
+      path.moveTo(points.first.dx, points.first.dy);
+      points
+          .take(points.length - 1)
+          .forEachIndexed((final int index, final Offset element) {
+        final Offset nextPoint = points[index + 1];
+        path.quadraticBezierTo(
+          element.dx,
+          element.dy,
+          (nextPoint.dx + element.dx) / 2,
+          (nextPoint.dy + element.dy) / 2,
+        );
+      });
+      final Paint paint = Paint()
+        ..color = Colors.white
+        ..strokeCap = StrokeCap.round
+        ..strokeWidth = 6
+        ..style = PaintingStyle.stroke;
 
-    final Path path = Path();
-    path.moveTo(points.first.dx, points.first.dy);
-    points
-        .take(points.length - 1)
-        .forEachIndexed((final int index, final Offset element) {
-      final Offset nextPoint = points[index + 1];
-      path.quadraticBezierTo(
-        element.dx,
-        element.dy,
-        (nextPoint.dx + element.dx) / 2,
-        (nextPoint.dy + element.dy) / 2,
-      );
-    });
-    final Paint paint = Paint()
-      ..color = Colors.white
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 6
-      ..style = PaintingStyle.stroke;
-    canvas.drawPath(path, paint);
+      canvas.drawPath(path, paint);
+    }
   }
 
   @override
