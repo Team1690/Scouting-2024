@@ -19,24 +19,26 @@ class IdTable {
 }
 
 class IdProvider extends InheritedWidget {
-  IdProvider({
-    required final Widget child,
-    required final Map<String, int> climbIds,
-    required final Map<String, int> drivetrainIds,
-    required final Map<String, int> drivemotorIds,
-    required final Map<String, int> matchTypeIds,
-    required final Map<String, int> robotMatchStatusIds,
-    required final Map<String, int> faultStatus,
-    required final Map<String, int> defense,
-  }) : this._inner(
+  IdProvider(
+      {required final Widget child,
+      required final Map<String, int> climbIds,
+      required final Map<String, int> drivetrainIds,
+      required final Map<String, int> drivemotorIds,
+      required final Map<String, int> matchTypeIds,
+      required final Map<String, int> robotFieldStatusIds,
+      required final Map<String, int> faultStatus,
+      required final Map<String, int> defense,
+      required final Map<String, int> startingPosition})
+      : this._inner(
           child: child,
           climb: IdTable(climbIds),
           driveTrain: IdTable(drivetrainIds),
           drivemotor: IdTable(drivemotorIds),
           matchType: IdTable(matchTypeIds),
-          robotMatchStatus: IdTable(robotMatchStatusIds),
+          robotFieldStatus: IdTable(robotFieldStatusIds),
           faultStatus: IdTable(faultStatus),
           defense: IdTable(defense),
+          startingPosition: IdTable(startingPosition),
         );
 
   IdProvider._inner({
@@ -45,26 +47,30 @@ class IdProvider extends InheritedWidget {
     required this.driveTrain,
     required this.drivemotor,
     required this.matchType,
-    required this.robotMatchStatus,
+    required this.robotFieldStatus,
     required this.faultStatus,
     required this.defense,
+    required this.startingPosition,
   });
-  final IdTable robotMatchStatus;
+  final IdTable robotFieldStatus;
   final IdTable matchType;
   final IdTable climb;
   final IdTable driveTrain;
   final IdTable drivemotor;
   final IdTable faultStatus;
   final IdTable defense;
+  final IdTable startingPosition;
+
   @override
   bool updateShouldNotify(final IdProvider oldWidget) =>
-      robotMatchStatus != oldWidget.robotMatchStatus ||
+      robotFieldStatus != oldWidget.robotFieldStatus ||
       climb != oldWidget.climb ||
       matchType != oldWidget.matchType ||
       driveTrain != oldWidget.driveTrain ||
       drivemotor != oldWidget.drivemotor ||
       faultStatus != oldWidget.faultStatus ||
-      defense != oldWidget.defense;
+      defense != oldWidget.defense ||
+      startingPosition != oldWidget.startingPosition;
 
   static IdProvider of(final BuildContext context) {
     final IdProvider? result =

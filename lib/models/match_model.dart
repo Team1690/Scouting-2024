@@ -12,7 +12,7 @@ class Match implements HasuraVars {
         scheduleMatch = null,
         name = "",
         robotFieldStatusId =
-            IdProvider.of(context).robotMatchStatus.nameToId["Worked"]!,
+            IdProvider.of(context).robotFieldStatus.nameToId["Worked"]!,
         autoAmp = 0,
         autoAmpMissed = 0,
         autoSpeaker = 0,
@@ -24,6 +24,7 @@ class Match implements HasuraVars {
         climbId = null,
         harmonyWith = 0,
         trapAmount = 0,
+        startingPositionID = null,
         scoutedTeam = null;
   Match.all({
     required this.isRematch,
@@ -42,6 +43,7 @@ class Match implements HasuraVars {
     required this.harmonyWith,
     required this.trapAmount,
     required this.scoutedTeam,
+    required this.startingPositionID,
   });
 
   Match cleared(final BuildContext context) =>
@@ -63,6 +65,7 @@ class Match implements HasuraVars {
     final int Function()? climbId,
     final int Function()? harmonyWith,
     final int Function()? trapAmount,
+    final int Function()? startingPositionID,
     final LightTeam? Function()? scoutedTeam,
   }) =>
       Match.all(
@@ -91,6 +94,9 @@ class Match implements HasuraVars {
         harmonyWith: harmonyWith != null ? harmonyWith() : this.harmonyWith,
         trapAmount: trapAmount != null ? trapAmount() : this.trapAmount,
         scoutedTeam: scoutedTeam != null ? scoutedTeam() : this.scoutedTeam,
+        startingPositionID: startingPositionID != null
+            ? startingPositionID()
+            : this.startingPositionID,
       );
 
   final bool isRematch;
@@ -108,6 +114,7 @@ class Match implements HasuraVars {
   final int? climbId;
   final int harmonyWith;
   final int trapAmount;
+  final int? startingPositionID;
   final LightTeam? scoutedTeam;
 
   @override
@@ -128,6 +135,7 @@ class Match implements HasuraVars {
         "cilmb_id": climbId,
         "harmony_with": harmonyWith,
         "trap_amount": trapAmount,
+        "starting_position": startingPositionID,
       };
 }
 
