@@ -112,7 +112,9 @@ class _AutoPathState extends State<AutoPath> {
                     builder: (final BuildContext dialogContext) => SelectPath(
                       fieldBackground: widget.fieldBackground,
                       newPath: exportedPath,
-                      existingPaths: [(exportedPath, "hi")], //TODO
+                      existingPaths: <(List<ui.Offset>, String)>[
+                        (exportedPath, "hi")
+                      ], //TODO
                       onExistingSelected: (final String url) {
                         print(url);
                         Navigator.pop(context);

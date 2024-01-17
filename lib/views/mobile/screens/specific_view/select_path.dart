@@ -5,12 +5,13 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 
 class SelectPath extends StatefulWidget {
-  const SelectPath(
-      {required this.newPath,
-      required this.existingPaths,
-      required this.fieldBackground,
-      required this.onExistingSelected,
-      required this.onNewSelected});
+  const SelectPath({
+    required this.newPath,
+    required this.existingPaths,
+    required this.fieldBackground,
+    required this.onExistingSelected,
+    required this.onNewSelected,
+  });
   final List<(List<Offset>, String)> existingPaths;
   final List<Offset> newPath;
   final ui.Image fieldBackground;
