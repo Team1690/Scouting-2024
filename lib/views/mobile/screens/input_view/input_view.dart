@@ -10,7 +10,10 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/local_save_button.dart";
 import "package:scouting_frontend/views/mobile/manage_preferences.dart";
 import "package:scouting_frontend/views/mobile/qr_generator.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/climbing.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/game_piece_counter.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/starting_pos.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/trap_amount.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
@@ -53,12 +56,12 @@ class _UserInputState extends State<UserInput> {
   late Match match = Match(context);
   // -1 means nothing
   late final Map<int, int> robotFieldStatusIndexToId = <int, int>{
-    -1: IdProvider.of(context).robotMatchStatus.nameToId["Worked"]!,
+    -1: IdProvider.of(context).robotFieldStatus.nameToId["Worked"]!,
     0: IdProvider.of(context)
-        .robotMatchStatus
+        .robotFieldStatus
         .nameToId["Didn't come to field"]!,
     1: IdProvider.of(context)
-        .robotMatchStatus
+        .robotFieldStatus
         .nameToId["Didn't work on field"]!,
   };
   String qrCodeJson = "";
@@ -171,6 +174,14 @@ class _UserInputState extends State<UserInput> {
                           });
                         },
                       ),
+                      StartingPos(
+                        match: match,
+                        onNewMatch: (final Match newMatch) {
+                          setState(() {
+                            match = newMatch;
+                          });
+                        },
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
@@ -207,7 +218,6 @@ class _UserInputState extends State<UserInput> {
                         },
                         matchMode: MatchMode.auto,
                       ),
-
                       const SizedBox(
                         height: 20,
                       ),
@@ -222,7 +232,23 @@ class _UserInputState extends State<UserInput> {
                         },
                         matchMode: MatchMode.tele,
                       ),
-                      //TODO teleop related widgets here
+                      Climbing(
+                        match: match,
+                        onNewMatch: (final Match newMatch) {
+                          setState(() {
+                            match = newMatch;
+                          });
+                        },
+                      ),
+                      TrapAmount(
+                        onTrapChange: (final int trap) {
+                          setState(() {
+                            match = match.copyWith(trapAmount: always(trap));
+                          });
+                        },
+                        match: match,
+                        flickerScreen: flickerScreen,
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -383,7 +409,11 @@ class _UserInputState extends State<UserInput> {
 
 //TODO update both mutations
 const String insertMutation = r"""
-
+mutation MyMutation {
+  insert_technical_match(objects: {}) {
+    affected_rows
+  }
+}
 """;
 
 const String updateMutation = r"""
