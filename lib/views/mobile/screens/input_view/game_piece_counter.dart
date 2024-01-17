@@ -32,6 +32,7 @@ class GamePieceCounter extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Expanded(
                 child: Counter(
@@ -44,6 +45,7 @@ class GamePieceCounter extends StatelessWidget {
                   count: amp,
                 ),
               ),
+              const VerticalDivider(),
               Expanded(
                 child: Counter(
                   label: "Scored Speaker",
@@ -58,6 +60,7 @@ class GamePieceCounter extends StatelessWidget {
             ],
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Expanded(
                 child: Counter(
@@ -70,6 +73,7 @@ class GamePieceCounter extends StatelessWidget {
                   count: ampMissed,
                 ),
               ),
+              const VerticalDivider(),
               Expanded(
                 child: Counter(
                   label: "Missed Speaker",
