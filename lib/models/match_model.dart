@@ -10,7 +10,7 @@ class Match implements HasuraVars {
   Match(final BuildContext context)
       : isRematch = false,
         scheduleMatch = null,
-        name = "",
+        scouterName = "",
         robotFieldStatusId =
             IdProvider.of(context).robotFieldStatus.nameToId["Worked"]!,
         autoAmp = 0,
@@ -29,7 +29,7 @@ class Match implements HasuraVars {
   Match.all({
     required this.isRematch,
     required this.scheduleMatch,
-    required this.name,
+    required this.scouterName,
     required this.robotFieldStatusId,
     required this.autoAmp,
     required this.autoAmpMissed,
@@ -47,7 +47,7 @@ class Match implements HasuraVars {
   });
 
   Match cleared(final BuildContext context) =>
-      Match(context).copyWith(name: always(name));
+      Match(context).copyWith(name: always(scouterName));
 
   Match copyWith({
     final bool Function()? isRematch,
@@ -72,7 +72,7 @@ class Match implements HasuraVars {
         isRematch: isRematch != null ? isRematch() : this.isRematch,
         scheduleMatch:
             scheduleMatch != null ? scheduleMatch() : this.scheduleMatch,
-        name: name != null ? name() : this.name,
+        scouterName: name != null ? name() : this.scouterName,
         robotFieldStatusId: robotFieldStatusId != null
             ? robotFieldStatusId()
             : this.robotFieldStatusId,
@@ -101,7 +101,7 @@ class Match implements HasuraVars {
 
   final bool isRematch;
   final ScheduleMatch? scheduleMatch;
-  final String? name;
+  final String? scouterName;
   final int robotFieldStatusId;
   final int autoAmp;
   final int autoAmpMissed;
@@ -120,9 +120,9 @@ class Match implements HasuraVars {
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         "team_id": scoutedTeam?.id,
-        "scouter_name": name,
-        "schedule_match_id": scheduleMatch?.id,
-        "robot_match_status_id": robotFieldStatusId,
+        "scouter_name": scouterName,
+        "schedule_id": scheduleMatch?.id,
+        "robot_field_status_id": robotFieldStatusId,
         "is_rematch": isRematch,
         "auto_amp": autoAmp,
         "auto_amp_missed": autoAmpMissed,
@@ -132,10 +132,10 @@ class Match implements HasuraVars {
         "tele_amp_missed": teleAmpMissed,
         "tele_speaker": teleSpeaker,
         "tele_speaker_missed": teleAmpMissed,
-        "cilmb_id": climbId,
+        "climb_id": climbId,
         "harmony_with": harmonyWith,
         "trap_amount": trapAmount,
-        "starting_position": startingPositionID,
+        "starting_position_id": startingPositionID,
       };
 }
 
