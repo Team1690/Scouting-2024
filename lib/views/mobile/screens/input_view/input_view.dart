@@ -77,7 +77,7 @@ class _UserInputState extends State<UserInput> {
     ].contains(match.scheduleMatch!.matchTypeId)
         ? "${match.scoutedTeam!.number} ${match.scoutedTeam!.name}"
         : match.scheduleMatch!.getTeamStation(match.scoutedTeam!) ?? "";
-    scouterNameController.text = match.name!;
+    scouterNameController.text = match.scouterName!;
   }
 
   @override
@@ -174,14 +174,6 @@ class _UserInputState extends State<UserInput> {
                           });
                         },
                       ),
-                      StartingPos(
-                        match: match,
-                        onNewMatch: (final Match newMatch) {
-                          setState(() {
-                            match = newMatch;
-                          });
-                        },
-                      ),
                       const SizedBox(
                         height: 15,
                       ),
@@ -201,6 +193,17 @@ class _UserInputState extends State<UserInput> {
                             match = match.copyWith(
                               isRematch: always(!match.isRematch),
                             );
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      StartingPos(
+                        match: match,
+                        onNewMatch: (final Match newMatch) {
+                          setState(() {
+                            match = newMatch;
                           });
                         },
                       ),
@@ -405,17 +408,17 @@ class _UserInputState extends State<UserInput> {
           ],
         ),
       );
-}
 
-//TODO update both mutations
-const String insertMutation = r"""
-mutation MyMutation {
-  insert_technical_match(objects: {}) {
+  String insertMutation = r"""
+mutation MyMutation($auto_amp: Int!, $auto_amp_missed: Int!, $auto_speaker: Int!, $auto_speaker_missed: Int!, $climb_id: Int!, $tele_amp: Int!, $tele_amp_missed: Int!, $tele_speaker: Int!, $tele_speaker_missed: Int!, $trap_amount: Int!, $harmony_with: Int!, $is_rematch: Boolean!, $robot_field_status_id: Int, $schedule_id: Int!, $starting_position_id: Int!, $team_id: Int!, $scouter_name: String!) {
+  insert_technical_match(objects: {auto_amp: $auto_amp, auto_amp_missed: $auto_amp_missed, auto_speaker: $auto_speaker, auto_speaker_missed: $auto_speaker_missed, cilmb_id: $climb_id, tele_amp: $tele_amp, tele_amp_missed: $tele_amp_missed, tele_speaker: $tele_speaker, tele_speaker_missed: $tele_speaker_missed, trap_amount: $trap_amount, harmony_with: $harmony_with, is_rematch: $is_rematch, robot_field_status_id: $robot_field_status_id, schedule_id: $schedule_id, starting_position_id: $starting_position_id, team_id: $team_id, scouter_name: $scouter_name}) {
     affected_rows
   }
 }
-""";
-
-const String updateMutation = r"""
 
 """;
+
+  String updateMutation = r"""
+
+""";
+}
