@@ -148,7 +148,7 @@ class _UserInputState extends State<UserInput> {
                                 ? null
                                 : "Please enter your name",
                         onChanged: (final String name) {
-                          match = match.copyWith(name: always(name));
+                          match = match.copyWith(scouterName: always(name));
                         },
                         decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.person),

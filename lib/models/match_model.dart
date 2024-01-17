@@ -47,12 +47,12 @@ class Match implements HasuraVars {
   });
 
   Match cleared(final BuildContext context) =>
-      Match(context).copyWith(name: always(scouterName));
+      Match(context).copyWith(scouterName: always(scouterName));
 
   Match copyWith({
     final bool Function()? isRematch,
     final ScheduleMatch? Function()? scheduleMatch,
-    final String? Function()? name,
+    final String? Function()? scouterName,
     final int Function()? robotFieldStatusId,
     final int Function()? autoAmp,
     final int Function()? autoAmpMissed,
@@ -72,7 +72,7 @@ class Match implements HasuraVars {
         isRematch: isRematch != null ? isRematch() : this.isRematch,
         scheduleMatch:
             scheduleMatch != null ? scheduleMatch() : this.scheduleMatch,
-        scouterName: name != null ? name() : this.scouterName,
+        scouterName: scouterName != null ? scouterName() : this.scouterName,
         robotFieldStatusId: robotFieldStatusId != null
             ? robotFieldStatusId()
             : this.robotFieldStatusId,
