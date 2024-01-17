@@ -13,7 +13,7 @@ import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
-import "package:scouting_frontend/views/mobile/specific_vars.dart";
+import 'package:scouting_frontend/views/mobile/screens/specific_view/specific_vars.dart';
 import "package:scouting_frontend/views/mobile/submit_button.dart";
 import "package:scouting_frontend/views/mobile/team_and_match_selection.dart";
 
@@ -24,12 +24,10 @@ class Specific extends StatefulWidget {
 
 class _SpecificState extends State<Specific> {
   final GlobalKey<FormState> formKey = GlobalKey();
-  List<TextEditingController> controllers =
-      List<TextEditingController>.generate(
-    9,
-    (final int i) => TextEditingController(),
-  );
-  final SpecificVars vars = SpecificVars();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController teamController = TextEditingController();
+  final TextEditingController matchController = TextEditingController();
+  final TextEditingController faultsController = TextEditingController();
   final FocusNode node = FocusNode();
 
   late final Map<int, int> defenseAmountIndexToId = <int, int>{
@@ -38,6 +36,8 @@ class _SpecificState extends State<Specific> {
     1: IdProvider.of(context).defense.nameToId["Full Defense"]!,
   };
   ui.Image? fieldImage;
+  bool didDefense = false;
+  late SpecificVars vars = SpecificVars(context);
   @override
   Widget build(final BuildContext context) => GestureDetector(
         onTap: node.unfocus,
@@ -56,13 +56,13 @@ class _SpecificState extends State<Specific> {
                 child: Column(
                   children: <Widget>[
                     TextFormField(
-                      controller: controllers[0], //index of nameController
+                      controller: nameController,
                       validator: (final String? value) =>
                           value != null && value.isNotEmpty
                               ? null
                               : "Please enter your name",
                       onChanged: (final String p0) {
-                        vars.name = p0;
+                        vars = vars.copyWith(name: always(p0));
                       },
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.person),
@@ -74,17 +74,17 @@ class _SpecificState extends State<Specific> {
                       height: 15,
                     ),
                     TeamAndMatchSelection(
-                      matchController:
-                          controllers[1], //index of matchController
-                      teamNumberController:
-                          controllers[2], //index of teamNumberController
+                      matchController: matchController,
+                      teamNumberController: teamController,
                       onChange: (
                         final ScheduleMatch selectedMatch,
                         final LightTeam? selectedTeam,
                       ) {
                         setState(() {
-                          vars.team = selectedTeam;
-                          vars.scheduleMatch = selectedMatch;
+                          vars = vars.copyWith(
+                            scheduleMatch: always(selectedMatch),
+                            team: always(selectedTeam),
+                          );
                         });
                       },
                     ),
@@ -104,7 +104,8 @@ class _SpecificState extends State<Specific> {
                       isSelected: <bool>[vars.isRematch],
                       onPressed: (final int i) {
                         setState(() {
-                          vars.isRematch = !vars.isRematch;
+                          vars =
+                              vars.copyWith(isRematch: always(!vars.isRematch));
                         });
                       },
                     ),
@@ -132,96 +133,147 @@ class _SpecificState extends State<Specific> {
                       child: const Text("Create Auto Path"),
                     ),
                     const SizedBox(height: 15.0),
-                    DropdownLine<String>(
+                    RatingDropdownLine<String>(
                       onTap: () {
                         setState(() {
-                          vars.drivetrainAndDriving =
-                              vars.drivetrainAndDriving.onNull(
-                            controllers[3].text,
-                          ); //index of drivingController
+                          vars = vars.copyWith(
+                            driveRating: always(vars.driveRating.onNull(1)),
+                          );
                         });
                       },
-                      value: vars.drivetrainAndDriving,
-                      onChange: (final String p0) =>
-                          vars.drivetrainAndDriving = p0,
-                      controller: controllers[3], //index of drivingController
+                      value: vars.driveRating?.toDouble(),
+                      onChange: (final double p0) {
+                        setState(() {
+                          vars = vars.copyWith(driveRating: always(p0.toInt()));
+                        });
+                      },
                       label: "Driving & Drivetrain",
                     ),
                     const SizedBox(height: 15.0),
-                    DropdownLine<String>(
+                    RatingDropdownLine<String>(
                       onTap: () {
                         setState(() {
-                          vars.intake = vars.intake.onNull(
-                            controllers[4].text,
-                          ); //index of intakeController
+                          vars = vars.copyWith(
+                            intakeRating: always(vars.intakeRating.onNull(1)),
+                          );
                         });
                       },
-                      value: vars.intake,
-                      onChange: (final String p0) => vars.intake = p0,
-                      controller: controllers[4], //index of intakeController
+                      value: vars.intakeRating?.toDouble(),
+                      onChange: (final double p0) {
+                        setState(() {
+                          vars =
+                              vars.copyWith(intakeRating: always(p0.toInt()));
+                        });
+                      },
                       label: "Intake",
                     ),
                     const SizedBox(height: 15.0),
-                    DropdownLine<String>(
-                      value: vars.placement,
+                    RatingDropdownLine<String>(
                       onTap: () {
                         setState(() {
-                          vars.placement = vars.placement.onNull(
-                            controllers[5].text,
-                          ); //index of shooterController
+                          vars = vars.copyWith(
+                            ampRating: always(vars.ampRating.onNull(1)),
+                          );
                         });
                       },
-
-                      onChange: (final String p0) => vars.placement = p0,
-                      controller: controllers[5], //index of shooterController
-                      label: "Placement",
+                      value: vars.ampRating?.toDouble(),
+                      onChange: (final double p0) {
+                        setState(() {
+                          vars = vars.copyWith(ampRating: always(p0.toInt()));
+                        });
+                      },
+                      label: "Amp",
                     ),
                     const SizedBox(height: 15.0),
-                    DropdownLine<String>(
+                    RatingDropdownLine<String>(
                       onTap: () {
                         setState(() {
-                          vars.defense = vars.defense.onNull(
-                            controllers[6].text,
-                          ); //index of defenseController
+                          vars = vars.copyWith(
+                            speakerRating: always(vars.speakerRating.onNull(1)),
+                          );
                         });
                       },
-                      value: vars.defense,
-                      onChange: (final String p0) => vars.defense = p0,
-                      controller: controllers[6], //index of defenseController
+                      value: vars.speakerRating?.toDouble(),
+                      onChange: (final double p0) {
+                        setState(() {
+                          vars =
+                              vars.copyWith(speakerRating: always(p0.toInt()));
+                        });
+                      },
+                      label: "Speaker",
+                    ),
+                    const SizedBox(height: 15.0),
+                    RatingDropdownLine<String>(
+                      onTap: () {
+                        setState(() {
+                          vars = vars.copyWith(
+                              climbRating: always(vars.climbRating.onNull(1)));
+                        });
+                      },
+                      value: vars.climbRating?.toDouble(),
+                      onChange: (final double p0) {
+                        setState(() {
+                          vars = vars.copyWith(climbRating: always(p0.toInt()));
+                        });
+                      },
+                      label: "Climb",
+                    ),
+                    RatingDropdownLine<String>(
+                      onTap: () {
+                        setState(() {
+                          vars = vars.copyWith(
+                              defenseRating:
+                                  always(vars.defenseRating.onNull(1)));
+                          didDefense = !didDefense;
+                        });
+                      },
+                      value: vars.defenseRating?.toDouble(),
+                      onChange: (final double p0) {
+                        setState(() {
+                          vars =
+                              vars.copyWith(defenseRating: always(p0.toInt()));
+                        });
+                      },
                       label: "Defense",
                     ),
-                    const SizedBox(height: 15.0),
-                    DropdownLine<String>(
+                    if (didDefense) ...[
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Switcher(
+                        borderRadiusGeometry: defaultBorderRadius,
+                        labels: const <String>["Half Defense", "Full Defense"],
+                        colors: const <Color>[Colors.blue, Colors.green],
+                        onChange: (final int i) {
+                          setState(() {
+                            vars = vars.copyWith(
+                                defenseAmount:
+                                    always(defenseAmountIndexToId[i]!));
+                          });
+                        },
+                        selected: <int, int>{
+                          for (final MapEntry<int, int> i
+                              in defenseAmountIndexToId.entries)
+                            i.value: i.key,
+                        }[vars.defenseAmount]!,
+                      ),
+                    ],
+                    RatingDropdownLine<String>(
                       onTap: () {
                         setState(() {
-                          vars.generalNotes = vars.generalNotes.onNull(
-                            controllers[7].text,
-                          ); //index of notesController
+                          vars = vars.copyWith(
+                            generalRating: always(vars.generalRating.onNull(1)),
+                          );
                         });
                       },
-                      value: vars.generalNotes,
-                      onChange: (final String p0) => vars.generalNotes = p0,
-                      controller: controllers[7], //index of notesController
-                      label: "General Notes",
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    SectionDivider(label: "Defense Amount"),
-                    Switcher(
-                      borderRadiusGeometry: defaultBorderRadius,
-                      labels: const <String>["Half Defense", "Full Defense"],
-                      colors: const <Color>[Colors.blue, Colors.green],
-                      onChange: (final int i) {
+                      value: vars.generalRating?.toDouble(),
+                      onChange: (final double p0) {
                         setState(() {
-                          vars.defenseAmount = defenseAmountIndexToId[i]!;
+                          vars =
+                              vars.copyWith(generalRating: always(p0.toInt()));
                         });
                       },
-                      selected: <int, int>{
-                        for (final MapEntry<int, int> i
-                            in defenseAmountIndexToId.entries)
-                          i.value: i.key,
-                      }[vars.defenseAmount]!,
+                      label: "General",
                     ),
                     const SizedBox(
                       height: 15,
@@ -257,8 +309,9 @@ class _SpecificState extends State<Specific> {
                               onPressed: (final int index) {
                                 assert(index == 0);
                                 setState(() {
-                                  vars.faultMessage =
-                                      vars.faultMessage.onNull("No input");
+                                  vars = vars.copyWith(
+                                      faultMessage: always(vars.faultMessage
+                                          .onNull("No input")));
                                 });
                               },
                             ),
@@ -276,10 +329,10 @@ class _SpecificState extends State<Specific> {
                           : CrossFadeState.showSecond,
                       firstChild: Container(),
                       secondChild: TextField(
-                        controller: controllers[8], //index of faultController
+                        controller: faultsController,
                         textDirection: TextDirection.rtl,
                         onChanged: (final String value) {
-                          vars.faultMessage = value;
+                          vars = vars.copyWith(faultMessage: always(value));
                         },
                         decoration:
                             const InputDecoration(hintText: "Robot fault"),
@@ -295,12 +348,10 @@ class _SpecificState extends State<Specific> {
                         resetForm: () {
                           setState(() {
                             vars.reset(context);
-                            for (final TextEditingController controller
-                                in controllers) {
-                              if (controller != controllers[0]) {
-                                controller.clear();
-                              }
-                            }
+                            nameController.clear();
+                            teamController.clear();
+                            matchController.clear();
+                            faultsController.clear();
                           });
                         },
                         mutation: """
@@ -325,6 +376,7 @@ mutation A(\$defense_amount_id: Int, \$defense: String, \$drivetrain_and_driving
           ),
         ),
       );
+
   Future<ui.Image> getField(final bool isRed) async {
     final ByteData data = await rootBundle
         .load("lib/assets/frc_2024_field_${isRed ? "red" : "blue"}.png");
