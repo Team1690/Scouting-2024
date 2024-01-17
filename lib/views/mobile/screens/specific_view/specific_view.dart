@@ -1,4 +1,8 @@
+import "dart:async";
+import "dart:ui" as ui;
+
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -6,6 +10,7 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/dropdown_line.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/mobile/specific_vars.dart";
@@ -32,7 +37,7 @@ class _SpecificState extends State<Specific> {
     0: IdProvider.of(context).defense.nameToId["Half Defense"]!,
     1: IdProvider.of(context).defense.nameToId["Full Defense"]!,
   };
-
+  ui.Image? fieldImage;
   @override
   Widget build(final BuildContext context) => GestureDetector(
         onTap: node.unfocus,
@@ -102,6 +107,29 @@ class _SpecificState extends State<Specific> {
                           vars.isRematch = !vars.isRematch;
                         });
                       },
+                    ),
+                    const SizedBox(height: 15.0),
+                    ElevatedButton(
+                      onPressed: () async {
+                        fieldImage = await getField(true);
+                        if (fieldImage != null) {
+                          unawaited(
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<AutoPath>(
+                                builder: (final BuildContext buildContext) =>
+                                    AutoPath(
+                                  fieldBackground: fieldImage!,
+                                  onChange: () {
+                                    //TODO change SpecificVars accordingly
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text("Create Auto Path"),
                     ),
                     const SizedBox(height: 15.0),
                     DropdownLine<String>(
@@ -297,4 +325,12 @@ mutation A(\$defense_amount_id: Int, \$defense: String, \$drivetrain_and_driving
           ),
         ),
       );
+  Future<ui.Image> getField(final bool isRed) async {
+    final ByteData data = await rootBundle
+        .load("lib/assets/frc_2024_field_${isRed ? "red" : "blue"}.png");
+    final ui.Codec codec =
+        await ui.instantiateImageCodec(data.buffer.asUint8List());
+    final ui.FrameInfo frameInfo = await codec.getNextFrame();
+    return frameInfo.image;
+  }
 }

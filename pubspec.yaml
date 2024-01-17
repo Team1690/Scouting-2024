@@ -72,6 +72,9 @@ flutter:
     - lib/assets/
     # - lib\assets
     - lib/assets/logo.png
+    - lib/assets/frc_2024_field.png
+    - lib/assets/frc_2024_field_blue.png
+    - lib/assets/frc_2024_field_red.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
