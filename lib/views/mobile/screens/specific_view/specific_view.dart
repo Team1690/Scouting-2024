@@ -3,6 +3,7 @@ import "dart:ui" as ui;
 
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:scouting_frontend/models/csv_or_url.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -11,9 +12,8 @@ import "package:scouting_frontend/views/mobile/dropdown_line.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
-import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
-import 'package:scouting_frontend/views/mobile/screens/specific_view/specific_vars.dart';
+import "package:scouting_frontend/views/mobile/screens/specific_view/specific_vars.dart";
 import "package:scouting_frontend/views/mobile/submit_button.dart";
 import "package:scouting_frontend/views/mobile/team_and_match_selection.dart";
 
@@ -121,8 +121,12 @@ class _SpecificState extends State<Specific> {
                                 builder: (final BuildContext buildContext) =>
                                     AutoPath(
                                   fieldBackground: fieldImage!,
-                                  onChange: () {
-                                    //TODO change SpecificVars accordingly
+                                  onChange: (final CsvOrNull result) {
+                                    setState(() {
+                                      vars = vars.copyWith(
+                                        autoPath: always(result),
+                                      );
+                                    });
                                   },
                                 ),
                               ),
@@ -132,6 +136,55 @@ class _SpecificState extends State<Specific> {
                       },
                       child: const Text("Create Auto Path"),
                     ),
+                    if (vars.autoPath != null) ...<Widget>[
+                      const SizedBox(height: 15.0),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: AspectRatio(
+                          aspectRatio: autoFieldWidth / fieldheight,
+                          child: LayoutBuilder(
+                            builder: (
+                              final BuildContext context,
+                              final BoxConstraints constraints,
+                            ) =>
+                                CustomPaint(
+                              painter: DrawingCanvas(
+                                width: 3,
+                                fieldBackground: fieldImage!,
+                                sketch: Sketch(
+                                  points: vars.autoPath.runtimeType == Csv
+                                      ? (vars.autoPath as Csv)
+                                          .csv
+                                          .split("\n")
+                                          .map(
+                                            (final String e) => Offset(
+                                              double.tryParse(
+                                                    e.split(",").first,
+                                                  ) ??
+                                                  0,
+                                              double.tryParse(
+                                                    e.split(",").last,
+                                                  ) ??
+                                                  0,
+                                            ),
+                                          )
+                                          .map(
+                                            (final ui.Offset e) => e.scale(
+                                              constraints.maxWidth /
+                                                  autoFieldWidth,
+                                              constraints.maxWidth /
+                                                  autoFieldWidth,
+                                            ),
+                                          )
+                                          .toList()
+                                      : <ui.Offset>[],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 15.0),
                     RatingDropdownLine<String>(
                       onTap: () {
@@ -207,7 +260,8 @@ class _SpecificState extends State<Specific> {
                       onTap: () {
                         setState(() {
                           vars = vars.copyWith(
-                              climbRating: always(vars.climbRating.onNull(1)));
+                            climbRating: always(vars.climbRating.onNull(1)),
+                          );
                         });
                       },
                       value: vars.climbRating?.toDouble(),
@@ -222,8 +276,8 @@ class _SpecificState extends State<Specific> {
                       onTap: () {
                         setState(() {
                           vars = vars.copyWith(
-                              defenseRating:
-                                  always(vars.defenseRating.onNull(1)));
+                            defenseRating: always(vars.defenseRating.onNull(1)),
+                          );
                           didDefense = !didDefense;
                         });
                       },
@@ -236,7 +290,7 @@ class _SpecificState extends State<Specific> {
                       },
                       label: "Defense",
                     ),
-                    if (didDefense) ...[
+                    if (didDefense) ...<Widget>[
                       const SizedBox(
                         height: 10,
                       ),
@@ -247,8 +301,8 @@ class _SpecificState extends State<Specific> {
                         onChange: (final int i) {
                           setState(() {
                             vars = vars.copyWith(
-                                defenseAmount:
-                                    always(defenseAmountIndexToId[i]!));
+                              defenseAmount: always(defenseAmountIndexToId[i]!),
+                            );
                           });
                         },
                         selected: <int, int>{
@@ -310,8 +364,10 @@ class _SpecificState extends State<Specific> {
                                 assert(index == 0);
                                 setState(() {
                                   vars = vars.copyWith(
-                                      faultMessage: always(vars.faultMessage
-                                          .onNull("No input")));
+                                    faultMessage: always(
+                                      vars.faultMessage.onNull("No input"),
+                                    ),
+                                  );
                                 });
                               },
                             ),

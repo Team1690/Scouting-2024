@@ -35,7 +35,7 @@ class RatingDropdownLine<T> extends StatelessWidget {
                   max: 10,
                   divisions: 9,
                   label: value.toString(),
-                )
+                ),
               ],
             ),
           ),
