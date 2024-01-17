@@ -3,7 +3,6 @@ import "dart:ui" as ui;
 
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:graphql/client.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -119,7 +118,12 @@ class _SpecificState extends State<Specific> {
                               context,
                               MaterialPageRoute<AutoPath>(
                                 builder: (final BuildContext buildContext) =>
-                                    AutoPath(fieldBackground: fieldImage!),
+                                    AutoPath(
+                                  fieldBackground: fieldImage!,
+                                  onChange: () {
+                                    //TODO change SpecificVars accordingly
+                                  },
+                                ),
                               ),
                             ),
                           );
