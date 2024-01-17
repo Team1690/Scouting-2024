@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/csv_or_url.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -20,7 +21,7 @@ class SpecificVars implements HasuraVars {
         isRematch = false,
         defenseAmount = 1,
         faultMessage = null,
-        autoPathUrl = "";
+        autoPath = null;
 
   SpecificVars.all({
     required this.team,
@@ -36,7 +37,7 @@ class SpecificVars implements HasuraVars {
     required this.isRematch,
     required this.defenseAmount,
     required this.faultMessage,
-    required this.autoPathUrl,
+    required this.autoPath,
   });
 
   SpecificVars copyWith({
@@ -53,7 +54,7 @@ class SpecificVars implements HasuraVars {
     final bool Function()? isRematch,
     final int Function()? defenseAmount,
     final String? Function()? faultMessage,
-    final String Function()? autoPathUrl,
+    final CsvOrNull? Function()? autoPath,
   }) =>
       SpecificVars.all(
         team: team != null ? team() : this.team,
@@ -74,7 +75,7 @@ class SpecificVars implements HasuraVars {
         defenseAmount:
             defenseAmount != null ? defenseAmount() : this.defenseAmount,
         faultMessage: faultMessage != null ? faultMessage() : this.faultMessage,
-        autoPathUrl: autoPathUrl != null ? autoPathUrl() : this.autoPathUrl,
+        autoPath: autoPath != null ? autoPath() : this.autoPath,
       );
 
   final LightTeam? team;
@@ -90,11 +91,11 @@ class SpecificVars implements HasuraVars {
   final bool isRematch;
   final int defenseAmount;
   final String? faultMessage;
-  final String autoPathUrl;
+  final CsvOrNull? autoPath;
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         "team_id": team?.id,
-        "path_url": autoPathUrl,
+        if (autoPath.runtimeType == Url) "path_url": (autoPath as Url).url,
         "driving_rating": driveRating,
         "intake_rating": intakeRating,
         "climb_rating": climbRating,
@@ -124,7 +125,7 @@ class SpecificVars implements HasuraVars {
       speakerRating: always(null),
       defenseRating: always(null),
       generalRating: always(null),
-      autoPathUrl: always(""),
+      autoPath: always(null),
       defenseAmount:
           always(IdProvider.of(context).defense.nameToId["No Defense"]!),
     );

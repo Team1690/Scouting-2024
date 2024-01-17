@@ -2,13 +2,14 @@ import "dart:ui" as ui;
 
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/csv_or_url.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
 
 class AutoPath extends StatefulWidget {
   const AutoPath({required this.fieldBackground, required this.onChange});
   final ui.Image fieldBackground;
-  final void Function() onChange;
+  final void Function(CsvOrNull) onChange;
 
   @override
   State<AutoPath> createState() => _AutoPathState();
@@ -113,18 +114,16 @@ class _AutoPathState extends State<AutoPath> {
                       fieldBackground: widget.fieldBackground,
                       newPath: exportedPath,
                       existingPaths: <(List<ui.Offset>, String)>[
-                        (exportedPath, "hi")
+                        (exportedPath, "hi"),
                       ], //TODO
                       onExistingSelected: (final String url) {
-                        print(url);
                         Navigator.pop(context);
-                        widget.onChange();
+                        widget.onChange(Url(url: url));
                         Navigator.pop(context);
                       },
                       onNewSelected: (final String csv) {
-                        print(csv);
                         Navigator.pop(context);
-                        widget.onChange();
+                        widget.onChange(Csv(csv: csv));
                         Navigator.pop(context);
                       },
                     ),
