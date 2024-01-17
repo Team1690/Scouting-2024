@@ -35,7 +35,7 @@ const double fieldheight = 8.1026;
 const double autoFieldWidth = fieldWidth - 5.87248;
 
 bool isPC(final BuildContext context) {
-  /*switch (Theme.of(context).platform) {
+  switch (Theme.of(context).platform) {
     case TargetPlatform.android:
     case TargetPlatform.iOS:
       return false;
@@ -45,6 +45,5 @@ bool isPC(final BuildContext context) {
     case TargetPlatform.linux:
     case TargetPlatform.fuchsia:
       return true;
-  }*/
-  return false;
+  }
 }
