@@ -6,8 +6,9 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
 
 class AutoPath extends StatefulWidget {
-  const AutoPath({required this.fieldBackground});
+  const AutoPath({required this.fieldBackground, required this.onChange});
   final ui.Image fieldBackground;
+  final void Function() onChange;
 
   @override
   State<AutoPath> createState() => _AutoPathState();
@@ -16,6 +17,7 @@ class AutoPath extends StatefulWidget {
 class _AutoPathState extends State<AutoPath> {
   @override
   Widget build(final BuildContext context) {
+    List<Offset> exportedPath = <ui.Offset>[];
     final ValueNotifier<Sketch> path =
         ValueNotifier<Sketch>(Sketch(points: <Offset>[]));
     bool pathDone = false;
@@ -58,10 +60,16 @@ class _AutoPathState extends State<AutoPath> {
                   listenable: path,
                   builder: (final BuildContext context, final Widget? e) =>
                       RepaintBoundary(
-                    child: CustomPaint(
-                      painter: DrawingCanvas(
-                        sketch: path.value,
-                        fieldBackground: widget.fieldBackground,
+                    child: LayoutBuilder(
+                      builder: (
+                        final BuildContext context,
+                        final BoxConstraints constraints,
+                      ) =>
+                          CustomPaint(
+                        painter: DrawingCanvas(
+                          sketch: path.value,
+                          fieldBackground: widget.fieldBackground,
+                        ),
                       ),
                     ),
                   ),
@@ -91,16 +99,32 @@ class _AutoPathState extends State<AutoPath> {
               ),
               IconButton(
                 onPressed: () {
+                  exportedPath = path.value.points
+                      .map(
+                        (final ui.Offset e) => e.scale(
+                          autoFieldWidth / MediaQuery.of(context).size.width,
+                          autoFieldWidth / MediaQuery.of(context).size.width,
+                        ),
+                      )
+                      .toList();
                   showDialog(
                     context: context,
                     builder: (final BuildContext dialogContext) => SelectPath(
                       fieldBackground: widget.fieldBackground,
-                      pathes: <List<ui.Offset>>[
-                        //This will be replaced by the actual saved pathes from Specific View (from db)
-                        List<Offset>.from(path.value.points),
-                        List<Offset>.from(path.value.points),
-                        List<Offset>.from(path.value.points),
-                      ],
+                      newPath: exportedPath,
+                      existingPaths: [(exportedPath, "hi")], //TODO
+                      onExistingSelected: (final String url) {
+                        print(url);
+                        Navigator.pop(context);
+                        widget.onChange();
+                        Navigator.pop(context);
+                      },
+                      onNewSelected: (final String csv) {
+                        print(csv);
+                        Navigator.pop(context);
+                        widget.onChange();
+                        Navigator.pop(context);
+                      },
                     ),
                   );
                 },
@@ -123,9 +147,11 @@ class DrawingCanvas extends CustomPainter {
   DrawingCanvas({
     required this.sketch,
     required this.fieldBackground,
+    this.width = 6.0,
   });
   final Sketch? sketch;
   final ui.Image fieldBackground;
+  final double width;
 
   @override
   void paint(final Canvas canvas, final Size size) async {
@@ -158,7 +184,7 @@ class DrawingCanvas extends CustomPainter {
       final Paint paint = Paint()
         ..color = Colors.white
         ..strokeCap = StrokeCap.round
-        ..strokeWidth = 6
+        ..strokeWidth = width
         ..style = PaintingStyle.stroke;
 
       canvas.drawPath(path, paint);
