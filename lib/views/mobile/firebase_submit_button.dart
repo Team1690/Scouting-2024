@@ -106,7 +106,8 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
   void uploadResult(final int teamid, final XFile result) async {
     final int a = result.name.lastIndexOf(".");
     final String ext = result.name.substring(a + 1);
-    final Reference ref = FirebaseStorage.instance.ref("/files/$teamid.$ext");
+    final Reference ref =
+        FirebaseStorage.instance.ref("/files/pit_photos/$teamid.$ext");
 
     final UploadTask firebaseTask = ref.putData(await result.readAsBytes());
 
