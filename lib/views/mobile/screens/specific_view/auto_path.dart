@@ -10,11 +10,11 @@ class AutoPath extends StatefulWidget {
   const AutoPath({
     required this.fieldBackground,
     required this.onChange,
-    required this.pastUrls,
+    required this.existingPaths,
   });
   final ui.Image fieldBackground;
   final void Function(CsvOrNull) onChange;
-  final List<String>? pastUrls;
+  final List<(List<Offset>, String)> existingPaths;
 
   @override
   State<AutoPath> createState() => _AutoPathState();
@@ -104,7 +104,7 @@ class _AutoPathState extends State<AutoPath> {
                 width: 15,
               ),
               IconButton(
-                onPressed: () {
+                onPressed: () async {
                   exportedPath = path.value.points
                       .map(
                         (final ui.Offset e) => e.scale(
@@ -113,14 +113,12 @@ class _AutoPathState extends State<AutoPath> {
                         ),
                       )
                       .toList();
-                  showDialog(
+                  await showDialog(
                     context: context,
                     builder: (final BuildContext dialogContext) => SelectPath(
                       fieldBackground: widget.fieldBackground,
                       newPath: exportedPath,
-                      existingPaths: <(List<ui.Offset>, String)>[
-                        (exportedPath, "hi"),
-                      ], //TODO
+                      existingPaths: widget.existingPaths,
                       onExistingSelected: (final String url) {
                         Navigator.pop(context);
                         widget.onChange(Url(url: url));

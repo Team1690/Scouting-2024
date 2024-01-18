@@ -1,7 +1,6 @@
 import "dart:async";
+import "dart:io";
 import "dart:ui" as ui;
-
-import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:graphql/client.dart";
@@ -131,7 +130,10 @@ class _SpecificState extends State<Specific> {
                                     final AsyncSnapshot<List<String>> snapshot,
                                   ) =>
                                       AutoPath(
-                                    pastUrls: snapshot.data,
+                                    existingPaths: snapshot.data
+                                            ?.map((e) => (fetchPaths(e), e))
+                                            .toList()
+                                        [],
                                     fieldBackground: fieldImage!,
                                     onChange: (final CsvOrNull result) {
                                       setState(() {
@@ -483,3 +485,20 @@ List<String> parserFn(final Map<String, dynamic> urls) =>
     (urls["specific_match"] as List<dynamic>)
         .map((final dynamic url) => url as String)
         .toList();
+
+Future<List<ui.Offset>> fetchPaths(final String? url) async {
+  if (url == null) {
+    return <ui.Offset>[];
+  }
+  final File file = File.fromUri(Uri.parse(url));
+  final String csv =
+      await file.readAsString();
+  return csv
+      .split("\n")
+      .map((final String e) => e.split(","))
+      .map(
+        (final List<String> e) =>
+            Offset(double.tryParse(e.first) ?? 0, double.tryParse(e.last) ?? 0),
+      )
+      .toList();
+}
