@@ -7,9 +7,14 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
 
 class AutoPath extends StatefulWidget {
-  const AutoPath({required this.fieldBackground, required this.onChange});
+  const AutoPath({
+    required this.fieldBackground,
+    required this.onChange,
+    required this.pastUrls,
+  });
   final ui.Image fieldBackground;
   final void Function(CsvOrNull) onChange;
+  final List<String>? pastUrls;
 
   @override
   State<AutoPath> createState() => _AutoPathState();

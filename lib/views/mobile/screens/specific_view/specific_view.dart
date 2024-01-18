@@ -1,12 +1,15 @@
 import "dart:async";
 import "dart:ui" as ui;
 
+import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:graphql/client.dart";
 import "package:scouting_frontend/models/csv_or_url.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/dropdown_line.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
@@ -119,15 +122,25 @@ class _SpecificState extends State<Specific> {
                               context,
                               MaterialPageRoute<AutoPath>(
                                 builder: (final BuildContext buildContext) =>
-                                    AutoPath(
-                                  fieldBackground: fieldImage!,
-                                  onChange: (final CsvOrNull result) {
-                                    setState(() {
-                                      vars = vars.copyWith(
-                                        autoPath: always(result),
-                                      );
-                                    });
-                                  },
+                                    StreamBuilder<List<String>>(
+                                  stream: vars.team != null
+                                      ? fetchUrls(vars.team!.number)
+                                      : const Stream<List<String>>.empty(),
+                                  builder: (
+                                    final BuildContext context,
+                                    final AsyncSnapshot<List<String>> snapshot,
+                                  ) =>
+                                      AutoPath(
+                                    pastUrls: snapshot.data,
+                                    fieldBackground: fieldImage!,
+                                    onChange: (final CsvOrNull result) {
+                                      setState(() {
+                                        vars = vars.copyWith(
+                                          autoPath: always(result),
+                                        );
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
@@ -442,3 +455,31 @@ mutation A(\$defense_amount_id: Int, \$defense: String, \$drivetrain_and_driving
     return frameInfo.image;
   }
 }
+
+Stream<List<String>> fetchUrls(final int team) {
+  final GraphQLClient client = getClient();
+  final String query = graphqlSyntax();
+  final Stream<QueryResult<List<String>>> result = client.subscribe(
+    SubscriptionOptions<List<String>>(
+      document: gql(query),
+      variables: <String, int>{"team": team},
+      parserFn: parserFn,
+    ),
+  );
+  return result.map(
+    (final QueryResult<List<String>> event) => event.mapQueryResult(),
+  );
+}
+
+String graphqlSyntax() => r"""
+query MyQuery($team: Int) {
+  specific_match(where: {team_id: {_eq: $team}}) {
+    path_url
+  }
+}
+  """;
+
+List<String> parserFn(final Map<String, dynamic> urls) =>
+    (urls["specific_match"] as List<dynamic>)
+        .map((final dynamic url) => url as String)
+        .toList();
