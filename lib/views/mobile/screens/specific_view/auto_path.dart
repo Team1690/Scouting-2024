@@ -119,7 +119,7 @@ class _AutoPathState extends State<AutoPath> {
                       fieldBackground: widget.fieldBackground,
                       newPath: exportedPath,
                       existingPaths: widget.existingPaths,
-                      onExistingSelected: (final String url) {
+                      onSelectExistingPath: (final String url) {
                         Navigator.pop(context);
                         widget.onChange(Url(url: url));
                         Navigator.pop(context);

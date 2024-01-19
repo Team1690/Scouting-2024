@@ -9,13 +9,13 @@ class SelectPath extends StatefulWidget {
     required this.newPath,
     required this.existingPaths,
     required this.fieldBackground,
-    required this.onExistingSelected,
+    required this.onSelectExistingPath,
     required this.onNewSelected,
   });
   final List<(List<Offset>, String)> existingPaths;
   final List<Offset> newPath;
   final ui.Image fieldBackground;
-  final void Function(String) onExistingSelected;
+  final void Function(String) onSelectExistingPath;
   final void Function(String) onNewSelected;
 
   @override
@@ -45,7 +45,7 @@ class _SelectPathState extends State<SelectPath> {
                               ) =>
                                   GestureDetector(
                                 onTap: () {
-                                  widget.onExistingSelected(path.$2);
+                                  widget.onSelectExistingPath(path.$2);
                                 },
                                 child: CustomPaint(
                                   painter: DrawingCanvas(
