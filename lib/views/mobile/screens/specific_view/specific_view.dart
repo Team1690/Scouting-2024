@@ -131,9 +131,12 @@ class _SpecificState extends State<Specific> {
                                   ) =>
                                       AutoPath(
                                     existingPaths: snapshot.data
-                                            ?.map((e) => (fetchPaths(e), e))
-                                            .toList()
-                                        [],
+                                            ?.map(
+                                              (final String e) =>
+                                                  (fetchPath(e), e),
+                                            )
+                                            .toList() ??
+                                        <(List<ui.Offset>, String)>[],
                                     fieldBackground: fieldImage!,
                                     onChange: (final CsvOrNull result) {
                                       setState(() {
@@ -486,13 +489,12 @@ List<String> parserFn(final Map<String, dynamic> urls) =>
         .map((final dynamic url) => url as String)
         .toList();
 
-Future<List<ui.Offset>> fetchPaths(final String? url) async {
+List<ui.Offset> fetchPath(final String? url) {
   if (url == null) {
     return <ui.Offset>[];
   }
   final File file = File.fromUri(Uri.parse(url));
-  final String csv =
-      await file.readAsString();
+  final String csv = file.readAsStringSync();
   return csv
       .split("\n")
       .map((final String e) => e.split(","))
