@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/views/mobile/pit_vars.dart";
+import "package:scouting_frontend/views/mobile/screens/pit_view/pit_vars.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_view.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
@@ -19,22 +19,25 @@ class _EditPitState extends State<EditPit> {
   PitVars fromPitData(
     final PitData? pit,
   ) {
-    final PitVars vars = PitVars();
+    PitVars vars = PitVars(context);
     if (pit == null) {
       return vars;
     }
     //TODO add season specific vars
-    vars.driveMotorAmount = pit.driveMotorAmount;
-    vars.driveMotorType =
-        IdProvider.of(context).drivemotor.nameToId[pit.driveMotorType];
-    vars.driveTrainType =
-        IdProvider.of(context).driveTrain.nameToId[pit.driveTrainType];
-    vars.driveWheelType = pit.driveWheelType;
-    vars.gearboxPurchased = pit.gearboxPurchased;
-    vars.hasShifter = pit.hasShifer;
-    vars.notes = pit.notes;
-    vars.teamId = pit.team.id;
-    vars.weight = pit.weight.toString();
+    vars = vars.copyWith(
+      driveMotorAmount: () => pit.driveMotorAmount,
+      driveMotorType: () =>
+          IdProvider.of(context).drivemotor.nameToId[pit.driveMotorType],
+      driveTrainType: () =>
+          IdProvider.of(context).driveTrain.nameToId[pit.driveTrainType],
+      driveWheelType: () => pit.driveWheelType,
+      gearboxPurchased: () => pit.gearboxPurchased,
+      hasShifter: () => pit.hasShifer,
+      notes: () => pit.notes,
+      teamId: () => pit.team.id,
+      weight: pit.weight.toString,
+    );
+
     return vars;
   }
 

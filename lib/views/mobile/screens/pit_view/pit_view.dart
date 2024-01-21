@@ -9,7 +9,7 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/image_picker_widget.dart";
 import "package:scouting_frontend/views/mobile/firebase_submit_button.dart";
-import "package:scouting_frontend/views/mobile/pit_vars.dart";
+import "package:scouting_frontend/views/mobile/screens/pit_view/pit_vars.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
@@ -28,7 +28,7 @@ class _PitViewState extends State<PitView> {
   LightTeam? team;
 
   XFile? result;
-  PitVars vars = PitVars();
+  late PitVars vars = PitVars(context);
   final GlobalKey<FormState> formKey = GlobalKey();
   final TextEditingController wheelTypeController = TextEditingController();
 
@@ -38,6 +38,7 @@ class _PitViewState extends State<PitView> {
   final ValueNotifier<bool> advancedSwitchController =
       ValueNotifier<bool>(false);
   final TextEditingController weightController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
   final List<String> driveWheelTypes = <String>[
     "Tread",
     "Colson",
@@ -67,7 +68,7 @@ class _PitViewState extends State<PitView> {
   @override
   void initState() {
     super.initState();
-    vars = widget.initialVars ?? PitVars();
+    vars = widget.initialVars ?? PitVars(context);
     weightController.text = vars.weight;
     notesController.text = vars.notes;
     if (!driveWheelTypes.contains(vars.driveWheelType) &&
@@ -115,7 +116,9 @@ class _PitViewState extends State<PitView> {
                         teams: TeamProvider.of(context).teams,
                         controller: teamSelectionController,
                         onChange: (final LightTeam lightTeam) {
-                          vars.teamId = lightTeam.id;
+                          vars = vars.copyWith(
+                            teamId: () => lightTeam.id,
+                          );
                         },
                       ),
                     ),
@@ -136,7 +139,9 @@ class _PitViewState extends State<PitView> {
                           .toList(),
                       onChange: (final int newValue) {
                         setState(() {
-                          vars.driveTrainType = newValue;
+                          vars = vars.copyWith(
+                            driveTrainType: () => newValue,
+                          );
                         });
                       },
                     ),
@@ -159,7 +164,7 @@ class _PitViewState extends State<PitView> {
                           .toList(),
                       onChange: (final int newValue) {
                         setState(() {
-                          vars.driveMotorType = newValue;
+                          vars = vars.copyWith(driveMotorType: () => newValue);
                         });
                       },
                     ),
@@ -176,7 +181,9 @@ class _PitViewState extends State<PitView> {
                       longPressedValue: 4,
                       onChange: (final int newValue) {
                         setState(() {
-                          vars.driveMotorAmount = newValue;
+                          vars = vars.copyWith(
+                            driveMotorAmount: () => newValue,
+                          );
                         });
                       },
                     ),
@@ -199,8 +206,10 @@ class _PitViewState extends State<PitView> {
                       ],
                       onChange: (final int selection) {
                         setState(() {
-                          vars.hasShifter =
-                              <int, bool>{1: false, 0: true}[selection];
+                          vars = vars.copyWith(
+                            hasShifter: () =>
+                                <int, bool>{1: false, 0: true}[selection],
+                          );
                         });
                       },
                     ),
@@ -224,8 +233,10 @@ class _PitViewState extends State<PitView> {
                       ],
                       onChange: (final int selection) {
                         setState(() {
-                          vars.gearboxPurchased =
-                              <int, bool>{1: false, 0: true}[selection];
+                          vars = vars.copyWith(
+                            gearboxPurchased: () =>
+                                <int, bool>{1: false, 0: true}[selection],
+                          );
                         });
                       },
                     ),
@@ -235,7 +246,9 @@ class _PitViewState extends State<PitView> {
                     TextFormField(
                       controller: weightController,
                       onChanged: (final String weight) {
-                        vars.weight = weight;
+                        vars = vars.copyWith(
+                          weight: () => weight,
+                        );
                       },
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
@@ -252,6 +265,28 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
+                    TextFormField(
+                      controller: heightController,
+                      onChanged: (final String height) {
+                        vars = vars.copyWith(
+                          height: () => height,
+                        );
+                      },
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      decoration: const InputDecoration(
+                        labelText: "Height",
+                        prefixIcon: Icon(Icons.swap_vert_rounded),
+                      ),
+                      validator: _numericValidator(
+                        "please enter the robot's height",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Selector<String>(
                       options: driveWheelTypes,
                       placeholder: "Choose a drive wheel",
@@ -263,7 +298,9 @@ class _PitViewState extends State<PitView> {
                             otherWheelSelected = true;
                           } else {
                             otherWheelSelected = false;
-                            vars.driveWheelType = newValue;
+                            vars = vars.copyWith(
+                              driveWheelType: () => newValue,
+                            );
                           }
                         });
                       },
@@ -281,7 +318,9 @@ class _PitViewState extends State<PitView> {
                         controller: wheelTypeController,
                         onChanged: (final String specifiedWheel) {
                           setState(() {
-                            vars.driveWheelType = specifiedWheel;
+                            vars = vars.copyWith(
+                              driveWheelType: () => specifiedWheel,
+                            );
                           });
                         },
                         validator: (final String? otherWheelOption) =>
@@ -319,7 +358,9 @@ class _PitViewState extends State<PitView> {
                       textDirection: TextDirection.rtl,
                       controller: notesController,
                       onChanged: (final String notes) {
-                        vars.notes = notes;
+                        vars = vars.copyWith(
+                          notes: () => notes,
+                        );
                       },
                       style: const TextStyle(color: Colors.white),
                       cursorColor: Colors.white,
