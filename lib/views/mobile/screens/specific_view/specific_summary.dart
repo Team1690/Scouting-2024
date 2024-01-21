@@ -22,7 +22,7 @@ class _SpecificSummaryState extends State<SpecificSummary> {
   final TextEditingController intakeController = TextEditingController();
   final TextEditingController speakerController = TextEditingController();
   bool isEnabled = false;
-
+  bool isPressed = false;
   @override
   Widget build(final BuildContext context) => Scaffold(
         drawer: isPC(context) ? null : SideNavBar(),
@@ -38,33 +38,80 @@ class _SpecificSummaryState extends State<SpecificSummary> {
           widgets: <Widget>[
             const Text("text"),
             Column(
-              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TeamSelectionFuture(
-                  onChange: (final LightTeam lightTeam) {},
+                  onChange: (final LightTeam lightTeam) {
+                    setState(() {
+                      isPressed = true;
+                    });
+                  },
                   controller: teamSelectionController,
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          isEnabled = true;
-                        });
-                      },
-                      child: const Text("Edit"),
-                    ),
-                    SpecificSummaryTextField(
-                      onTextChanged: () {
-                        setState(() {
-                          isEnabled = false;
-                        });
-                      },
-                      isEnabled: isEnabled,
-                      controller: ampController,
-                    ),
-                  ],
+                TextButton(
+                  onPressed: () {
+                    isPressed ? setState(() => isEnabled = true) : null;
+                  },
+                  child: const Text("Edit"),
+                ),
+                SpecificSummaryTextField(
+                  onTextChanged: () {
+                    setState(() {
+                      isEnabled = false;
+                    });
+                  },
+                  isEnabled: isEnabled,
+                  controller: ampController,
+                  label: "Amp",
+                ),
+                SpecificSummaryTextField(
+                  onTextChanged: () {
+                    setState(() {
+                      isEnabled = false;
+                    });
+                  },
+                  isEnabled: isEnabled,
+                  controller: speakerController,
+                  label: "Speaker",
+                ),
+                SpecificSummaryTextField(
+                  onTextChanged: () {
+                    setState(() {
+                      isEnabled = false;
+                    });
+                  },
+                  isEnabled: isEnabled,
+                  controller: climbController,
+                  label: "Intake",
+                ),
+                SpecificSummaryTextField(
+                  onTextChanged: () {
+                    setState(() {
+                      isEnabled = false;
+                    });
+                  },
+                  isEnabled: isEnabled,
+                  controller: drivingController,
+                  label: "Climing",
+                ),
+                SpecificSummaryTextField(
+                  onTextChanged: () {
+                    setState(() {
+                      isEnabled = false;
+                    });
+                  },
+                  isEnabled: isEnabled,
+                  controller: intakeController,
+                  label: "General",
+                ),
+                SpecificSummaryTextField(
+                  onTextChanged: () {
+                    setState(() {
+                      isEnabled = false;
+                    });
+                  },
+                  isEnabled: isEnabled,
+                  controller: generalController,
+                  label: "Driving",
                 ),
               ],
             ),
@@ -72,19 +119,38 @@ class _SpecificSummaryState extends State<SpecificSummary> {
         ),
       );
 
-  String insertMutation = r"""
-mutation MyMutation($amp_text: String, $climb_text: String, $driving_text: String, $general_text: String, $intake_text: String, $speaker_text: String) {
-  insert_specific_summary(objects: {amp_text: $amp_text, climb_text: $climb_text, driving_text: $driving_text, general_text: $general_text, intake_text: $intake_text, speaker_text: $speaker_text}) {
+  String updateMutation = r"""
+mutation MyMutation(
+  $amp_text: String_comparison_exp, 
+  $climb_text: String_comparison_exp, 
+  $driving_text: String_comparison_exp, 
+  $general_text: String_comparison_exp, 
+  $intake_text: String_comparison_exp, 
+  $speaker_text: String_comparison_exp
+  ){
+  update_specific_summary(
+    where: {
+      amp_text: $amp_text, 
+      climb_text: $climb_text, 
+      driving_text: $driving_text, 
+      general_text: $general_text, 
+      intake_text: $intake_text, 
+      speaker_text: $speaker_text
+      }){
     affected_rows
   }
-}
-
 """;
 
-  String updateMutation = r"""
-
-""";
   String subSciriptionMutation = r"""
-
+subscription MySubscription {
+  specific_summary {
+    amp_text
+    climb_text
+    driving_text
+    general_text
+    intake_text
+    speaker_text
+  }
+}
 """;
 }

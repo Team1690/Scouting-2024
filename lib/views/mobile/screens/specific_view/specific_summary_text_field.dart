@@ -6,73 +6,31 @@ class SpecificSummaryTextField extends StatelessWidget {
     required this.onTextChanged,
     required this.isEnabled,
     required this.controller,
+    required this.label,
   });
   final void Function() onTextChanged;
   final TextEditingController controller;
   final bool isEnabled;
+  final String label;
 
   @override
   Widget build(final BuildContext context) => Expanded(
-        child: TextFormField(
-          onTapOutside: (final PointerDownEvent event) {
-            onTextChanged();
-          },
-          controller: controller,
-          enabled: isEnabled,
-          style: const TextStyle(),
-          cursorColor: Colors.blue,
-          maxLines: 2,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextFormField(
+            onTapOutside: (final PointerDownEvent event) {
+              onTextChanged();
+            },
+            controller: controller,
+            enabled: isEnabled,
+            style: const TextStyle(),
+            cursorColor: Colors.blue,
+            maxLines: null,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              labelText: label,
+            ),
           ),
         ),
       );
 }
-
-
-
-// SpecificSummaryTextField(
-//   onChanged: () {
-//     setState(() {
-//       isEnabled = false;
-//     });
-//   },
-//   isEnabled: isEnabled,
-//   controller: speakerController,
-// ),
-// SpecificSummaryTextField(
-//   onChanged: () {
-//     setState(() {
-//       isEnabled = false;
-//     });
-//   },
-//   isEnabled: isEnabled,
-//   controller: climbController,
-// ),
-// SpecificSummaryTextField(
-//   onChanged: () {
-//     setState(() {
-//       isEnabled = false;
-//     });
-//   },
-//   isEnabled: isEnabled,
-//   controller: drivingController,
-// ),
-// SpecificSummaryTextField(
-//   onChanged: () {
-//     setState(() {
-//       isEnabled = false;
-//     });
-//   },
-//   isEnabled: isEnabled,
-//   controller: intakeController,
-// ),
-// SpecificSummaryTextField(
-//   onChanged: () {
-//     setState(() {
-//       isEnabled = false;
-//     });
-//   },
-//   isEnabled: isEnabled,
-//   controller: generalController,
-// ),
