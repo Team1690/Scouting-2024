@@ -15,6 +15,7 @@ import "package:scouting_frontend/views/mobile/screens/input_view/game_piece_cou
 import "package:scouting_frontend/views/mobile/screens/input_view/starting_pos.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/trap_amount.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
+import "package:scouting_frontend/views/mobile/screens/scouter_name_input.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
@@ -141,20 +142,12 @@ class _UserInputState extends State<UserInput> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      TextFormField(
-                        controller: scouterNameController,
-                        validator: (final String? value) =>
-                            value != null && value.isNotEmpty
-                                ? null
-                                : "Please enter your name",
-                        onChanged: (final String name) {
-                          match = match.copyWith(scouterName: always(name));
+                      ScouterNameInput(
+                        onScouterNameChange: (final String scouterName) {
+                          match =
+                              match.copyWith(scouterName: always(scouterName));
                         },
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.person),
-                          border: OutlineInputBorder(),
-                          hintText: "Scouter name",
-                        ),
+                        scouterNameController: scouterNameController,
                       ),
                       const SizedBox(
                         height: 15,
