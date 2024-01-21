@@ -13,7 +13,9 @@ class PitVars implements HasuraVars {
         driveWheelType = null,
         teamId = null,
         weight = "",
-        height = "";
+        height = "",
+        canHarmonize = null,
+        canTrap = 0;
 
   PitVars.all({
     required this.driveTrainType,
@@ -26,6 +28,8 @@ class PitVars implements HasuraVars {
     required this.teamId,
     required this.weight,
     required this.height,
+    required this.canHarmonize,
+    required this.canTrap,
   });
 
   PitVars copyWith({
@@ -39,6 +43,8 @@ class PitVars implements HasuraVars {
     final int? Function()? teamId,
     final String Function()? weight,
     final String Function()? height,
+    final bool? Function()? canHarmonize,
+    final int Function()? canTrap,
   }) =>
       PitVars.all(
         driveTrainType:
@@ -58,6 +64,8 @@ class PitVars implements HasuraVars {
         teamId: teamId != null ? teamId() : this.teamId,
         weight: weight != null ? weight() : this.weight,
         height: height != null ? height() : this.height,
+        canHarmonize: canHarmonize != null ? canHarmonize() : this.canHarmonize,
+        canTrap: canTrap != null ? canTrap() : this.canTrap,
       );
   //TODO add season specific vars
   final int? driveTrainType;
@@ -70,6 +78,8 @@ class PitVars implements HasuraVars {
   final int? teamId;
   final String weight;
   final String height;
+  final bool? canHarmonize;
+  final int canTrap;
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         //TODO add season specific vars
@@ -83,6 +93,8 @@ class PitVars implements HasuraVars {
         "team_id": teamId,
         "weight": int.parse(weight),
         "height": int.parse(height),
+        "can_harmonize": canHarmonize,
+        "canTrap": canTrap,
       };
 
   void reset() {
@@ -97,6 +109,8 @@ class PitVars implements HasuraVars {
       teamId: always(null),
       weight: always(""),
       height: always(""),
+      canHarmonize: always(null),
+      canTrap: always(0),
     );
   }
 }

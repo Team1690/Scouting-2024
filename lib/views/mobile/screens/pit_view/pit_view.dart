@@ -337,6 +337,53 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
+                    Switcher(
+                      borderRadiusGeometry: defaultBorderRadius,
+                      selected: vars.canHarmonize.mapNullable(
+                            (final bool canHarmonize) => canHarmonize ? 1 : 0,
+                          ) ??
+                          -1,
+                      labels: const <String>[
+                        "Can't Harmonize",
+                        "Can Harmonize",
+                      ],
+                      colors: const <Color>[
+                        Colors.white,
+                        Colors.white,
+                      ],
+                      onChange: (final int selection) {
+                        setState(() {
+                          vars = vars.copyWith(
+                            canHarmonize: () =>
+                                <int, bool>{1: true, 0: false}[selection],
+                          );
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Switcher(
+                      borderRadiusGeometry: defaultBorderRadius,
+                      selected: vars.canTrap,
+                      labels: const <String>[
+                        "Can't Trap",
+                        "Can Trap",
+                        "Can Trap Twice",
+                      ],
+                      colors: const <Color>[
+                        Colors.white,
+                        Colors.white,
+                        Colors.white,
+                      ],
+                      onChange: (final int selection) {
+                        setState(() {
+                          vars = vars.copyWith(
+                            canTrap: () => selection,
+                          );
+                        });
+                      },
+                    ),
                     Visibility(
                       visible: widget.initialVars == null,
                       child: Column(
