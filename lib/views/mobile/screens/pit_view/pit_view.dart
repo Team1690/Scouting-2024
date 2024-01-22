@@ -15,6 +15,7 @@ import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/submit_button.dart";
+import "package:scouting_frontend/views/mobile/screens/pit_view/teams_without_pit.dart";
 
 class PitView extends StatefulWidget {
   const PitView([this.initialVars]);
@@ -55,6 +56,7 @@ class _PitViewState extends State<PitView> {
     setState(() {
       vars.reset();
       weightController.clear();
+      heightController.clear();
       notesController.clear();
       wheelTypeController.clear();
       teamSelectionController.clear();
@@ -70,7 +72,8 @@ class _PitViewState extends State<PitView> {
     super.initState();
     vars = widget.initialVars ?? PitVars(context);
     weightController.text = vars.weight;
-    notesController.text = vars.notes;
+    heightController.text = vars.height;
+    notesController.text = vars.notes ?? "";
     if (!driveWheelTypes.contains(vars.driveWheelType) &&
         widget.initialVars != null) {
       otherWheelSelected = true;
@@ -170,6 +173,53 @@ class _PitViewState extends State<PitView> {
                     ),
                     const SizedBox(
                       height: 20,
+                    ),
+                    Selector<String>(
+                      options: driveWheelTypes,
+                      placeholder: "Choose a drive wheel",
+                      value: otherWheelSelected ? "Other" : vars.driveWheelType,
+                      makeItem: (final String wheelType) => wheelType,
+                      onChange: (final String newValue) {
+                        setState(() {
+                          if (newValue == "Other") {
+                            otherWheelSelected = true;
+                          } else {
+                            otherWheelSelected = false;
+                            vars = vars.copyWith(
+                              driveWheelType: () => newValue,
+                            );
+                          }
+                        });
+                      },
+                      validate: (final String? wheelType) =>
+                          wheelType == null || wheelType.isEmpty
+                              ? "please enter the robot's wheel type"
+                              : null,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Visibility(
+                      visible: otherWheelSelected,
+                      child: TextFormField(
+                        controller: wheelTypeController,
+                        onChanged: (final String specifiedWheel) {
+                          setState(() {
+                            vars = vars.copyWith(
+                              driveWheelType: () => specifiedWheel,
+                            );
+                          });
+                        },
+                        validator: (final String? otherWheelOption) =>
+                            otherWheelSelected &&
+                                    (otherWheelOption == null ||
+                                        otherWheelOption.isEmpty)
+                                ? "Please specify \"Other\" wheel type"
+                                : null,
+                        decoration: const InputDecoration(
+                          labelText: "\"Other\" drive wheel type",
+                        ),
+                      ),
                     ),
                     Counter(
                       count: vars.driveMotorAmount,
@@ -284,62 +334,13 @@ class _PitViewState extends State<PitView> {
                         "please enter the robot's height",
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Selector<String>(
-                      options: driveWheelTypes,
-                      placeholder: "Choose a drive wheel",
-                      value: otherWheelSelected ? "Other" : vars.driveWheelType,
-                      makeItem: (final String wheelType) => wheelType,
-                      onChange: (final String newValue) {
-                        setState(() {
-                          if (newValue == "Other") {
-                            otherWheelSelected = true;
-                          } else {
-                            otherWheelSelected = false;
-                            vars = vars.copyWith(
-                              driveWheelType: () => newValue,
-                            );
-                          }
-                        });
-                      },
-                      validate: (final String? wheelType) =>
-                          wheelType == null || wheelType.isEmpty
-                              ? "please enter the robot's wheel type"
-                              : null,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Visibility(
-                      visible: otherWheelSelected,
-                      child: TextFormField(
-                        controller: wheelTypeController,
-                        onChanged: (final String specifiedWheel) {
-                          setState(() {
-                            vars = vars.copyWith(
-                              driveWheelType: () => specifiedWheel,
-                            );
-                          });
-                        },
-                        validator: (final String? otherWheelOption) =>
-                            otherWheelSelected &&
-                                    (otherWheelOption == null ||
-                                        otherWheelOption.isEmpty)
-                                ? "Please specify \"Other\" wheel type"
-                                : null,
-                        decoration: const InputDecoration(
-                          labelText: "\"Other\" drive wheel type",
-                        ),
-                      ),
-                    ),
+                    SectionDivider(label: "OnStage"),
                     const SizedBox(
                       height: 20,
                     ),
                     Switcher(
                       borderRadiusGeometry: defaultBorderRadius,
-                      selected: vars.canHarmonize.mapNullable(
+                      selected: vars.harmony.mapNullable(
                             (final bool canHarmonize) => canHarmonize ? 1 : 0,
                           ) ??
                           -1,
@@ -354,7 +355,7 @@ class _PitViewState extends State<PitView> {
                       onChange: (final int selection) {
                         setState(() {
                           vars = vars.copyWith(
-                            canHarmonize: () =>
+                            harmony: () =>
                                 <int, bool>{1: true, 0: false}[selection],
                           );
                         });
@@ -365,7 +366,7 @@ class _PitViewState extends State<PitView> {
                     ),
                     Switcher(
                       borderRadiusGeometry: defaultBorderRadius,
-                      selected: vars.canTrap,
+                      selected: vars.trap,
                       labels: const <String>[
                         "Can't Trap",
                         "Can Trap",
@@ -379,7 +380,33 @@ class _PitViewState extends State<PitView> {
                       onChange: (final int selection) {
                         setState(() {
                           vars = vars.copyWith(
-                            canTrap: () => selection,
+                            trap: () => selection,
+                          );
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Switcher(
+                      borderRadiusGeometry: defaultBorderRadius,
+                      selected: vars.hasBuddyClimb.mapNullable(
+                            (final bool canBuddyClimb) => canBuddyClimb ? 1 : 0,
+                          ) ??
+                          -1,
+                      labels: const <String>[
+                        "Can't Buddy Climb",
+                        "Can Buddy Climb",
+                      ],
+                      colors: const <Color>[
+                        Colors.white,
+                        Colors.white,
+                      ],
+                      onChange: (final int selection) {
+                        setState(() {
+                          vars = vars.copyWith(
+                            hasBuddyClimb: () =>
+                                <int, bool>{1: true, 0: false}[selection],
                           );
                         });
                       },
@@ -454,30 +481,38 @@ class _PitViewState extends State<PitView> {
 }
 
 //TODO add season specific variables to both mutations
-const String insertMutation = """
+const String insertMutation = r"""
           mutation InsertPit(
-              \$url: String,
-              \$drive_motor_amount: Int,
-              \$drivemotor_id: Int,
-              \$drivetrain_id: Int,
-              \$drive_wheel_type: String,
-              \$gearbox_purchased: Boolean,
-              \$notes:String,
-              \$has_shifter:Boolean,
-              \$team_id:Int,
-              \$weight:Int,
+              $url: String,
+              $drive_motor_amount: Int,
+              $drivemotor_id: Int,
+              $drivetrain_id: Int,
+              $drive_wheel_type: String,
+              $gearbox_purchased: Boolean,
+              $notes:String,
+              $has_shifter:Boolean,
+              $team_id:Int,
+              $weight:Int,
+              $height: Int,
+              $harmonize: Boolean,
+              $trap: Int,
+              $has_buddy_climb: Boolean,
               ) {
-          insert__2023_pit(objects: {
-          url: \$url,
-          drive_motor_amount: \$drive_motor_amount,
-          drivemotor_id: \$drivemotor_id,
-          drivetrain_id: \$drivetrain_id,
-          drive_wheel_type: \$drive_wheel_type,
-          gearbox_purchased: \$gearbox_purchased,
-          notes: \$notes,
-          has_shifter: \$has_shifter,
-          team_id: \$team_id,
-          weight:  \$weight,
+          insert_pit(objects: {
+          url: $url,
+          drive_motor_amount: $drive_motor_amount,
+          drivemotor_id: $drivemotor_id,
+          drivetrain_id: $drivetrain_id,
+          drive_wheel_type: $drive_wheel_type,
+          gearbox_purchased: $gearbox_purchased,
+          notes: $notes,
+          has_shifter: $has_shifter,
+          team_id: $team_id,
+          weight:  $weight,
+          height: $height,
+          harmony: $harmonize,
+          trap: $trap,
+          has_buddy_climb: $has_buddy_climb,
           }) {
               returning {
                 url
@@ -486,75 +521,41 @@ const String insertMutation = """
           }
           """;
 
-const String updateMutation = """
+const String updateMutation = r"""
           mutation UpdatePit(
-              \$drive_motor_amount: Int,
-              \$drivemotor_id: Int,
-              \$drivetrain_id: Int,
-              \$drive_wheel_type: String,
-              \$gearbox_purchased: Boolean,
-              \$notes:String,
-              \$has_shifter:Boolean,
-              \$team_id:Int,
-              \$weight:Int,
+              $drive_motor_amount: Int,
+              $drivemotor_id: Int,
+              $drivetrain_id: Int,
+              $drive_wheel_type: String,
+              $gearbox_purchased: Boolean,
+              $notes:String,
+              $has_shifter:Boolean,
+              $team_id:Int,
+              $weight:Int,
+              $height: Int,
+              $harmony: Boolean,
+              $trap: Int,
+              $has_buddy_climb: Boolean,
               ) {
-          update__2023_pit(where: {team_id: {_eq: \$team_id}}, _set: {
-          drive_motor_amount: \$drive_motor_amount,
-          drivemotor_id: \$drivemotor_id,
-          drivetrain_id: \$drivetrain_id,
-          drive_wheel_type: \$drive_wheel_type,
-          gearbox_purchased: \$gearbox_purchased,
-          notes: \$notes,
-          has_shifter: \$has_shifter,
-          team_id: \$team_id,
-          weight:  \$weight,
+          update_pit(where: {team_id: {_eq: $team_id}}, _set: {
+          drive_motor_amount: $drive_motor_amount,
+          drivemotor_id: $drivemotor_id,
+          drivetrain_id: $drivetrain_id,
+          drive_wheel_type: $drive_wheel_type,
+          gearbox_purchased: $gearbox_purchased,
+          notes: $notes,
+          has_shifter: $has_shifter,
+          team_id: $team_id,
+          weight:  $weight,
+          height: $height,
+          harmony: $harmonize,
+          trap: $trap
+          has_buddy_climb: $has_buddy_climb,
           }) {
     affected_rows
   }
           }
           """;
-
-class TeamsWithoutPit extends StatelessWidget {
-  const TeamsWithoutPit();
-
-  @override
-  Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text("Teams without pit"),
-          centerTitle: true,
-        ),
-        body: StreamBuilder<List<LightTeam>>(
-          stream: fetchTeamsWithoutPit(),
-          builder: (
-            final BuildContext context,
-            final AsyncSnapshot<List<LightTeam>> snapshot,
-          ) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString()),
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView(
-              children: snapshot.data.mapNullable(
-                    (final List<LightTeam> teams) => teams
-                        .map(
-                          (final LightTeam team) => ListTile(
-                            title: Text("${team.number} ${team.name}"),
-                          ),
-                        )
-                        .toList(),
-                  ) ??
-                  (throw Exception("No data")),
-            );
-          },
-        ),
-      );
-}
 
 Stream<List<LightTeam>> fetchTeamsWithoutPit() => getClient()
     .subscribe(
@@ -564,7 +565,7 @@ Stream<List<LightTeam>> fetchTeamsWithoutPit() => getClient()
         document: gql(
           r"""
 query NoPit {
-  team(where:  {_not: { _2023_pit: {} } }) {
+  team(where:  {_not: { pit: {} } }) {
     number
     name
     id
@@ -578,23 +579,3 @@ query NoPit {
     .map(
       queryResultToParsed,
     );
-
-class CheckBoxFormField extends FormField<void> {
-  CheckBoxFormField({
-    required final Widget widget,
-    required final String? Function(void) validate,
-  }) : super(
-          enabled: true,
-          validator: validate,
-          builder: (final FormFieldState<void> state) => Column(
-            children: <Widget>[
-              widget,
-              if (state.hasError)
-                Text(
-                  state.errorText!,
-                  style: const TextStyle(color: Colors.red),
-                ),
-            ],
-          ),
-        );
-}

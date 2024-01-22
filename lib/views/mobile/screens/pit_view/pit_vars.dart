@@ -14,8 +14,9 @@ class PitVars implements HasuraVars {
         teamId = null,
         weight = "",
         height = "",
-        canHarmonize = null,
-        canTrap = 0;
+        harmony = null,
+        trap = 0,
+        hasBuddyClimb = null;
 
   PitVars.all({
     required this.driveTrainType,
@@ -28,8 +29,9 @@ class PitVars implements HasuraVars {
     required this.teamId,
     required this.weight,
     required this.height,
-    required this.canHarmonize,
-    required this.canTrap,
+    required this.harmony,
+    required this.trap,
+    required this.hasBuddyClimb,
   });
 
   PitVars copyWith({
@@ -43,8 +45,9 @@ class PitVars implements HasuraVars {
     final int? Function()? teamId,
     final String Function()? weight,
     final String Function()? height,
-    final bool? Function()? canHarmonize,
-    final int Function()? canTrap,
+    final bool? Function()? harmony,
+    final int Function()? trap,
+    final bool? Function()? hasBuddyClimb,
   }) =>
       PitVars.all(
         driveTrainType:
@@ -64,8 +67,10 @@ class PitVars implements HasuraVars {
         teamId: teamId != null ? teamId() : this.teamId,
         weight: weight != null ? weight() : this.weight,
         height: height != null ? height() : this.height,
-        canHarmonize: canHarmonize != null ? canHarmonize() : this.canHarmonize,
-        canTrap: canTrap != null ? canTrap() : this.canTrap,
+        harmony: harmony != null ? harmony() : this.harmony,
+        trap: trap != null ? trap() : this.trap,
+        hasBuddyClimb:
+            hasBuddyClimb != null ? hasBuddyClimb() : this.hasBuddyClimb,
       );
   //TODO add season specific vars
   final int? driveTrainType;
@@ -73,13 +78,14 @@ class PitVars implements HasuraVars {
   final int driveMotorAmount;
   final bool? hasShifter;
   final bool? gearboxPurchased;
-  final String notes;
+  final String? notes;
   final String? driveWheelType;
   final int? teamId;
   final String weight;
   final String height;
-  final bool? canHarmonize;
-  final int canTrap;
+  final bool? harmony;
+  final int trap;
+  final bool? hasBuddyClimb;
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         //TODO add season specific vars
@@ -88,13 +94,14 @@ class PitVars implements HasuraVars {
         "drive_motor_amount": driveMotorAmount,
         "has_shifter": hasShifter,
         "gearbox_purchased": gearboxPurchased,
-        "notes": notes,
+        "notes": notes ?? "",
         "drive_wheel_type": driveWheelType ?? "",
         "team_id": teamId,
         "weight": int.parse(weight),
         "height": int.parse(height),
-        "can_harmonize": canHarmonize,
-        "canTrap": canTrap,
+        "harmonize": harmony,
+        "trap": trap,
+        "has_buddy_climb": hasBuddyClimb,
       };
 
   void reset() {
@@ -109,8 +116,9 @@ class PitVars implements HasuraVars {
       teamId: always(null),
       weight: always(""),
       height: always(""),
-      canHarmonize: always(null),
-      canTrap: always(0),
+      harmony: always(null),
+      trap: always(0),
+      hasBuddyClimb: always(null),
     );
   }
 }
