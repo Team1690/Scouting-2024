@@ -100,6 +100,8 @@ class _SubmitButtonState extends State<SubmitButton> {
               _state = ButtonState.fail;
             });
             final List<GraphQLError> errors = exception.graphqlErrors;
+            // ignore: avoid_print
+            print(errors.map((final GraphQLError e) => (e.message)).toList());
             if (errors.length == 1) {
               final GraphQLError error = errors.single;
               _errorMessage = error.extensions?["code"]?.toString() ==

@@ -27,6 +27,7 @@ class Counter extends StatelessWidget {
   final int count;
   @override
   Widget build(final BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Row(
             children: <Widget>[
@@ -61,9 +62,7 @@ class Counter extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Spacer(),
                 Expanded(
                   flex: 6,
                   child: RoundedIconButton(
@@ -95,7 +94,6 @@ class Counter extends StatelessWidget {
                     },
                   ),
                 ),
-                const Spacer(),
               ],
             ),
           ),

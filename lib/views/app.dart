@@ -2,9 +2,9 @@ import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/views/mobile/screens/input_view.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 
 class App extends StatelessWidget {
@@ -18,6 +18,7 @@ class App extends StatelessWidget {
     required this.faultStatus,
     required this.matches,
     required this.defense,
+    required this.startingPosition,
   });
   final List<ScheduleMatch> matches;
   final Map<String, int> robotFieldStatusIds;
@@ -28,17 +29,19 @@ class App extends StatelessWidget {
   final Map<String, int> matchTypeIds;
   final Map<String, int> faultStatus;
   final Map<String, int> defense;
+  final Map<String, int> startingPosition;
   @override
   Widget build(final BuildContext context) => TeamProvider(
         teams: teams,
         child: MatchesProvider(
           matches: matches,
           child: IdProvider(
+            startingPosition: startingPosition,
             matchTypeIds: matchTypeIds,
             climbIds: climbIds,
             drivemotorIds: driveMotorIds,
             drivetrainIds: drivetrainIds,
-            robotMatchStatusIds: robotFieldStatusIds,
+            robotFieldStatusIds: robotFieldStatusIds,
             faultStatus: faultStatus,
             defense: defense,
             child: MaterialApp(
