@@ -121,63 +121,65 @@ Future<List<CoachData>> fetchMatches(final BuildContext context) async {
   final QueryResult<List<CoachData>> result = await client.query(
     QueryOptions<List<CoachData>>(
       document: gql(query),
-      parserFn: (final Map<String, dynamic> data) {
-        final List<dynamic> matches = (data["matches"] as List<dynamic>);
-        return matches
-            .where(
-          (final dynamic element) => teamValues
-              .any((final String team) => element[team]?["number"] == 1690),
-        )
-            .map((final dynamic match) {
-          final int number = match["match_number"] as int;
-          final String matchType = match["match_type"]["title"] as String;
-          final bool happened = match["happened"] as bool;
-          final List<CoachViewLightTeam> teams = teamValues
-              .map<CoachViewLightTeam?>((final String e) {
-                // Couldn't use mapNullable properly because this variable is dynamic
-                if (match[e] == null) {
-                  return null;
-                }
-                final LightTeam team = LightTeam.fromJson(match[e]);
-                //TODO initialize and calculate the data you wish to display
-
-                final List<String> faultMessages = (match[e]["faults"]
-                        as List<dynamic>)
-                    .map((final dynamic fault) => fault["message"] as String)
-                    .toList();
-
-                return CoachViewLightTeam(
-                  team: team,
-                  isBlue: e.startsWith("blue"),
-                  faults: faultMessages,
-                );
-              })
-              .whereType<CoachViewLightTeam>()
-              .toList();
-
-          final List<CoachViewLightTeam> redAlliance = teams
-              .where((final CoachViewLightTeam element) => !element.isBlue)
-              .toList();
-          final List<CoachViewLightTeam> blueAlliance = teams
-              .where((final CoachViewLightTeam element) => element.isBlue)
-              .toList();
-          //TODO return the actual calculated data (replace these placeholders)
-          return CoachData(
-            happened: happened,
-            blueAlliance: blueAlliance,
-            redAlliance: redAlliance,
-            matchNumber: number,
-            matchType: matchType,
-            avgBlue: 0,
-            avgRed: 0,
-            avgBlueWithFourth: 0,
-            avgRedWithFourth: 0,
-          );
-        }).toList();
-      },
+      parserFn: fetchMatchesParserfn,
     ),
   );
   return result.mapQueryResult();
+}
+
+List<CoachData> fetchMatchesParserfn(final Map<String, dynamic> data) {
+  final List<dynamic> matches = (data["schedule_matches"] as List<dynamic>);
+  return matches
+      .where(
+    (final dynamic element) =>
+        teamValues.any((final String team) => element[team]?["number"] == 1690),
+  )
+      .map((final dynamic match) {
+    final int number = match["match_number"] as int;
+    final String matchType = match["match_type"]["title"] as String;
+    final bool happened = match["happened"] as bool;
+    final List<CoachViewLightTeam> teams = teamValues
+        .map<CoachViewLightTeam?>((final String e) {
+          // Couldn't use mapNullable properly because this variable is dynamic
+          if (match[e] == null) {
+            return null;
+          }
+          final LightTeam team = LightTeam.fromJson(match[e]);
+          //TODO initialize and calculate the data you wish to display
+
+          final List<String> faultMessages =
+              (match[e]["faults"] as List<dynamic>)
+                  .map((final dynamic fault) => fault["message"] as String)
+                  .toList();
+
+          return CoachViewLightTeam(
+            team: team,
+            isBlue: e.startsWith("blue"),
+            faults: faultMessages,
+          );
+        })
+        .whereType<CoachViewLightTeam>()
+        .toList();
+
+    final List<CoachViewLightTeam> redAlliance = teams
+        .where((final CoachViewLightTeam element) => !element.isBlue)
+        .toList();
+    final List<CoachViewLightTeam> blueAlliance = teams
+        .where((final CoachViewLightTeam element) => element.isBlue)
+        .toList();
+    //TODO return the actual calculated data (replace these placeholders)
+    return CoachData(
+      happened: happened,
+      blueAlliance: blueAlliance,
+      redAlliance: redAlliance,
+      matchNumber: number,
+      matchType: matchType,
+      avgBlue: 0,
+      avgRed: 0,
+      avgBlueWithFourth: 0,
+      avgRedWithFourth: 0,
+    );
+  }).toList();
 }
 
 const List<String> teamValues = <String>[
