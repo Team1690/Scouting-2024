@@ -64,7 +64,7 @@ class RobotImageButton extends StatelessWidget {
             );
           }
         },
-        icon: const Icon(Icons.camera_alt),
+        icon: const Icon(Icons.image),
       );
 }
 
