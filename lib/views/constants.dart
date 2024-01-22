@@ -30,16 +30,4 @@ final ThemeData darkModeTheme = ThemeData.dark().copyWith(
   buttonTheme: const ButtonThemeData(buttonColor: primaryColor),
 );
 
-bool isPC(final BuildContext context) {
-  switch (Theme.of(context).platform) {
-    case TargetPlatform.android:
-    case TargetPlatform.iOS:
-      return false;
-
-    case TargetPlatform.windows:
-    case TargetPlatform.macOS:
-    case TargetPlatform.linux:
-    case TargetPlatform.fuchsia:
-      return true;
-  }
-}
+bool isPC(final BuildContext context) => false;

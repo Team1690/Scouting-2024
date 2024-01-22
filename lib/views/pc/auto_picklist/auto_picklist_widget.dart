@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/mobile/screens/coach_team_info_data.dart";
+import 'package:scouting_frontend/views/mobile/screens/coach_view/coach_team_info_data.dart';
 import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 import "package:flutter_switch/flutter_switch.dart";
