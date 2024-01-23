@@ -1,5 +1,4 @@
 import "dart:collection";
-
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -7,7 +6,6 @@ import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/common/no_team_selected.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
-import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_titled_line_chart.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_line_chart.dart";
 
 class CompareGamechartCard extends StatelessWidget {
@@ -105,26 +103,6 @@ class CompareGamechartCard extends StatelessWidget {
                             .toList(),
                         colors,
                         "Total Cubes",
-                      ),
-                      CompareClimbLineChart(
-                        data
-                            .map(
-                              (final CompareTeam element) =>
-                                  element.autoBalanceVals,
-                            )
-                            .toList(),
-                        colors,
-                        "Auto Balance Values",
-                      ),
-                      CompareClimbLineChart(
-                        data
-                            .map(
-                              (final CompareTeam element) =>
-                                  element.endgameBalanceVals,
-                            )
-                            .toList(),
-                        colors,
-                        "Endgame Balance Values",
                       ),
                     ],
                   ),

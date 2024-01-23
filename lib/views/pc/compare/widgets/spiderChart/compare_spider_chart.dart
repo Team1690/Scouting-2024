@@ -20,19 +20,6 @@ class CompareSpiderChart extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Builder(
             builder: (final BuildContext context) {
-              final double autoBalanceRatio = 100 /
-                  data
-                      .map(
-                        (final CompareTeam team) => team.avgAutoBalancePoints,
-                      )
-                      .reduce(max);
-              final double endgameBalanceRatio = 100 /
-                  data
-                      .map(
-                        (final CompareTeam team) =>
-                            team.avgEndgameBalancePoints,
-                      )
-                      .reduce(max);
               final double teleGamepiecePointRatio = 100 /
                   data
                       .map(
@@ -56,10 +43,6 @@ class CompareSpiderChart extends StatelessWidget {
                 data: data
                     .map<List<int>>(
                       (final CompareTeam team) => <double>[
-                        team.endgameBalanceSuccessPercentage,
-                        team.autoBalanceSuccessPercentage,
-                        team.avgEndgameBalancePoints * endgameBalanceRatio,
-                        team.avgAutoBalancePoints * autoBalanceRatio,
                         team.avgTeleGamepiecesPoints * teleGamepiecePointRatio,
                         team.avgAutoGamepiecePoints * autoGamepiecePointRatio,
                       ]
@@ -72,10 +55,6 @@ class CompareSpiderChart extends StatelessWidget {
                     .toList(),
                 ticks: const <int>[0, 25, 50, 75, 100],
                 features: const <String>[
-                  "Endgame Balance%",
-                  "Auto Balance%",
-                  "Endgame Balance Score%",
-                  "Auto Balance Score%",
                   "Tele Gamepieces",
                   "Auto Gamepieces",
                 ],
