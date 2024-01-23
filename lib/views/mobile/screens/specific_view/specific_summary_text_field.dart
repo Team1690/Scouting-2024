@@ -14,10 +14,11 @@ class SpecificSummaryTextField extends StatelessWidget {
   final String label;
 
   @override
-  Widget build(final BuildContext context) => Expanded(
+  Widget build(final BuildContext context) => SizedBox(
+        height: 100,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TextFormField(
+          child: TextField(
             onTapOutside: (final PointerDownEvent event) {
               onTextChanged();
             },
