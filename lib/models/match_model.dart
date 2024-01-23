@@ -148,79 +148,50 @@ enum MatchMode {
   final String title;
 }
 
-enum Gamepiece {
-  cone("cones"),
-  cube("cubes");
+enum PlaceLocation {
+  speaker("speaker"),
+  amp("amp");
 
-  const Gamepiece(this.title);
-  final String title;
-}
-
-enum GridLevel {
-  top(5, "top"),
-  mid(3, "mid"),
-  low(2, "low"),
-  none(0, "delivered");
-
-  const GridLevel(this.points, this.title);
-  final int points;
+  const PlaceLocation(this.title);
   final String title;
 }
 
 class EffectiveScore {
   const EffectiveScore({
     required this.mode,
-    required this.piece,
-    required this.level,
+    required this.place,
   });
   final MatchMode mode;
-  final Gamepiece piece;
-  final GridLevel? level;
+  final PlaceLocation place;
 
   @override
   int get hashCode => Object.hashAll(<Object?>[
         mode,
-        piece,
-        level,
+        place,
       ]);
 
   @override
   bool operator ==(final Object other) =>
-      other is EffectiveScore &&
-      other.level == level &&
-      other.mode == mode &&
-      other.piece == piece;
+      other is EffectiveScore && other.mode == mode && other.place == place;
 }
 
-List<EffectiveScore> coneAndCube(final GridLevel level, final MatchMode mode) =>
-    <EffectiveScore>[
+List<EffectiveScore> speakerAndAmp(final MatchMode mode) => <EffectiveScore>[
       EffectiveScore(
         mode: mode,
-        piece: Gamepiece.cone,
-        level: level,
+        place: PlaceLocation.speaker,
       ),
       EffectiveScore(
         mode: mode,
-        piece: Gamepiece.cube,
-        level: level,
+        place: PlaceLocation.amp,
       ),
-    ];
-
-List<EffectiveScore> allLevel(final MatchMode mode) => <EffectiveScore>[
-      ...GridLevel.values
-          .map((final GridLevel level) => coneAndCube(level, mode))
-          .expand(identity),
     ];
 
 final Map<EffectiveScore, int> score = <EffectiveScore, int>{
-  ...MatchMode.values.map(allLevel).expand(identity).toList().asMap().map(
-        (final _, final EffectiveScore effectiveScore) =>
+  ...MatchMode.values.toList().asMap().map(
+        (final int index, final MatchMode mode) =>
             MapEntry<EffectiveScore, int>(
-          effectiveScore,
-          effectiveScore.level!.points +
-              (effectiveScore.level != GridLevel.none
-                  ? effectiveScore.mode.pointAddition
-                  : 0), //this can be null since we define each EffectiveScore here to have a level (aka not missed)
+          EffectiveScore(mode: mode, place: PlaceLocation.speaker),
+          mode.pointAddition,
         ),
       ),
 };
@@ -244,13 +215,13 @@ Map<EffectiveScore, double> parseByMode(
   final dynamic data,
 ) =>
     Map<EffectiveScore, double>.fromEntries(
-      allLevel(mode).map(
+      speakerAndAmp(mode).map(
         (final EffectiveScore e) => MapEntry<EffectiveScore, double>(
           e,
-          data["${e.mode.title}_${e.piece.title}_${e.level!.title}"] as double,
+          data["${e.mode.title}_${e.place.title}"] as double,
         ),
       ),
-    ); //we define these values, therefore they are not null (see 'allLevel()')
+    );
 
 Map<EffectiveScore, double> parseMatch(
   final dynamic data,

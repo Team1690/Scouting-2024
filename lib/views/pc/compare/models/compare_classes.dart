@@ -10,8 +10,8 @@ class CompareTeam {
     required this.gamepiecePoints,
     required this.team,
     required this.autoGamepieces,
-    required this.totalCones,
-    required this.totalCubes,
+    required this.totalSpeakers,
+    required this.totalAmps,
     required this.totalDelivered,
   });
   final LightTeam team;
@@ -21,8 +21,8 @@ class CompareTeam {
   final CompareLineChartData teleGamepieces;
   final CompareLineChartData gamepieces;
   final CompareLineChartData gamepiecePoints;
-  final CompareLineChartData totalCones;
-  final CompareLineChartData totalCubes;
+  final CompareLineChartData totalSpeakers;
+  final CompareLineChartData totalAmps;
   final CompareLineChartData totalDelivered;
 }
 

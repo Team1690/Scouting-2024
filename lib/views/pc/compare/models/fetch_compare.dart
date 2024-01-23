@@ -68,11 +68,11 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
         (teams["team"] as List<dynamic>)
             .map<CompareTeam>((final dynamic teamsTable) {
           final LightTeam team = LightTeam.fromJson(teamsTable);
-          final List<dynamic> matches =
+          final List<dynamic> technicalMatches =
               teamsTable["technical_matches"] as List<dynamic>;
           final List<dynamic> specificMatches =
               teamsTable["specific_matches"] as List<dynamic>;
-          final List<int> autoGamepieces = matches
+          final List<int> autoGamepieces = technicalMatches
               .map(
                 (final dynamic technicalMatch) => (getPieces(
                       parseByMode(MatchMode.auto, technicalMatch),
@@ -81,7 +81,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
                         (technicalMatch["auto_speaker_missed"] as int))),
               )
               .toList();
-          final List<int> teleGamepieces = matches
+          final List<int> teleGamepieces = technicalMatches
               .map(
                 (final dynamic technicalMatch) => (getPieces(
                       parseByMode(MatchMode.tele, technicalMatch),
@@ -90,7 +90,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
                         (technicalMatch["tele_speaker_missed"] as int))),
               )
               .toList();
-          final List<int> totalMissed = matches
+          final List<int> totalMissed = technicalMatches
               .map(
                 (final dynamic technicalMatch) =>
                     ((technicalMatch["auto_amp_missed"] as int) +
@@ -99,14 +99,14 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
                         (technicalMatch["tele_speaker_missed"] as int)),
               )
               .toList();
-          final List<int> gamepieces = matches
+          final List<int> gamepieces = technicalMatches
               .map(
                 (final dynamic technicalMatch) => getPieces(
                   parseMatch(technicalMatch),
                 ).toInt(),
               )
               .toList();
-          final List<int> gamepiecePoints = matches
+          final List<int> gamepiecePoints = technicalMatches
               .map(
                 (final dynamic technicalMatch) => (getPoints(
                   parseMatch(technicalMatch),
@@ -114,17 +114,18 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
               )
               .toList();
 
-          final List<int> totalAmps = matches
+          final List<int> totalAmps = technicalMatches
               .map(
-                (final dynamic match) =>
-                    (match["auto_amp"] as int) + (match["tele_amp"] as int),
+                (final dynamic technicalMatch) =>
+                    (technicalMatch["auto_amp"] as int) +
+                    (technicalMatch["tele_amp"] as int),
               )
               .toList();
-          final List<int> totalSpeakers = matches
+          final List<int> totalSpeakers = technicalMatches
               .map(
-                (final dynamic match) =>
-                    (match["auto_speaker"] as int) +
-                    (match["tele_speaker"] as int),
+                (final dynamic technicalMatch) =>
+                    (technicalMatch["auto_speaker"] as int) +
+                    (technicalMatch["tele_speaker"] as int),
               )
               .toList();
           final dynamic avg =
@@ -137,7 +138,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
               ? double.nan
               : getPoints(parseByMode(MatchMode.auto, avg));
 
-          final List<RobotMatchStatus> matchStatuses = matches
+          final List<RobotMatchStatus> matchStatuses = technicalMatches
               .map(
                 (final dynamic e) => robotMatchStatusTitleToEnum(
                   e["robot_match_status"]["title"] as String,
@@ -145,7 +146,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
               )
               .toList();
           final List<DefenseAmount> defenceAmounts = <DefenseAmount>[
-            for (int i = 0; i < matches.length; i++)
+            for (int i = 0; i < technicalMatches.length; i++)
               if (i >= specificMatches.length)
                 DefenseAmount.noDefense
               else
@@ -198,8 +199,8 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
             gamepieces: gamepiecesLine,
             gamepiecePoints: pointLineChart,
             team: team,
-            totalCones: totalAmpsLineChart,
-            totalCubes: totalSpeakerLineChart,
+            totalSpeakers: totalAmpsLineChart,
+            totalAmps: totalSpeakerLineChart,
             teleGamepieces: teleGamepiecesLineChart,
             autoGamepieces: autoGamepiecesLineChart,
             avgAutoGamepiecePoints: avgAutoGamepiecePoints,
