@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/helpers.dart";
-import "package:scouting_frontend/models/match_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/card.dart";
@@ -176,18 +175,19 @@ DataCell show(final double value, [final bool isPercent = false]) => DataCell(
     );
 
 class _Team {
-  const _Team(
-      {required this.sumPoints,
-      required this.autoAmpAvg,
-      required this.teleAmpAvg,
-      required this.autoGamepieceAvg,
-      required this.teleSpeakerAvg,
-      required this.gamepieceAvg,
-      required this.team,
-      required this.gamepiecePointAvg,
-      required this.brokenMatches,
-      required this.amountOfMatches,
-      required this.autoSpeakerAvg});
+  const _Team({
+    required this.sumPoints,
+    required this.autoAmpAvg,
+    required this.teleAmpAvg,
+    required this.autoGamepieceAvg,
+    required this.teleSpeakerAvg,
+    required this.gamepieceAvg,
+    required this.team,
+    required this.gamepiecePointAvg,
+    required this.brokenMatches,
+    required this.amountOfMatches,
+    required this.autoSpeakerAvg,
+  });
   final double sumPoints;
   final double autoSpeakerAvg;
   final double autoAmpAvg;
@@ -207,10 +207,10 @@ Stream<List<_Team>> _fetchTeamList() => getClient()
         document: gql(query),
         parserFn: (final Map<String, dynamic> data) {
           final List<dynamic> teams = data["team"] as List<dynamic>;
-          final int autoSpeakerPoints = 5;
-          final int autoAmpPoints = 2;
-          final int teleSpeakerPoints = 2;
-          final int teleAmpPoints = 1;
+          const int autoSpeakerPoints = 5;
+          const int autoAmpPoints = 2;
+          const int teleSpeakerPoints = 2;
+          const int teleAmpPoints = 1;
           return teams.map<_Team>((final dynamic team) {
             final List<RobotFieldStatus> robotFieldStatuses =
                 (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
@@ -240,7 +240,7 @@ Stream<List<_Team>> _fetchTeamList() => getClient()
             final double sumPoints = nullValidator
                 ? double.nan
                 : (teleSpeakerAvg * teleSpeakerPoints) +
-                    (teleAmpAvg * teleSpeakerAvg) +
+                    (teleAmpAvg * teleAmpPoints) +
                     (autoGamepieceAvg * autoAmpPoints) +
                     (autoSpeakerAvg * autoAmpPoints);
 
