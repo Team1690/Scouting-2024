@@ -12,8 +12,8 @@ class PitVars implements HasuraVars {
         notes = "",
         driveWheelType = null,
         teamId = null,
-        weight = "",
-        height = "",
+        weight = null,
+        height = null,
         harmony = null,
         trap = 0,
         hasBuddyClimb = null;
@@ -43,8 +43,8 @@ class PitVars implements HasuraVars {
     final String Function()? notes,
     final String? Function()? driveWheelType,
     final int? Function()? teamId,
-    final String Function()? weight,
-    final String Function()? height,
+    final double? Function()? weight,
+    final double? Function()? height,
     final bool? Function()? harmony,
     final int Function()? trap,
     final bool? Function()? hasBuddyClimb,
@@ -72,53 +72,49 @@ class PitVars implements HasuraVars {
         hasBuddyClimb:
             hasBuddyClimb != null ? hasBuddyClimb() : this.hasBuddyClimb,
       );
-  //TODO add season specific vars
   final int? driveTrainType;
   final int? driveMotorType;
   final int driveMotorAmount;
   final bool? hasShifter;
   final bool? gearboxPurchased;
-  final String? notes;
+  final String notes;
   final String? driveWheelType;
   final int? teamId;
-  final String weight;
-  final String height;
+  final double? weight;
+  final double? height;
   final bool? harmony;
   final int trap;
   final bool? hasBuddyClimb;
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
-        //TODO add season specific vars
         "drivetrain_id": driveTrainType,
         "drivemotor_id": driveMotorType,
         "drive_motor_amount": driveMotorAmount,
         "has_shifter": hasShifter,
         "gearbox_purchased": gearboxPurchased,
-        "notes": notes ?? "",
+        "notes": notes,
         "drive_wheel_type": driveWheelType ?? "",
         "team_id": teamId,
-        "weight": int.parse(weight),
-        "height": int.parse(height),
+        "weight": weight,
+        "height": height,
         "harmonize": harmony,
         "trap": trap,
         "has_buddy_climb": hasBuddyClimb,
       };
 
-  void reset() {
-    copyWith(
-      driveTrainType: always(null),
-      driveMotorType: always(null),
-      driveMotorAmount: always(2),
-      hasShifter: always(null),
-      gearboxPurchased: always(null),
-      notes: always(""),
-      driveWheelType: always(null),
-      teamId: always(null),
-      weight: always(""),
-      height: always(""),
-      harmony: always(null),
-      trap: always(0),
-      hasBuddyClimb: always(null),
-    );
-  }
+  PitVars reset() => copyWith(
+        driveTrainType: always(null),
+        driveMotorType: always(null),
+        driveMotorAmount: always(2),
+        hasShifter: always(null),
+        gearboxPurchased: always(null),
+        notes: always(""),
+        driveWheelType: always(null),
+        teamId: always(null),
+        weight: always(null),
+        height: always(null),
+        harmony: always(null),
+        trap: always(0),
+        hasBuddyClimb: always(null),
+      );
 }

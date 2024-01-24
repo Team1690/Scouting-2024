@@ -54,7 +54,7 @@ class _PitViewState extends State<PitView> {
 
   void resetFrame() {
     setState(() {
-      vars.reset();
+      vars = vars.reset();
       weightController.clear();
       heightController.clear();
       notesController.clear();
@@ -66,14 +66,13 @@ class _PitViewState extends State<PitView> {
     });
   }
 
-  //TODO add new season specific variables to allow editting
   @override
   void initState() {
     super.initState();
     vars = widget.initialVars ?? PitVars(context);
-    weightController.text = vars.weight;
-    heightController.text = vars.height;
-    notesController.text = vars.notes ?? "";
+    weightController.text = vars.weight != null ? vars.weight.toString() : "0";
+    heightController.text = vars.height != null ? vars.height.toString() : "0";
+    notesController.text = vars.notes;
     if (!driveWheelTypes.contains(vars.driveWheelType) &&
         widget.initialVars != null) {
       otherWheelSelected = true;
@@ -297,7 +296,7 @@ class _PitViewState extends State<PitView> {
                       controller: weightController,
                       onChanged: (final String weight) {
                         vars = vars.copyWith(
-                          weight: () => weight,
+                          weight: () => double.tryParse(weight) ?? 0,
                         );
                       },
                       keyboardType: TextInputType.number,
@@ -319,7 +318,7 @@ class _PitViewState extends State<PitView> {
                       controller: heightController,
                       onChanged: (final String height) {
                         vars = vars.copyWith(
-                          height: () => height,
+                          height: () => double.tryParse(height) ?? 0,
                         );
                       },
                       keyboardType: TextInputType.number,
@@ -480,7 +479,6 @@ class _PitViewState extends State<PitView> {
       );
 }
 
-//TODO add season specific variables to both mutations
 const String insertMutation = r"""
           mutation InsertPit(
               $url: String,

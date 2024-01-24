@@ -164,8 +164,11 @@ class PitData {
     required this.faultMessages,
     required this.weight,
     required this.team,
+    required this.height,
+    required this.harmony,
+    required this.trap,
+    required this.hasBuddyClimb,
   });
-  //TODO add season specific variables
   final String driveTrainType;
   final int driveMotorAmount;
   final String driveWheelType;
@@ -173,7 +176,11 @@ class PitData {
   final bool? gearboxPurchased;
   final String driveMotorType;
   final String notes;
-  final int weight;
+  final double weight;
+  final double height;
+  final bool harmony;
+  final bool hasBuddyClimb;
+  final int trap;
   final String url;
   final List<String>? faultMessages;
   final LightTeam team;

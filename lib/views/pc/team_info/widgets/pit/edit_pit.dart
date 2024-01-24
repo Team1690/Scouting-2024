@@ -23,7 +23,6 @@ class _EditPitState extends State<EditPit> {
     if (pit == null) {
       return vars;
     }
-    //TODO add season specific vars
     vars = vars.copyWith(
       driveMotorAmount: () => pit.driveMotorAmount,
       driveMotorType: () =>
@@ -35,7 +34,11 @@ class _EditPitState extends State<EditPit> {
       hasShifter: () => pit.hasShifer,
       notes: () => pit.notes,
       teamId: () => pit.team.id,
-      weight: pit.weight.toString,
+      weight: () => pit.weight,
+      height: () => pit.height,
+      harmony: () => pit.harmony,
+      trap: () => pit.trap,
+      hasBuddyClimb: () => pit.hasBuddyClimb,
     );
 
     return vars;
