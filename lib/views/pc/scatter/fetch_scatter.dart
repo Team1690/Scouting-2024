@@ -13,65 +13,33 @@ query Scatter {
     id
     name
     technical_matches_aggregate(where: {ignored: {_eq: false}}) {
-    aggregate {
-      stddev{
-        auto_cones_low
-        auto_cones_mid
-        auto_cones_top
-        auto_cubes_low
-        auto_cubes_mid
-        auto_cubes_top
-        tele_cones_low
-        tele_cones_mid
-        tele_cones_top
-        tele_cubes_low
-        tele_cubes_mid
-        tele_cubes_top
-        auto_cones_delivered
-        auto_cubes_delivered
-        tele_cones_delivered
-        tele_cubes_delivered
-      }
-      avg {
-        auto_cones_low
-        auto_cones_mid
-        auto_cones_top
-        auto_cubes_low
-        auto_cubes_mid
-        auto_cubes_top
-        tele_cones_low
-        tele_cones_mid
-        tele_cones_top
-        tele_cubes_low
-        tele_cubes_mid
-        tele_cubes_top
-        auto_cones_delivered
-        auto_cubes_delivered
-        tele_cones_delivered
-        tele_cubes_delivered
+      aggregate {
+        stddev {
+      auto_amp
+      auto_amp_missed
+      tele_amp
+      tele_amp_missed
+      auto_speaker
+      auto_speaker_missed
+      tele_speaker
+      tele_speaker_missed       
+        }
       }
     }
-  }
     technical_matches(where: {ignored: {_eq: false}}) {
-    auto_cones_low
-    auto_cones_mid
-    auto_cones_top
-    auto_cubes_low
-    auto_cubes_mid
-    auto_cubes_top
-    tele_cones_low
-    tele_cones_mid
-    tele_cones_top
-    tele_cubes_low
-    tele_cubes_mid
-    tele_cubes_top
-    auto_cones_delivered
-    auto_cubes_delivered
-    tele_cones_delivered
-    tele_cubes_delivered
-  }
+      auto_amp
+      auto_amp_missed
+      tele_amp
+      tele_amp_missed
+      auto_speaker
+      auto_speaker_missed
+      tele_speaker
+      tele_speaker_missed
+    
+    }
   }
 }
+
 """;
 Future<List<ScatterData>> fetchScatterData() async {
   final GraphQLClient client = getClient();
@@ -95,7 +63,7 @@ Future<List<ScatterData>> fetchScatterData() async {
                         ["stddev"];
                 final List<dynamic> matches =
                     scatterTeam["technical_matches"] as List<dynamic>;
-                if (avg["auto_cones_top"] == null) {
+                if (avg["auto_amp"] == null) {
                   //if one of these is null, the team's match data doesnt exist so we return null
                   return null;
                 }
@@ -108,7 +76,7 @@ Future<List<ScatterData>> fetchScatterData() async {
                           (matchPoints - avgGamepiecePoints).abs(),
                     )
                     .average;
-                final double gamepiecesStddev = stddev["auto_cones_top"] == null
+                final double gamepiecesStddev = stddev["auto_speaker"] == null
                     ? 0
                     : getPieces(parseMatch(stddev));
                 final double avgGamepieces = getPieces(parseMatch(avg));

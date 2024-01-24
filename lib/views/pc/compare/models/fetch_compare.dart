@@ -263,9 +263,9 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
             }
             throw Exception("Not a endgame balance value");
           }).toList();
-          final List<RobotMatchStatus> matchStatuses = matches
+          final List<RobotFieldStatus> matchStatuses = matches
               .map(
-                (final dynamic e) => robotMatchStatusTitleToEnum(
+                (final dynamic e) => robotFieldStatusTitleToEnum(
                   e["robot_match_status"]["title"] as String,
                 ),
               )

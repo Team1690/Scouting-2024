@@ -91,37 +91,16 @@ class TeamList extends StatelessWidget {
                                   ),
                                   column(
                                     "Tele Gamepieces",
-                                    (final _Team team) => team.teleGamepieceAvg,
+                                    (final _Team team) => team.teleSpeakerAvg,
                                   ),
                                   column(
                                     "Gamepieces Scored",
                                     (final _Team team) => team.gamepieceAvg,
                                   ),
                                   column(
-                                    "Gamepieces Delivered",
-                                    (final _Team team) => team.deliveredAvg,
-                                  ),
-                                  column(
                                     "Gamepiece points",
                                     (final _Team team) =>
                                         team.gamepiecePointAvg,
-                                  ),
-                                  column(
-                                    "Auto balance points",
-                                    (final _Team team) =>
-                                        team.autoBalancePointsAvg,
-                                    "Avg points / Matches Balanced / Matches played",
-                                  ),
-                                  column(
-                                    "Endgame balance points",
-                                    (final _Team team) =>
-                                        team.endgameBalancePointsAvg,
-                                    "Avg points / Matches Balanced / Matches played",
-                                  ),
-                                  column(
-                                    "Auto balance percentage",
-                                    (final _Team team) =>
-                                        team.autoBalancePercentage,
                                   ),
                                   column(
                                     "Broken matches",
@@ -161,22 +140,10 @@ class TeamList extends StatelessWidget {
                                         ),
                                         ...<double>[
                                           team.autoGamepieceAvg,
-                                          team.teleGamepieceAvg,
+                                          team.teleSpeakerAvg,
                                           team.gamepieceAvg,
-                                          team.deliveredAvg,
                                           team.gamepiecePointAvg,
                                         ].map(show),
-                                        DataCell(
-                                          Text(
-                                            "${team.autoBalancePointsAvg.toStringAsFixed(1)} / ${team.matchesBalanced} / ${team.amountOfMatches}",
-                                          ),
-                                        ),
-                                        DataCell(
-                                          Text(
-                                            "${team.endgameBalancePointsAvg.toStringAsFixed(1)} / ${team.matchesBalanced} / ${team.amountOfMatches}",
-                                          ),
-                                        ),
-                                        show(team.autoBalancePercentage, true),
                                         DataCell(
                                           Text(
                                             team.brokenMatches.toString(),
@@ -209,32 +176,29 @@ DataCell show(final double value, [final bool isPercent = false]) => DataCell(
     );
 
 class _Team {
-  const _Team({
-    required this.autoBalancePercentage,
-    required this.autoGamepieceAvg,
-    required this.teleGamepieceAvg,
-    required this.gamepieceAvg,
-    required this.team,
-    required this.autoBalancePointsAvg,
-    required this.endgameBalancePointsAvg,
-    required this.gamepiecePointAvg,
-    required this.brokenMatches,
-    required this.amountOfMatches,
-    required this.matchesBalanced,
-    required this.deliveredAvg,
-  });
+  const _Team(
+      {required this.sumPoints,
+      required this.autoAmpAvg,
+      required this.teleAmpAvg,
+      required this.autoGamepieceAvg,
+      required this.teleSpeakerAvg,
+      required this.gamepieceAvg,
+      required this.team,
+      required this.gamepiecePointAvg,
+      required this.brokenMatches,
+      required this.amountOfMatches,
+      required this.autoSpeakerAvg});
+  final double sumPoints;
+  final double autoSpeakerAvg;
+  final double autoAmpAvg;
   final double autoGamepieceAvg;
-  final double teleGamepieceAvg;
+  final double teleSpeakerAvg;
+  final double teleAmpAvg;
   final double gamepieceAvg;
-  final double deliveredAvg;
   final LightTeam team;
   final double gamepiecePointAvg;
-  final double autoBalancePointsAvg;
-  final double endgameBalancePointsAvg;
-  final double autoBalancePercentage;
   final int brokenMatches;
   final int amountOfMatches;
-  final int matchesBalanced;
 }
 
 Stream<List<_Team>> _fetchTeamList() => getClient()
@@ -243,121 +207,62 @@ Stream<List<_Team>> _fetchTeamList() => getClient()
         document: gql(query),
         parserFn: (final Map<String, dynamic> data) {
           final List<dynamic> teams = data["team"] as List<dynamic>;
+          final int autoSpeakerPoints = 5;
+          final int autoAmpPoints = 2;
+          final int teleSpeakerPoints = 2;
+          final int teleAmpPoints = 1;
           return teams.map<_Team>((final dynamic team) {
-            final List<int> autoBalancePoints =
-                (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
-                    .where(
-                      (final dynamic node) =>
-                          node["auto_balance"]["title"] != "No attempt",
-                    )
-                    .map(
-                      (final dynamic node) =>
-                          node["auto_balance"]["auto_points"] as int,
-                    )
-                    .toList();
-            final List<int> endgameBalancePoints =
-                (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
-                    .where(
-                      (final dynamic node) =>
-                          node["endgame_balance"]["title"] != "No attempt",
-                    )
-                    .map(
-                      (final dynamic node) =>
-                          node["endgame_balance"]["endgame_points"] as int,
-                    )
-                    .toList();
-            final List<RobotMatchStatus> robotMatchStatuses =
+            final List<RobotFieldStatus> robotFieldStatuses =
                 (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
                     .map(
-                      (final dynamic node) => robotMatchStatusTitleToEnum(
-                        node["robot_match_status"]["title"] as String,
+                      (final dynamic node) => robotFieldStatusTitleToEnum(
+                        node["robot_field_status"]["title"] as String,
                       ),
                     )
                     .toList();
-            final List<String> autoBalance =
-                (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
-                    .map(
-                      (final dynamic node) =>
-                          node["auto_balance"]["title"] as String,
-                    )
-                    .where((final String title) => title != "No attempt")
-                    .toList();
-            final double autoBalancePercentage = (autoBalance
-                        .where(
-                          (final String title) => title != "Failed",
-                        )
-                        .length /
-                    autoBalance.length) *
-                100;
             final dynamic avg =
                 team["technical_matches_aggregate"]["aggregate"]["avg"];
-            final double autoGamepieceDelivered = avg["auto_cones_top"] == null
+            final bool nullValidator = avg["auto_amp"] == null;
+            final double autoGamepieceAvg = nullValidator
                 ? double.nan
-                : (avg["auto_cones_delivered"] as double) +
-                    (avg["auto_cubes_delivered"] as double);
-            final double teleGamepieceDelivered = avg["auto_cones_top"] == null
+                : (autoAmpPoints) + (autoSpeakerPoints) / 2;
+            final double teleAmpAvg =
+                nullValidator ? double.nan : avg["tele_amp"] as double;
+            final double teleSpeakerAvg =
+                nullValidator ? double.nan : avg["tele_speaker"] as double;
+            final double autoAmpAvg =
+                nullValidator ? double.nan : avg["auto_amp"] as double;
+            final double autoSpeakerAvg =
+                nullValidator ? double.nan : avg["auto_speaker"] as double;
+            final double gamepieceAvg = nullValidator
                 ? double.nan
-                : (avg["tele_cones_delivered"] as double) +
-                    (avg["tele_cubes_delivered"] as double);
-            final double gamepiecePointsAvg = avg["auto_cones_top"] == null
+                : teleAmpAvg + teleSpeakerAvg + autoGamepieceAvg;
+            final double sumPoints = nullValidator
                 ? double.nan
-                : getPoints(parseMatch(avg));
-            final double autoGamepieceAvg = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPieces(
-                    parseByMode(
-                      MatchMode.auto,
-                      avg,
-                    ),
-                  );
-            final double teleGamepieceAvg = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPieces(
-                    parseByMode(
-                      MatchMode.tele,
-                      avg,
-                    ),
-                  );
-            final double gamepieceSum = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPieces(parseMatch(avg));
-            final double autoBalancePointAvg =
-                autoBalancePoints.averageOrNull ?? double.nan;
-            final double endgameBalancePointAvg =
-                endgameBalancePoints.averageOrNull ?? double.nan;
-            endgameBalancePoints.averageOrNull ?? double.nan;
+                : (teleSpeakerAvg * teleSpeakerPoints) +
+                    (teleAmpAvg * teleSpeakerAvg) +
+                    (autoGamepieceAvg * autoAmpPoints) +
+                    (autoSpeakerAvg * autoAmpPoints);
+
             return _Team(
+              sumPoints: sumPoints,
+              autoAmpAvg: autoAmpAvg,
+              autoSpeakerAvg: autoSpeakerAvg,
               amountOfMatches: (team["technical_matches_aggregate"]["nodes"]
                       as List<dynamic>)
                   .length,
-              matchesBalanced: (team["technical_matches_aggregate"]["nodes"]
-                      as List<dynamic>)
-                  .map(
-                    (final dynamic node) =>
-                        node["auto_balance"]["title"] as String,
-                  )
+              brokenMatches: robotFieldStatuses
                   .where(
-                    (final String title) =>
-                        title != "No attempt" && title != "Failed",
+                    (final RobotFieldStatus robotFieldStatus) =>
+                        robotFieldStatus != RobotFieldStatus.worked,
                   )
                   .length,
-              autoBalancePercentage: autoBalancePercentage,
-              brokenMatches: robotMatchStatuses
-                  .where(
-                    (final RobotMatchStatus robotMatchStatus) =>
-                        robotMatchStatus != RobotMatchStatus.worked,
-                  )
-                  .length,
-              autoGamepieceAvg: autoGamepieceAvg - autoGamepieceDelivered,
-              teleGamepieceAvg: teleGamepieceAvg,
-              gamepieceAvg: gamepieceSum -
-                  autoGamepieceDelivered -
-                  teleGamepieceDelivered,
-              deliveredAvg: autoGamepieceDelivered + teleGamepieceDelivered,
-              gamepiecePointAvg: gamepiecePointsAvg,
+              autoGamepieceAvg: autoGamepieceAvg,
+              teleSpeakerAvg: teleSpeakerAvg,
+              teleAmpAvg: teleAmpAvg,
+              gamepieceAvg: gamepieceAvg,
+              gamepiecePointAvg: autoGamepieceAvg,
               team: LightTeam.fromJson(team),
-              autoBalancePointsAvg: autoBalancePointAvg,
-              endgameBalancePointsAvg: endgameBalancePointAvg,
             );
           }).toList();
         },
@@ -377,37 +282,19 @@ subscription MySubscription {
     technical_matches_aggregate(where: {ignored: {_eq: false}}) {
       aggregate {
         avg {
-          auto_cones_low
-          auto_cones_mid
-          auto_cones_top
-          auto_cubes_low
-          auto_cubes_mid
-          auto_cubes_top
-          tele_cones_low
-          tele_cones_mid
-          tele_cones_top
-          tele_cubes_low
-          tele_cubes_mid
-          tele_cubes_top
-          auto_cones_delivered
-          tele_cones_delivered
-          auto_cubes_delivered
-          tele_cubes_delivered
+           auto_amp
+      auto_amp_missed
+      tele_amp
+      tele_amp_missed
+      auto_speaker
+      auto_speaker_missed
+      tele_speaker
+      tele_speaker_missed
         }
       }
       nodes {
-        robot_match_status {
+        robot_field_status {
           title
-        }
-        auto_balance {
-          title
-          auto_points
-          order
-        }
-        endgame_balance {
-          title
-          endgame_points
-          order
         }
       }
     }
