@@ -79,49 +79,79 @@ Future<List<ScatterData>> fetchScatterData() async {
   final QueryResult<List<ScatterData>> result = await client.query(
     QueryOptions<List<ScatterData>>(
       document: gql(query),
-      parserFn: (final Map<String, dynamic> data) =>
-          (data["team"] as List<dynamic>)
-              .map<ScatterData?>((final dynamic scatterTeam) {
-                final LightTeam team = LightTeam(
-                  scatterTeam["id"] as int,
-                  scatterTeam["number"] as int,
-                  scatterTeam["name"] as String,
-                  scatterTeam["colors_index"] as int,
+      parserFn: (final Map<String, dynamic> data) => (data["team"]
+              as List<dynamic>)
+          .map<ScatterData?>((final dynamic scatterTeam) {
+            final LightTeam team = LightTeam(
+              scatterTeam["id"] as int,
+              scatterTeam["number"] as int,
+              scatterTeam["name"] as String,
+              scatterTeam["colors_index"] as int,
+            );
+            final dynamic avg =
+                scatterTeam["technical_matches_aggregate"]["aggregate"]["avg"];
+            final dynamic stddev = scatterTeam["technical_matches_aggregate"]
+                ["aggregate"]["stddev"];
+            final List<dynamic> matches =
+                scatterTeam["technical_matches"] as List<dynamic>;
+            if (avg["auto_cones_top"] == null) {
+              //if one of these is null, the team's match data doesnt exist so we return null
+              return null;
+            }
+            final double avgGamepiecePoints = parseMatch(avg)
+                .values
+                .mapIndexed(
+                  (final int index, final int element) =>
+                      parseMatch(avg).keys.toList()[index].points * element,
+                )
+                .toList()
+                .fold(
+                  0,
+                  (final double previousValue, final int element) =>
+                      previousValue + element,
                 );
-                final dynamic avg = scatterTeam["technical_matches_aggregate"]
-                    ["aggregate"]["avg"];
-                final dynamic stddev =
-                    scatterTeam["technical_matches_aggregate"]["aggregate"]
-                        ["stddev"];
-                final List<dynamic> matches =
-                    scatterTeam["technical_matches"] as List<dynamic>;
-                if (avg["auto_cones_top"] == null) {
-                  //if one of these is null, the team's match data doesnt exist so we return null
-                  return null;
-                }
-                final double avgGamepiecePoints = getPoints(parseMatch(avg));
-                final Iterable<double> matchesGamepiecePoints = matches
-                    .map((final dynamic match) => getPoints(parseMatch(match)));
-                final double yStddevGamepiecePoints = matchesGamepiecePoints
-                    .map(
-                      (final double matchPoints) =>
-                          (matchPoints - avgGamepiecePoints).abs(),
-                    )
-                    .average;
-                final double gamepiecesStddev = stddev["auto_cones_top"] == null
-                    ? 0
-                    : getPieces(parseMatch(stddev));
-                final double avgGamepieces = getPieces(parseMatch(avg));
-                return ScatterData(
-                  avgGamepiecePoints,
-                  yStddevGamepiecePoints,
-                  team,
-                  avgGamepieces,
-                  gamepiecesStddev,
+            final Iterable<double> matchesGamepiecePoints = matches.map(
+              (final dynamic match) => parseMatch(match)
+                  .values
+                  .mapIndexed(
+                    (final int index, final int element) =>
+                        parseMatch(match).keys.toList()[index].points * element,
+                  )
+                  .toList()
+                  .fold(
+                    0,
+                    (final double previousValue, final int element) =>
+                        previousValue + element,
+                  ),
+            );
+            final double yStddevGamepiecePoints = matchesGamepiecePoints
+                .map(
+                  (final double matchPoints) =>
+                      (matchPoints - avgGamepiecePoints).abs(),
+                )
+                .average;
+            final double gamepiecesStddev = stddev["auto_cones_top"] == null
+                ? 0
+                : parseMatch(stddev).values.fold(
+                      0,
+                      (final double previousValue, final int element) =>
+                          previousValue + element,
+                    );
+            final double avgGamepieces = parseMatch(avg).values.fold(
+                  0,
+                  (final double previousValue, final int element) =>
+                      previousValue + element,
                 );
-              })
-              .whereType<ScatterData>()
-              .toList(),
+            return ScatterData(
+              avgGamepiecePoints,
+              yStddevGamepiecePoints,
+              team,
+              avgGamepieces,
+              gamepiecesStddev,
+            );
+          })
+          .whereType<ScatterData>()
+          .toList(),
     ),
   );
   return result.mapQueryResult();

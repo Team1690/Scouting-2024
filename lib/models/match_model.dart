@@ -140,11 +140,10 @@ class Match implements HasuraVars {
 }
 
 enum MatchMode {
-  auto(1, "auto"),
-  tele(0, "tele");
+  auto("auto"),
+  tele("tele");
 
-  const MatchMode(this.pointAddition, this.title);
-  final int pointAddition;
+  const MatchMode(this.title);
   final String title;
 }
 
@@ -156,77 +155,60 @@ enum PlaceLocation {
   final String title;
 }
 
-class EffectiveScore {
-  const EffectiveScore({
+enum ScoreByPointGiver {
+  autoSpeaker(
+    mode: MatchMode.auto,
+    place: PlaceLocation.amp,
+    points: 5,
+  ),
+  autoAmp(
+    mode: MatchMode.auto,
+    place: PlaceLocation.amp,
+    points: 2,
+  ),
+  teleSpeaker(
+    mode: MatchMode.tele,
+    place: PlaceLocation.speaker,
+    points: 2,
+  ),
+  teleAmp(
+    mode: MatchMode.tele,
+    place: PlaceLocation.amp,
+    points: 1,
+  );
+
+  const ScoreByPointGiver({
     required this.mode,
     required this.place,
+    required this.points,
   });
+
   final MatchMode mode;
   final PlaceLocation place;
-
-  @override
-  int get hashCode => Object.hashAll(<Object?>[
-        mode,
-        place,
-      ]);
-
-  @override
-  bool operator ==(final Object other) =>
-      other is EffectiveScore && other.mode == mode && other.place == place;
+  final int points;
 }
 
-List<EffectiveScore> speakerAndAmp(final MatchMode mode) => <EffectiveScore>[
-      EffectiveScore(
-        mode: mode,
-        place: PlaceLocation.speaker,
-      ),
-      EffectiveScore(
-        mode: mode,
-        place: PlaceLocation.amp,
-      ),
-    ];
-
-final Map<EffectiveScore, int> score = <EffectiveScore, int>{
-  ...MatchMode.values.toList().asMap().map(
-        (final int index, final MatchMode mode) =>
-            MapEntry<EffectiveScore, int>(
-          EffectiveScore(mode: mode, place: PlaceLocation.speaker),
-          mode.pointAddition,
-        ),
-      ),
-};
-
-double getPoints(final Map<EffectiveScore, double> countedValues) =>
-    countedValues.keys.fold(
-      0,
-      (final double points, final EffectiveScore effectiveScore) =>
-          countedValues[effectiveScore]! * score[effectiveScore]! + points,
-    );
-
-double getPieces(final Map<EffectiveScore, double> countedValues) =>
-    countedValues.keys.fold(
-      0,
-      (final double gamepieces, final EffectiveScore effectiveScore) =>
-          countedValues[effectiveScore]! + gamepieces,
-    );
-
-Map<EffectiveScore, double> parseByMode(
+Map<ScoreByPointGiver, int> parseByMode(
   final MatchMode mode,
   final dynamic data,
 ) =>
-    Map<EffectiveScore, double>.fromEntries(
-      speakerAndAmp(mode).map(
-        (final EffectiveScore e) => MapEntry<EffectiveScore, double>(
-          e,
-          data["${e.mode.title}_${e.place.title}"] as double,
-        ),
-      ),
+    Map<ScoreByPointGiver, int>.fromEntries(
+      ScoreByPointGiver.values
+          .where(
+            (final ScoreByPointGiver pointGiver) => pointGiver.mode == mode,
+          )
+          .map(
+            (final ScoreByPointGiver e) => MapEntry<ScoreByPointGiver, int>(
+              e,
+              data["${e.mode.title}_${e.place.title}"] as int,
+            ),
+          ),
     );
 
-Map<EffectiveScore, double> parseMatch(
+Map<ScoreByPointGiver, int> parseMatch(
   final dynamic data,
 ) =>
-    <EffectiveScore, double>{
+    <ScoreByPointGiver, int>{
       ...parseByMode(MatchMode.auto, data),
       ...parseByMode(MatchMode.tele, data),
     };
