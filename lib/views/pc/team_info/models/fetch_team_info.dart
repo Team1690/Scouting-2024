@@ -15,7 +15,7 @@ query TeamInfo(\$id: Int!) {
     faults {
       message
     }
-    _2023_pit {
+    pit {
       weight
       drive_motor_amount
       drive_wheel_type
@@ -30,7 +30,7 @@ query TeamInfo(\$id: Int!) {
         title
       }
     }
-    _2023_specifics{
+    specific_match{
       schedule_match_id
       defense
       drivetrain_and_driving
@@ -63,7 +63,7 @@ query TeamInfo(\$id: Int!) {
           title
         }
       }
-      robot_match_status {
+      robot_field_status {
         title
       }
       robot_placement{

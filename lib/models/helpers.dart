@@ -1,25 +1,25 @@
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
-RobotMatchStatus robotMatchStatusTitleToEnum(final String title) {
+RobotFieldStatus robotFieldStatusTitleToEnum(final String title) {
   switch (title) {
     case "Worked":
-      return RobotMatchStatus.worked;
+      return RobotFieldStatus.worked;
     case "Didn't come to field":
-      return RobotMatchStatus.didntComeToField;
+      return RobotFieldStatus.didntComeToField;
     case "Didn't work on field":
-      return RobotMatchStatus.didntWorkOnField;
+      return RobotFieldStatus.didntWorkOnField;
   }
   throw Exception("Isn't a valid title");
 }
 
-DefenseAmount defenseAmountTitleToEnum(final String title) {
+Defense defenseAmountTitleToEnum(final String title) {
   switch (title) {
     case "No Defense":
-      return DefenseAmount.noDefense;
+      return Defense.noDefense;
     case "Half Defense":
-      return DefenseAmount.halfDefense;
+      return Defense.halfDefense;
     case "Full Defense":
-      return DefenseAmount.fullDefense;
+      return Defense.fullDefense;
   }
   throw Exception("Isn't a valid title");
 }

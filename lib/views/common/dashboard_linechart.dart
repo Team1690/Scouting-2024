@@ -4,7 +4,7 @@ import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart"
-    show DefenseAmount, MatchIdentifier, RobotMatchStatus;
+    show Defense, MatchIdentifier, RobotFieldStatus;
 
 class _BaseLineChart extends StatelessWidget {
   const _BaseLineChart({
@@ -17,7 +17,7 @@ class _BaseLineChart extends StatelessWidget {
     required this.rightTitles,
     required this.maxY,
     required this.minY,
-    required this.robotMatchStatuses,
+    required this.robotFieldStatuses,
   });
 
   final double minY;
@@ -29,8 +29,8 @@ class _BaseLineChart extends StatelessWidget {
   final List<List<int>> dataSet;
   final List<MatchIdentifier> gameNumbers;
   final SideTitles rightTitles;
-  final List<List<RobotMatchStatus>> robotMatchStatuses;
-  final List<List<DefenseAmount>> defenseAmounts;
+  final List<List<RobotFieldStatus>> robotFieldStatuses;
+  final List<List<Defense>> defenseAmounts;
   @override
   Widget build(final BuildContext context) => LineChart(
         LineChartData(
@@ -61,28 +61,28 @@ class _BaseLineChart extends StatelessWidget {
                   strokeWidth: 4,
                   radius: 6,
                   color: secondaryColor,
-                  strokeColor: robotMatchStatuses[index][spot.x.toInt()] ==
-                          RobotMatchStatus.didntWorkOnField
+                  strokeColor: robotFieldStatuses[index][spot.x.toInt()] ==
+                          RobotFieldStatus.didntWorkOnField
                       ? Colors.red
-                      : robotMatchStatuses[index][spot.x.toInt()] ==
-                              RobotMatchStatus.didntComeToField
+                      : robotFieldStatuses[index][spot.x.toInt()] ==
+                              RobotFieldStatus.didntComeToField
                           ? Colors.purple
                           : defenseAmounts[index][spot.x.toInt()] ==
-                                  DefenseAmount.fullDefense
+                                  Defense.fullDefense
                               ? Colors.green
                               : Colors.blue,
                 ),
                 checkToShowDot:
                     (final FlSpot spot, final LineChartBarData data) {
-                  if (robotMatchStatuses[index][spot.x.toInt()] ==
-                          RobotMatchStatus.didntComeToField ||
-                      robotMatchStatuses[index][spot.x.toInt()] ==
-                          RobotMatchStatus.didntWorkOnField) {
+                  if (robotFieldStatuses[index][spot.x.toInt()] ==
+                          RobotFieldStatus.didntComeToField ||
+                      robotFieldStatuses[index][spot.x.toInt()] ==
+                          RobotFieldStatus.didntWorkOnField) {
                     return true;
                   } else if (defenseAmounts[index][spot.x.toInt()] ==
-                          DefenseAmount.halfDefense ||
+                          Defense.halfDefense ||
                       defenseAmounts[index][spot.x.toInt()] ==
-                          DefenseAmount.fullDefense) {
+                          Defense.fullDefense) {
                     return true;
                   }
                   return false;
@@ -154,13 +154,13 @@ class DashboardTitledLineChart extends StatelessWidget {
     required this.inputedColors,
     required this.gameNumbers,
     required this.showShadow,
-    required this.robotMatchStatuses,
+    required this.robotFieldStatuses,
     required this.heightsToTitles,
   });
-  final List<List<DefenseAmount>> defenseAmounts;
+  final List<List<Defense>> defenseAmounts;
   final List<Color> inputedColors;
   final List<MatchIdentifier> gameNumbers;
-  final List<List<RobotMatchStatus>> robotMatchStatuses;
+  final List<List<RobotFieldStatus>> robotFieldStatuses;
   final Map<int, String> heightsToTitles;
 
   final List<List<int>> dataSet;
@@ -168,7 +168,7 @@ class DashboardTitledLineChart extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => _BaseLineChart(
         defenseAmounts: defenseAmounts,
-        robotMatchStatuses: robotMatchStatuses,
+        robotFieldStatuses: robotFieldStatuses,
         showShadow: showShadow,
         inputedColors: inputedColors,
         dataSet: dataSet,
@@ -208,7 +208,7 @@ class DashboardLineChart extends StatelessWidget {
     this.distanceFromHighest = 5,
     required this.inputedColors,
     required this.showShadow,
-    required this.robotMatchStatuses,
+    required this.robotFieldStatuses,
     this.sideTitlesInterval = 5,
     required this.defenseAmounts,
   });
@@ -217,8 +217,8 @@ class DashboardLineChart extends StatelessWidget {
   final int distanceFromHighest;
   final List<List<int>> dataSet;
   final List<MatchIdentifier> gameNumbers;
-  final List<List<RobotMatchStatus>> robotMatchStatuses;
-  final List<List<DefenseAmount>> defenseAmounts;
+  final List<List<RobotFieldStatus>> robotFieldStatuses;
+  final List<List<Defense>> defenseAmounts;
   final double sideTitlesInterval;
   int get highestValue =>
       dataSet.map((final List<int> points) => points.reduce(max)).reduce(max);
@@ -226,7 +226,7 @@ class DashboardLineChart extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => _BaseLineChart(
         defenseAmounts: defenseAmounts,
-        robotMatchStatuses: robotMatchStatuses,
+        robotFieldStatuses: robotFieldStatuses,
         showShadow: showShadow,
         inputedColors: inputedColors,
         dataSet: dataSet,

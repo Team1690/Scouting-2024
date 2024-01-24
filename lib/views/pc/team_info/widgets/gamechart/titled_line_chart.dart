@@ -31,7 +31,7 @@ class TitledLineChart extends StatelessWidget {
               inputedColors: const <Color>[primaryColor],
               gameNumbers: data.gameNumbers,
               dataSet: data.points,
-              robotMatchStatuses: data.robotMatchStatuses,
+              robotFieldStatuses: data.robotFieldStatuses,
               heightsToTitles: heightToTitles,
             ),
           ),

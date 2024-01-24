@@ -263,17 +263,17 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
             }
             throw Exception("Not a endgame balance value");
           }).toList();
-          final List<RobotMatchStatus> matchStatuses = matches
+          final List<RobotFieldStatus> matchStatuses = matches
               .map(
                 (final dynamic e) => robotMatchStatusTitleToEnum(
                   e["robot_match_status"]["title"] as String,
                 ),
               )
               .toList();
-          final List<DefenseAmount> defenceAmounts = <DefenseAmount>[
+          final List<Defense> defenceAmounts = <Defense>[
             for (int i = 0; i < matches.length; i++)
               if (i >= specificMatches.length)
-                DefenseAmount.noDefense
+                Defense.noDefense
               else
                 defenseAmountTitleToEnum(
                   (specificMatches[i] as dynamic)["defense_amount"]["title"]
@@ -286,7 +286,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
             matchStatuses: matchStatuses,
             defenseAmounts: matches
                 .map(
-                  (final dynamic match) => DefenseAmount
+                  (final dynamic match) => Defense
                       .noDefense, //defense should not be shown in Balance Charts
                 )
                 .toList(),
@@ -297,7 +297,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
             matchStatuses: matchStatuses,
             defenseAmounts: matches
                 .map(
-                  (final dynamic match) => DefenseAmount
+                  (final dynamic match) => Defense
                       .noDefense, //defense should not be shown in Balance Charts
                 )
                 .toList(),

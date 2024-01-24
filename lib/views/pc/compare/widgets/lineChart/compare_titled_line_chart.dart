@@ -30,7 +30,7 @@ class CompareClimbLineChart extends StatelessWidget {
               defenseAmounts: data
                   .map((final CompareLineChartData e) => e.defenseAmounts)
                   .toList(),
-              robotMatchStatuses: data
+              robotFieldStatuses: data
                   .map(
                     (final CompareLineChartData chartData) =>
                         chartData.matchStatuses,

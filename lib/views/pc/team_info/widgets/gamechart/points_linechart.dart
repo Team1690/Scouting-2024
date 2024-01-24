@@ -31,7 +31,7 @@ class PointsLineChart extends StatelessWidget {
               ],
               distanceFromHighest: 20,
               dataSet: data.points,
-              robotMatchStatuses: data.robotMatchStatuses,
+              robotFieldStatuses: data.robotFieldStatuses,
               defenseAmounts: data.defenseAmounts,
             ),
           ),
