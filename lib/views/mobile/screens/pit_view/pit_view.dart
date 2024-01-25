@@ -70,8 +70,8 @@ class _PitViewState extends State<PitView> {
   void initState() {
     super.initState();
     vars = widget.initialVars ?? PitVars(context);
-    weightController.text = vars.weight != null ? vars.weight.toString() : "0";
-    heightController.text = vars.height != null ? vars.height.toString() : "0";
+    weightController.text = vars.weight != null ? vars.weight.toString() : "";
+    heightController.text = vars.height != null ? vars.height.toString() : "";
     notesController.text = vars.notes;
     if (!driveWheelTypes.contains(vars.driveWheelType) &&
         widget.initialVars != null) {
@@ -296,7 +296,7 @@ class _PitViewState extends State<PitView> {
                       controller: weightController,
                       onChanged: (final String weight) {
                         vars = vars.copyWith(
-                          weight: () => double.tryParse(weight) ?? 0,
+                          weight: () => double.tryParse(weight),
                         );
                       },
                       keyboardType: TextInputType.number,

@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_view.dart";
 
 class TeamsWithoutPit extends StatelessWidget {
@@ -17,30 +17,25 @@ class TeamsWithoutPit extends StatelessWidget {
           builder: (
             final BuildContext context,
             final AsyncSnapshot<List<LightTeam>> snapshot,
-          ) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString()),
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView(
-              children: snapshot.data.mapNullable(
-                    (final List<LightTeam> teams) => teams
-                        .map(
-                          (final LightTeam team) => ListTile(
-                            title: Text("${team.number} ${team.name}"),
-                          ),
-                        )
-                        .toList(),
-                  ) ??
-                  (throw Exception("No data")),
-            );
-          },
+          ) =>
+              snapshot.mapSnapshot<Widget>(
+            onSuccess: (final List<LightTeam> teams) => ListView(
+              children: teams
+                  .map(
+                    (final LightTeam team) => ListTile(
+                      title: Text("${team.number} ${team.name}"),
+                    ),
+                  )
+                  .toList(),
+            ),
+            onWaiting: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            onNoData: () => const Text("No Data"),
+            onError: (final Object a) => Center(
+              child: Text(snapshot.error.toString()),
+            ),
+          ),
         ),
       );
 }
