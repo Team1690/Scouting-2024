@@ -52,7 +52,7 @@ class _SpecificSummaryState extends State<SpecificSummary> {
                   ) =>
                       snapshot.mapSnapshot(
                     onSuccess: (final SummaryEntry? summaryEntry) {
-                      print("New value! ${summaryEntry?.ampText}");
+                      print("New value! $summaryEntry");
                       return SummaryEditor(
                         summaryEntry: summaryEntry,
                         team: team!,
@@ -128,4 +128,8 @@ class SummaryEntry {
   final String ampText;
   final String speakerText;
   final String generalText;
+
+  @override
+  String toString() =>
+      "$intakeText $climbText $drivingText $ampText $speakerText $generalText";
 }
