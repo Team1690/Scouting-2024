@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/helpers.dart";
-import "package:scouting_frontend/models/match_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/card.dart";
@@ -299,28 +298,14 @@ Stream<List<_Team>> _fetchTeamList() => getClient()
                 ? double.nan
                 : (avg["tele_cones_delivered"] as double) +
                     (avg["tele_cubes_delivered"] as double);
-            final double gamepiecePointsAvg = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPoints(parseMatch(avg));
-            final double autoGamepieceAvg = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPieces(
-                    parseByMode(
-                      MatchMode.auto,
-                      avg,
-                    ),
-                  );
-            final double teleGamepieceAvg = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPieces(
-                    parseByMode(
-                      MatchMode.tele,
-                      avg,
-                    ),
-                  );
-            final double gamepieceSum = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPieces(parseMatch(avg));
+            final double gamepiecePointsAvg =
+                avg["auto_cones_top"] == null ? double.nan : 1;
+            final double autoGamepieceAvg =
+                avg["auto_cones_top"] == null ? double.nan : 1;
+            final double teleGamepieceAvg =
+                avg["auto_cones_top"] == null ? double.nan : 1;
+            final double gamepieceSum =
+                avg["auto_cones_top"] == null ? double.nan : 1;
             final double autoBalancePointAvg =
                 autoBalancePoints.averageOrNull ?? double.nan;
             final double endgameBalancePointAvg =

@@ -8,10 +8,10 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
-const String query = """
+const String query = r"""
 
-query FetchCompare(\$ids: [Int!]) {
-  team(where: {id: {_in: \$ids}}) {
+query FetchCompare($ids: [Int!]) {
+  team(where: {id: {_in: $ids}}) {
     technical_matches_aggregate(where: {ignored: {_eq: false}}) {
       aggregate {
         avg {
@@ -47,6 +47,9 @@ query FetchCompare(\$ids: [Int!]) {
           tele_speaker
           tele_speaker_missed
           trap_amount
+      robot_field_status {
+        title
+      }
     }
     name
     number
@@ -152,8 +155,9 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
               .toList();
           final dynamic avg =
               teamsTable["technical_matches_aggregate"]["aggregate"]["avg"];
-          final bool avgNullValidator = avg["auto_amp"] == null;
-          final double avgTeleGamepiecesPoints = avgNullValidator
+          final bool avgNullValidator = avg["auto_amp"] == 0;
+          print(1);
+          /*final double avgTeleGamepiecesPoints = avgNullValidator
               ? double.nan
               : parseByMode(MatchMode.tele, avg).values.fold(
                     0,
@@ -166,12 +170,13 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
                     0,
                     (final double previousValue, final int element) =>
                         previousValue + element,
-                  );
+                  );*/
+          print(2);
 
           final List<RobotMatchStatus> matchStatuses = technicalMatches
               .map(
                 (final dynamic e) => robotMatchStatusTitleToEnum(
-                  e["robot_match_status"]["title"] as String,
+                  e["robot_field_status"]["title"] as String,
                 ),
               )
               .toList();
@@ -224,7 +229,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
             matchStatuses: matchStatuses,
             defenseAmounts: defenceAmounts,
           );
-
+          //TODO:
           return CompareTeam(
             gamepieces: gamepiecesLine,
             gamepiecePoints: pointLineChart,
@@ -233,8 +238,8 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
             totalAmps: totalSpeakerLineChart,
             teleGamepieces: teleGamepiecesLineChart,
             autoGamepieces: autoGamepiecesLineChart,
-            avgAutoGamepiecePoints: avgAutoGamepiecePoints,
-            avgTeleGamepiecesPoints: avgTeleGamepiecesPoints,
+            avgAutoGamepiecePoints: 0,
+            avgTeleGamepiecesPoints: 0,
             totalDelivered: totalMissedLineChart,
           );
         }),
@@ -247,5 +252,6 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
       },
     ),
   );
+  print(3);
   return result.mapQueryResult();
 }

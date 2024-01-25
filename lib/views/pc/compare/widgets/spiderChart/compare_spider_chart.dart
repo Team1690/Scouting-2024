@@ -41,12 +41,12 @@ class CompareSpiderChart extends StatelessWidget {
                     .toList(),
                 numberOfFeatures: 6,
                 data: data
-                    .map<List<int>>(
+                    .map(
                       (final CompareTeam team) => <double>[
                         team.avgTeleGamepiecesPoints * teleGamepiecePointRatio,
                         team.avgAutoGamepiecePoints * autoGamepiecePointRatio,
                       ]
-                          .map<int>(
+                          .map(
                             (final double e) =>
                                 e.isNaN || e.isInfinite ? 0 : e.toInt(),
                           )
