@@ -168,8 +168,10 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
                 ),
           ];
           final List<int> gamesClimbed = technicalMatches
-              .map((final dynamic e) =>
-                  e["climb"]["title"] as String == "Climbed" ? 1 : 0)
+              .map(
+                (final dynamic e) =>
+                    e["climb"]["title"] as String == "Climbed" ? 1 : 0,
+              )
               .toList();
 
           CompareLineChartData compareLinechart(final List<int> points) =>
