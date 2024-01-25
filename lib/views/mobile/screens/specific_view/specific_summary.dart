@@ -51,13 +51,11 @@ class _SpecificSummaryState extends State<SpecificSummary> {
                     final AsyncSnapshot<SummaryEntry?> snapshot,
                   ) =>
                       snapshot.mapSnapshot(
-                    onSuccess: (final SummaryEntry? summaryEntry) {
-                      print("New value! $summaryEntry");
-                      return SummaryEditor(
-                        summaryEntry: summaryEntry,
-                        team: team!,
-                      );
-                    },
+                    onSuccess: (final SummaryEntry? summaryEntry) =>
+                        SummaryEditor(
+                      summaryEntry: summaryEntry,
+                      team: team!,
+                    ),
                     onWaiting: CircularProgressIndicator.new,
                     onNoData: () =>
                         SummaryEditor(summaryEntry: null, team: team!),

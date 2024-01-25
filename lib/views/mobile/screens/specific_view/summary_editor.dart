@@ -18,8 +18,18 @@ class SummaryEditor extends StatefulWidget {
 
 class _SummaryEditorState extends State<SummaryEditor> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    updateTextFields();
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant final SummaryEditor oldWidget) {
+    updateTextFields();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void updateTextFields() {
     ampController.text = widget.summaryEntry?.ampText ?? "";
     speakerController.text = widget.summaryEntry?.speakerText ?? "";
     intakeController.text = widget.summaryEntry?.intakeText ?? "";
