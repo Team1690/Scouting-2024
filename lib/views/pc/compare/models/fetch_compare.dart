@@ -113,14 +113,10 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
               .map(
                 (final dynamic technicalMatch) =>
                     parseMatch<int>(technicalMatch)
-                        .values
-                        .mapIndexed(
-                          (final int index, final int element) =>
-                              parseMatch(technicalMatch)
-                                  .keys
-                                  .toList()[index]
-                                  .points *
-                              element,
+                        .entries
+                        .map(
+                          (final MapEntry<ScoreByPointGiver, int> pointGiver) =>
+                              pointGiver.key.points * pointGiver.value,
                         )
                         .toList()
                         .sum,
@@ -137,8 +133,9 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
           final List<int> totalSpeakers = technicalMatches
               .map(
                 (final dynamic technicalMatch) =>
-                    (technicalMatch["auto_speaker"] as int) +
-                    (technicalMatch["tele_speaker"] as int),
+                    parseByPlace<int>(PlaceLocation.speaker, technicalMatch)
+                        .values
+                        .sum,
               )
               .toList();
           final dynamic avg =

@@ -205,6 +205,24 @@ Map<ScoreByPointGiver, T> parseByMode<T extends num>(
           ),
     );
 
+Map<ScoreByPointGiver, T> parseByPlace<T extends num>(
+  final PlaceLocation location,
+  final dynamic data,
+) =>
+    Map<ScoreByPointGiver, T>.fromEntries(
+      ScoreByPointGiver.values
+          .where(
+            (final ScoreByPointGiver pointGiver) =>
+                pointGiver.place == location,
+          )
+          .map(
+            (final ScoreByPointGiver e) => MapEntry<ScoreByPointGiver, T>(
+              e,
+              data["${e.mode.title}_${e.place.title}"] as T,
+            ),
+          ),
+    );
+
 Map<ScoreByPointGiver, T> parseMatch<T extends num>(
   final dynamic data,
 ) =>
