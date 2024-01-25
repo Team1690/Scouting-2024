@@ -59,9 +59,8 @@ class _SpecificSummaryState extends State<SpecificSummary> {
                     onWaiting: CircularProgressIndicator.new,
                     onNoData: () =>
                         SummaryEditor(summaryEntry: null, team: team!),
-                    onError: (final Object error) {
-                      return Text("${error.runtimeType}");
-                    },
+                    onError: (final Object error) =>
+                        Text("${error.runtimeType}"),
                   ),
                 ),
             ],
@@ -107,8 +106,7 @@ class _SpecificSummaryState extends State<SpecificSummary> {
       ),
     );
     return result.map(
-      (final QueryResult<SummaryEntry?> result) =>
-          result.mapQueryResultNullable(),
+      (final QueryResult<SummaryEntry?> result) => result.mapQueryResult(),
     );
   }
 }
