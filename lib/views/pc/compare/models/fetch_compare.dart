@@ -78,25 +78,19 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
           final List<int> autoGamepieces = technicalMatches
               .map(
                 (final dynamic technicalMatch) =>
-                    (parseByMode(MatchMode.auto, technicalMatch).values.fold(
-                              0,
-                              (final int previousValue, final int element) =>
-                                  previousValue + element,
-                            ) -
-                        ((technicalMatch["auto_amp_missed"] as int) +
-                            (technicalMatch["auto_speaker_missed"] as int))),
+                    (parseByMode(MatchMode.auto, technicalMatch).values.reduce(
+                          (final int value, final int element) =>
+                              value + element,
+                        )),
               )
               .toList();
           final List<int> teleGamepieces = technicalMatches
               .map(
                 (final dynamic technicalMatch) =>
-                    (parseByMode(MatchMode.tele, technicalMatch).values.fold(
-                              0,
-                              (final int previousValue, final int element) =>
-                                  previousValue + element,
-                            ) -
-                        ((technicalMatch["tele_amp_missed"] as int) +
-                            (technicalMatch["tele_speaker_missed"] as int))),
+                    (parseByMode(MatchMode.tele, technicalMatch).values.reduce(
+                          (final int value, final int element) =>
+                              value + element,
+                        )),
               )
               .toList();
           final List<int> totalMissed = technicalMatches
@@ -111,10 +105,9 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
           final List<int> gamepieces = technicalMatches
               .map(
                 (final dynamic technicalMatch) =>
-                    parseMatch(technicalMatch).values.fold(
-                          0,
-                          (final int previousValue, final int element) =>
-                              previousValue + element,
+                    parseMatch(technicalMatch).values.reduce(
+                          (final int value, final int element) =>
+                              value + element,
                         ),
               )
               .toList();
@@ -131,10 +124,8 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
                           element,
                     )
                     .toList()
-                    .fold(
-                      0,
-                      (final int previousValue, final int element) =>
-                          previousValue + element,
+                    .reduce(
+                      (final int value, final int element) => value + element,
                     ),
               )
               .toList();
