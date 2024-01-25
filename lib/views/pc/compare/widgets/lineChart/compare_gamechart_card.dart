@@ -112,7 +112,7 @@ class CompareGamechartCard extends StatelessWidget {
                             .toList(),
                         colors,
                         "Climbed",
-                      )
+                      ),
                     ],
                   ),
                 ),
