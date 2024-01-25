@@ -93,7 +93,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
               });
             },
             isEnabled: isEnabled,
-            controller: climbController,
+            controller: intakeController,
             label: "Intake",
           ),
           SpecificSummaryTextField(
@@ -103,7 +103,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
               });
             },
             isEnabled: isEnabled,
-            controller: drivingController,
+            controller: climbController,
             label: "Climbing",
           ),
           SpecificSummaryTextField(
@@ -113,7 +113,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
               });
             },
             isEnabled: isEnabled,
-            controller: intakeController,
+            controller: generalController,
             label: "General",
           ),
           SpecificSummaryTextField(
@@ -123,7 +123,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
               });
             },
             isEnabled: isEnabled,
-            controller: generalController,
+            controller: drivingController,
             label: "Driving",
           ),
         ],
