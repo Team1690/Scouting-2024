@@ -49,7 +49,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
                 child: const Text("Edit"),
               ),
               SubmitButton(
-                getJson: () => {
+                getJson: () => <String, dynamic>{
                   "team_id": widget.team.id,
                   "amp_text": ampController.text,
                   "speaker_text": speakerController.text,
