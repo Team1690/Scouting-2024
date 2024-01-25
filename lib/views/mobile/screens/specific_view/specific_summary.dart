@@ -97,12 +97,12 @@ class _SpecificSummaryState extends State<SpecificSummary> {
             return null;
           }
           return SummaryEntry(
-            specificSummary[0]["intake_text"] as String,
-            specificSummary[0]["amp_text"] as String,
-            specificSummary[0]["climb_text"] as String,
-            specificSummary[0]["driving_text"] as String,
-            specificSummary[0]["speaker_text"] as String,
-            specificSummary[0]["general_text"] as String,
+            intakeText: specificSummary[0]["intake_text"] as String,
+            ampText: specificSummary[0]["amp_text"] as String,
+            climbText: specificSummary[0]["climb_text"] as String,
+            drivingText: specificSummary[0]["driving_text"] as String,
+            speakerText: specificSummary[0]["speaker_text"] as String,
+            generalText: specificSummary[0]["general_text"] as String,
           );
         },
       ),
@@ -114,14 +114,14 @@ class _SpecificSummaryState extends State<SpecificSummary> {
 }
 
 class SummaryEntry {
-  const SummaryEntry(
-    this.intakeText,
-    this.climbText,
-    this.drivingText,
-    this.ampText,
-    this.speakerText,
-    this.generalText,
-  );
+  const SummaryEntry({
+    required this.intakeText,
+    required this.climbText,
+    required this.drivingText,
+    required this.ampText,
+    required this.speakerText,
+    required this.generalText,
+  });
   final String intakeText;
   final String climbText;
   final String drivingText;
