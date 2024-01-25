@@ -26,7 +26,10 @@ class CompareClimbLineChart extends StatelessWidget {
             ),
             child: DashboardTitledLineChart(
               //TODO add titles
-              heightsToTitles: const <int, String>{},
+              heightsToTitles: const <int, String>{
+                0: "Not Climbed",
+                1: "Climbed",
+              },
               defenseAmounts: data
                   .map((final CompareLineChartData e) => e.defenseAmounts)
                   .toList(),

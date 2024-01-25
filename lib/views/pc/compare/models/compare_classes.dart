@@ -13,6 +13,7 @@ class CompareTeam {
     required this.totalSpeakers,
     required this.totalAmps,
     required this.totalDelivered,
+    required this.climbed,
   });
   final LightTeam team;
   final double avgTeleGamepiecesPoints;
@@ -24,6 +25,7 @@ class CompareTeam {
   final CompareLineChartData totalSpeakers;
   final CompareLineChartData totalAmps;
   final CompareLineChartData totalDelivered;
+  final CompareLineChartData climbed;
 }
 
 class CompareLineChartData {

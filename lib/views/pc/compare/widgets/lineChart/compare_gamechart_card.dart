@@ -7,6 +7,7 @@ import "package:scouting_frontend/views/common/no_team_selected.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_line_chart.dart";
+import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_titled_line_chart.dart";
 
 class CompareGamechartCard extends StatelessWidget {
   const CompareGamechartCard(this.data, this.teams);
@@ -105,6 +106,13 @@ class CompareGamechartCard extends StatelessWidget {
                         colors,
                         "Total Amps",
                       ),
+                      CompareClimbLineChart(
+                        data
+                            .map((final CompareTeam element) => element.climbed)
+                            .toList(),
+                        colors,
+                        "Climbed",
+                      )
                     ],
                   ),
                 ),

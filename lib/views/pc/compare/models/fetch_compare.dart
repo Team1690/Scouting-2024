@@ -47,6 +47,9 @@ query FetchCompare($ids: [Int!]) {
           tele_speaker
           tele_speaker_missed
           trap_amount
+      climb {
+        title
+      }
       robot_field_status {
         title
       }
@@ -80,10 +83,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
                 (final dynamic technicalMatch) =>
                     (parseByMode<int>(MatchMode.auto, technicalMatch)
                         .values
-                        .reduce(
-                          (final int value, final int element) =>
-                              value + element,
-                        )),
+                        .sum),
               )
               .toList();
           final List<int> teleGamepieces = technicalMatches
@@ -91,10 +91,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
                 (final dynamic technicalMatch) =>
                     (parseByMode<int>(MatchMode.tele, technicalMatch)
                         .values
-                        .reduce(
-                          (final int value, final int element) =>
-                              value + element,
-                        )),
+                        .sum),
               )
               .toList();
           final List<int> totalMissed = technicalMatches
@@ -109,10 +106,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
           final List<int> gamepieces = technicalMatches
               .map(
                 (final dynamic technicalMatch) =>
-                    parseMatch<int>(technicalMatch).values.reduce(
-                          (final int value, final int element) =>
-                              value + element,
-                        ),
+                    parseMatch<int>(technicalMatch).values.sum,
               )
               .toList();
           final List<int> gamepiecePoints = technicalMatches
@@ -129,10 +123,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
                               element,
                         )
                         .toList()
-                        .reduce(
-                          (final int value, final int element) =>
-                              value + element,
-                        ),
+                        .sum,
               )
               .toList();
 
@@ -155,16 +146,10 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
           final bool avgNullValidator = avg["auto_amp"] == null;
           final double avgTeleGamepiecesPoints = avgNullValidator
               ? double.nan
-              : parseByMode<double>(MatchMode.tele, avg).values.reduce(
-                    (final double value, final double element) =>
-                        value + element,
-                  );
+              : parseByMode<double>(MatchMode.tele, avg).values.sum;
           final double avgAutoGamepiecePoints = avgNullValidator
               ? double.nan
-              : parseByMode<double>(MatchMode.auto, avg).values.reduce(
-                    (final double value, final double element) =>
-                        value + element,
-                  );
+              : parseByMode<double>(MatchMode.auto, avg).values.sum;
 
           final List<RobotMatchStatus> matchStatuses = technicalMatches
               .map(
@@ -179,50 +164,36 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
                 DefenseAmount.noDefense
               else
                 defenseAmountTitleToEnum(
-                  (specificMatches[i] as dynamic)["defense"]["title"] as String,
+                  specificMatches[i]["defense"]["title"] as String,
                 ),
           ];
+          final List<int> gamesClimbed = technicalMatches
+              .map((final dynamic e) =>
+                  e["climb"]["title"] as String == "Climbed" ? 1 : 0)
+              .toList();
+
+          CompareLineChartData compareLinechart(final List<int> points) =>
+              CompareLineChartData(
+                points: points,
+                matchStatuses: matchStatuses,
+                defenseAmounts: defenceAmounts,
+              );
 
           final CompareLineChartData totalSpeakerLineChart =
-              CompareLineChartData(
-            points: totalSpeakers,
-            matchStatuses: matchStatuses,
-            defenseAmounts: defenceAmounts,
-          );
-          final CompareLineChartData totalAmpsLineChart = CompareLineChartData(
-            points: totalAmps,
-            matchStatuses: matchStatuses,
-            defenseAmounts: defenceAmounts,
-          );
-          final CompareLineChartData gamepiecesLine = CompareLineChartData(
-            points: gamepieces,
-            matchStatuses: matchStatuses,
-            defenseAmounts: defenceAmounts,
-          );
+              compareLinechart(totalSpeakers);
+          final CompareLineChartData totalAmpsLineChart =
+              compareLinechart(totalAmps);
+          final CompareLineChartData gamepiecesLine =
+              compareLinechart(gamepieces);
           final CompareLineChartData autoGamepiecesLineChart =
-              CompareLineChartData(
-            points: autoGamepieces,
-            matchStatuses: matchStatuses,
-            defenseAmounts: defenceAmounts,
-          );
+              compareLinechart(autoGamepieces);
           final CompareLineChartData teleGamepiecesLineChart =
-              CompareLineChartData(
-            points: teleGamepieces,
-            matchStatuses: matchStatuses,
-            defenseAmounts: defenceAmounts,
-          );
-          final CompareLineChartData pointLineChart = CompareLineChartData(
-            points: gamepiecePoints,
-            matchStatuses: matchStatuses,
-            defenseAmounts: defenceAmounts,
-          );
+              compareLinechart(teleGamepieces);
+          final CompareLineChartData pointLineChart =
+              compareLinechart(gamepiecePoints);
           final CompareLineChartData totalMissedLineChart =
-              CompareLineChartData(
-            points: totalMissed,
-            matchStatuses: matchStatuses,
-            defenseAmounts: defenceAmounts,
-          );
-          //TODO:
+              compareLinechart(totalMissed);
+          final CompareLineChartData climbed = compareLinechart(gamesClimbed);
           return CompareTeam(
             gamepieces: gamepiecesLine,
             gamepiecePoints: pointLineChart,
@@ -234,6 +205,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
             avgAutoGamepiecePoints: avgAutoGamepiecePoints,
             avgTeleGamepiecesPoints: avgTeleGamepiecesPoints,
             totalDelivered: totalMissedLineChart,
+            climbed: climbed,
           );
         }),
         (final CompareTeam team1, final CompareTeam team2) =>
