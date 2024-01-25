@@ -64,7 +64,7 @@ class CompareGamechartCard extends StatelessWidget {
                             )
                             .toList(),
                         colors,
-                        "Total Delivered",
+                        "Total Missed",
                       ),
                       CompareLineChart(
                         data

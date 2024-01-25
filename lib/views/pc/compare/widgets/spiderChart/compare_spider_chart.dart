@@ -39,18 +39,15 @@ class CompareSpiderChart extends StatelessWidget {
                       (final CompareTeam team) => team.team.color,
                     )
                     .toList(),
-                numberOfFeatures: 6,
+                numberOfFeatures: 2,
                 data: data
                     .map(
-                      (final CompareTeam team) => <double>[
-                        team.avgTeleGamepiecesPoints * teleGamepiecePointRatio,
-                        team.avgAutoGamepiecePoints * autoGamepiecePointRatio,
-                      ]
-                          .map(
-                            (final double e) =>
-                                e.isNaN || e.isInfinite ? 0 : e.toInt(),
-                          )
-                          .toList(),
+                      (final CompareTeam team) => <int>[
+                        (team.avgTeleGamepiecesPoints * teleGamepiecePointRatio)
+                            .toInt(),
+                        (team.avgAutoGamepiecePoints * autoGamepiecePointRatio)
+                            .toInt(),
+                      ],
                     )
                     .toList(),
                 ticks: const <int>[0, 25, 50, 75, 100],

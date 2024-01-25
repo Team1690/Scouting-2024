@@ -98,30 +98,29 @@ Future<List<ScatterData>> fetchScatterData() async {
               //if one of these is null, the team's match data doesnt exist so we return null
               return null;
             }
-            final double avgGamepiecePoints = parseMatch(avg)
+            //TODO: getPieces
+            final double avgGamepiecePoints = parseMatch<double>(avg)
                 .values
                 .mapIndexed(
-                  (final int index, final int element) =>
+                  (final int index, final double element) =>
                       parseMatch(avg).keys.toList()[index].points * element,
                 )
                 .toList()
-                .fold(
-                  0,
-                  (final double previousValue, final int element) =>
-                      previousValue + element,
+                .reduce(
+                  (final double value, final double element) => value + element,
                 );
             final Iterable<double> matchesGamepiecePoints = matches.map(
-              (final dynamic match) => parseMatch(match)
+              (final dynamic match) => parseMatch<double>(match)
                   .values
                   .mapIndexed(
-                    (final int index, final int element) =>
-                        parseMatch(match).keys.toList()[index].points * element,
+                    (final int index, final double element) =>
+                        parseMatch<double>(match).keys.toList()[index].points *
+                        element,
                   )
                   .toList()
-                  .fold(
-                    0,
-                    (final double previousValue, final int element) =>
-                        previousValue + element,
+                  .reduce(
+                    (final double value, final double element) =>
+                        value + element,
                   ),
             );
             final double yStddevGamepiecePoints = matchesGamepiecePoints
@@ -132,15 +131,12 @@ Future<List<ScatterData>> fetchScatterData() async {
                 .average;
             final double gamepiecesStddev = stddev["auto_cones_top"] == null
                 ? 0
-                : parseMatch(stddev).values.fold(
-                      0,
-                      (final double previousValue, final int element) =>
-                          previousValue + element,
+                : parseMatch<double>(stddev).values.reduce(
+                      (final double value, final double element) =>
+                          value + element,
                     );
-            final double avgGamepieces = parseMatch(avg).values.fold(
-                  0,
-                  (final double previousValue, final int element) =>
-                      previousValue + element,
+            final double avgGamepieces = parseMatch<double>(avg).values.reduce(
+                  (final double value, final double element) => value + element,
                 );
             return ScatterData(
               avgGamepiecePoints,

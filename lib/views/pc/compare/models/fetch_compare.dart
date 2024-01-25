@@ -78,7 +78,9 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
           final List<int> autoGamepieces = technicalMatches
               .map(
                 (final dynamic technicalMatch) =>
-                    (parseByMode(MatchMode.auto, technicalMatch).values.reduce(
+                    (parseByMode<int>(MatchMode.auto, technicalMatch)
+                        .values
+                        .reduce(
                           (final int value, final int element) =>
                               value + element,
                         )),
@@ -87,7 +89,9 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
           final List<int> teleGamepieces = technicalMatches
               .map(
                 (final dynamic technicalMatch) =>
-                    (parseByMode(MatchMode.tele, technicalMatch).values.reduce(
+                    (parseByMode<int>(MatchMode.tele, technicalMatch)
+                        .values
+                        .reduce(
                           (final int value, final int element) =>
                               value + element,
                         )),
@@ -105,7 +109,7 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
           final List<int> gamepieces = technicalMatches
               .map(
                 (final dynamic technicalMatch) =>
-                    parseMatch(technicalMatch).values.reduce(
+                    parseMatch<int>(technicalMatch).values.reduce(
                           (final int value, final int element) =>
                               value + element,
                         ),
@@ -113,20 +117,22 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
               .toList();
           final List<int> gamepiecePoints = technicalMatches
               .map(
-                (final dynamic technicalMatch) => parseMatch(technicalMatch)
-                    .values
-                    .mapIndexed(
-                      (final int index, final int element) =>
-                          parseMatch(technicalMatch)
-                              .keys
-                              .toList()[index]
-                              .points *
-                          element,
-                    )
-                    .toList()
-                    .reduce(
-                      (final int value, final int element) => value + element,
-                    ),
+                (final dynamic technicalMatch) =>
+                    parseMatch<int>(technicalMatch)
+                        .values
+                        .mapIndexed(
+                          (final int index, final int element) =>
+                              parseMatch(technicalMatch)
+                                  .keys
+                                  .toList()[index]
+                                  .points *
+                              element,
+                        )
+                        .toList()
+                        .reduce(
+                          (final int value, final int element) =>
+                              value + element,
+                        ),
               )
               .toList();
 
@@ -146,23 +152,19 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
               .toList();
           final dynamic avg =
               teamsTable["technical_matches_aggregate"]["aggregate"]["avg"];
-          final bool avgNullValidator = avg["auto_amp"] == 0;
-          print(1);
-          /*final double avgTeleGamepiecesPoints = avgNullValidator
+          final bool avgNullValidator = avg["auto_amp"] == null;
+          final double avgTeleGamepiecesPoints = avgNullValidator
               ? double.nan
-              : parseByMode(MatchMode.tele, avg).values.fold(
-                    0,
-                    (final double previousValue, final int element) =>
-                        previousValue + element,
+              : parseByMode<double>(MatchMode.tele, avg).values.reduce(
+                    (final double value, final double element) =>
+                        value + element,
                   );
           final double avgAutoGamepiecePoints = avgNullValidator
               ? double.nan
-              : parseByMode(MatchMode.auto, avg).values.fold(
-                    0,
-                    (final double previousValue, final int element) =>
-                        previousValue + element,
-                  );*/
-          print(2);
+              : parseByMode<double>(MatchMode.auto, avg).values.reduce(
+                    (final double value, final double element) =>
+                        value + element,
+                  );
 
           final List<RobotMatchStatus> matchStatuses = technicalMatches
               .map(
@@ -229,8 +231,8 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
             totalAmps: totalSpeakerLineChart,
             teleGamepieces: teleGamepiecesLineChart,
             autoGamepieces: autoGamepiecesLineChart,
-            avgAutoGamepiecePoints: 0,
-            avgTeleGamepiecesPoints: 0,
+            avgAutoGamepiecePoints: avgAutoGamepiecePoints,
+            avgTeleGamepiecesPoints: avgTeleGamepiecesPoints,
             totalDelivered: totalMissedLineChart,
           );
         }),
@@ -243,6 +245,5 @@ Future<SplayTreeSet<CompareTeam>> fetchData(
       },
     ),
   );
-  print(3);
   return result.mapQueryResult();
 }

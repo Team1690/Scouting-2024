@@ -188,27 +188,27 @@ enum ScoreByPointGiver {
   final int points;
 }
 
-Map<ScoreByPointGiver, int> parseByMode(
+Map<ScoreByPointGiver, T> parseByMode<T extends num>(
   final MatchMode mode,
   final dynamic data,
 ) =>
-    Map<ScoreByPointGiver, int>.fromEntries(
+    Map<ScoreByPointGiver, T>.fromEntries(
       ScoreByPointGiver.values
           .where(
             (final ScoreByPointGiver pointGiver) => pointGiver.mode == mode,
           )
           .map(
-            (final ScoreByPointGiver e) => MapEntry<ScoreByPointGiver, int>(
+            (final ScoreByPointGiver e) => MapEntry<ScoreByPointGiver, T>(
               e,
-              data["${e.mode.title}_${e.place.title}"] as int,
+              data["${e.mode.title}_${e.place.title}"] as T,
             ),
           ),
     );
 
-Map<ScoreByPointGiver, int> parseMatch(
+Map<ScoreByPointGiver, T> parseMatch<T extends num>(
   final dynamic data,
 ) =>
-    <ScoreByPointGiver, int>{
-      ...parseByMode(MatchMode.auto, data),
-      ...parseByMode(MatchMode.tele, data),
+    <ScoreByPointGiver, T>{
+      ...parseByMode<T>(MatchMode.auto, data),
+      ...parseByMode<T>(MatchMode.tele, data),
     };
