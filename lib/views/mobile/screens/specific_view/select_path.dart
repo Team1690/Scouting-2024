@@ -54,6 +54,10 @@ class _SelectPathState extends State<SelectPath> {
                                     sketch: Sketch(
                                       points: path.$1
                                           .map(
+                                            (final ui.Offset e) =>
+                                                Offset(e.dx, e.dy),
+                                          )
+                                          .map(
                                             (final ui.Offset e) => e.scale(
                                               constraints.maxWidth /
                                                   autoFieldWidth,

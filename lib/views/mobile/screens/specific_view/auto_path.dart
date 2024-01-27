@@ -13,7 +13,7 @@ class AutoPath extends StatefulWidget {
     required this.existingPaths,
   });
   final ui.Image fieldBackground;
-  final void Function(CsvOrNull) onChange;
+  final void Function(CsvOrUrl) onChange;
   final List<(List<Offset>, String)> existingPaths;
 
   @override
@@ -32,13 +32,17 @@ class _AutoPathState extends State<AutoPath> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Builder(
-            builder: (final BuildContext context) => Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width *
-                  fieldheight /
-                  autoFieldWidth,
-              child: Listener(
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width *
+                fieldheight /
+                autoFieldWidth,
+            child: LayoutBuilder(
+              builder: (
+                final BuildContext context,
+                final BoxConstraints constraints,
+              ) =>
+                  Listener(
                 onPointerDown: (final PointerDownEvent pointerEvent) {
                   if (!pathDone) {
                     final RenderBox box =
@@ -49,7 +53,9 @@ class _AutoPathState extends State<AutoPath> {
                   }
                 },
                 onPointerMove: (final PointerMoveEvent pointerEvent) {
-                  if (!pathDone) {
+                  if (!pathDone &&
+                      pointerEvent.position.dy - AppBar().preferredSize.height <
+                          constraints.maxHeight) {
                     final RenderBox box =
                         context.findRenderObject() as RenderBox;
                     final Offset offset =
