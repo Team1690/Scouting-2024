@@ -54,7 +54,7 @@ class SpecificVars implements HasuraVars {
     final bool Function()? isRematch,
     final int Function()? defenseAmount,
     final String? Function()? faultMessage,
-    final CsvOrNull? Function()? autoPath,
+    final CsvOrUrl? Function()? autoPath,
   }) =>
       SpecificVars.all(
         team: team != null ? team() : this.team,
@@ -91,7 +91,7 @@ class SpecificVars implements HasuraVars {
   final bool isRematch;
   final int defenseAmount;
   final String? faultMessage;
-  final CsvOrNull? autoPath;
+  final CsvOrUrl? autoPath;
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         "team_id": team?.id,
@@ -107,27 +107,23 @@ class SpecificVars implements HasuraVars {
         "schedule_match_id": scheduleMatch?.id,
         "scouter_name": name,
         "defense_amount_id": defenseAmount,
-        if (faultMessage != null) "match_number": scheduleMatch?.matchNumber,
-        if (faultMessage != null) "fault_message": faultMessage,
-        if (faultMessage != null) "match_type_id": scheduleMatch?.matchTypeId,
+        if (faultMessage != null) "schedule_match_id": scheduleMatch?.id,
       };
 
-  void reset(final BuildContext context) {
-    copyWith(
-      isRematch: always(false),
-      scheduleMatch: always(null),
-      faultMessage: always(null),
-      team: always(null),
-      driveRating: always(null),
-      climbRating: always(null),
-      intakeRating: always(null),
-      ampRating: always(null),
-      speakerRating: always(null),
-      defenseRating: always(null),
-      generalRating: always(null),
-      autoPath: always(null),
-      defenseAmount:
-          always(IdProvider.of(context).defense.nameToId["No Defense"]!),
-    );
-  }
+  SpecificVars reset(final BuildContext context) => copyWith(
+        isRematch: always(false),
+        scheduleMatch: always(null),
+        faultMessage: always(null),
+        team: always(null),
+        driveRating: always(null),
+        climbRating: always(null),
+        intakeRating: always(null),
+        ampRating: always(null),
+        speakerRating: always(null),
+        defenseRating: always(null),
+        generalRating: always(null),
+        autoPath: always(null),
+        defenseAmount:
+            always(IdProvider.of(context).defense.nameToId["No Defense"]!),
+      );
 }

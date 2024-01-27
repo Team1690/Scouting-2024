@@ -1,12 +1,12 @@
-sealed class CsvOrNull {}
+sealed class CsvOrUrl {}
 
-class Csv extends CsvOrNull {
+class Csv extends CsvOrUrl {
   Csv({required this.csv});
 
   final String csv;
 }
 
-class Url extends CsvOrNull {
+class Url extends CsvOrUrl {
   Url({required this.url});
 
   final String url;
