@@ -344,7 +344,10 @@ class _PitViewState extends State<PitView> {
                       widget.initialVars == null
                           ? FireBaseSubmitButton(
                               validate: () => formKey.currentState!.validate(),
-                              getResult: () => result,
+                              getResult: () async =>
+                                  await result?.readAsBytes(),
+                              filePath:
+                                  "/files/pit_photos/${vars.teamId}.${(result?.path.substring((result?.path.lastIndexOf(".") ?? 0) + 1))}",
                               mutation: insertMutation,
                               vars: vars,
                               resetForm: resetFrame,
