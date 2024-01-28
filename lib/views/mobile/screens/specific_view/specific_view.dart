@@ -556,7 +556,7 @@ Future<List<String?>> fetchUrls(final int team) async {
   final GraphQLClient client = getClient();
   const String query = r"""
 query MyQuery($team: Int) {
-  specific_match(where: {team_id: {_eq: $team}}) {
+  specific_match(where: {team_id: {_eq: $team}}, distinct_on: url) {
     url
   }
 }
