@@ -142,11 +142,37 @@ class _SpecificState extends State<Specific> {
                               MaterialPageRoute<AutoPath>(
                                 builder: (final BuildContext buildContext) =>
                                     AutoPath(
+                                  savedPath: switch (vars.autoPath) {
+                                    Csv(csv: final String csv) => csv
+                                        .split("\n")
+                                        .map(
+                                          (final String e) => Offset(
+                                            double.tryParse(
+                                                  e.split(",").first,
+                                                ) ??
+                                                0,
+                                            double.tryParse(
+                                                  e.split(",").last,
+                                                ) ??
+                                                0,
+                                          ),
+                                        )
+                                        .toList(),
+                                    Url(url: final String url) => snapshot.data
+                                        ?.firstWhere(
+                                          (
+                                            final (
+                                              List<ui.Offset>,
+                                              String
+                                            ) element,
+                                          ) =>
+                                              element.$2 == url,
+                                        )
+                                        .$1,
+                                    null => null
+                                  },
                                   existingPaths: snapshot.data ??
-                                      <(
-                                        List<ui.Offset>,
-                                        String
-                                      )>[], //TODO query takes time to fetch the data and the AutoPath button may be pressed before it does. maybe save auto paths and display saved ones if query is delayed due to poor connection?
+                                      <(List<ui.Offset>, String)>[],
                                   fieldBackground: fieldImage!,
                                   onChange: (final CsvOrUrl result) {
                                     setState(() {

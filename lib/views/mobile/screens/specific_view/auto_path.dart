@@ -11,10 +11,12 @@ class AutoPath extends StatefulWidget {
     required this.fieldBackground,
     required this.onChange,
     required this.existingPaths,
+    required this.savedPath,
   });
   final ui.Image fieldBackground;
   final void Function(CsvOrUrl) onChange;
   final List<(List<Offset>, String)> existingPaths;
+  final List<Offset>? savedPath;
 
   @override
   State<AutoPath> createState() => _AutoPathState();
@@ -27,6 +29,20 @@ class _AutoPathState extends State<AutoPath> {
     final ValueNotifier<Sketch> path =
         ValueNotifier<Sketch>(Sketch(points: <Offset>[]));
     bool pathDone = false;
+    if (widget.savedPath != null) {
+      path.value = Sketch(
+        points: widget.savedPath!
+            .map(
+              (final ui.Offset spot) => spot.scale(
+                MediaQuery.of(context).size.width / autoFieldWidth,
+                MediaQuery.of(context).size.width / autoFieldWidth,
+              ),
+            )
+            .toList(),
+      );
+      pathDone = true;
+    }
+
     return Scaffold(
       appBar: AppBar(),
       body: Column(
