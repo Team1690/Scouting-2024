@@ -23,12 +23,12 @@ class AutoPath extends StatefulWidget {
 }
 
 class _AutoPathState extends State<AutoPath> {
+  List<Offset> exportedPath = <ui.Offset>[];
+  final ValueNotifier<Sketch> path =
+      ValueNotifier<Sketch>(Sketch(points: <Offset>[]));
+  bool pathDone = false;
   @override
-  Widget build(final BuildContext context) {
-    List<Offset> exportedPath = <ui.Offset>[];
-    final ValueNotifier<Sketch> path =
-        ValueNotifier<Sketch>(Sketch(points: <Offset>[]));
-    bool pathDone = false;
+  void didChangeDependencies() {
     if (widget.savedPath != null) {
       path.value = Sketch(
         points: widget.savedPath!
@@ -42,61 +42,66 @@ class _AutoPathState extends State<AutoPath> {
       );
       pathDone = true;
     }
+    super.didChangeDependencies();
+  }
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width *
-                fieldheight /
-                autoFieldWidth,
-            child: LayoutBuilder(
-              builder: (
-                final BuildContext context,
-                final BoxConstraints constraints,
-              ) =>
-                  Listener(
-                onPointerDown: (final PointerDownEvent pointerEvent) {
-                  if (!pathDone) {
-                    final RenderBox box =
-                        context.findRenderObject() as RenderBox;
-                    final Offset offset =
-                        box.globalToLocal(pointerEvent.position);
-                    path.value = Sketch(points: <Offset>[offset]);
-                  }
-                },
-                onPointerMove: (final PointerMoveEvent pointerEvent) {
-                  if (!pathDone &&
-                      pointerEvent.position.dy - AppBar().preferredSize.height <
-                          constraints.maxHeight) {
-                    final RenderBox box =
-                        context.findRenderObject() as RenderBox;
-                    final Offset offset =
-                        box.globalToLocal(pointerEvent.position);
-                    final List<Offset> points =
-                        List<Offset>.from(path.value.points)..add(offset);
-                    path.value = Sketch(points: points);
-                  }
-                },
-                onPointerUp: (final PointerUpEvent pointerUpEvent) {
-                  pathDone = true;
-                },
-                child: ListenableBuilder(
-                  listenable: path,
-                  builder: (final BuildContext context, final Widget? e) =>
-                      RepaintBoundary(
-                    child: LayoutBuilder(
-                      builder: (
-                        final BuildContext context,
-                        final BoxConstraints constraints,
-                      ) =>
-                          CustomPaint(
-                        painter: DrawingCanvas(
-                          sketch: path.value,
-                          fieldBackground: widget.fieldBackground,
+  @override
+  Widget build(final BuildContext context) => Scaffold(
+        appBar: AppBar(),
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width *
+                  fieldheight /
+                  autoFieldWidth,
+              child: LayoutBuilder(
+                builder: (
+                  final BuildContext context,
+                  final BoxConstraints constraints,
+                ) =>
+                    Listener(
+                  onPointerDown: (final PointerDownEvent pointerEvent) {
+                    if (!pathDone) {
+                      final RenderBox box =
+                          context.findRenderObject() as RenderBox;
+                      final Offset offset =
+                          box.globalToLocal(pointerEvent.position);
+                      path.value = Sketch(points: <Offset>[offset]);
+                    }
+                  },
+                  onPointerMove: (final PointerMoveEvent pointerEvent) {
+                    if (!pathDone &&
+                        pointerEvent.position.dy -
+                                AppBar().preferredSize.height <
+                            constraints.maxHeight) {
+                      final RenderBox box =
+                          context.findRenderObject() as RenderBox;
+                      final Offset offset =
+                          box.globalToLocal(pointerEvent.position);
+                      final List<Offset> points =
+                          List<Offset>.from(path.value.points)..add(offset);
+                      path.value = Sketch(points: points);
+                    }
+                  },
+                  onPointerUp: (final PointerUpEvent pointerUpEvent) {
+                    pathDone = true;
+                  },
+                  child: ListenableBuilder(
+                    listenable: path,
+                    builder: (final BuildContext context, final Widget? e) =>
+                        RepaintBoundary(
+                      child: LayoutBuilder(
+                        builder: (
+                          final BuildContext context,
+                          final BoxConstraints constraints,
+                        ) =>
+                            CustomPaint(
+                          painter: DrawingCanvas(
+                            sketch: path.value,
+                            fieldBackground: widget.fieldBackground,
+                          ),
                         ),
                       ),
                     ),
@@ -104,69 +109,67 @@ class _AutoPathState extends State<AutoPath> {
                 ),
               ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              IconButton(
-                onPressed: () {
-                  if (pathDone) {
-                    path.value = Sketch(points: <Offset>[]);
-                    pathDone = false;
-                  }
-                },
-                icon: const Icon(Icons.delete_outline_rounded),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Colors.red,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-              IconButton(
-                onPressed: () async {
-                  exportedPath = path.value.points
-                      .map(
-                        (final ui.Offset e) => e.scale(
-                          autoFieldWidth / MediaQuery.of(context).size.width,
-                          autoFieldWidth / MediaQuery.of(context).size.width,
-                        ),
-                      )
-                      .toList();
-                  await showDialog(
-                    context: context,
-                    builder: (final BuildContext dialogContext) => SelectPath(
-                      fieldBackground: widget.fieldBackground,
-                      newPath: exportedPath,
-                      existingPaths: widget.existingPaths,
-                      onSelectExistingPath: (final String url) {
-                        Navigator.pop(context);
-                        widget.onChange(Url(url: url));
-                        Navigator.pop(context);
-                      },
-                      onNewSelected: (final String csv) {
-                        Navigator.pop(context);
-                        widget.onChange(Csv(csv: csv));
-                        Navigator.pop(context);
-                      },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    if (pathDone) {
+                      path.value = Sketch(points: <Offset>[]);
+                      pathDone = false;
+                    }
+                  },
+                  icon: const Icon(Icons.delete_outline_rounded),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      Colors.red,
                     ),
-                  );
-                },
-                icon: const Icon(Icons.save_as),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Colors.blue,
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+                const SizedBox(
+                  width: 15,
+                ),
+                IconButton(
+                  onPressed: () async {
+                    exportedPath = path.value.points
+                        .map(
+                          (final ui.Offset e) => e.scale(
+                            autoFieldWidth / MediaQuery.of(context).size.width,
+                            autoFieldWidth / MediaQuery.of(context).size.width,
+                          ),
+                        )
+                        .toList();
+                    await showDialog(
+                      context: context,
+                      builder: (final BuildContext dialogContext) => SelectPath(
+                        fieldBackground: widget.fieldBackground,
+                        newPath: exportedPath,
+                        existingPaths: widget.existingPaths,
+                        onSelectExistingPath: (final String url) {
+                          Navigator.pop(context);
+                          widget.onChange(Url(url: url));
+                          Navigator.pop(context);
+                        },
+                        onNewSelected: (final String csv) {
+                          Navigator.pop(context);
+                          widget.onChange(Csv(csv: csv));
+                          Navigator.pop(context);
+                        },
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.save_as),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      Colors.blue,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
 }
 
 class DrawingCanvas extends CustomPainter {
