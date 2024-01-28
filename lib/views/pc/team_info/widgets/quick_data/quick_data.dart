@@ -16,58 +16,103 @@ class QuickDataCard extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: <Widget>[
-                    const Column(
+                    Column(
                       children: <Widget>[
-                        Text(
+                        const Text(
                           "Auto",
                           style: TextStyle(fontSize: 18),
                         ),
-                        //TODO Auto quickdata
+                        Text(
+                          "Speaker: ${data.avgAutoSpeaker.toStringAsFixed(1)}",
+                        ),
+                        Text("Amp: ${data.avgAutoAmp.toStringAsFixed(1)}"),
+                        Text(
+                          "Missed Speaker: ${data.avgAutoMissedSpeaker.toStringAsFixed(1)}",
+                        ),
+                        Text(
+                          "Missed Amp: ${data.avgAutoMissedAmp.toStringAsFixed(1)}",
+                        ),
                       ],
                     ),
-                    const Column(
+                    Column(
                       children: <Widget>[
-                        Text(
+                        const Text(
                           "Teleop",
                           style: TextStyle(fontSize: 18),
                         ),
-                        //TODO tele quickdata
+                        Text(
+                          "Speaker: ${data.avgTeleSpeaker.toStringAsFixed(1)}",
+                        ),
+                        Text("Amp: ${data.avgTeleAmp.toStringAsFixed(1)}"),
+                        Text(
+                          "Missed Speaker: ${data.avgTeleMissedSpeaker.toStringAsFixed(1)}",
+                        ),
+                        Text(
+                          "Missed Amp: ${data.avgTeleMissedAmp.toStringAsFixed(1)}",
+                        ),
+                        Text("Traps: ${data.avgTrap.toStringAsFixed(1)}"),
                       ],
                     ),
-                    const Column(
+                    Column(
                       children: <Widget>[
+                        const Text(
+                          "Climb",
+                          style: TextStyle(fontSize: 18),
+                        ),
                         Text(
+                          "Games Climbed: ${data.matchesClimbed}",
+                        ),
+                        Text("Games Harmonized: ${data.matchesHarmonized}"),
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        const Text(
                           "Points",
                           style: TextStyle(fontSize: 18),
                         ),
-                        //TODO points quickdata
+                        Text(
+                          "Gamepieces: ${data.avgGamepiecePoints.toStringAsFixed(1)}",
+                        ),
                       ],
                     ),
-                    const Column(
+                    Column(
                       children: <Widget>[
-                        Text(
+                        const Text(
                           "Misc",
                           style: TextStyle(fontSize: 18),
                         ),
-                        //TODO misc quickdata
+                        Text(
+                          "Gamepieces scored: ${data.avgGamepieces.toStringAsFixed(1)}",
+                        ),
+                        Text("Matches Played: ${data.amoutOfMatches}"),
                       ],
                     ),
-                    const Column(
+                    Column(
                       children: <Widget>[
-                        Text(
+                        const Text(
                           "Defense Stats",
                           style: TextStyle(fontSize: 18),
                         ),
-                        //TODO defense quickdata
+                        Text(
+                          "Avg GP No Defense: ${data.avgGamePiecesNoDefense.toStringAsFixed(1)}",
+                        ),
+                        Text(
+                          "Avg GP Half Defense: ${data.avgGamePiecesHalfDefense.toStringAsFixed(1)}",
+                        ),
+                        Text(
+                          "Avg GP Full Defense: ${data.avgGamePiecesFullDefense.toStringAsFixed(1)}",
+                        ),
                       ],
                     ),
-                    const Column(
+                    Column(
                       children: <Widget>[
-                        Text(
+                        const Text(
                           "Picklist",
                           style: TextStyle(fontSize: 18),
                         ),
-                        //TODO picklist quickdata
+                        Text("First: ${data.firstPicklistIndex}"),
+                        Text("Second: ${data.secondPicklistIndex}"),
                       ],
                     ),
                   ]

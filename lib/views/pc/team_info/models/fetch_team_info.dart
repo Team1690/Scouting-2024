@@ -143,6 +143,22 @@ Future<Team> fetchTeamInfo(
           amoutOfMatches: 0,
           firstPicklistIndex: 0,
           secondPicklistIndex: 0,
+          avgAutoAmp: 0,
+          avgAutoMissedAmp: 0,
+          avgAutoMissedSpeaker: 0,
+          avgAutoSpeaker: 0,
+          avgGamePiecesFullDefense: 0,
+          avgGamePiecesHalfDefense: 0,
+          avgGamePiecesNoDefense: 0,
+          avgGamepiecePoints: 0,
+          avgGamepieces: 0,
+          avgTeleAmp: 0,
+          avgTeleMissedAmp: 0,
+          avgTeleMissedSpeaker: 0,
+          avgTeleSpeaker: 0,
+          avgTrap: 0,
+          matchesClimbed: 0,
+          matchesHarmonized: 0,
         );
         //TODO create with required auto variables
         AutoByPosData getDataByNodeList(final List<dynamic> matchesInPos) =>

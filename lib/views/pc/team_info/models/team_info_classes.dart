@@ -6,10 +6,42 @@ class QuickData {
     required this.amoutOfMatches,
     required this.firstPicklistIndex,
     required this.secondPicklistIndex,
+    required this.avgAutoAmp,
+    required this.avgAutoMissedAmp,
+    required this.avgAutoMissedSpeaker,
+    required this.avgAutoSpeaker,
+    required this.avgGamePiecesFullDefense,
+    required this.avgGamePiecesHalfDefense,
+    required this.avgGamePiecesNoDefense,
+    required this.avgGamepiecePoints,
+    required this.avgGamepieces,
+    required this.avgTeleAmp,
+    required this.avgTeleMissedAmp,
+    required this.avgTeleMissedSpeaker,
+    required this.avgTeleSpeaker,
+    required this.avgTrap,
+    required this.matchesClimbed,
+    required this.matchesHarmonized,
   });
   final int amoutOfMatches;
   final int firstPicklistIndex;
   final int secondPicklistIndex;
+  final double avgGamepieces;
+  final double avgGamepiecePoints;
+  final double avgAutoSpeaker;
+  final double avgAutoAmp;
+  final double avgAutoMissedSpeaker;
+  final double avgAutoMissedAmp;
+  final double avgTeleSpeaker;
+  final double avgTeleAmp;
+  final double avgTeleMissedSpeaker;
+  final double avgTeleMissedAmp;
+  final double avgGamePiecesNoDefense;
+  final double avgGamePiecesHalfDefense;
+  final double avgGamePiecesFullDefense;
+  final double avgTrap;
+  final int matchesClimbed;
+  final int matchesHarmonized;
 }
 
 class AutoByPosData {
