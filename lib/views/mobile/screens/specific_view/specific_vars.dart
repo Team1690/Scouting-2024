@@ -95,7 +95,7 @@ class SpecificVars implements HasuraVars {
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         "team_id": team?.id,
-        if (autoPath.runtimeType == Url) "path_url": (autoPath as Url).url,
+        if (autoPath case Url(url: final String url)) "url": url,
         "driving_rating": driveRating,
         "intake_rating": intakeRating,
         "climb_rating": climbRating,

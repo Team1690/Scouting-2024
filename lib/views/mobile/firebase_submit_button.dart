@@ -21,14 +21,12 @@ class FireBaseSubmitButton extends StatefulWidget {
   final String mutation;
   final bool Function() validate;
   final void Function() resetForm;
-  final Future<Uint8List?> Function() getResult;
+  final Future<Uint8List> Function() getResult;
   final String filePath;
 
   @override
   State<FireBaseSubmitButton> createState() => _FireBaseSubmitButtonState();
 }
-
-class T {}
 
 class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
   ButtonState _state = ButtonState.idle;
@@ -62,7 +60,7 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
           ),
         },
         state: _state,
-        onPressed: () {
+        onPressed: () async {
           if (_state == ButtonState.loading) return;
 
           if (_state == ButtonState.fail) {
@@ -70,7 +68,7 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
               _state = ButtonState.idle;
             });
 
-            Navigator.push(
+            await Navigator.push(
               context,
               MaterialPageRoute<Scaffold>(
                 builder: (final BuildContext context) => Scaffold(
@@ -98,7 +96,7 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
             );
             return;
           } else {
-            uploadData();
+            await uploadData();
             Future<void>.delayed(
               const Duration(seconds: 5),
               () => setState((() => _state = ButtonState.idle)),
@@ -107,56 +105,35 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
         },
       );
 
-  void uploadData() async {
-    if (await widget.getResult() != null) {
-      final Reference ref = FirebaseStorage.instance.ref(widget.filePath);
+  Future<void> uploadData() async {
+    final Reference ref = FirebaseStorage.instance.ref(widget.filePath);
 
-      final UploadTask firebaseTask = ref.putData(
-        await widget.getResult() ??
-            (throw Exception("can't happen but good to check :D")),
-      );
+    final UploadTask firebaseTask = ref.putData(
+      await widget.getResult(),
+    );
 
-      bool running = true;
+    bool running = true;
 
-      firebaseTask.snapshotEvents.listen((final TaskSnapshot event) async {
-        if (event.state == TaskState.running && running) {
-          setState(() {
-            _state = ButtonState.loading;
-          });
-          running = false;
-        } else if (event.state == TaskState.success) {
-          final Map<String, dynamic> vars =
-              Map<String, dynamic>.from(widget.vars.toJson());
-          final String url = await ref.getDownloadURL();
-          vars[
-              widget.filePath.substring(widget.filePath.lastIndexOf(".") + 1) ==
-                      "txt"
-                  ? "path_url"
-                  : "url"] = url;
-          await submitToDb(vars, ref);
-        } else if (event.state == TaskState.error) {
-          setState(() {
-            _state = ButtonState.fail;
-            errorMessage = "error";
-            graphqlErrorMessage = "Firebase error";
-            Future<void>.delayed(
-              const Duration(seconds: 5),
-              () => setState((() => _state = ButtonState.idle)),
-            );
-          });
-        }
-      });
-    } else {
-      setState(() {
-        _state = ButtonState.fail;
-        errorMessage = "error";
-        graphqlErrorMessage = "Invalid file";
-        Future<void>.delayed(
-          const Duration(seconds: 5),
-          () => setState((() => _state = ButtonState.idle)),
-        );
-      });
-    }
+    firebaseTask.snapshotEvents.listen((final TaskSnapshot event) async {
+      if (event.state == TaskState.running && running) {
+        setState(() {
+          _state = ButtonState.loading;
+        });
+        running = false;
+      } else if (event.state == TaskState.success) {
+        final Map<String, dynamic> vars =
+            Map<String, dynamic>.from(widget.vars.toJson());
+        final String url = await ref.getDownloadURL();
+        vars["url"] = url;
+        await submitToDb(vars, ref);
+      } else if (event.state == TaskState.error) {
+        setState(() {
+          _state = ButtonState.fail;
+          errorMessage = "error";
+          graphqlErrorMessage = "Firebase error";
+        });
+      }
+    });
   }
 
   Future<void> submitToDb(

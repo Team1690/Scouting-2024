@@ -135,31 +135,30 @@ class _SpecificState extends State<Specific> {
                         ),
                         onPressed: () async {
                           fieldImage = await getField(true);
-                          if (fieldImage != null) {
-                            unawaited(
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute<AutoPath>(
-                                  builder: (final BuildContext buildContext) =>
-                                      AutoPath(
-                                    existingPaths: snapshot.data ??
-                                        <(
-                                          List<ui.Offset>,
-                                          String
-                                        )>[], //TODO query takes time to fetch the data and the AutoPath button may be pressed before it does. maybe save auto paths and display saved ones if query is delayed due to poor connection?
-                                    fieldBackground: fieldImage!,
-                                    onChange: (final CsvOrUrl result) {
-                                      setState(() {
-                                        vars = vars.copyWith(
-                                          autoPath: always(result),
-                                        );
-                                      });
-                                    },
-                                  ),
+
+                          unawaited(
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<AutoPath>(
+                                builder: (final BuildContext buildContext) =>
+                                    AutoPath(
+                                  existingPaths: snapshot.data ??
+                                      <(
+                                        List<ui.Offset>,
+                                        String
+                                      )>[], //TODO query takes time to fetch the data and the AutoPath button may be pressed before it does. maybe save auto paths and display saved ones if query is delayed due to poor connection?
+                                  fieldBackground: fieldImage!,
+                                  onChange: (final CsvOrUrl result) {
+                                    setState(() {
+                                      vars = vars.copyWith(
+                                        autoPath: always(result),
+                                      );
+                                    });
+                                  },
                                 ),
                               ),
-                            );
-                          }
+                            ),
+                          );
                         },
                         child: const Text("Create Auto Path"),
                       ),
@@ -179,22 +178,42 @@ class _SpecificState extends State<Specific> {
                                   width: 3,
                                   fieldBackground: fieldImage!,
                                   sketch: Sketch(
-                                    points: vars.autoPath.runtimeType == Csv
-                                        ? (vars.autoPath as Csv)
-                                            .csv
-                                            .split("\n")
-                                            .map(
-                                              (final String e) => Offset(
-                                                double.tryParse(
-                                                      e.split(",").first,
-                                                    ) ??
-                                                    0,
-                                                double.tryParse(
-                                                      e.split(",").last,
-                                                    ) ??
-                                                    0,
-                                              ),
+                                    points: switch (vars.autoPath!) {
+                                      Csv(csv: final String csv) => csv
+                                          .split("\n")
+                                          .map(
+                                            (final String e) => Offset(
+                                              double.tryParse(
+                                                    e.split(",").first,
+                                                  ) ??
+                                                  0,
+                                              double.tryParse(
+                                                    e.split(",").last,
+                                                  ) ??
+                                                  0,
+                                            ),
+                                          )
+                                          .map(
+                                            (final ui.Offset e) => e.scale(
+                                              constraints.maxWidth /
+                                                  autoFieldWidth,
+                                              constraints.maxWidth /
+                                                  autoFieldWidth,
+                                            ),
+                                          )
+                                          .toList(),
+                                      Url(url: final String url) =>
+                                        snapshot.data!
+                                            .firstWhere(
+                                              (
+                                                final (
+                                                  List<ui.Offset>,
+                                                  String
+                                                ) element,
+                                              ) =>
+                                                  element.$2 == url,
                                             )
+                                            .$1
                                             .map(
                                               (final ui.Offset e) => e.scale(
                                                 constraints.maxWidth /
@@ -204,32 +223,7 @@ class _SpecificState extends State<Specific> {
                                               ),
                                             )
                                             .toList()
-                                        : snapshot.data != null &&
-                                                vars.autoPath.runtimeType == Url
-                                            ? snapshot.data!
-                                                .firstWhere(
-                                                  (
-                                                    final (
-                                                      List<ui.Offset>,
-                                                      String
-                                                    ) element,
-                                                  ) =>
-                                                      element.$2 ==
-                                                      (vars.autoPath as Url)
-                                                          .url,
-                                                )
-                                                .$1
-                                                .map(
-                                                  (final ui.Offset e) =>
-                                                      e.scale(
-                                                    constraints.maxWidth /
-                                                        autoFieldWidth,
-                                                    constraints.maxWidth /
-                                                        autoFieldWidth,
-                                                  ),
-                                                )
-                                                .toList()
-                                            : <Offset>[],
+                                    },
                                   ),
                                 ),
                               ),
@@ -466,9 +460,6 @@ class _SpecificState extends State<Specific> {
                         alignment: Alignment.bottomCenter,
                         child: submitButtons(
                           "auto_paths/${vars.scheduleMatch?.id}_${vars.team?.id}.txt",
-                          () async => Uint8List.fromList(
-                            (vars.autoPath as Csv).csv.codeUnits,
-                          ),
                           () {
                             setState(() {
                               vars = vars.reset(context);
@@ -479,8 +470,8 @@ class _SpecificState extends State<Specific> {
                             });
                           },
                           """
-                mutation A(\$defense_amount_id: Int, \$defense_rating: Int, \$driving_rating: Int, \$general_rating: Int, \$intake_rating: Int, \$is_rematch: Boolean, \$speaker_rating: Int, \$scouter_name: String, \$team_id: Int, \$path_url: String, \$climb_rating: Int, \$amp_rating: Int, \$schedule_match_id: Int, \$fault_message:String){
-                  insert_specific_match(objects: {scouter_name: \$scouter_name, team_id: \$team_id, speaker_rating: \$speaker_rating, schedule_match_id: \$schedule_match_id, path_url: \$path_url, is_rematch: \$is_rematch, intake_rating: \$intake_rating, general_rating: \$general_rating, driving_rating: \$driving_rating, defense_rating: \$defense_rating, defense_amount_id: \$defense_amount_id, climb_rating: \$climb_rating, amp_rating: \$amp_rating}) {
+                mutation A(\$defense_amount_id: Int, \$defense_rating: Int, \$driving_rating: Int, \$general_rating: Int, \$intake_rating: Int, \$is_rematch: Boolean, \$speaker_rating: Int, \$scouter_name: String, \$team_id: Int, \$url: String, \$climb_rating: Int, \$amp_rating: Int, \$schedule_match_id: Int, \$fault_message:String){
+                  insert_specific_match(objects: {scouter_name: \$scouter_name, team_id: \$team_id, speaker_rating: \$speaker_rating, schedule_match_id: \$schedule_match_id, url: \$url, is_rematch: \$is_rematch, intake_rating: \$intake_rating, general_rating: \$general_rating, driving_rating: \$driving_rating, defense_rating: \$defense_rating, defense_amount_id: \$defense_amount_id, climb_rating: \$climb_rating, amp_rating: \$amp_rating}) {
                     affected_rows
                   }
                       ${vars.faultMessage == null ? "" : """
@@ -502,25 +493,28 @@ class _SpecificState extends State<Specific> {
       );
   Widget submitButtons(
     final String filePath,
-    final Future<Uint8List?> Function() getResult,
     final void Function() resetForm,
     final String mutation,
   ) =>
-      vars.autoPath.runtimeType == Csv
-          ? FireBaseSubmitButton(
-              filePath: filePath,
-              getResult: getResult,
-              vars: vars,
-              validate: () => formKey.currentState!.validate(),
-              resetForm: resetForm,
-              mutation: mutation,
-            )
-          : SubmitButton(
-              getJson: () => vars.toJson(),
-              validate: () => formKey.currentState!.validate(),
-              resetForm: resetForm,
-              mutation: mutation,
-            );
+      switch (vars.autoPath) {
+        null => Container(),
+        Csv(csv: final String csv) => FireBaseSubmitButton(
+            filePath: filePath,
+            getResult: () async => Uint8List.fromList(
+              csv.codeUnits,
+            ),
+            vars: vars,
+            validate: () => formKey.currentState!.validate(),
+            resetForm: resetForm,
+            mutation: mutation,
+          ),
+        Url() => SubmitButton(
+            getJson: () => vars.toJson(),
+            validate: () => formKey.currentState!.validate(),
+            resetForm: resetForm,
+            mutation: mutation,
+          ),
+      };
 
   Future<ui.Image> getField(final bool isRed) async {
     final ByteData data = await rootBundle
@@ -537,7 +531,7 @@ Future<List<String?>> fetchUrls(final int team) async {
   const String query = r"""
 query MyQuery($team: Int) {
   specific_match(where: {team_id: {_eq: $team}}) {
-    path_url
+    url
   }
 }
   """;
@@ -553,7 +547,7 @@ query MyQuery($team: Int) {
 
 List<String> parserFn(final Map<String, dynamic> urls) =>
     (urls["specific_match"] as List<dynamic>)
-        .map((final dynamic url) => url["path_url"] as String)
+        .map((final dynamic url) => url["url"] as String)
         .toList();
 
 Future<List<ui.Offset>> fetchPath(final String? url) async {
