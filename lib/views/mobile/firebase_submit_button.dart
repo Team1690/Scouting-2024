@@ -83,24 +83,19 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
             );
             return;
           }
-
           if (!widget.validate()) {
             setState(() {
               errorMessage = "Input Error";
               _state = ButtonState.fail;
             });
 
-            Future<void>.delayed(
+            await Future<void>.delayed(
               const Duration(seconds: 5),
               () => setState((() => _state = ButtonState.idle)),
             );
             return;
           } else {
             await uploadData();
-            Future<void>.delayed(
-              const Duration(seconds: 5),
-              () => setState((() => _state = ButtonState.idle)),
-            );
           }
         },
       );
@@ -132,6 +127,9 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
           errorMessage = "error";
           graphqlErrorMessage = "Firebase error";
         });
+        await Future<void>.delayed(const Duration(seconds: 5), () {
+          setState((() => _state = ButtonState.idle));
+        });
       }
     });
   }
@@ -157,20 +155,16 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
       });
 
       graphqlErrorMessage = graphqlQueryResult.exception.toString();
-
-      Future<void>.delayed(
-        const Duration(seconds: 5),
-        () => setState((() => _state = ButtonState.idle)),
-      );
     } else {
-      widget.resetForm();
       setState(() {
         _state = ButtonState.success;
       });
-      Future<void>.delayed(
-        const Duration(seconds: 5),
-        () => setState((() => _state = ButtonState.idle)),
-      );
     }
+    await Future<void>.delayed(const Duration(seconds: 5), () {
+      if (_state == ButtonState.success) {
+        widget.resetForm();
+      }
+      setState((() => _state = ButtonState.idle));
+    });
   }
 }
