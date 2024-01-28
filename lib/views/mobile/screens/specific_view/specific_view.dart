@@ -136,55 +136,13 @@ class _SpecificState extends State<Specific> {
                         onPressed: () async {
                           fieldImage = await getField(true);
 
-                          unawaited(
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<AutoPath>(
-                                builder: (final BuildContext buildContext) =>
-                                    AutoPath(
-                                  savedPath: switch (vars.autoPath) {
-                                    Csv(csv: final String csv) => csv
-                                        .split("\n")
-                                        .map(
-                                          (final String e) => Offset(
-                                            double.tryParse(
-                                                  e.split(",").first,
-                                                ) ??
-                                                0,
-                                            double.tryParse(
-                                                  e.split(",").last,
-                                                ) ??
-                                                0,
-                                          ),
-                                        )
-                                        .toList(),
-                                    Url(url: final String url) => snapshot.data
-                                        ?.firstWhere(
-                                          (
-                                            final (
-                                              List<ui.Offset>,
-                                              String
-                                            ) element,
-                                          ) =>
-                                              element.$2 == url,
-                                        )
-                                        .$1,
-                                    null => null
-                                  },
-                                  existingPaths: snapshot.data ??
-                                      <(List<ui.Offset>, String)>[],
-                                  fieldBackground: fieldImage!,
-                                  onChange: (final CsvOrUrl result) {
-                                    setState(() {
-                                      vars = vars.copyWith(
-                                        autoPath: always(result),
-                                      );
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                          );
+                          final CsvOrUrl? result =
+                              await showPathSelectionDialog(context, snapshot);
+                          setState(() {
+                            vars = vars.copyWith(
+                              autoPath: always(result),
+                            );
+                          });
                         },
                         child: const Text("Create Auto Path"),
                       ),
@@ -205,29 +163,17 @@ class _SpecificState extends State<Specific> {
                                   fieldBackground: fieldImage!,
                                   sketch: Sketch(
                                     points: switch (vars.autoPath!) {
-                                      Csv(csv: final String csv) => csv
-                                          .split("\n")
-                                          .map(
-                                            (final String e) => Offset(
-                                              double.tryParse(
-                                                    e.split(",").first,
-                                                  ) ??
-                                                  0,
-                                              double.tryParse(
-                                                    e.split(",").last,
-                                                  ) ??
-                                                  0,
-                                            ),
-                                          )
-                                          .map(
-                                            (final ui.Offset e) => e.scale(
-                                              constraints.maxWidth /
-                                                  autoFieldWidth,
-                                              constraints.maxWidth /
-                                                  autoFieldWidth,
-                                            ),
-                                          )
-                                          .toList(),
+                                      Csv(csv: final String csv) =>
+                                        parseAutoCsv(csv)
+                                            .map(
+                                              (final ui.Offset e) => e.scale(
+                                                constraints.maxWidth /
+                                                    autoFieldWidth,
+                                                constraints.maxWidth /
+                                                    autoFieldWidth,
+                                              ),
+                                            )
+                                            .toList(),
                                       Url(url: final String url) =>
                                         snapshot.data!
                                             .firstWhere(
@@ -517,6 +463,32 @@ class _SpecificState extends State<Specific> {
           ),
         ),
       );
+
+  Future<CsvOrUrl?> showPathSelectionDialog(
+    final BuildContext context,
+    final AsyncSnapshot<List<(List<ui.Offset>, String)>> snapshot,
+  ) =>
+      Navigator.push<CsvOrUrl>(
+        context,
+        MaterialPageRoute<CsvOrUrl>(
+          builder: (final BuildContext buildContext) => AutoPath(
+            savedPath: switch (vars.autoPath) {
+              Csv(csv: final String csv) => parseAutoCsv(csv),
+              Url(url: final String url) => snapshot.data
+                  ?.firstWhere(
+                    (
+                      final (List<ui.Offset>, String) element,
+                    ) =>
+                        element.$2 == url,
+                  )
+                  .$1,
+              null => null
+            },
+            existingPaths: snapshot.data ?? <(List<ui.Offset>, String)>[],
+            fieldBackground: fieldImage!,
+          ),
+        ),
+      );
   Widget submitButtons(
     final String filePath,
     final void Function() resetForm,
@@ -581,14 +553,7 @@ Future<List<ui.Offset>> fetchPath(final String? url) async {
     return <ui.Offset>[];
   }
   final String csv = await http.read(Uri.parse(url));
-  return csv
-      .split("\n")
-      .map((final String e) => e.split(","))
-      .map(
-        (final List<String> e) =>
-            Offset(double.tryParse(e.first) ?? 0, double.tryParse(e.last) ?? 0),
-      )
-      .toList();
+  return parseAutoCsv(csv);
 }
 
 Future<List<(List<Offset>, String)>> getPaths(final int teamId) async {
@@ -607,3 +572,14 @@ Future<List<(List<Offset>, String)>> getPaths(final int teamId) async {
   }
   return result;
 }
+
+List<Offset> parseAutoCsv(final String csv) => csv
+    .split("\n")
+    .map((final String e) => e.split(","))
+    .map(
+      (final List<String> e) => Offset(
+        double.tryParse(e.first) ?? 0,
+        double.tryParse(e.last) ?? 0,
+      ),
+    )
+    .toList();

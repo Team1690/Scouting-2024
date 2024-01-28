@@ -9,12 +9,10 @@ import "package:scouting_frontend/views/mobile/screens/specific_view/select_path
 class AutoPath extends StatefulWidget {
   const AutoPath({
     required this.fieldBackground,
-    required this.onChange,
     required this.existingPaths,
     required this.savedPath,
   });
   final ui.Image fieldBackground;
-  final void Function(CsvOrUrl) onChange;
   final List<(List<Offset>, String)> existingPaths;
   final List<Offset>? savedPath;
 
@@ -27,15 +25,17 @@ class _AutoPathState extends State<AutoPath> {
   final ValueNotifier<Sketch> path =
       ValueNotifier<Sketch>(Sketch(points: <Offset>[]));
   bool pathDone = false;
+  double rescaleRatio = 0;
   @override
   void didChangeDependencies() {
+    rescaleRatio = autoFieldWidth / MediaQuery.of(context).size.width;
     if (widget.savedPath != null) {
       path.value = Sketch(
         points: widget.savedPath!
             .map(
               (final ui.Offset spot) => spot.scale(
-                MediaQuery.of(context).size.width / autoFieldWidth,
-                MediaQuery.of(context).size.width / autoFieldWidth,
+                1 / rescaleRatio,
+                1 / rescaleRatio,
               ),
             )
             .toList(),
@@ -134,8 +134,8 @@ class _AutoPathState extends State<AutoPath> {
                     exportedPath = path.value.points
                         .map(
                           (final ui.Offset e) => e.scale(
-                            autoFieldWidth / MediaQuery.of(context).size.width,
-                            autoFieldWidth / MediaQuery.of(context).size.width,
+                            rescaleRatio,
+                            rescaleRatio,
                           ),
                         )
                         .toList();
@@ -147,13 +147,11 @@ class _AutoPathState extends State<AutoPath> {
                         existingPaths: widget.existingPaths,
                         onSelectExistingPath: (final String url) {
                           Navigator.pop(context);
-                          widget.onChange(Url(url: url));
-                          Navigator.pop(context);
+                          Navigator.pop(context, Url(url: url));
                         },
                         onNewSelected: (final String csv) {
                           Navigator.pop(context);
-                          widget.onChange(Csv(csv: csv));
-                          Navigator.pop(context);
+                          Navigator.pop(context, Csv(csv: csv));
                         },
                       ),
                     );
