@@ -1,18 +1,15 @@
 import "dart:collection";
-import "package:collection/collection.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/helpers.dart";
-import "package:scouting_frontend/models/match_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
 import "package:scouting_frontend/views/common/fetch_functions/team_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/technical_match.dart";
-import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
 
 const String query = r"""
-
 query FetchSingleTeam($ids: [Int!]) @cached {
   team(where: {id: {_in: $ids}}) {
     technical_matches_aggregate(where: {ignored: {_eq: false}}) {
@@ -67,10 +64,17 @@ query FetchSingleTeam($ids: [Int!]) @cached {
       fault_status {
         title
       }
+      match_number
+      match_type {
+        title
+      }
+      id
     }
     pit {
       drive_motor_amount
-      drive_wheel_type
+      wheel_type {
+        title
+      } 
       drivemotor {
         title
       }
@@ -86,6 +90,15 @@ query FetchSingleTeam($ids: [Int!]) @cached {
       trap
       weight
       url
+      team {
+        faults {
+          message
+        }
+        name
+        number
+        id
+        colors_index
+      }
     }
   }
 }
@@ -101,19 +114,19 @@ Future<SplayTreeSet<TeamData>> fetchData(
       parserFn: (final Map<String, dynamic> teams) =>
           SplayTreeSet<TeamData>.from(
         (teams["team"] as List<dynamic>)
-            .map<TeamData>((final dynamic teamsTable) {
-          final LightTeam team = LightTeam.fromJson(teamsTable);
+            .map<TeamData>((final dynamic teamTable) {
+          final LightTeam team = LightTeam.fromJson(teamTable);
           final List<dynamic> technicalMatchesTable =
-              teamsTable["technical_matches"] as List<dynamic>;
+              teamTable["technical_matches"] as List<dynamic>;
           final List<dynamic> specificMatchesTable =
-              teamsTable["specific_matches"] as List<dynamic>;
+              teamTable["specific_matches"] as List<dynamic>;
           final Map<String, double> avgTable =
-              teamsTable["technical_matches_aggregate"]["aggregate"]["avg"]
+              teamTable["technical_matches_aggregate"]["aggregate"]["avg"]
                   as Map<String, double>;
+          final dynamic pitTable = teamTable["pit"];
           final DefenseAmount defenseAmount = defenseAmountTitleToEnum(
             specificMatchesTable[0]["defense"]["title"] as String,
           );
-          final PitData pitData = PitData(driveTrainType: driveTrainType, driveMotorAmount: driveMotorAmount, driveMotorType: driveMotorType, driveWheelType: driveWheelType, gearboxPurchased: gearboxPurchased, notes: notes, hasShifer: hasShifer, url: url, faultMessages: faultMessages, weight: weight, team: team, height: height, harmony: harmony, trap: trap, hasBuddyClimb: hasBuddyClimb,);
           return TeamData(
             avgAutoSpeakerMissed: avgTable["auto_speaker_missed"] ?? 0,
             avgTeleSpeakerMissed: avgTable["tele_speaker_missed"] ?? 0,
@@ -127,9 +140,20 @@ Future<SplayTreeSet<TeamData>> fetchData(
             technicalMatches:
                 technicalMatchesTable.map(TechnicalMatch.parse).toList(),
             defenseAmount: defenseAmount,
-            pitData: pitData,
-            faultEntry: ,
-            lightTeam: lightTeam,
+            pitData: PitData.parse(pitTable),
+            faultEntrys: (teamTable["faults"] as List<dynamic>)
+                .map(
+                  (final dynamic fault) => FaultEntry(
+                    fault["message"] as String,
+                    team,
+                    fault["id"] as int,
+                    fault["fault_status"]["title"] as String,
+                    fault["match_number"] as int,
+                    fault["match_type"]["order"] as int?,
+                  ),
+                )
+                .toList(),
+            lightTeam: team,
           );
         }),
         (final TeamData team1, final TeamData team2) =>

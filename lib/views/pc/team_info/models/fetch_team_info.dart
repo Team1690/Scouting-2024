@@ -5,6 +5,8 @@ import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
+import '../../../common/fetch_functions/pit_data/pit_data.dart';
+
 //TODO add season specific vars and tables to the query
 const String teamInfoQuery = """
 query TeamInfo(\$id: Int!) {

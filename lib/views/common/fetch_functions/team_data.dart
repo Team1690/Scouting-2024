@@ -3,6 +3,8 @@ import "package:scouting_frontend/views/common/fetch_functions/technical_match.d
 import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
+import 'pit_data/pit_data.dart';
+
 class TeamData {
   TeamData({
     required this.avgAutoSpeakerMissed,
@@ -18,7 +20,7 @@ class TeamData {
     required this.avgTeleAmp,
     required this.pitData,
     required this.lightTeam,
-    required this.faultEntry,
+    required this.faultEntrys,
   });
   final List<TechnicalMatch> technicalMatches;
   final DefenseAmount defenseAmount;
@@ -26,7 +28,7 @@ class TeamData {
   final double avgTeleSpeakerMissed;
   final double avgTeleAmpMissed;
   final double avgAutoAmpMissed;
-  final List<FaultEntry> faultEntry;
+  final List<FaultEntry> faultEntrys;
   final double avgTeleSpeaker;
   final double avgAutoSpeaker;
   final double avgTrapAmount;

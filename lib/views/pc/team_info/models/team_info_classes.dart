@@ -1,5 +1,7 @@
 import "package:scouting_frontend/models/team_model.dart";
 
+import '../../../common/fetch_functions/pit_data/pit_data.dart';
+
 class QuickData {
   QuickData({
     //TODO add season specific variables
@@ -149,41 +151,6 @@ class MatchIdentifier {
     }
     throw Exception("Not a supported match type");
   }
-}
-
-class PitData {
-  PitData({
-    required this.driveTrainType,
-    required this.driveMotorAmount,
-    required this.driveMotorType,
-    required this.driveWheelType,
-    required this.gearboxPurchased,
-    required this.notes,
-    required this.hasShifer,
-    required this.url,
-    required this.faultMessages,
-    required this.weight,
-    required this.team,
-    required this.height,
-    required this.harmony,
-    required this.trap,
-    required this.hasBuddyClimb,
-  });
-  final String driveTrainType;
-  final int driveMotorAmount;
-  final String driveWheelType;
-  final bool? hasShifer;
-  final bool? gearboxPurchased;
-  final String driveMotorType;
-  final String notes;
-  final double weight;
-  final double height;
-  final bool harmony;
-  final bool hasBuddyClimb;
-  final int trap;
-  final String url;
-  final List<String>? faultMessages;
-  final LightTeam team;
 }
 
 class Team {
