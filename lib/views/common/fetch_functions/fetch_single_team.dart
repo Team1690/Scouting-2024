@@ -5,6 +5,9 @@ import "package:scouting_frontend/models/helpers.dart";
 import "package:scouting_frontend/models/match_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
+import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
+import "package:scouting_frontend/views/common/fetch_functions/team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/technical_match.dart";
 import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
@@ -88,153 +91,49 @@ query FetchSingleTeam($ids: [Int!]) @cached {
 }
 """;
 
-Future<SplayTreeSet<CompareTeam>> fetchData(
+Future<SplayTreeSet<TeamData>> fetchData(
   final List<int> ids,
 ) async {
   final GraphQLClient client = getClient();
 
-  final QueryResult<SplayTreeSet<CompareTeam>> result = await client.query(
-    QueryOptions<SplayTreeSet<CompareTeam>>(
+  final QueryResult<SplayTreeSet<TeamData>> result = await client.query(
+    QueryOptions<SplayTreeSet<TeamData>>(
       parserFn: (final Map<String, dynamic> teams) =>
-          SplayTreeSet<CompareTeam>.from(
+          SplayTreeSet<TeamData>.from(
         (teams["team"] as List<dynamic>)
-            .map<CompareTeam>((final dynamic teamsTable) {
+            .map<TeamData>((final dynamic teamsTable) {
           final LightTeam team = LightTeam.fromJson(teamsTable);
-          final List<dynamic> technicalMatches =
+          final List<dynamic> technicalMatchesTable =
               teamsTable["technical_matches"] as List<dynamic>;
-          final List<dynamic> specificMatches =
+          final List<dynamic> specificMatchesTable =
               teamsTable["specific_matches"] as List<dynamic>;
-          final List<int> autoGamepieces = technicalMatches
-              .map(
-                (final dynamic technicalMatch) =>
-                    (parseByMode<int>(MatchMode.auto, technicalMatch)
-                        .values
-                        .sum),
-              )
-              .toList();
-          final List<int> teleGamepieces = technicalMatches
-              .map(
-                (final dynamic technicalMatch) =>
-                    (parseByMode<int>(MatchMode.tele, technicalMatch)
-                        .values
-                        .sum),
-              )
-              .toList();
-          final List<int> totalMissed = technicalMatches
-              .map(
-                (final dynamic technicalMatch) =>
-                    ((technicalMatch["auto_amp_missed"] as int) +
-                        (technicalMatch["auto_speaker_missed"] as int)) +
-                    ((technicalMatch["tele_amp_missed"] as int) +
-                        (technicalMatch["tele_speaker_missed"] as int)),
-              )
-              .toList();
-          final List<int> gamepieces = technicalMatches
-              .map(
-                (final dynamic technicalMatch) =>
-                    parseMatch<int>(technicalMatch).values.sum,
-              )
-              .toList();
-          final List<int> gamepiecePoints = technicalMatches
-              .map(
-                (final dynamic technicalMatch) =>
-                    parseMatch<int>(technicalMatch)
-                        .entries
-                        .map(
-                          (final MapEntry<ScoreByPointGiver, int> pointGiver) =>
-                              pointGiver.key.points * pointGiver.value,
-                        )
-                        .toList()
-                        .sum,
-              )
-              .toList();
-
-          final List<int> totalAmps = technicalMatches
-              .map(
-                (final dynamic technicalMatch) =>
-                    (technicalMatch["auto_amp"] as int) +
-                    (technicalMatch["tele_amp"] as int),
-              )
-              .toList();
-          final List<int> totalSpeakers = technicalMatches
-              .map(
-                (final dynamic technicalMatch) =>
-                    parseByPlace<int>(PlaceLocation.speaker, technicalMatch)
-                        .values
-                        .sum,
-              )
-              .toList();
-          final dynamic avg =
-              teamsTable["technical_matches_aggregate"]["aggregate"]["avg"];
-          final bool avgNullValidator = avg["auto_amp"] == null;
-          final double avgTeleGamepiecesPoints = avgNullValidator
-              ? double.nan
-              : parseByMode<double>(MatchMode.tele, avg).values.sum;
-          final double avgAutoGamepiecePoints = avgNullValidator
-              ? double.nan
-              : parseByMode<double>(MatchMode.auto, avg).values.sum;
-
-          final List<RobotMatchStatus> matchStatuses = technicalMatches
-              .map(
-                (final dynamic e) => robotMatchStatusTitleToEnum(
-                  e["robot_field_status"]["title"] as String,
-                ),
-              )
-              .toList();
-          final List<DefenseAmount> defenceAmounts = <DefenseAmount>[
-            for (int i = 0; i < technicalMatches.length; i++)
-              if (i >= specificMatches.length)
-                DefenseAmount.noDefense
-              else
-                defenseAmountTitleToEnum(
-                  specificMatches[i]["defense"]["title"] as String,
-                ),
-          ];
-          final List<int> gamesClimbed = technicalMatches
-              .map(
-                (final dynamic e) =>
-                    e["climb"]["title"] as String == "Climbed" ? 1 : 0,
-              )
-              .toList();
-
-          CompareLineChartData compareLinechart(final List<int> points) =>
-              CompareLineChartData(
-                points: points,
-                matchStatuses: matchStatuses,
-                defenseAmounts: defenceAmounts,
-              );
-
-          final CompareLineChartData totalSpeakerLineChart =
-              compareLinechart(totalSpeakers);
-          final CompareLineChartData totalAmpsLineChart =
-              compareLinechart(totalAmps);
-          final CompareLineChartData gamepiecesLine =
-              compareLinechart(gamepieces);
-          final CompareLineChartData autoGamepiecesLineChart =
-              compareLinechart(autoGamepieces);
-          final CompareLineChartData teleGamepiecesLineChart =
-              compareLinechart(teleGamepieces);
-          final CompareLineChartData pointLineChart =
-              compareLinechart(gamepiecePoints);
-          final CompareLineChartData totalMissedLineChart =
-              compareLinechart(totalMissed);
-          final CompareLineChartData climbed = compareLinechart(gamesClimbed);
-          return CompareTeam(
-            gamepieces: gamepiecesLine,
-            gamepiecePoints: pointLineChart,
-            team: team,
-            totalSpeakers: totalAmpsLineChart,
-            totalAmps: totalSpeakerLineChart,
-            teleGamepieces: teleGamepiecesLineChart,
-            autoGamepieces: autoGamepiecesLineChart,
-            avgAutoGamepiecePoints: avgAutoGamepiecePoints,
-            avgTeleGamepiecesPoints: avgTeleGamepiecesPoints,
-            totalDelivered: totalMissedLineChart,
-            climbed: climbed,
+          final Map<String, double> avgTable =
+              teamsTable["technical_matches_aggregate"]["aggregate"]["avg"]
+                  as Map<String, double>;
+          final DefenseAmount defenseAmount = defenseAmountTitleToEnum(
+            specificMatchesTable[0]["defense"]["title"] as String,
+          );
+          final PitData pitData = PitData(driveTrainType: driveTrainType, driveMotorAmount: driveMotorAmount, driveMotorType: driveMotorType, driveWheelType: driveWheelType, gearboxPurchased: gearboxPurchased, notes: notes, hasShifer: hasShifer, url: url, faultMessages: faultMessages, weight: weight, team: team, height: height, harmony: harmony, trap: trap, hasBuddyClimb: hasBuddyClimb,);
+          return TeamData(
+            avgAutoSpeakerMissed: avgTable["auto_speaker_missed"] ?? 0,
+            avgTeleSpeakerMissed: avgTable["tele_speaker_missed"] ?? 0,
+            avgTeleAmpMissed: avgTable["tele_amp_missed"] ?? 0,
+            avgAutoAmpMissed: avgTable["auto_amp_missed"] ?? 0,
+            avgTeleSpeaker: avgTable["tele_speaker"] ?? 0,
+            avgAutoSpeaker: avgTable["auto_speaker"] ?? 0,
+            avgAutoAmp: avgTable["auto_amp"] ?? 0,
+            avgTeleAmp: avgTable["tele_amp"] ?? 0,
+            avgTrapAmount: avgTable["trap_amount"] ?? 0,
+            technicalMatches:
+                technicalMatchesTable.map(TechnicalMatch.parse).toList(),
+            defenseAmount: defenseAmount,
+            pitData: pitData,
+            faultEntry: ,
+            lightTeam: lightTeam,
           );
         }),
-        (final CompareTeam team1, final CompareTeam team2) =>
-            team1.team.id.compareTo(team2.team.id),
+        (final TeamData team1, final TeamData team2) =>
+            team1.lightTeam.id.compareTo(team2.lightTeam.id),
       ),
       document: gql(query),
       variables: <String, dynamic>{
