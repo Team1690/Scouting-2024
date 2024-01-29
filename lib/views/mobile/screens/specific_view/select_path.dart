@@ -6,17 +6,15 @@ import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.d
 
 class SelectPath extends StatefulWidget {
   const SelectPath({
-    required this.newPath,
+    required this.drawnPath,
     required this.existingPaths,
-    required this.fieldBackground,
-    required this.onSelectExistingPath,
-    required this.onNewSelected,
+    required this.fieldBackgrounds,
+    required this.onNewSketch,
   });
-  final List<(List<Offset>, String)> existingPaths;
-  final List<Offset> newPath;
-  final ui.Image fieldBackground;
-  final void Function(String) onSelectExistingPath;
-  final void Function(String) onNewSelected;
+  final List<Sketch> existingPaths;
+  final Sketch drawnPath;
+  final (ui.Image, ui.Image) fieldBackgrounds;
+  final void Function(Sketch) onNewSketch;
 
   @override
   State<SelectPath> createState() => _SelectPathState();
@@ -36,7 +34,7 @@ class _SelectPathState extends State<SelectPath> {
                   children: <Widget>[
                     ...widget.existingPaths
                         .map(
-                          (final (List<ui.Offset>, String) path) => AspectRatio(
+                          (final Sketch path) => AspectRatio(
                             aspectRatio: autoFieldWidth / fieldheight,
                             child: LayoutBuilder(
                               builder: (
@@ -45,14 +43,18 @@ class _SelectPathState extends State<SelectPath> {
                               ) =>
                                   GestureDetector(
                                 onTap: () {
-                                  widget.onSelectExistingPath(path.$2);
+                                  widget.onNewSketch(path);
                                 },
                                 child: CustomPaint(
                                   painter: DrawingCanvas(
                                     width: 3,
-                                    fieldBackground: widget.fieldBackground,
+                                    fieldBackground: path.isRed
+                                        ? widget.fieldBackgrounds.$1
+                                        : widget.fieldBackgrounds.$2,
                                     sketch: Sketch(
-                                      points: path.$1
+                                      url: path.url,
+                                      isRed: path.isRed,
+                                      points: path.points
                                           .map(
                                             (final ui.Offset e) =>
                                                 Offset(e.dx, e.dy),
@@ -83,10 +85,7 @@ class _SelectPathState extends State<SelectPath> {
                         ),
                     ElevatedButton(
                       onPressed: () {
-                        final String csvString = widget.newPath
-                            .map((final ui.Offset e) => "${e.dx},${e.dy}")
-                            .join("\n");
-                        widget.onNewSelected(csvString);
+                        widget.onNewSketch(widget.drawnPath);
                       },
                       child: const Text("Select Sketched Path"),
                     ),

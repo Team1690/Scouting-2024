@@ -2,46 +2,51 @@ import "dart:ui" as ui;
 
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/csv_or_url.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
 
 class AutoPath extends StatefulWidget {
   const AutoPath({
-    required this.fieldBackground,
+    required this.fieldBackgrounds,
     required this.existingPaths,
-    required this.savedPath,
+    required this.initialPath,
+    required this.initialIsRed,
   });
-  final ui.Image fieldBackground;
-  final List<(List<Offset>, String)> existingPaths;
-  final List<Offset>? savedPath;
+  final (ui.Image, ui.Image) fieldBackgrounds;
+  final List<Sketch> existingPaths;
+  final Sketch? initialPath;
+  final bool initialIsRed;
 
   @override
   State<AutoPath> createState() => _AutoPathState();
 }
 
 class _AutoPathState extends State<AutoPath> {
-  List<Offset> exportedPath = <ui.Offset>[];
-  final ValueNotifier<Sketch> path =
-      ValueNotifier<Sketch>(Sketch(points: <Offset>[]));
+  late final ValueNotifier<Sketch> path = ValueNotifier<Sketch>(
+    widget.initialPath ??
+        Sketch(
+          points: [],
+          isRed: widget.initialIsRed,
+          url: null,
+        ),
+  );
   bool pathDone = false;
   double rescaleRatio = 0;
   @override
   void didChangeDependencies() {
     rescaleRatio = autoFieldWidth / MediaQuery.of(context).size.width;
-    if (widget.savedPath != null) {
-      path.value = Sketch(
-        points: widget.savedPath!
-            .map(
-              (final ui.Offset spot) => spot.scale(
-                1 / rescaleRatio,
-                1 / rescaleRatio,
-              ),
-            )
-            .toList(),
-      );
-      pathDone = true;
-    }
+    path.value = Sketch(
+      url: path.value.url,
+      points: path.value.points
+          .map(
+            (final ui.Offset spot) => spot.scale(
+              1 / rescaleRatio,
+              1 / rescaleRatio,
+            ),
+          )
+          .toList(),
+      isRed: path.value.isRed,
+    );
     super.didChangeDependencies();
   }
 
@@ -68,7 +73,11 @@ class _AutoPathState extends State<AutoPath> {
                           context.findRenderObject() as RenderBox;
                       final Offset offset =
                           box.globalToLocal(pointerEvent.position);
-                      path.value = Sketch(points: <Offset>[offset]);
+                      path.value = Sketch(
+                        points: <Offset>[offset],
+                        isRed: path.value.isRed,
+                        url: path.value.url,
+                      );
                     }
                   },
                   onPointerMove: (final PointerMoveEvent pointerEvent) {
@@ -82,7 +91,12 @@ class _AutoPathState extends State<AutoPath> {
                           box.globalToLocal(pointerEvent.position);
                       final List<Offset> points =
                           List<Offset>.from(path.value.points)..add(offset);
-                      path.value = Sketch(points: points);
+
+                      path.value = Sketch(
+                        points: points,
+                        isRed: path.value.isRed,
+                        url: path.value.url,
+                      );
                     }
                   },
                   onPointerUp: (final PointerUpEvent pointerUpEvent) {
@@ -100,7 +114,9 @@ class _AutoPathState extends State<AutoPath> {
                             CustomPaint(
                           painter: DrawingCanvas(
                             sketch: path.value,
-                            fieldBackground: widget.fieldBackground,
+                            fieldBackground: path.value.isRed
+                                ? widget.fieldBackgrounds.$1
+                                : widget.fieldBackgrounds.$2,
                           ),
                         ),
                       ),
@@ -115,7 +131,10 @@ class _AutoPathState extends State<AutoPath> {
                 IconButton(
                   onPressed: () {
                     if (pathDone) {
-                      path.value = Sketch(points: <Offset>[]);
+                      path.value = Sketch(
+                          points: <Offset>[],
+                          isRed: path.value.isRed,
+                          url: path.value.url);
                       pathDone = false;
                     }
                   },
@@ -131,27 +150,26 @@ class _AutoPathState extends State<AutoPath> {
                 ),
                 IconButton(
                   onPressed: () async {
-                    exportedPath = path.value.points
-                        .map(
-                          (final ui.Offset e) => e.scale(
-                            rescaleRatio,
-                            rescaleRatio,
-                          ),
-                        )
-                        .toList();
                     await showDialog(
                       context: context,
                       builder: (final BuildContext dialogContext) => SelectPath(
-                        fieldBackground: widget.fieldBackground,
-                        newPath: exportedPath,
+                        fieldBackgrounds: widget.fieldBackgrounds,
+                        drawnPath: Sketch(
+                          isRed: path.value.isRed,
+                          points: path.value.points
+                              .map(
+                                (final ui.Offset e) => e.scale(
+                                  rescaleRatio,
+                                  rescaleRatio,
+                                ),
+                              )
+                              .toList(),
+                          url: path.value.url,
+                        ),
                         existingPaths: widget.existingPaths,
-                        onSelectExistingPath: (final String url) {
+                        onNewSketch: (final Sketch sketch) {
                           Navigator.pop(context);
-                          Navigator.pop(context, Url(url: url));
-                        },
-                        onNewSelected: (final String csv) {
-                          Navigator.pop(context);
-                          Navigator.pop(context, Csv(csv: csv));
+                          Navigator.pop(context, sketch);
                         },
                       ),
                     );
@@ -159,7 +177,25 @@ class _AutoPathState extends State<AutoPath> {
                   icon: const Icon(Icons.save_as),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      Colors.blue,
+                      Colors.green,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                IconButton(
+                  onPressed: () => setState(() {
+                    path.value = Sketch(
+                      isRed: !path.value.isRed,
+                      points: path.value.points,
+                      url: path.value.url,
+                    );
+                  }),
+                  icon: const Icon(Icons.flip_camera_android),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      path.value.isRed ? Colors.blue : Colors.red,
                     ),
                   ),
                 ),
@@ -181,7 +217,7 @@ class DrawingCanvas extends CustomPainter {
   final double width;
 
   @override
-  void paint(final Canvas canvas, final Size size) async {
+  void paint(final Canvas canvas, final ui.Size size) async {
     canvas.drawImageRect(
       fieldBackground,
       Rect.fromLTWH(
@@ -223,6 +259,12 @@ class DrawingCanvas extends CustomPainter {
 }
 
 class Sketch {
-  Sketch({required this.points});
+  Sketch({
+    required this.points,
+    required this.isRed,
+    required this.url,
+  });
   final List<Offset> points;
+  final bool isRed;
+  final String? url;
 }

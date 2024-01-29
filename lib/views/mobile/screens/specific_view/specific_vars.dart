@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/csv_or_url.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 
 class SpecificVars implements HasuraVars {
   SpecificVars(final BuildContext context)
@@ -54,7 +54,7 @@ class SpecificVars implements HasuraVars {
     final bool Function()? isRematch,
     final int Function()? defenseAmount,
     final String? Function()? faultMessage,
-    final CsvOrUrl? Function()? autoPath,
+    final Sketch? Function()? autoPath,
   }) =>
       SpecificVars.all(
         team: team != null ? team() : this.team,
@@ -91,11 +91,11 @@ class SpecificVars implements HasuraVars {
   final bool isRematch;
   final int defenseAmount;
   final String? faultMessage;
-  final CsvOrUrl? autoPath;
+  final Sketch? autoPath;
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         "team_id": team?.id,
-        if (autoPath case Url(url: final String url)) "url": url,
+        if (autoPath!.url != null) "url": autoPath!.url!,
         "driving_rating": driveRating,
         "intake_rating": intakeRating,
         "climb_rating": climbRating,
