@@ -1,6 +1,5 @@
 import "dart:collection";
 import "package:graphql/client.dart";
-import "package:scouting_frontend/models/helpers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/fetch_functions/team_data.dart";
@@ -10,7 +9,7 @@ import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.da
 import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
 
 const String query = r"""
-query FetchSingleTeam($ids: [Int!]) @cached {
+query FetchTeams($ids: [Int!]) @cached {
   team(where: {id: {_in: $ids}}) {
     technical_matches_aggregate(where: {ignored: {_eq: false}}) {
       aggregate {
@@ -32,6 +31,15 @@ query FetchSingleTeam($ids: [Int!]) @cached {
       defense {
         title
       }
+      defense_rating
+      driving_rating
+      general_rating
+      intake_rating
+      is_rematch
+      speaker_rating
+      url
+      climb_rating
+      amp_rating
     }
     technical_matches(where: {ignored: {_eq: false}}, order_by: [{schedule_match: {match_type: {order: asc}}}, {schedule_match: {match_number: asc}}, {is_rematch: asc}]) {
       schedule_match {
@@ -74,7 +82,7 @@ query FetchSingleTeam($ids: [Int!]) @cached {
       drive_motor_amount
       wheel_type {
         title
-      } 
+      }
       drivemotor {
         title
       }
@@ -100,8 +108,17 @@ query FetchSingleTeam($ids: [Int!]) @cached {
         colors_index
       }
     }
+    specific_summary {
+      amp_text
+      climb_text
+      driving_text
+      general_text
+      intake_text
+      speaker_text
+    }
   }
 }
+
 """;
 
 Future<SplayTreeSet<TeamData>> fetchData(
@@ -124,9 +141,6 @@ Future<SplayTreeSet<TeamData>> fetchData(
               teamTable["technical_matches_aggregate"]["aggregate"]["avg"]
                   as Map<String, double>;
           final dynamic pitTable = teamTable["pit"];
-          final DefenseAmount defenseAmount = defenseAmountTitleToEnum(
-            specificMatchesTable[0]["defense"]["title"] as String,
-          );
           return TeamData(
             avgAutoSpeakerMissed: avgTable["auto_speaker_missed"] ?? 0,
             avgTeleSpeakerMissed: avgTable["tele_speaker_missed"] ?? 0,
@@ -139,7 +153,6 @@ Future<SplayTreeSet<TeamData>> fetchData(
             avgTrapAmount: avgTable["trap_amount"] ?? 0,
             technicalMatches:
                 technicalMatchesTable.map(TechnicalMatch.parse).toList(),
-            defenseAmount: defenseAmount,
             pitData: PitData.parse(pitTable),
             faultEntrys: (teamTable["faults"] as List<dynamic>)
                 .map(
@@ -153,6 +166,8 @@ Future<SplayTreeSet<TeamData>> fetchData(
                   ),
                 )
                 .toList(),
+// TODO: wait for reabase or something like that
+            specificMatches: <SpecificMatch>[],
             lightTeam: team,
           );
         }),
