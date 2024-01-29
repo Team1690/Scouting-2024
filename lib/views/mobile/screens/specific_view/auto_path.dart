@@ -25,7 +25,7 @@ class _AutoPathState extends State<AutoPath> {
   late final ValueNotifier<Sketch> path = ValueNotifier<Sketch>(
     widget.initialPath ??
         Sketch(
-          points: [],
+          points: <ui.Offset>[],
           isRed: widget.initialIsRed,
           url: null,
         ),
@@ -132,9 +132,10 @@ class _AutoPathState extends State<AutoPath> {
                   onPressed: () {
                     if (pathDone) {
                       path.value = Sketch(
-                          points: <Offset>[],
-                          isRed: path.value.isRed,
-                          url: path.value.url);
+                        points: <Offset>[],
+                        isRed: path.value.isRed,
+                        url: path.value.url,
+                      );
                       pathDone = false;
                     }
                   },

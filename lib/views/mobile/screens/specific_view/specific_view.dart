@@ -1,15 +1,11 @@
 import "dart:async";
 import "dart:ui" as ui;
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:graphql/client.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/mobile/dropdown_line.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/firebase_submit_button.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
@@ -60,246 +56,243 @@ class _SpecificState extends State<Specific> {
               builder: (
                 final BuildContext context,
                 final AsyncSnapshot<List<Sketch>> snapshot,
-              ) {
-                print("${snapshot.connectionState}");
-                return SingleChildScrollView(
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          controller: nameController,
-                          validator: (final String? value) =>
-                              value != null && value.isNotEmpty
-                                  ? null
-                                  : "Please enter your name",
-                          onChanged: (final String p0) {
-                            vars = vars.copyWith(name: always(p0));
-                          },
-                          decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.person),
-                            border: OutlineInputBorder(),
-                            hintText: "Scouter names",
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        TeamAndMatchSelection(
-                          matchController: matchController,
-                          teamNumberController: teamController,
-                          onChange: (
-                            final ScheduleMatch selectedMatch,
-                            final LightTeam? selectedTeam,
-                          ) {
-                            setState(() {
-                              vars = vars.copyWith(
-                                scheduleMatch: always(selectedMatch),
-                                team: always(selectedTeam),
-                                autoPath: always(null),
-                              );
-                              if (vars.team != null) {
-                                pathsFuture = getPaths(vars);
-                              }
-                              final ScheduleMatch? scheduleMatch =
-                                  vars.scheduleMatch;
-                              final Map<String, int> matchTypes =
-                                  IdProvider.of(context).matchType.nameToId;
-                              if (scheduleMatch != null &&
-                                  !<int>[
-                                    matchTypes["Pre scouting"]!,
-                                    matchTypes["Practice"]!
-                                  ].contains(scheduleMatch.matchTypeId)) {
-                                intialIsRed = scheduleMatch.redAlliance
-                                    .contains(vars.team);
-                              }
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        ToggleButtons(
-                          fillColor: const Color.fromARGB(10, 244, 67, 54),
-                          selectedColor: Colors.red,
-                          selectedBorderColor: Colors.red,
-                          children: const <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text("Rematch"),
-                            ),
-                          ],
-                          isSelected: <bool>[vars.isRematch],
-                          onPressed: (final int i) {
-                            setState(() {
-                              vars = vars.copyWith(
-                                isRematch: always(!vars.isRematch),
-                              );
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 15.0),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            foregroundColor: snapshot.data != null &&
-                                    snapshot.data!.isNotEmpty
+              ) =>
+                  SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        controller: nameController,
+                        validator: (final String? value) =>
+                            value != null && value.isNotEmpty
                                 ? null
-                                : MaterialStateProperty.all<Color>(Colors.grey),
-                          ),
-                          onPressed: () async {
-                            fieldImages =
-                                (await getField(true), await getField(false));
-                            final Sketch? result =
-                                await showPathSelectionDialog(
-                              context,
-                              snapshot.data ?? <Sketch>[],
-                              intialIsRed,
-                            );
-                            setState(() {
-                              vars = vars.copyWith(
-                                autoPath: always(result ?? vars.autoPath),
-                              );
-                            });
-                          },
-                          child: const Text("Create Auto Path"),
+                                : "Please enter your name",
+                        onChanged: (final String p0) {
+                          vars = vars.copyWith(name: always(p0));
+                        },
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.person),
+                          border: OutlineInputBorder(),
+                          hintText: "Scouter names",
                         ),
-                        if (vars.autoPath != null) ...<Widget>[
-                          const SizedBox(height: 15.0),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 2,
-                            child: AspectRatio(
-                              aspectRatio: autoFieldWidth / fieldheight,
-                              child: LayoutBuilder(
-                                builder: (
-                                  final BuildContext context,
-                                  final BoxConstraints constraints,
-                                ) =>
-                                    CustomPaint(
-                                  painter: DrawingCanvas(
-                                    width: 3,
-                                    fieldBackground: vars.autoPath!.isRed
-                                        ? fieldImages!.$1
-                                        : fieldImages!.$2,
-                                    sketch: Sketch(
-                                      isRed: vars.autoPath!.isRed,
-                                      url: vars.autoPath!.url,
-                                      points: vars.autoPath!.points
-                                          .map(
-                                            (final ui.Offset e) => e.scale(
-                                              constraints.maxWidth /
-                                                  autoFieldWidth,
-                                              constraints.maxWidth /
-                                                  autoFieldWidth,
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      TeamAndMatchSelection(
+                        matchController: matchController,
+                        teamNumberController: teamController,
+                        onChange: (
+                          final ScheduleMatch selectedMatch,
+                          final LightTeam? selectedTeam,
+                        ) {
+                          setState(() {
+                            vars = vars.copyWith(
+                              scheduleMatch: always(selectedMatch),
+                              team: always(selectedTeam),
+                              autoPath: always(null),
+                            );
+                            if (vars.team != null) {
+                              pathsFuture = getPaths(vars);
+                            }
+                            final ScheduleMatch? scheduleMatch =
+                                vars.scheduleMatch;
+                            final Map<String, int> matchTypes =
+                                IdProvider.of(context).matchType.nameToId;
+                            if (scheduleMatch != null &&
+                                !<int>[
+                                  matchTypes["Pre scouting"]!,
+                                  matchTypes["Practice"]!,
+                                ].contains(scheduleMatch.matchTypeId)) {
+                              intialIsRed =
+                                  scheduleMatch.redAlliance.contains(vars.team);
+                            }
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      ToggleButtons(
+                        fillColor: const Color.fromARGB(10, 244, 67, 54),
+                        selectedColor: Colors.red,
+                        selectedBorderColor: Colors.red,
+                        children: const <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Text("Rematch"),
+                          ),
+                        ],
+                        isSelected: <bool>[vars.isRematch],
+                        onPressed: (final int i) {
+                          setState(() {
+                            vars = vars.copyWith(
+                              isRematch: always(!vars.isRematch),
+                            );
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 15.0),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          foregroundColor: snapshot.data != null &&
+                                  snapshot.data!.isNotEmpty
+                              ? null
+                              : MaterialStateProperty.all<Color>(Colors.grey),
+                        ),
+                        onPressed: () async {
+                          fieldImages =
+                              (await getField(true), await getField(false));
+                          final Sketch? result = await showPathSelectionDialog(
+                            context,
+                            snapshot.data ?? <Sketch>[],
+                            intialIsRed,
+                          );
+                          setState(() {
+                            vars = vars.copyWith(
+                              autoPath: always(result ?? vars.autoPath),
+                            );
+                          });
+                        },
+                        child: const Text("Create Auto Path"),
+                      ),
+                      if (vars.autoPath != null) ...<Widget>[
+                        const SizedBox(height: 15.0),
+                        Container(
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: AspectRatio(
+                            aspectRatio: autoFieldWidth / fieldheight,
+                            child: LayoutBuilder(
+                              builder: (
+                                final BuildContext context,
+                                final BoxConstraints constraints,
+                              ) =>
+                                  CustomPaint(
+                                painter: DrawingCanvas(
+                                  width: 3,
+                                  fieldBackground: vars.autoPath!.isRed
+                                      ? fieldImages!.$1
+                                      : fieldImages!.$2,
+                                  sketch: Sketch(
+                                    isRed: vars.autoPath!.isRed,
+                                    url: vars.autoPath!.url,
+                                    points: vars.autoPath!.points
+                                        .map(
+                                          (final ui.Offset e) => e.scale(
+                                            constraints.maxWidth /
+                                                autoFieldWidth,
+                                            constraints.maxWidth /
+                                                autoFieldWidth,
+                                          ),
+                                        )
+                                        .toList(),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                        const SizedBox(height: 15.0),
-                        SpecificRating(
-                          onChanged: (final SpecificVars vars) => setState(() {
-                            this.vars = vars;
-                          }),
-                          vars: vars,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const FittedBox(
-                                fit: BoxFit.fitHeight,
-                                child: Text(
-                                  "Robot fault:     ",
-                                ),
-                              ),
-                              FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: ToggleButtons(
-                                  fillColor:
-                                      const Color.fromARGB(10, 244, 67, 54),
-                                  focusColor:
-                                      const Color.fromARGB(170, 244, 67, 54),
-                                  highlightColor:
-                                      const Color.fromARGB(170, 244, 67, 54),
-                                  selectedBorderColor:
-                                      const Color.fromARGB(170, 244, 67, 54),
-                                  selectedColor: Colors.red,
-                                  children: const <Widget>[
-                                    Icon(
-                                      Icons.cancel,
-                                    ),
-                                  ],
-                                  isSelected: <bool>[vars.faultMessage != null],
-                                  onPressed: (final int index) {
-                                    assert(index == 0);
-                                    setState(() {
-                                      vars = vars.copyWith(
-                                        faultMessage: always(
-                                          vars.faultMessage.onNull("No input"),
-                                        ),
-                                      );
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        AnimatedCrossFade(
-                          duration: const Duration(milliseconds: 300),
-                          crossFadeState: vars.faultMessage == null
-                              ? CrossFadeState.showFirst
-                              : CrossFadeState.showSecond,
-                          firstChild: Container(),
-                          secondChild: TextField(
-                            controller: faultsController,
-                            textDirection: TextDirection.rtl,
-                            onChanged: (final String value) {
-                              vars = vars.copyWith(faultMessage: always(value));
-                            },
-                            decoration:
-                                const InputDecoration(hintText: "Robot fault"),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: submitButtons(
-                            "auto_paths/${vars.scheduleMatch?.id}_${vars.team?.id}.txt",
-                            () {
-                              setState(() {
-                                pathsFuture = Future<List<Sketch>>(
-                                  () => <Sketch>[],
-                                );
-                                vars = vars.reset(context);
-                                nameController.clear();
-                                teamController.clear();
-                                matchController.clear();
-                                faultsController.clear();
-                              });
-                            },
-                            getMutation(vars.faultMessage),
-                          ),
                         ),
                       ],
-                    ),
+                      const SizedBox(height: 15.0),
+                      SpecificRating(
+                        onChanged: (final SpecificVars vars) => setState(() {
+                          this.vars = vars;
+                        }),
+                        vars: vars,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Text(
+                                "Robot fault:     ",
+                              ),
+                            ),
+                            FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: ToggleButtons(
+                                fillColor:
+                                    const Color.fromARGB(10, 244, 67, 54),
+                                focusColor:
+                                    const Color.fromARGB(170, 244, 67, 54),
+                                highlightColor:
+                                    const Color.fromARGB(170, 244, 67, 54),
+                                selectedBorderColor:
+                                    const Color.fromARGB(170, 244, 67, 54),
+                                selectedColor: Colors.red,
+                                children: const <Widget>[
+                                  Icon(
+                                    Icons.cancel,
+                                  ),
+                                ],
+                                isSelected: <bool>[vars.faultMessage != null],
+                                onPressed: (final int index) {
+                                  assert(index == 0);
+                                  setState(() {
+                                    vars = vars.copyWith(
+                                      faultMessage: always(
+                                        vars.faultMessage.onNull("No input"),
+                                      ),
+                                    );
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 300),
+                        crossFadeState: vars.faultMessage == null
+                            ? CrossFadeState.showFirst
+                            : CrossFadeState.showSecond,
+                        firstChild: Container(),
+                        secondChild: TextField(
+                          controller: faultsController,
+                          textDirection: TextDirection.rtl,
+                          onChanged: (final String value) {
+                            vars = vars.copyWith(faultMessage: always(value));
+                          },
+                          decoration:
+                              const InputDecoration(hintText: "Robot fault"),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: submitButtons(
+                          "auto_paths/${vars.scheduleMatch?.id}_${vars.team?.id}.txt",
+                          () {
+                            setState(() {
+                              pathsFuture = Future<List<Sketch>>(
+                                () => <Sketch>[],
+                              );
+                              vars = vars.reset(context);
+                              nameController.clear();
+                              teamController.clear();
+                              matchController.clear();
+                              faultsController.clear();
+                            });
+                          },
+                          getMutation(vars.faultMessage),
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              },
+                ),
+              ),
             ),
           ),
         ),

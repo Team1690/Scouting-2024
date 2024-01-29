@@ -22,7 +22,7 @@ class SpecificRating extends StatelessWidget {
       1: IdProvider.of(context).defense.nameToId["Full Defense"]!,
     };
     return Column(
-      children: [
+      children: <Widget>[
         RatingDropdownLine<String>(
           onTap: () {
             onChanged(
@@ -40,9 +40,11 @@ class SpecificRating extends StatelessWidget {
         const SizedBox(height: 15.0),
         RatingDropdownLine<String>(
           onTap: () {
-            onChanged(vars.copyWith(
-              intakeRating: always(vars.intakeRating.onNull(1)),
-            ));
+            onChanged(
+              vars.copyWith(
+                intakeRating: always(vars.intakeRating.onNull(1)),
+              ),
+            );
           },
           value: vars.intakeRating?.toDouble(),
           onChange: (final double p0) {
@@ -68,24 +70,30 @@ class SpecificRating extends StatelessWidget {
         const SizedBox(height: 15.0),
         RatingDropdownLine<String>(
           onTap: () {
-            onChanged(vars.copyWith(
-              speakerRating: always(vars.speakerRating.onNull(1)),
-            ));
+            onChanged(
+              vars.copyWith(
+                speakerRating: always(vars.speakerRating.onNull(1)),
+              ),
+            );
           },
           value: vars.speakerRating?.toDouble(),
           onChange: (final double p0) {
-            onChanged(vars.copyWith(
-              speakerRating: always(p0.toInt()),
-            ));
+            onChanged(
+              vars.copyWith(
+                speakerRating: always(p0.toInt()),
+              ),
+            );
           },
           label: "Speaker",
         ),
         const SizedBox(height: 15.0),
         RatingDropdownLine<String>(
           onTap: () {
-            onChanged(vars.copyWith(
-              climbRating: always(vars.climbRating.onNull(1)),
-            ));
+            onChanged(
+              vars.copyWith(
+                climbRating: always(vars.climbRating.onNull(1)),
+              ),
+            );
           },
           value: vars.climbRating?.toDouble(),
           onChange: (final double p0) {
@@ -97,8 +105,9 @@ class SpecificRating extends StatelessWidget {
           onTap: () {
             onChanged(
               vars.copyWith(
-                  defenseRating: always(vars.defenseRating.onNull(1)),
-                  defenseAmount: always(vars.defenseRating.onNull(1) ?? 1)),
+                defenseRating: always(vars.defenseRating.onNull(1)),
+                defenseAmount: always(vars.defenseRating.onNull(1) ?? 1),
+              ),
             );
           },
           value: vars.defenseRating?.toDouble(),
@@ -145,9 +154,11 @@ class SpecificRating extends StatelessWidget {
           },
           value: vars.generalRating?.toDouble(),
           onChange: (final double p0) {
-            onChanged(vars.copyWith(
-              generalRating: always(p0.toInt()),
-            ));
+            onChanged(
+              vars.copyWith(
+                generalRating: always(p0.toInt()),
+              ),
+            );
           },
           label: "General",
         ),

@@ -6,7 +6,6 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path_csv.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_vars.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/specific_view.dart";
 import "package:http/http.dart" as http;
 
 Future<List<String>> fetchUrls(final int team) async {
