@@ -122,13 +122,11 @@ class NewFault {
   const NewFault(
     this.message,
     this.team,
-    this.matchNumber,
-    this.matchTypeId,
+    this.scheduleMatchId,
   );
   final String message;
   final LightTeam team;
-  final int? matchNumber;
-  final int? matchTypeId;
+  final int? scheduleMatchId;
 }
 
 class FaultEntry {

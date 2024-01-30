@@ -28,7 +28,7 @@ class PitView extends StatefulWidget {
 class _PitViewState extends State<PitView> {
   LightTeam? team;
 
-  XFile? result;
+  XFile? userImage;
   late PitVars vars = PitVars(context);
   final GlobalKey<FormState> formKey = GlobalKey();
   final TextEditingController wheelTypeController = TextEditingController();
@@ -60,7 +60,7 @@ class _PitViewState extends State<PitView> {
       notesController.clear();
       wheelTypeController.clear();
       teamSelectionController.clear();
-      result = null;
+      userImage = null;
       advancedSwitchController.value = false;
       otherWheelSelected = false;
     });
@@ -417,10 +417,10 @@ class _PitViewState extends State<PitView> {
                           SectionDivider(label: "Robot Image"),
                           ImagePickerWidget(
                             validate: (final XFile? image) =>
-                                result.onNull("Please pick an Image"),
+                                userImage.onNull("Please pick an Image"),
                             controller: advancedSwitchController,
                             onImagePicked: (final XFile newResult) =>
-                                result = newResult,
+                                userImage = newResult,
                           ),
                         ],
                       ),
@@ -458,7 +458,10 @@ class _PitViewState extends State<PitView> {
                       widget.initialVars == null
                           ? FireBaseSubmitButton(
                               validate: () => formKey.currentState!.validate(),
-                              getResult: () => result,
+                              getResult: () => userImage!
+                                  .readAsBytes(), // Saftey, Validation requires result to be non null
+                              filePath:
+                                  "/files/pit_photos/${vars.teamId}.${(userImage?.path.substring((userImage?.path.lastIndexOf(".") ?? 0) + 1))}",
                               mutation: insertMutation,
                               vars: vars,
                               resetForm: resetFrame,

@@ -1,19 +1,17 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
 
-class DropdownLine<T> extends StatelessWidget {
-  DropdownLine({
+class RatingDropdownLine<T> extends StatelessWidget {
+  RatingDropdownLine({
     required this.onChange,
-    required this.controller,
     required this.label,
     required this.value,
     required this.onTap,
   });
   final String label;
-  final T? value;
+  final double? value;
   final void Function() onTap;
-  final void Function(String) onChange;
-  final TextEditingController controller;
+  final void Function(double) onChange;
 
   @override
   Widget build(final BuildContext context) => Column(
@@ -30,11 +28,13 @@ class DropdownLine<T> extends StatelessWidget {
             firstChild: Container(),
             secondChild: Column(
               children: <Widget>[
-                TextField(
-                  controller: controller,
-                  textDirection: TextDirection.rtl,
+                Slider(
+                  value: value ?? 1,
                   onChanged: onChange,
-                  decoration: InputDecoration(hintText: label),
+                  min: 1,
+                  max: 10,
+                  divisions: 9,
+                  label: value.toString(),
                 ),
               ],
             ),

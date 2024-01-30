@@ -1,7 +1,8 @@
+import "dart:typed_data";
+
 import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
-import "package:image_picker/image_picker.dart";
 import "package:progress_state_button/iconed_button.dart";
 import "package:progress_state_button/progress_button.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -14,12 +15,14 @@ class FireBaseSubmitButton extends StatefulWidget {
     required this.getResult,
     required this.resetForm,
     required this.validate,
+    required this.filePath,
   });
   final HasuraVars vars;
   final String mutation;
   final bool Function() validate;
   final void Function() resetForm;
-  final XFile? Function() getResult;
+  final Future<Uint8List> Function() getResult;
+  final String filePath;
 
   @override
   State<FireBaseSubmitButton> createState() => _FireBaseSubmitButtonState();
@@ -57,7 +60,7 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
           ),
         },
         state: _state,
-        onPressed: () {
+        onPressed: () async {
           if (_state == ButtonState.loading) return;
 
           if (_state == ButtonState.fail) {
@@ -65,7 +68,7 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
               _state = ButtonState.idle;
             });
 
-            Navigator.push(
+            await Navigator.push(
               context,
               MaterialPageRoute<Scaffold>(
                 builder: (final BuildContext context) => Scaffold(
@@ -80,35 +83,29 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
             );
             return;
           }
-
           if (!widget.validate()) {
             setState(() {
               errorMessage = "Input Error";
               _state = ButtonState.fail;
             });
 
-            Future<void>.delayed(
+            await Future<void>.delayed(
               const Duration(seconds: 5),
               () => setState((() => _state = ButtonState.idle)),
             );
             return;
           } else {
-            final int? teamid = widget.vars.toJson()["team_id"] as int?;
-            final XFile? file = widget.getResult();
-            uploadResult(
-              teamid!,
-              file!,
-            );
+            await uploadData();
           }
         },
       );
 
-  void uploadResult(final int teamid, final XFile result) async {
-    final int a = result.name.lastIndexOf(".");
-    final String ext = result.name.substring(a + 1);
-    final Reference ref = FirebaseStorage.instance.ref("/files/$teamid.$ext");
+  Future<void> uploadData() async {
+    final Reference ref = FirebaseStorage.instance.ref(widget.filePath);
 
-    final UploadTask firebaseTask = ref.putData(await result.readAsBytes());
+    final UploadTask firebaseTask = ref.putData(
+      await widget.getResult(),
+    );
 
     bool running = true;
 
@@ -123,50 +120,51 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
             Map<String, dynamic>.from(widget.vars.toJson());
         final String url = await ref.getDownloadURL();
         vars["url"] = url;
-
-        final GraphQLClient client = getClient();
-
-        final QueryResult<void> graphqlQueryResult = await client.mutate(
-          MutationOptions<void>(
-            document: gql(widget.mutation),
-            variables: vars,
-          ),
-        );
-
-        if (graphqlQueryResult.hasException) {
-          await ref.delete();
-          setState(() {
-            _state = ButtonState.fail;
-            errorMessage = "Error";
-          });
-
-          graphqlErrorMessage = graphqlQueryResult.exception.toString();
-
-          Future<void>.delayed(
-            const Duration(seconds: 5),
-            () => setState((() => _state = ButtonState.idle)),
-          );
-        } else {
-          widget.resetForm();
-          setState(() {
-            _state = ButtonState.success;
-          });
-          Future<void>.delayed(
-            const Duration(seconds: 5),
-            () => setState((() => _state = ButtonState.idle)),
-          );
-        }
+        await submitToDb(vars, ref);
       } else if (event.state == TaskState.error) {
         setState(() {
           _state = ButtonState.fail;
           errorMessage = "error";
           graphqlErrorMessage = "Firebase error";
-          Future<void>.delayed(
-            const Duration(seconds: 5),
-            () => setState((() => _state = ButtonState.idle)),
-          );
+        });
+        await Future<void>.delayed(const Duration(seconds: 5), () {
+          setState((() => _state = ButtonState.idle));
         });
       }
+    });
+  }
+
+  Future<void> submitToDb(
+    final Map<String, dynamic> vars,
+    final Reference? ref,
+  ) async {
+    final GraphQLClient client = getClient();
+
+    final QueryResult<void> graphqlQueryResult = await client.mutate(
+      MutationOptions<void>(
+        document: gql(widget.mutation),
+        variables: vars,
+      ),
+    );
+
+    if (graphqlQueryResult.hasException) {
+      if (ref != null) await ref.delete();
+      setState(() {
+        _state = ButtonState.fail;
+        errorMessage = "Error";
+      });
+
+      graphqlErrorMessage = graphqlQueryResult.exception.toString();
+    } else {
+      setState(() {
+        _state = ButtonState.success;
+      });
+    }
+    await Future<void>.delayed(const Duration(seconds: 5), () {
+      if (_state == ButtonState.success) {
+        widget.resetForm();
+      }
+      setState((() => _state = ButtonState.idle));
     });
   }
 }
