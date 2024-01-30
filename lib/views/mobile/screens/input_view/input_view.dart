@@ -10,7 +10,12 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/local_save_button.dart";
 import "package:scouting_frontend/views/mobile/manage_preferences.dart";
 import "package:scouting_frontend/views/mobile/qr_generator.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/climbing.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/game_piece_counter.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/starting_pos.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/trap_amount.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
+import "package:scouting_frontend/views/mobile/screens/scouter_name_input.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
@@ -52,12 +57,12 @@ class _UserInputState extends State<UserInput> {
   late Match match = Match(context);
   // -1 means nothing
   late final Map<int, int> robotFieldStatusIndexToId = <int, int>{
-    -1: IdProvider.of(context).robotMatchStatus.nameToId["Worked"]!,
+    -1: IdProvider.of(context).robotFieldStatus.nameToId["Worked"]!,
     0: IdProvider.of(context)
-        .robotMatchStatus
+        .robotFieldStatus
         .nameToId["Didn't come to field"]!,
     1: IdProvider.of(context)
-        .robotMatchStatus
+        .robotFieldStatus
         .nameToId["Didn't work on field"]!,
   };
   String qrCodeJson = "";
@@ -73,7 +78,7 @@ class _UserInputState extends State<UserInput> {
     ].contains(match.scheduleMatch!.matchTypeId)
         ? "${match.scoutedTeam!.number} ${match.scoutedTeam!.name}"
         : match.scheduleMatch!.getTeamStation(match.scoutedTeam!) ?? "";
-    scouterNameController.text = match.name!;
+    scouterNameController.text = match.scouterName!;
   }
 
   @override
@@ -137,20 +142,12 @@ class _UserInputState extends State<UserInput> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      TextFormField(
-                        controller: scouterNameController,
-                        validator: (final String? value) =>
-                            value != null && value.isNotEmpty
-                                ? null
-                                : "Please enter your name",
-                        onChanged: (final String name) {
-                          match = match.copyWith(name: always(name));
+                      ScouterNameInput(
+                        onScouterNameChange: (final String scouterName) {
+                          match =
+                              match.copyWith(scouterName: always(scouterName));
                         },
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.person),
-                          border: OutlineInputBorder(),
-                          hintText: "Scouter name",
-                        ),
+                        scouterNameController: scouterNameController,
                       ),
                       const SizedBox(
                         height: 15,
@@ -193,36 +190,61 @@ class _UserInputState extends State<UserInput> {
                         },
                       ),
                       const SizedBox(
+                        height: 10,
+                      ),
+                      StartingPos(
+                        match: match,
+                        onNewMatch: (final Match newMatch) {
+                          setState(() {
+                            match = newMatch;
+                          });
+                        },
+                      ),
+                      const SizedBox(
                         height: 15,
                       ),
                       SectionDivider(label: "Autonomous"),
-                      //TODO Auto related widgets here
-
-                      // Visibility(
-                      //   visible: match.robotMatchStatusId != notOnFieldId,
-                      //   child: ToggleButtons(
-                      //     fillColor: const Color.fromARGB(10, 244, 67, 54),
-                      //     selectedColor: Colors.green,
-                      //     selectedBorderColor: Colors.green,
-                      //     children: const <Widget>[
-                      //       Padding(
-                      //         padding: EdgeInsets.symmetric(horizontal: 10),
-                      //         child: Text("Mobility"),
-                      //       ),
-                      //     ],
-                      //     isSelected: <bool>[match.mobility],
-                      //     onPressed: (final int i) {
-                      //       setState(() {
-                      //         match.mobility = !match.mobility;
-                      //       });
-                      //     },
-                      //   ),
-                      // ),
+                      MatchModeGamePieceCounter(
+                        flickerScreen: flickerScreen,
+                        match: match,
+                        onNewMatch: (final Match match) {
+                          setState(() {
+                            this.match = match;
+                          });
+                        },
+                        matchMode: MatchMode.auto,
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
                       SectionDivider(label: "Teleoperated"),
-                      //TODO teleop related widgets here
+                      MatchModeGamePieceCounter(
+                        flickerScreen: flickerScreen,
+                        match: match,
+                        onNewMatch: (final Match match) {
+                          setState(() {
+                            this.match = match;
+                          });
+                        },
+                        matchMode: MatchMode.tele,
+                      ),
+                      Climbing(
+                        match: match,
+                        onNewMatch: (final Match newMatch) {
+                          setState(() {
+                            match = newMatch;
+                          });
+                        },
+                      ),
+                      TrapAmount(
+                        onTrapChange: (final int trap) {
+                          setState(() {
+                            match = match.copyWith(trapAmount: always(trap));
+                          });
+                        },
+                        match: match,
+                        flickerScreen: flickerScreen,
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -240,7 +262,7 @@ class _UserInputState extends State<UserInput> {
                         onChange: (final int i) {
                           setState(() {
                             match = match.copyWith(
-                              robotMatchStatusId:
+                              robotFieldStatusId:
                                   always(robotFieldStatusIndexToId[i]!),
                             );
                           });
@@ -379,13 +401,17 @@ class _UserInputState extends State<UserInput> {
           ],
         ),
       );
+
+  String insertMutation = r"""
+mutation MyMutation($auto_amp: Int!, $auto_amp_missed: Int!, $auto_speaker: Int!, $auto_speaker_missed: Int!, $climb_id: Int!, $tele_amp: Int!, $tele_amp_missed: Int!, $tele_speaker: Int!, $tele_speaker_missed: Int!, $trap_amount: Int!, $harmony_with: Int!, $is_rematch: Boolean!, $robot_field_status_id: Int, $schedule_id: Int!, $starting_position_id: Int!, $team_id: Int!, $scouter_name: String!) {
+  insert_technical_match(objects: {auto_amp: $auto_amp, auto_amp_missed: $auto_amp_missed, auto_speaker: $auto_speaker, auto_speaker_missed: $auto_speaker_missed, cilmb_id: $climb_id, tele_amp: $tele_amp, tele_amp_missed: $tele_amp_missed, tele_speaker: $tele_speaker, tele_speaker_missed: $tele_speaker_missed, trap_amount: $trap_amount, harmony_with: $harmony_with, is_rematch: $is_rematch, robot_field_status_id: $robot_field_status_id, schedule_id: $schedule_id, starting_position_id: $starting_position_id, team_id: $team_id, scouter_name: $scouter_name}) {
+    affected_rows
+  }
 }
 
-//TODO update both mutations
-const String insertMutation = r"""
-
 """;
 
-const String updateMutation = r"""
+  String updateMutation = r"""
 
 """;
+}

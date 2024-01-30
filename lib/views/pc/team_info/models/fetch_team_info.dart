@@ -15,7 +15,11 @@ query TeamInfo(\$id: Int!) {
     faults {
       message
     }
-    _2023_pit {
+    pit {
+      trap
+      has_buddy_climb
+      harmony
+      height
       weight
       drive_motor_amount
       drive_wheel_type
@@ -30,7 +34,7 @@ query TeamInfo(\$id: Int!) {
         title
       }
     }
-    _2023_specifics{
+    specific_matches{
       schedule_match_id
       defense
       drivetrain_and_driving
@@ -40,11 +44,11 @@ query TeamInfo(\$id: Int!) {
       is_rematch
       scouter_name
       defense_amount_id
-      match{
+      schedule_match{
         match_type_id
         match_number
       }
-      defense_amount{
+      defense{
         title
       }
     }
@@ -56,9 +60,9 @@ query TeamInfo(\$id: Int!) {
     }
     technical_matches(
       where: {ignored: {_eq: false}}
-      order_by: [{match: {match_type: {order: asc}}}, {match: {match_number: asc}}, {is_rematch: asc}]
+      order_by: [{schedule_match: {match_type: {order: asc}}}, {schedule_match: {match_number: asc}}, {is_rematch: asc}]
     ) {
-      match {
+      schedule_match {
         match_type {
           title
         }
@@ -71,7 +75,7 @@ query TeamInfo(\$id: Int!) {
       }
       schedule_match_id
       is_rematch
-      match {
+      schedule_match {
         match_number
       }
     }
@@ -95,7 +99,7 @@ Future<Team> fetchTeamInfo(
             ? team["team_by_pk"] as Map<String, dynamic>
             : throw Exception("that team doesnt exist");
         final Map<String, dynamic>? pit =
-            (teamByPk["_2023_pit"] as Map<String, dynamic>?);
+            (teamByPk["pit"] as Map<String, dynamic>?);
 
         final List<String> faultMessages = (teamByPk["faults"] as List<dynamic>)
             .map((final dynamic e) => e["message"] as String)
@@ -103,7 +107,7 @@ Future<Team> fetchTeamInfo(
         final PitData? pitData = pit.mapNullable<PitData>(
           ////TODO add season-specific variables
           (final Map<String, dynamic> pitTable) => PitData(
-            weight: pitTable["weight"] as int,
+            weight: pitTable["weight"] as double,
             driveMotorAmount: pitTable["drive_motor_amount"] as int,
             driveWheelType: pitTable["drive_wheel_type"] as String,
             gearboxPurchased: pitTable["gearbox_purchased"] as bool?,
@@ -114,13 +118,17 @@ Future<Team> fetchTeamInfo(
             driveMotorType: pitTable["drivemotor"]["title"] as String,
             faultMessages: faultMessages,
             team: teamForQuery,
+            height: pitTable["height"] as double,
+            harmony: pitTable["harmony"] as bool,
+            hasBuddyClimb: pitTable["hasBuddyClimb"] as bool,
+            trap: pitTable["trap"] as int,
           ),
         );
         final List<dynamic> matches =
             (teamByPk["technical_matches"] as List<dynamic>);
 
         final SpecificData specificData = SpecificData(
-          (teamByPk["_2023_specifics"] as List<dynamic>)
+          (teamByPk["specific_matches"] as List<dynamic>)
               .map(
                 (final dynamic specific) => SpecificMatch(
                   drivetrainAndDriving:

@@ -8,7 +8,6 @@ import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/fetch_matches.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/app.dart";
-
 import "package:scouting_frontend/firebase_options.dart";
 import "package:scouting_frontend/models/id_helpers.dart";
 
@@ -26,6 +25,7 @@ void main() async {
     "robot_field_status",
     "fault_status",
     "defense",
+    "starting_position",
   ], <String>[
     "match_type",
   ]);
@@ -37,6 +37,7 @@ void main() async {
   final Map<String, int> robotFieldStatuses = enums["robot_field_status"]!;
   final Map<String, int> faultStatus = enums["fault_status"]!;
   final Map<String, int> defense = enums["defense"]!;
+  final Map<String, int> startingPosition = enums["starting_position"]!;
   final List<ScheduleMatch> matches = await fetchMatches();
   final List<LightTeam> teams = await fetchTeams();
 
@@ -51,6 +52,7 @@ void main() async {
       driveMotorIds: driveMotors,
       robotFieldStatusIds: robotFieldStatuses,
       defense: defense,
+      startingPosition: startingPosition,
     ),
   );
 }
