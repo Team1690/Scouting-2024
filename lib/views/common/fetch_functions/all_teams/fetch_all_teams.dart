@@ -1,7 +1,9 @@
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/helpers.dart";
+import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import 'package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart';
+import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 const String subscription = r"""
@@ -70,70 +72,67 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                 ? double.nan
                 : (avg["tele_amp_missed"] as double) +
                     (avg["tele_speaker_missed"] as double);
-            final double gamepiecePointsAvg = avg["auto_cones_top"] == null
+            final double gamepiecePointsAvg = nullValidator
                 ? double.nan
-                : getPoints(parseMatch(avg));
-            final double autoGamepieceAvg = avg["auto_cones_top"] == null
+                : getPoints<double>(parseMatch<double>(avg));
+            final double autoGamepieceAvg = nullValidator
                 ? double.nan
-                : getPieces(
-                    parseByMode(
+                : getPieces<double>(
+                    parseByMode<double>(
                       MatchMode.auto,
                       avg,
                     ),
                   );
-            final double teleGamepieceAvg = avg["auto_cones_top"] == null
+            final double teleGamepieceAvg = nullValidator
                 ? double.nan
-                : getPieces(
-                    parseByMode(
+                : getPieces<double>(
+                    parseByMode<double>(
                       MatchMode.tele,
                       avg,
                     ),
                   );
-            final double gamepieceSum = avg["auto_cones_top"] == null
+            final double gamepieceSum = nullValidator
                 ? double.nan
-                : getPieces(parseMatch(avg));
-            final double autoBalancePointAvg =
-                autoBalancePoints.averageOrNull ?? double.nan;
-            final double endgameBalancePointAvg =
-                endgameBalancePoints.averageOrNull ?? double.nan;
-            endgameBalancePoints.averageOrNull ?? double.nan;
-            return _Team(
+                : getPieces<double>(parseMatch<double>(avg));
+            final double avgTraps =
+                nullValidator ? double.nan : avg["trap_amount"] as double;
+            final int firstPicklistIndex = team["first_picklist_index"] as int;
+            final int secondPicklistIndex =
+                team["second_picklist_index"] as int;
+            return AllTeamData(
               amountOfMatches: (team["technical_matches_aggregate"]["nodes"]
                       as List<dynamic>)
                   .length,
-              matchesBalanced: (team["technical_matches_aggregate"]["nodes"]
+              matchesClimbed: (team["technical_matches_aggregate"]["nodes"]
                       as List<dynamic>)
                   .map(
-                    (final dynamic node) =>
-                        node["auto_balance"]["title"] as String,
+                    (final dynamic node) => node["climb"]["title"] as String,
                   )
                   .where(
                     (final String title) =>
                         title != "No attempt" && title != "Failed",
                   )
                   .length,
-              autoBalancePercentage: autoBalancePercentage,
               brokenMatches: robotMatchStatuses
                   .where(
                     (final RobotMatchStatus robotMatchStatus) =>
                         robotMatchStatus != RobotMatchStatus.worked,
                   )
                   .length,
-              autoGamepieceAvg: autoGamepieceAvg - autoGamepieceDelivered,
+              autoGamepieceAvg: autoGamepieceAvg,
               teleGamepieceAvg: teleGamepieceAvg,
-              gamepieceAvg: gamepieceSum -
-                  autoGamepieceDelivered -
-                  teleGamepieceDelivered,
-              deliveredAvg: autoGamepieceDelivered + teleGamepieceDelivered,
+              gamepieceAvg: gamepieceSum,
+              missedAvg: autoGamepieceMissed + teleGamepieceMissed,
               gamepiecePointAvg: gamepiecePointsAvg,
               team: LightTeam.fromJson(team),
-              autoBalancePointsAvg: autoBalancePointAvg,
-              endgameBalancePointsAvg: endgameBalancePointAvg,
+              firstPicklistIndex: firstPicklistIndex,
+              secondPicklistIndex: secondPicklistIndex,
+              trapAverage: avgTraps,
             );
           }).toList();
         },
       ),
     )
     .map(
-      (final QueryResult<List<_Team>> event) => event.mapQueryResult(),
+      (final QueryResult<List<AllTeamData>> event) => event.mapQueryResult(),
     );
