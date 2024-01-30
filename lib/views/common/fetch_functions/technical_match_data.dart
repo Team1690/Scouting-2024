@@ -46,7 +46,7 @@ class TechnicalMatchData {
         autoAmpMissed: match["auto_amp_missed"] as int,
         teleSpeaker: match["tele_speaker"] as int,
         autoSpeaker: match["auto_speaker"] as int,
-        matchNumber: match["number"] as int,
+        matchNumber: match["schedule_match"]["match_number"] as int,
         harmonyWith: match["harmony_with"] as int,
         trapAmount: match["trap_amount"] as int,
         autoAmp: match["auto_amp"] as int,

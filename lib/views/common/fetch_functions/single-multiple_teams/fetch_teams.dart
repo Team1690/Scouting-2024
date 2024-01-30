@@ -145,12 +145,10 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
               teamTable["technical_matches"] as List<dynamic>;
           final List<dynamic> specificMatchesTables =
               teamTable["specific_matches"] as List<dynamic>;
-          final Map<String, double> avgTable =
-              teamTable["technical_matches_aggregate"]["aggregate"]["avg"]
-                  as Map<String, double>;
+          final dynamic avgTable =
+              teamTable["technical_matches_aggregate"]["aggregate"]["avg"];
           final dynamic pitTable = teamTable["pit"];
-          final Map<String, String> specificSummaryTable =
-              teamTable["specific_summary"] as Map<String, String>;
+          final dynamic specificSummaryTable = teamTable["specific_summary"];
           return TeamData(
             avgData: AvgData.parse(avgTable),
             technicalMatches:
@@ -163,7 +161,7 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
                     team,
                     fault["id"] as int,
                     fault["fault_status"]["title"] as String,
-                    fault["match_number"] as int,
+                    fault["match_number"] as int?,
                     fault["match_type"]["order"] as int?,
                   ),
                 )

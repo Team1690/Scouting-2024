@@ -15,7 +15,7 @@ class SpecificSummaryData {
   final String speakerText;
 
   static SpecificSummaryData parse(
-    final Map<String, String> specificSummaryTable,
+    final dynamic specificSummaryTable,
   ) =>
       SpecificSummaryData(
         ampText: specificSummaryTable["amp_text"] as String,

@@ -50,15 +50,16 @@ class PitData {
         hasShifer: pit["has_shifter"] as bool?,
         url: pit["url"] as String,
         faultMessages: (pit["team"]["faults"] as List<dynamic>)
-            .map((final dynamic fault) => fault["message"]) as List<String>,
-        weight: pit["weight"] as double,
+            .map((final dynamic fault) => fault["message"] as String)
+            .toList(),
+        weight: (pit["weight"] as num).toDouble(),
         team: LightTeam(
           pit["team"]["id"] as int,
           pit["team"]["number"] as int,
           pit["team"]["name"] as String,
           pit["team"]["colors_index"] as int,
         ),
-        height: pit["height"] as double,
+        height: (pit["height"] as num).toDouble(),
         harmony: pit["harmony"] as bool,
         trap: pit["trap"] as int,
         hasBuddyClimb: pit["has_buddy_climb"] as bool,
