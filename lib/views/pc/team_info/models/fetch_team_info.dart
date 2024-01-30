@@ -3,6 +3,9 @@ import "package:graphql/client.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_motor_enum.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_train_enum.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_wheel_enum.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 import '../../../common/fetch_functions/pit_data/pit_data.dart';
@@ -111,13 +114,19 @@ Future<Team> fetchTeamInfo(
           (final Map<String, dynamic> pitTable) => PitData(
             weight: pitTable["weight"] as double,
             driveMotorAmount: pitTable["drive_motor_amount"] as int,
-            driveWheelType: pitTable["drive_wheel_type"] as String,
+            driveWheelType: driveWheelTitleToEnum(
+              pitTable["drive_wheel_type"] as String,
+            ),
             gearboxPurchased: pitTable["gearbox_purchased"] as bool?,
             notes: pitTable["notes"] as String,
             hasShifer: pitTable["has_shifter"] as bool?,
             url: pitTable["url"] as String,
-            driveTrainType: pitTable["drivetrain"]["title"] as String,
-            driveMotorType: pitTable["drivemotor"]["title"] as String,
+            driveTrainType: driveTrainTitleToEnum(
+              pitTable["drivetrain"]["title"] as String,
+            ),
+            driveMotorType: driveMotorTitleToEnum(
+              pitTable["drivemotor"]["title"] as String,
+            ),
             faultMessages: faultMessages,
             team: teamForQuery,
             height: pitTable["height"] as double,
