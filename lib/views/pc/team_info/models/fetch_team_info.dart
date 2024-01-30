@@ -6,6 +6,7 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_motor_enum.dart";
 import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_train_enum.dart";
 import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_wheel_enum.dart";
+import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 import '../../../common/fetch_functions/pit_data/pit_data.dart';
@@ -141,12 +142,12 @@ Future<Team> fetchTeamInfo(
         final SpecificData specificData = SpecificData(
           (teamByPk["specific_matches"] as List<dynamic>)
               .map(
-                (final dynamic specific) => SpecificMatch(
+                (final dynamic specific) => SpecificMatchData(
                   drivetrainAndDriving:
                       specific["drivetrain_and_driving"] as String?,
                   intake: specific["intake"] as String?,
                   placement: specific["placement"] as String?,
-                  generalNotes: specific["general_notes"] as String?,
+                  general: specific["general_notes"] as String?,
                   defense: specific["defense"] as String?,
                   isRematch: specific["is_rematch"] as bool,
                   matchNumber: specific["match"]["match_number"] as int,

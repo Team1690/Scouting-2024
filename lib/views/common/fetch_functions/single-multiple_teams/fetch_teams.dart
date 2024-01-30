@@ -2,86 +2,15 @@ import "dart:collection";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
+import "package:scouting_frontend/views/common/fetch_functions/avg_technical_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
-import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
 
 const String query = r"""
 query FetchTeams($ids: [Int!]) @cached {
-  team_by_pk(id: \$id) {
-    first_picklist_index
-    second_picklist_index
-    id
-    faults {
-      message
-    }
-    pit {
-      trap
-      has_buddy_climb
-      harmony
-      height
-      weight
-      drive_motor_amount
-      drive_wheel_type
-      gearbox_purchased
-      notes
-      has_shifter
-      url
-      drivetrain {
-        title
-      }
-      drivemotor {
-        title
-      }
-    }
-    specific_matches{
-      schedule_match_id
-      defense
-      drivetrain_and_driving
-      general_notes
-      intake
-      placement
-      is_rematch
-      scouter_name
-      defense_amount_id
-      schedule_match{
-        match_type_id
-        match_number
-      }
-      defense{
-        title
-      }
-    }
-    technical_matches_aggregate(where: {ignored: {_eq: false}}) {
-      aggregate {
-        avg {
-        }
-      }
-    }
-    technical_matches(
-      where: {ignored: {_eq: false}}
-      order_by: [{schedule_match: {match_type: {order: asc}}}, {schedule_match: {match_number: asc}}, {is_rematch: asc}]
-    ) {
-      schedule_match {
-        match_type {
-          title
-        }
-      }
-      robot_match_status {
-        title
-      }
-      robot_placement{
-        title
-      }
-      schedule_match_id
-      is_rematch
-      schedule_match {
-        match_number
-      }
-    }
-  }
   team(where: {id: {_in: $ids}}) {
     technical_matches_aggregate(where: {ignored: {_eq: false}}) {
       aggregate {
@@ -112,6 +41,11 @@ query FetchTeams($ids: [Int!]) @cached {
       url
       climb_rating
       amp_rating
+      schedule_match {
+        match_number
+        match_type_id
+      }
+      scouter_name
     }
     technical_matches(where: {ignored: {_eq: false}}, order_by: [{schedule_match: {match_type: {order: asc}}}, {schedule_match: {match_number: asc}}, {is_rematch: asc}]) {
       schedule_match {
@@ -191,6 +125,7 @@ query FetchTeams($ids: [Int!]) @cached {
   }
 }
 
+
 """;
 
 Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
@@ -207,22 +142,14 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
           final LightTeam team = LightTeam.fromJson(teamTable);
           final List<dynamic> technicalMatchesTable =
               teamTable["technical_matches"] as List<dynamic>;
-          // final List<dynamic> specificMatchesTable =
-          //     teamTable["specific_matches"] as List<dynamic>;
+          final List<dynamic> specificMatchesTables =
+              teamTable["specific_matches"] as List<dynamic>;
           final Map<String, double> avgTable =
               teamTable["technical_matches_aggregate"]["aggregate"]["avg"]
                   as Map<String, double>;
           final dynamic pitTable = teamTable["pit"];
           return TeamData(
-            avgAutoSpeakerMissed: avgTable["auto_speaker_missed"] ?? 0,
-            avgTeleSpeakerMissed: avgTable["tele_speaker_missed"] ?? 0,
-            avgTeleAmpMissed: avgTable["tele_amp_missed"] ?? 0,
-            avgAutoAmpMissed: avgTable["auto_amp_missed"] ?? 0,
-            avgTeleSpeaker: avgTable["tele_speaker"] ?? 0,
-            avgAutoSpeaker: avgTable["auto_speaker"] ?? 0,
-            avgAutoAmp: avgTable["auto_amp"] ?? 0,
-            avgTeleAmp: avgTable["tele_amp"] ?? 0,
-            avgTrapAmount: avgTable["trap_amount"] ?? 0,
+            avgData: AvgData.parse(avgTable),
             technicalMatches:
                 technicalMatchesTable.map(TechnicalMatchData.parse).toList(),
             pitData: PitData.parse(pitTable),
@@ -238,7 +165,8 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
                   ),
                 )
                 .toList(),
-            specificMatches: <SpecificMatch>[],
+            specificMatches:
+                specificMatchesTables.map(SpecificMatchData.parse).toList(),
             lightTeam: team,
           );
         }),

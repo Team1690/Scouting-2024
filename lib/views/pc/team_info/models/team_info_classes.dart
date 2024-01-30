@@ -1,4 +1,5 @@
 import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
 
 import '../../../common/fetch_functions/pit_data/pit_data.dart';
 
@@ -35,55 +36,7 @@ class AutoData {
 
 class SpecificData {
   const SpecificData(this.msg);
-  final List<SpecificMatch> msg;
-}
-
-class SpecificMatch {
-  const SpecificMatch({
-    required this.isRematch,
-    required this.matchNumber,
-    required this.matchTypeId,
-    required this.scouterNames,
-    required this.drivetrainAndDriving,
-    required this.intake,
-    required this.placement,
-    required this.generalNotes,
-    required this.defense,
-  });
-  final int matchNumber;
-  final int matchTypeId;
-  final String scouterNames;
-  final bool isRematch;
-
-  final String? drivetrainAndDriving;
-  final String? intake;
-  final String? placement;
-  final String? defense;
-  final String? generalNotes;
-
-  bool isNull(final String val) {
-    switch (val) {
-      case "Drivetrain And Driving":
-        return drivetrainAndDriving == null;
-      case "Intake":
-        return intake == null;
-      case "Placement":
-        return placement == null;
-      case "Defense":
-        return defense == null;
-      case "General Notes":
-        return generalNotes == null;
-      case "All":
-      default:
-        return (drivetrainAndDriving == null &&
-                intake == null &&
-                placement == null &&
-                defense == null &&
-                generalNotes == null)
-            ? true
-            : false;
-    }
-  }
+  final List<SpecificMatchData> msg;
 }
 
 class LineChartData {

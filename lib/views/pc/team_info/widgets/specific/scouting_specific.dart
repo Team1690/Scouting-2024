@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
@@ -22,7 +23,8 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
             child: Column(
               children: widget.msg.msg
                   .map<Widget>(
-                    (final SpecificMatch e) => e.isNull(widget.selectorValue)
+                    (final SpecificMatchData e) => e
+                            .isNull(widget.selectorValue)
                         ? Container()
                         : Card(
                             // shape: ,
@@ -189,7 +191,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                                                 ],
                                               )
                                             : Container(),
-                                        (e.generalNotes != null &&
+                                        (e.general != null &&
                                                 (widget.selectorValue ==
                                                         "All" ||
                                                     widget.selectorValue ==
@@ -210,7 +212,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    e.generalNotes!,
+                                                    e.general!,
                                                     textDirection:
                                                         TextDirection.rtl,
                                                     style: const TextStyle(
