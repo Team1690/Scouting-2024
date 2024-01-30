@@ -1,5 +1,5 @@
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/views/common/fetch_functions/technical_match.dart";
+import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
@@ -21,7 +21,7 @@ class TeamData {
     required this.faultEntrys,
     required this.specificMatches,
   });
-  final List<TechnicalMatch> technicalMatches;
+  final List<TechnicalMatchData> technicalMatches;
   final List<SpecificMatch> specificMatches;
   final double avgAutoSpeakerMissed;
   final double avgTeleSpeakerMissed;

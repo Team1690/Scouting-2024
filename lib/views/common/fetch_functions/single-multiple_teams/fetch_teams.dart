@@ -2,8 +2,8 @@ import "dart:collection";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/common/fetch_functions/team_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/technical_match.dart";
+import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
@@ -224,7 +224,7 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
             avgTeleAmp: avgTable["tele_amp"] ?? 0,
             avgTrapAmount: avgTable["trap_amount"] ?? 0,
             technicalMatches:
-                technicalMatchesTable.map(TechnicalMatch.parse).toList(),
+                technicalMatchesTable.map(TechnicalMatchData.parse).toList(),
             pitData: PitData.parse(pitTable),
             faultEntrys: (teamTable["faults"] as List<dynamic>)
                 .map(

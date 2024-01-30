@@ -2,8 +2,8 @@ import "package:scouting_frontend/models/helpers.dart";
 import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
-class TechnicalMatch {
-  TechnicalMatch({
+class TechnicalMatchData {
+  TechnicalMatchData({
     required this.teleSpeakerMissed,
     required this.autoSpeakerMissed,
     required this.robotFieldStatus,
@@ -35,7 +35,7 @@ class TechnicalMatch {
   final int teleAmp;
   final Climb climb;
 
-  static TechnicalMatch parse(final dynamic match) => TechnicalMatch(
+  static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
         teleSpeakerMissed: match["tele_speaker_missed"] as int,
         autoSpeakerMissed: match["auto_speaker_missed"] as int,
         robotFieldStatus: robotMatchStatusTitleToEnum(
