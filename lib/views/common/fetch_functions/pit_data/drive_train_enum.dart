@@ -6,7 +6,8 @@ enum DriveTrain {
   mecanumOrH("Mecanum/H"),
   other("Other");
 
-  const DriveTrain(final String title);
+  const DriveTrain(this.title);
+  final String title;
 }
 
 DriveTrain driveTrainTitleToEnum(final String title) {

@@ -31,8 +31,9 @@ class _PitViewState extends State<PitView> {
   XFile? userImage;
   late PitVars vars = PitVars(context);
   final GlobalKey<FormState> formKey = GlobalKey();
-  final TextEditingController wheelTypeController = TextEditingController();
-
+  final TextEditingController wheelTypeOtherController =
+      TextEditingController();
+  bool otherWheelTypeSelected = false;
   final TextEditingController teamSelectionController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
   final FocusNode node = FocusNode();
@@ -40,15 +41,6 @@ class _PitViewState extends State<PitView> {
       ValueNotifier<bool>(false);
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
-  final List<String> driveWheelTypes = <String>[
-    "Tread",
-    "Colson",
-    "Hi-grip",
-    "Mecanum",
-    "Omni",
-    "Other",
-  ];
-  bool otherWheelSelected = false;
   FormFieldValidator<String> _numericValidator(final String error) =>
       (final String? text) => int.tryParse(text ?? "").onNull(error);
 
@@ -58,11 +50,10 @@ class _PitViewState extends State<PitView> {
       weightController.clear();
       heightController.clear();
       notesController.clear();
-      wheelTypeController.clear();
+      wheelTypeOtherController.clear();
       teamSelectionController.clear();
       userImage = null;
       advancedSwitchController.value = false;
-      otherWheelSelected = false;
     });
   }
 
@@ -73,11 +64,7 @@ class _PitViewState extends State<PitView> {
     weightController.text = vars.weight != null ? vars.weight.toString() : "";
     heightController.text = vars.height != null ? vars.height.toString() : "";
     notesController.text = vars.notes;
-    if (!driveWheelTypes.contains(vars.driveWheelType) &&
-        widget.initialVars != null) {
-      otherWheelSelected = true;
-    }
-    wheelTypeController.text = vars.driveWheelType ?? "";
+    wheelTypeOtherController.text = "";
   }
 
   @override
@@ -173,44 +160,48 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Selector<String>(
-                      options: driveWheelTypes,
+                    Selector<int>(
+                      options: IdProvider.of(context)
+                          .driveWheel
+                          .idToName
+                          .keys
+                          .toList(),
                       placeholder: "Choose a drive wheel",
-                      value: otherWheelSelected ? "Other" : vars.driveWheelType,
-                      makeItem: (final String wheelType) => wheelType,
-                      onChange: (final String newValue) {
+                      value: vars.driveWheelType,
+                      makeItem: (final int wheelType) => IdProvider.of(context)
+                          .driveWheel
+                          .idToName[wheelType]!,
+                      onChange: (final int newValue) {
                         setState(() {
-                          if (newValue == "Other") {
-                            otherWheelSelected = true;
-                          } else {
-                            otherWheelSelected = false;
-                            vars = vars.copyWith(
-                              driveWheelType: () => newValue,
-                            );
-                          }
+                          otherWheelTypeSelected = IdProvider.of(context)
+                                  .driveWheel
+                                  .idToName[newValue] ==
+                              "Other";
+                          vars = vars.copyWith(
+                            driveWheelType: () => newValue,
+                          );
                         });
                       },
-                      validate: (final String? wheelType) =>
-                          wheelType == null || wheelType.isEmpty
-                              ? "please enter the robot's wheel type"
-                              : null,
+                      validate: (final int? wheelType) => wheelType == null
+                          ? "please enter the robot's wheel type"
+                          : null,
                     ),
                     const SizedBox(
                       height: 5,
                     ),
                     Visibility(
-                      visible: otherWheelSelected,
+                      visible: otherWheelTypeSelected,
                       child: TextFormField(
-                        controller: wheelTypeController,
+                        controller: wheelTypeOtherController,
                         onChanged: (final String specifiedWheel) {
                           setState(() {
                             vars = vars.copyWith(
-                              driveWheelType: () => specifiedWheel,
+                              otherDriveWheelType: () => specifiedWheel,
                             );
                           });
                         },
                         validator: (final String? otherWheelOption) =>
-                            otherWheelSelected &&
+                            otherWheelTypeSelected &&
                                     (otherWheelOption == null ||
                                         otherWheelOption.isEmpty)
                                 ? "Please specify \"Other\" wheel type"
@@ -488,7 +479,8 @@ const String insertMutation = r"""
               $drive_motor_amount: Int,
               $drivemotor_id: Int,
               $drivetrain_id: Int,
-              $drive_wheel_type: String,
+              $wheel_type_id: Int,
+              $other_wheel_type: String,
               $gearbox_purchased: Boolean,
               $notes:String,
               $has_shifter:Boolean,
@@ -504,7 +496,8 @@ const String insertMutation = r"""
           drive_motor_amount: $drive_motor_amount,
           drivemotor_id: $drivemotor_id,
           drivetrain_id: $drivetrain_id,
-          drive_wheel_type: $drive_wheel_type,
+          wheel_type_id: $wheel_type_id,
+          other_wheel_type: $other_wheel_type,
           gearbox_purchased: $gearbox_purchased,
           notes: $notes,
           has_shifter: $has_shifter,
@@ -527,7 +520,8 @@ const String updateMutation = r"""
               $drive_motor_amount: Int,
               $drivemotor_id: Int,
               $drivetrain_id: Int,
-              $drive_wheel_type: String,
+              $wheel_type_id: Int,
+              $other_wheel_type: String,
               $gearbox_purchased: Boolean,
               $notes:String,
               $has_shifter:Boolean,
@@ -542,7 +536,8 @@ const String updateMutation = r"""
           drive_motor_amount: $drive_motor_amount,
           drivemotor_id: $drivemotor_id,
           drivetrain_id: $drivetrain_id,
-          drive_wheel_type: $drive_wheel_type,
+          wheel_type_id: $wheel_type_id
+          other_wheel_Type: $other_wheel_type,
           gearbox_purchased: $gearbox_purchased,
           notes: $notes,
           has_shifter: $has_shifter,

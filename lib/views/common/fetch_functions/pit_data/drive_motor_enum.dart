@@ -7,7 +7,8 @@ enum DriveMotor {
   kraken("Kraken"),
   other("Other");
 
-  const DriveMotor(final String title);
+  const DriveMotor(this.title);
+  final String title;
 }
 
 DriveMotor driveMotorTitleToEnum(final String title) {

@@ -11,6 +11,7 @@ class PitVars implements HasuraVars {
         gearboxPurchased = null,
         notes = "",
         driveWheelType = null,
+        otherDriveWheelType = null,
         teamId = null,
         weight = null,
         height = null,
@@ -32,6 +33,7 @@ class PitVars implements HasuraVars {
     required this.harmony,
     required this.trap,
     required this.hasBuddyClimb,
+    required this.otherDriveWheelType,
   });
 
   PitVars copyWith({
@@ -41,7 +43,8 @@ class PitVars implements HasuraVars {
     final bool? Function()? hasShifter,
     final bool? Function()? gearboxPurchased,
     final String Function()? notes,
-    final String? Function()? driveWheelType,
+    final int? Function()? driveWheelType,
+    final String? Function()? otherDriveWheelType,
     final int? Function()? teamId,
     final double? Function()? weight,
     final double? Function()? height,
@@ -57,6 +60,9 @@ class PitVars implements HasuraVars {
         driveMotorAmount: driveMotorAmount != null
             ? driveMotorAmount()
             : this.driveMotorAmount,
+        otherDriveWheelType: otherDriveWheelType != null
+            ? otherDriveWheelType()
+            : this.otherDriveWheelType,
         hasShifter: hasShifter != null ? hasShifter() : this.hasShifter,
         gearboxPurchased: gearboxPurchased != null
             ? gearboxPurchased()
@@ -78,7 +84,8 @@ class PitVars implements HasuraVars {
   final bool? hasShifter;
   final bool? gearboxPurchased;
   final String notes;
-  final String? driveWheelType;
+  final int? driveWheelType;
+  final String? otherDriveWheelType;
   final int? teamId;
   final double? weight;
   final double? height;
@@ -93,7 +100,8 @@ class PitVars implements HasuraVars {
         "has_shifter": hasShifter,
         "gearbox_purchased": gearboxPurchased,
         "notes": notes,
-        "drive_wheel_type": driveWheelType ?? "",
+        "wheel_type_id": driveWheelType,
+        "other_wheel_type": otherDriveWheelType,
         "team_id": teamId,
         "weight": weight,
         "height": height,
@@ -116,5 +124,6 @@ class PitVars implements HasuraVars {
         harmony: always(null),
         trap: always(0),
         hasBuddyClimb: always(null),
+        otherDriveWheelType: always(null),
       );
 }

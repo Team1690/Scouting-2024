@@ -6,7 +6,8 @@ enum DriveWheel {
   omni("Omni"),
   other("Other");
 
-  const DriveWheel(final String title);
+  const DriveWheel(this.title);
+  final String title;
 }
 
 DriveWheel driveWheelTitleToEnum(final String title) {

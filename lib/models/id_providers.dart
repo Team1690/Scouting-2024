@@ -29,6 +29,7 @@ class IdProvider extends InheritedWidget {
     required final Map<String, int> faultStatus,
     required final Map<String, int> defense,
     required final Map<String, int> startingPosition,
+    required final Map<String, int> driveWheelIds,
   }) : this._inner(
           child: child,
           climb: IdTable(climbIds),
@@ -39,6 +40,7 @@ class IdProvider extends InheritedWidget {
           faultStatus: IdTable(faultStatus),
           defense: IdTable(defense),
           startingPosition: IdTable(startingPosition),
+          driveWheel: IdTable(driveWheelIds),
         );
 
   IdProvider._inner({
@@ -51,6 +53,7 @@ class IdProvider extends InheritedWidget {
     required this.faultStatus,
     required this.defense,
     required this.startingPosition,
+    required this.driveWheel,
   });
   final IdTable robotFieldStatus;
   final IdTable matchType;
@@ -60,6 +63,7 @@ class IdProvider extends InheritedWidget {
   final IdTable faultStatus;
   final IdTable defense;
   final IdTable startingPosition;
+  final IdTable driveWheel;
 
   @override
   bool updateShouldNotify(final IdProvider oldWidget) =>
@@ -70,7 +74,8 @@ class IdProvider extends InheritedWidget {
       drivemotor != oldWidget.drivemotor ||
       faultStatus != oldWidget.faultStatus ||
       defense != oldWidget.defense ||
-      startingPosition != oldWidget.startingPosition;
+      startingPosition != oldWidget.startingPosition ||
+      driveWheel != oldWidget.driveWheel;
 
   static IdProvider of(final BuildContext context) {
     final IdProvider? result =
