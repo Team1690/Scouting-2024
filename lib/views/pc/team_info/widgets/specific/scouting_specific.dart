@@ -84,7 +84,8 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    e.drivetrainAndDriving!,
+                                                    e.drivetrainAndDriving!
+                                                        .toString(),
                                                     textDirection:
                                                         TextDirection.rtl,
                                                     style: const TextStyle(
@@ -116,7 +117,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    e.intake!,
+                                                    e.intake!.toString(),
                                                     textDirection:
                                                         TextDirection.rtl,
                                                     style: const TextStyle(
@@ -127,7 +128,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                                                 ],
                                               )
                                             : Container(),
-                                        (e.placement != null &&
+                                        (e.amp != null &&
                                                 (widget.selectorValue ==
                                                         "All" ||
                                                     widget.selectorValue ==
@@ -148,7 +149,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    e.placement!,
+                                                    e.amp!.toString(),
                                                     textDirection:
                                                         TextDirection.rtl,
                                                     style: const TextStyle(
@@ -180,7 +181,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    e.defense!,
+                                                    e.defense!.toString(),
                                                     textDirection:
                                                         TextDirection.rtl,
                                                     style: const TextStyle(
@@ -212,7 +213,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    e.general!,
+                                                    e.general!.toString(),
                                                     textDirection:
                                                         TextDirection.rtl,
                                                     style: const TextStyle(

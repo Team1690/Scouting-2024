@@ -1,7 +1,6 @@
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
-
-import '../../../common/fetch_functions/pit_data/pit_data.dart';
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
 
 class QuickData {
   QuickData({
