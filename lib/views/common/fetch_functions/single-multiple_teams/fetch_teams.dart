@@ -5,6 +5,7 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/fetch_functions/avg_technical_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/specific_summary_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
@@ -148,6 +149,8 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
               teamTable["technical_matches_aggregate"]["aggregate"]["avg"]
                   as Map<String, double>;
           final dynamic pitTable = teamTable["pit"];
+          final Map<String, String> specificSummaryTable =
+              teamTable["specific_summary"] as Map<String, String>;
           return TeamData(
             avgData: AvgData.parse(avgTable),
             technicalMatches:
@@ -167,6 +170,7 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
                 .toList(),
             specificMatches:
                 specificMatchesTables.map(SpecificMatchData.parse).toList(),
+            summaryData: SpecificSummaryData.parse(specificSummaryTable),
             lightTeam: team,
           );
         }),

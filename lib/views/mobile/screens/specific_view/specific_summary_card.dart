@@ -8,14 +8,14 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/summary_editor.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 
-class SpecificSummary extends StatefulWidget {
-  const SpecificSummary({super.key});
+class SpecificSummaryCard extends StatefulWidget {
+  const SpecificSummaryCard({super.key});
 
   @override
-  State<SpecificSummary> createState() => _SpecificSummaryState();
+  State<SpecificSummaryCard> createState() => _SpecificSummaryCardState();
 }
 
-class _SpecificSummaryState extends State<SpecificSummary> {
+class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
   final TextEditingController teamSelectionController = TextEditingController();
 
   bool isEnabled = false;

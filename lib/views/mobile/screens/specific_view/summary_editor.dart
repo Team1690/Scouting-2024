@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/specific_summary.dart";
+import 'package:scouting_frontend/views/mobile/screens/specific_view/specific_summary_card.dart';
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_summary_text_field.dart";
 import "package:scouting_frontend/views/mobile/submit_button.dart";
 
