@@ -31,17 +31,18 @@ class _AutoPathState extends State<AutoPath> {
         ),
   );
   bool pathDone = false;
-  double rescaleRatio = 0;
+  double pixelToMeterRatio = 0;
   @override
   void didChangeDependencies() {
-    rescaleRatio = autoFieldWidth / MediaQuery.of(context).size.width;
+    pixelToMeterRatio = autoFieldWidth / MediaQuery.of(context).size.width;
+    final double meterToPixelRatio = 1 / pixelToMeterRatio;
     path.value = Sketch(
       url: path.value.url,
       points: path.value.points
           .map(
             (final ui.Offset spot) => spot.scale(
-              1 / rescaleRatio,
-              1 / rescaleRatio,
+              meterToPixelRatio,
+              meterToPixelRatio,
             ),
           )
           .toList(),
@@ -49,6 +50,15 @@ class _AutoPathState extends State<AutoPath> {
     );
     super.didChangeDependencies();
   }
+
+  List<ui.Offset> convertToMeters(final List<ui.Offset> points) => points
+      .map(
+        (final ui.Offset e) => e.scale(
+          pixelToMeterRatio,
+          pixelToMeterRatio,
+        ),
+      )
+      .toList();
 
   @override
   Widget build(final BuildContext context) => Scaffold(
@@ -68,17 +78,16 @@ class _AutoPathState extends State<AutoPath> {
                 ) =>
                     Listener(
                   onPointerDown: (final PointerDownEvent pointerEvent) {
-                    if (!pathDone) {
-                      final RenderBox box =
-                          context.findRenderObject() as RenderBox;
-                      final Offset offset =
-                          box.globalToLocal(pointerEvent.position);
-                      path.value = Sketch(
-                        points: <Offset>[offset],
-                        isRed: path.value.isRed,
-                        url: path.value.url,
-                      );
-                    }
+                    pathDone = false;
+                    final RenderBox box =
+                        context.findRenderObject() as RenderBox;
+                    final Offset offset =
+                        box.globalToLocal(pointerEvent.position);
+                    path.value = Sketch(
+                      points: <Offset>[offset],
+                      isRed: path.value.isRed,
+                      url: path.value.url,
+                    );
                   },
                   onPointerMove: (final PointerMoveEvent pointerEvent) {
                     if (!pathDone &&
@@ -130,14 +139,12 @@ class _AutoPathState extends State<AutoPath> {
               children: <Widget>[
                 IconButton(
                   onPressed: () {
-                    if (pathDone) {
-                      path.value = Sketch(
-                        points: <Offset>[],
-                        isRed: path.value.isRed,
-                        url: path.value.url,
-                      );
-                      pathDone = false;
-                    }
+                    path.value = Sketch(
+                      points: <Offset>[],
+                      isRed: path.value.isRed,
+                      url: null,
+                    );
+                    pathDone = true;
                   },
                   icon: const Icon(Icons.delete_outline_rounded),
                   style: ButtonStyle(
@@ -157,14 +164,7 @@ class _AutoPathState extends State<AutoPath> {
                         fieldBackgrounds: widget.fieldBackgrounds,
                         drawnPath: Sketch(
                           isRed: path.value.isRed,
-                          points: path.value.points
-                              .map(
-                                (final ui.Offset e) => e.scale(
-                                  rescaleRatio,
-                                  rescaleRatio,
-                                ),
-                              )
-                              .toList(),
+                          points: convertToMeters(path.value.points),
                           url: path.value.url,
                         ),
                         existingPaths: widget.existingPaths,
@@ -197,6 +197,25 @@ class _AutoPathState extends State<AutoPath> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
                       path.value.isRed ? Colors.blue : Colors.red,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                IconButton(
+                  onPressed: () => Navigator.pop(
+                    context,
+                    Sketch(
+                      url: path.value.url,
+                      points: convertToMeters(path.value.points),
+                      isRed: path.value.isRed,
+                    ),
+                  ),
+                  icon: const Icon(Icons.done),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      Colors.green,
                     ),
                   ),
                 ),

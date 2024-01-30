@@ -3,6 +3,7 @@ import "dart:ui" as ui;
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/path_canvas.dart";
 
 class SelectPath extends StatefulWidget {
   const SelectPath({
@@ -34,49 +35,27 @@ class _SelectPathState extends State<SelectPath> {
                   children: <Widget>[
                     ...widget.existingPaths
                         .map(
-                          (final Sketch path) => AspectRatio(
-                            aspectRatio: autoFieldWidth / fieldheight,
-                            child: LayoutBuilder(
-                              builder: (
-                                final BuildContext context,
-                                final BoxConstraints constraints,
-                              ) =>
-                                  GestureDetector(
-                                onTap: () {
-                                  widget.onNewSketch(path);
-                                },
-                                child: CustomPaint(
-                                  painter: DrawingCanvas(
-                                    width: 3,
-                                    fieldBackground: path.isRed
-                                        ? widget.fieldBackgrounds.$1
-                                        : widget.fieldBackgrounds.$2,
-                                    sketch: Sketch(
-                                      url: path.url,
-                                      isRed: path.isRed,
-                                      points: path.points
-                                          .map(
-                                            (final ui.Offset e) =>
-                                                Offset(e.dx, e.dy),
-                                          )
-                                          .map(
-                                            (final ui.Offset e) => e.scale(
-                                              constraints.maxWidth /
-                                                  autoFieldWidth,
-                                              constraints.maxWidth /
-                                                  autoFieldWidth,
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
-                                  ),
+                          (final Sketch path) => GestureDetector(
+                            onTap: () {
+                              widget.onNewSketch(path);
+                            },
+                            child: AspectRatio(
+                              aspectRatio: autoFieldWidth / fieldheight,
+                              child: LayoutBuilder(
+                                builder: (
+                                  final BuildContext context,
+                                  final BoxConstraints constraints,
+                                ) =>
+                                    PathCanvas(
+                                  sketch: path,
+                                  fieldImages: widget.fieldBackgrounds,
                                 ),
                               ),
                             ),
                           ),
                         )
                         .expand(
-                          (final AspectRatio element) => <Widget>[
+                          (final Widget element) => <Widget>[
                             element,
                             const SizedBox(
                               height: 10,

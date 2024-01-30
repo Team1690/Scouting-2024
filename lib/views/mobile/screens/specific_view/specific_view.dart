@@ -12,6 +12,7 @@ import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path_csv.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/fetch_auto_path.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/path_canvas.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_ratings.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_vars.dart";
@@ -157,40 +158,14 @@ class _SpecificState extends State<Specific> {
                         },
                         child: const Text("Create Auto Path"),
                       ),
-                      if (vars.autoPath != null) ...<Widget>[
+                      if (vars.autoPath != null &&
+                          fieldImages != null) ...<Widget>[
                         const SizedBox(height: 15.0),
                         Container(
                           width: MediaQuery.of(context).size.width / 2,
-                          child: AspectRatio(
-                            aspectRatio: autoFieldWidth / fieldheight,
-                            child: LayoutBuilder(
-                              builder: (
-                                final BuildContext context,
-                                final BoxConstraints constraints,
-                              ) =>
-                                  CustomPaint(
-                                painter: DrawingCanvas(
-                                  width: 3,
-                                  fieldBackground: vars.autoPath!.isRed
-                                      ? fieldImages!.$1
-                                      : fieldImages!.$2,
-                                  sketch: Sketch(
-                                    isRed: vars.autoPath!.isRed,
-                                    url: vars.autoPath!.url,
-                                    points: vars.autoPath!.points
-                                        .map(
-                                          (final ui.Offset e) => e.scale(
-                                            constraints.maxWidth /
-                                                autoFieldWidth,
-                                            constraints.maxWidth /
-                                                autoFieldWidth,
-                                          ),
-                                        )
-                                        .toList(),
-                                  ),
-                                ),
-                              ),
-                            ),
+                          child: PathCanvas(
+                            sketch: vars.autoPath!,
+                            fieldImages: fieldImages!,
                           ),
                         ),
                       ],

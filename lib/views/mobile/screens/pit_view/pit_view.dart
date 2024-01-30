@@ -29,7 +29,7 @@ class _PitViewState extends State<PitView> {
   LightTeam? team;
 
   XFile? userImage;
-  PitVars vars = PitVars();
+  late PitVars vars = PitVars(context);
   final GlobalKey<FormState> formKey = GlobalKey();
   final TextEditingController wheelTypeController = TextEditingController();
 
