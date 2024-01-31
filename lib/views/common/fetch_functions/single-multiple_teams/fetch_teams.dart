@@ -7,7 +7,7 @@ import "package:scouting_frontend/views/common/fetch_functions/single-multiple_t
 import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/specific_summary_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
-import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
 import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
 
 const String query = r"""
@@ -16,6 +16,28 @@ query FetchTeams($ids: [Int!]) @cached {
     technical_matches_aggregate(where: {ignored: {_eq: false}}) {
       aggregate {
         avg {
+          auto_amp
+          auto_amp_missed
+          auto_speaker
+          auto_speaker_missed
+          tele_amp
+          tele_amp_missed
+          tele_speaker
+          tele_speaker_missed
+          trap_amount
+        }
+        max {
+          auto_amp
+          auto_amp_missed
+          auto_speaker
+          auto_speaker_missed
+          tele_amp
+          tele_amp_missed
+          tele_speaker
+          tele_speaker_missed
+          trap_amount
+        }
+        min{
           auto_amp
           auto_amp_missed
           auto_speaker
@@ -125,7 +147,6 @@ query FetchTeams($ids: [Int!]) @cached {
     }
   }
 }
-
 
 """;
 
