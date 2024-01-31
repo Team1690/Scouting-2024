@@ -4,19 +4,12 @@ enum Climb {
   climbed("Climbed"),
   buddyClimbed("Buddy Climbed");
 
-  const Climb(final String title);
+  const Climb(this.title);
+  final String title;
 }
 
-Climb climbTitleToEnum(final String title) {
-  switch (title) {
-    case "No Attempt":
-      return Climb.noAttempt;
-    case "Failed":
-      return Climb.failed;
-    case "Climbed":
-      return Climb.climbed;
-    case "Buddy Climbed":
-      return Climb.buddyClimbed;
-  }
-  throw Exception("Isn't a valid title");
-}
+Climb climbTitleToEnum(final String title) =>
+    Climb.values
+        .where((final Climb climbOption) => climbOption.title == title)
+        .singleOrNull ??
+    (throw Exception("Invalid title: $title"));

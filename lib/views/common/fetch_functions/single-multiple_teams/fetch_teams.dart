@@ -2,13 +2,13 @@ import "dart:collection";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/common/fetch_functions/avg_technical_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/aggregate_data/aggregate_technical_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/specific_summary_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
-import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
 import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 
 const String query = r"""
 query FetchTeams($ids: [Int!]) @cached {
@@ -166,13 +166,13 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
               teamTable["technical_matches"] as List<dynamic>;
           final List<dynamic> specificMatchesTables =
               teamTable["specific_matches"] as List<dynamic>;
-          final dynamic avgTable =
-              teamTable["technical_matches_aggregate"]["aggregate"]["avg"];
+          final dynamic aggregateTable =
+              teamTable["technical_matches_aggregate"]["aggregate"];
           final dynamic pitTable = teamTable["pit"];
           final List<dynamic> faultTable = teamTable["faults"] as List<dynamic>;
           final dynamic specificSummaryTable = teamTable["specific_summary"];
           return TeamData(
-            avgData: AvgData.parse(avgTable),
+            aggregateData: AggregateData.parse(aggregateTable),
             technicalMatches:
                 technicalMatchesTable.map(TechnicalMatchData.parse).toList(),
             pitData: PitData.parse(pitTable),
