@@ -148,24 +148,14 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
           final dynamic avgTable =
               teamTable["technical_matches_aggregate"]["aggregate"]["avg"];
           final dynamic pitTable = teamTable["pit"];
+          final List<dynamic> faultTable = teamTable["faults"] as List<dynamic>;
           final dynamic specificSummaryTable = teamTable["specific_summary"];
           return TeamData(
             avgData: AvgData.parse(avgTable),
             technicalMatches:
                 technicalMatchesTable.map(TechnicalMatchData.parse).toList(),
             pitData: PitData.parse(pitTable),
-            faultEntrys: (teamTable["faults"] as List<dynamic>)
-                .map(
-                  (final dynamic fault) => FaultEntry(
-                    fault["message"] as String,
-                    team,
-                    fault["id"] as int,
-                    fault["fault_status"]["title"] as String,
-                    fault["match_number"] as int?,
-                    fault["match_type"]["order"] as int?,
-                  ),
-                )
-                .toList(),
+            faultEntrys: faultTable.map(FaultEntry.parse).toList(),
             specificMatches:
                 specificMatchesTables.map(SpecificMatchData.parse).toList(),
             summaryData: SpecificSummaryData.parse(specificSummaryTable),
@@ -173,7 +163,7 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
           );
         }),
         (final TeamData team1, final TeamData team2) =>
-            team1.lightTeam.id.compareTo(team2.lightTeam.id),
+            team1.lightTeam.number.compareTo(team2.lightTeam.number),
       ),
       document: gql(query),
       variables: <String, dynamic>{
