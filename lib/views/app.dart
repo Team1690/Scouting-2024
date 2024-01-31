@@ -19,6 +19,7 @@ class App extends StatelessWidget {
     required this.matches,
     required this.defense,
     required this.startingPosition,
+    required this.driveWheelIds,
   });
   final List<ScheduleMatch> matches;
   final Map<String, int> robotFieldStatusIds;
@@ -26,6 +27,7 @@ class App extends StatelessWidget {
   final Map<String, int> climbIds;
   final Map<String, int> drivetrainIds;
   final Map<String, int> driveMotorIds;
+  final Map<String, int> driveWheelIds;
   final Map<String, int> matchTypeIds;
   final Map<String, int> faultStatus;
   final Map<String, int> defense;
@@ -44,6 +46,7 @@ class App extends StatelessWidget {
             robotFieldStatusIds: robotFieldStatusIds,
             faultStatus: faultStatus,
             defense: defense,
+            driveWheelIds: driveWheelIds,
             child: MaterialApp(
               title: "Orbit Scouting",
               home: isPC(context) ? TeamInfoScreen() : const UserInput(),

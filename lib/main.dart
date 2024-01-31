@@ -26,6 +26,7 @@ void main() async {
     "fault_status",
     "defense",
     "starting_position",
+    "wheel_type",
   ], <String>[
     "match_type",
   ]);
@@ -38,6 +39,7 @@ void main() async {
   final Map<String, int> faultStatus = enums["fault_status"]!;
   final Map<String, int> defense = enums["defense"]!;
   final Map<String, int> startingPosition = enums["starting_position"]!;
+  final Map<String, int> driveWheels = enums["wheel_type"]!;
   final List<ScheduleMatch> matches = await fetchMatches();
   final List<LightTeam> teams = await fetchTeams();
 
@@ -53,6 +55,7 @@ void main() async {
       robotFieldStatusIds: robotFieldStatuses,
       defense: defense,
       startingPosition: startingPosition,
+      driveWheelIds: driveWheels,
     ),
   );
 }

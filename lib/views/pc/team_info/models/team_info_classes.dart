@@ -1,4 +1,6 @@
 import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
 
 class QuickData {
   QuickData({
@@ -33,55 +35,7 @@ class AutoData {
 
 class SpecificData {
   const SpecificData(this.msg);
-  final List<SpecificMatch> msg;
-}
-
-class SpecificMatch {
-  const SpecificMatch({
-    required this.isRematch,
-    required this.matchNumber,
-    required this.matchTypeId,
-    required this.scouterNames,
-    required this.drivetrainAndDriving,
-    required this.intake,
-    required this.placement,
-    required this.generalNotes,
-    required this.defense,
-  });
-  final int matchNumber;
-  final int matchTypeId;
-  final String scouterNames;
-  final bool isRematch;
-
-  final String? drivetrainAndDriving;
-  final String? intake;
-  final String? placement;
-  final String? defense;
-  final String? generalNotes;
-
-  bool isNull(final String val) {
-    switch (val) {
-      case "Drivetrain And Driving":
-        return drivetrainAndDriving == null;
-      case "Intake":
-        return intake == null;
-      case "Placement":
-        return placement == null;
-      case "Defense":
-        return defense == null;
-      case "General Notes":
-        return generalNotes == null;
-      case "All":
-      default:
-        return (drivetrainAndDriving == null &&
-                intake == null &&
-                placement == null &&
-                defense == null &&
-                generalNotes == null)
-            ? true
-            : false;
-    }
-  }
+  final List<SpecificMatchData> msg;
 }
 
 class LineChartData {
@@ -149,41 +103,6 @@ class MatchIdentifier {
     }
     throw Exception("Not a supported match type");
   }
-}
-
-class PitData {
-  PitData({
-    required this.driveTrainType,
-    required this.driveMotorAmount,
-    required this.driveMotorType,
-    required this.driveWheelType,
-    required this.gearboxPurchased,
-    required this.notes,
-    required this.hasShifer,
-    required this.url,
-    required this.faultMessages,
-    required this.weight,
-    required this.team,
-    required this.height,
-    required this.harmony,
-    required this.trap,
-    required this.hasBuddyClimb,
-  });
-  final String driveTrainType;
-  final int driveMotorAmount;
-  final String driveWheelType;
-  final bool? hasShifer;
-  final bool? gearboxPurchased;
-  final String driveMotorType;
-  final String notes;
-  final double weight;
-  final double height;
-  final bool harmony;
-  final bool hasBuddyClimb;
-  final int trap;
-  final String url;
-  final List<String>? faultMessages;
-  final LightTeam team;
 }
 
 class Team {

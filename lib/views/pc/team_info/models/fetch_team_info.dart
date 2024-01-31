@@ -3,7 +3,12 @@ import "package:graphql/client.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_motor_enum.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_train_enum.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_wheel_enum.dart";
+import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
 
 //TODO add season specific vars and tables to the query
 const String teamInfoQuery = """
@@ -109,13 +114,19 @@ Future<Team> fetchTeamInfo(
           (final Map<String, dynamic> pitTable) => PitData(
             weight: pitTable["weight"] as double,
             driveMotorAmount: pitTable["drive_motor_amount"] as int,
-            driveWheelType: pitTable["drive_wheel_type"] as String,
+            driveWheelType: driveWheelTitleToEnum(
+              pitTable["drive_wheel_type"] as String,
+            ),
             gearboxPurchased: pitTable["gearbox_purchased"] as bool?,
             notes: pitTable["notes"] as String,
             hasShifer: pitTable["has_shifter"] as bool?,
             url: pitTable["url"] as String,
-            driveTrainType: pitTable["drivetrain"]["title"] as String,
-            driveMotorType: pitTable["drivemotor"]["title"] as String,
+            driveTrainType: driveTrainTitleToEnum(
+              pitTable["drivetrain"]["title"] as String,
+            ),
+            driveMotorType: driveMotorTitleToEnum(
+              pitTable["drivemotor"]["title"] as String,
+            ),
             faultMessages: faultMessages,
             team: teamForQuery,
             height: pitTable["height"] as double,
@@ -130,18 +141,7 @@ Future<Team> fetchTeamInfo(
         final SpecificData specificData = SpecificData(
           (teamByPk["specific_matches"] as List<dynamic>)
               .map(
-                (final dynamic specific) => SpecificMatch(
-                  drivetrainAndDriving:
-                      specific["drivetrain_and_driving"] as String?,
-                  intake: specific["intake"] as String?,
-                  placement: specific["placement"] as String?,
-                  generalNotes: specific["general_notes"] as String?,
-                  defense: specific["defense"] as String?,
-                  isRematch: specific["is_rematch"] as bool,
-                  matchNumber: specific["match"]["match_number"] as int,
-                  matchTypeId: specific["match"]["match_type_id"] as int,
-                  scouterNames: specific["scouter_name"] as String,
-                ),
+                SpecificMatchData.parse,
               )
               .toList(),
         );
