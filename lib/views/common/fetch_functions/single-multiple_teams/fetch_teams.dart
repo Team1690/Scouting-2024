@@ -106,6 +106,12 @@ query FetchTeams($ids: [Int!]) @cached {
         title
       }
       id
+      team {
+        name
+        number
+        id
+        colors_index
+      }
     }
     pit {
       drive_motor_amount
