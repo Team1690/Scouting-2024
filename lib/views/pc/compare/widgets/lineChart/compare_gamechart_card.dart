@@ -1,27 +1,26 @@
 import "dart:collection";
-
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/common/no_team_selected.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
+import "package:scouting_frontend/views/pc/compare/models/compare_team_data.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_titled_line_chart.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_line_chart.dart";
 
 class CompareGamechartCard extends StatelessWidget {
   const CompareGamechartCard(this.data, this.teams);
-  final SplayTreeSet<CompareTeam> data;
+  final SplayTreeSet<CompareTeamData> data;
   final SplayTreeSet<LightTeam> teams;
   @override
   Widget build(final BuildContext context) {
-    final Iterable<CompareTeam> emptyTeams = data.where(
-      (final CompareTeam element) => element.gamepieces.points.length < 2,
+    final Iterable<CompareTeamData> emptyTeams = data.where(
+      (final CompareTeamData element) => element.gamepieces.points.length < 2,
     );
     final List<Color> colors = data
         .map(
-          (final CompareTeam element) => element.team.color,
+          (final CompareTeamData element) => element.team.color,
         )
         .toList();
     return DashboardCard(
@@ -30,7 +29,7 @@ class CompareGamechartCard extends StatelessWidget {
           ? NoTeamSelected()
           : emptyTeams.isNotEmpty
               ? Text(
-                  "teams: ${emptyTeams.map((final CompareTeam compareTeam) => compareTeam.team.number).toString()} have insufficient data, please remove them",
+                  "teams: ${emptyTeams.map((final CompareTeamData compareTeam) => compareTeam.team.number).toString()} have insufficient data, please remove them",
                 )
               : Builder(
                   builder: (
@@ -42,7 +41,8 @@ class CompareGamechartCard extends StatelessWidget {
                       CompareLineChart(
                         data
                             .map(
-                              (final CompareTeam element) => element.gamepieces,
+                              (final CompareTeamData element) =>
+                                  element.gamepieces,
                             )
                             .toList(),
                         colors,
@@ -51,7 +51,7 @@ class CompareGamechartCard extends StatelessWidget {
                       CompareLineChart(
                         data
                             .map(
-                              (final CompareTeam element) =>
+                              (final CompareTeamData element) =>
                                   element.gamepiecePoints,
                             )
                             .toList(),
@@ -61,17 +61,17 @@ class CompareGamechartCard extends StatelessWidget {
                       CompareLineChart(
                         data
                             .map(
-                              (final CompareTeam element) =>
-                                  element.totalDelivered,
+                              (final CompareTeamData element) =>
+                                  element.totalMissed,
                             )
                             .toList(),
                         colors,
-                        "Total Delivered",
+                        "Total Missed",
                       ),
                       CompareLineChart(
                         data
                             .map(
-                              (final CompareTeam element) =>
+                              (final CompareTeamData element) =>
                                   element.autoGamepieces,
                             )
                             .toList(),
@@ -81,7 +81,7 @@ class CompareGamechartCard extends StatelessWidget {
                       CompareLineChart(
                         data
                             .map(
-                              (final CompareTeam element) =>
+                              (final CompareTeamData element) =>
                                   element.teleGamepieces,
                             )
                             .toList(),
@@ -91,40 +91,32 @@ class CompareGamechartCard extends StatelessWidget {
                       CompareLineChart(
                         data
                             .map(
-                              (final CompareTeam element) => element.totalCones,
+                              (final CompareTeamData element) =>
+                                  element.totalAmps,
                             )
                             .toList(),
                         colors,
-                        "Total Cones",
+                        "Total Amps",
                       ),
                       CompareLineChart(
                         data
                             .map(
-                              (final CompareTeam element) => element.totalCubes,
+                              (final CompareTeamData element) =>
+                                  element.totalSpeakers,
                             )
                             .toList(),
                         colors,
-                        "Total Cubes",
+                        "Total Speakers",
                       ),
                       CompareClimbLineChart(
                         data
                             .map(
-                              (final CompareTeam element) =>
-                                  element.autoBalanceVals,
+                              (final CompareTeamData element) =>
+                                  element.climbed,
                             )
                             .toList(),
                         colors,
-                        "Auto Balance Values",
-                      ),
-                      CompareClimbLineChart(
-                        data
-                            .map(
-                              (final CompareTeam element) =>
-                                  element.endgameBalanceVals,
-                            )
-                            .toList(),
-                        colors,
-                        "Endgame Balance Values",
+                        "Climbed",
                       ),
                     ],
                   ),

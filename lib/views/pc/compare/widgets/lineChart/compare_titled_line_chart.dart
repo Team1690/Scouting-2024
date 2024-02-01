@@ -1,7 +1,6 @@
 import "dart:math";
-
 import "package:flutter/material.dart";
-import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
+import "package:scouting_frontend/views/pc/compare/models/compare_team_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 

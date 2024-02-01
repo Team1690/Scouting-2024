@@ -1,16 +1,15 @@
 import "dart:collection";
 import "dart:math";
-
 import "package:flutter/material.dart";
-import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
+import "package:scouting_frontend/views/pc/compare/models/compare_team_data.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/spiderChart/radar_chart.dart";
 
 class CompareSpiderChart extends StatelessWidget {
   const CompareSpiderChart(this.data);
-  final SplayTreeSet<CompareTeam> data;
+  final SplayTreeSet<CompareTeamData> data;
 
-  Iterable<CompareTeam> get emptyTeams => data.where(
-        (final CompareTeam team) => team.gamepieces.points.length < 2,
+  Iterable<CompareTeamData> get emptyTeams => data.where(
+        (final CompareTeamData team) => team.gamepieces.points.length < 2,
       );
 
   @override
@@ -20,48 +19,39 @@ class CompareSpiderChart extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Builder(
             builder: (final BuildContext context) {
-              final double autoBalanceRatio = 100 /
-                  data
-                      .map(
-                        (final CompareTeam team) => team.avgAutoBalancePoints,
-                      )
-                      .reduce(max);
-              final double endgameBalanceRatio = 100 /
-                  data
-                      .map(
-                        (final CompareTeam team) =>
-                            team.avgEndgameBalancePoints,
-                      )
-                      .reduce(max);
               final double teleGamepiecePointRatio = 100 /
                   data
                       .map(
-                        (final CompareTeam team) =>
+                        (final CompareTeamData team) =>
                             team.avgTeleGamepiecesPoints,
                       )
                       .reduce(max);
               final double autoGamepiecePointRatio = 100 /
                   data
                       .map(
-                        (final CompareTeam team) => team.avgAutoGamepiecePoints,
+                        (final CompareTeamData team) =>
+                            team.avgAutoGamepiecePoints,
                       )
                       .reduce(max);
               return SpiderChart(
                 colors: data
                     .map(
-                      (final CompareTeam team) => team.team.color,
+                      (final CompareTeamData team) => team.team.color,
                     )
                     .toList(),
-                numberOfFeatures: 6,
+                numberOfFeatures: 4,
                 data: data
-                    .map<List<int>>(
-                      (final CompareTeam team) => <double>[
-                        team.endgameBalanceSuccessPercentage,
-                        team.autoBalanceSuccessPercentage,
-                        team.avgEndgameBalancePoints * endgameBalanceRatio,
-                        team.avgAutoBalancePoints * autoBalanceRatio,
-                        team.avgTeleGamepiecesPoints * teleGamepiecePointRatio,
-                        team.avgAutoGamepiecePoints * autoGamepiecePointRatio,
+                    .map(
+                      (final CompareTeamData team) => <double>[
+                        (team.avgTeleGamepiecesPoints *
+                            teleGamepiecePointRatio),
+                        (team.avgAutoGamepiecePoints * autoGamepiecePointRatio),
+                        (team.avgTeleGamepiecesPoints *
+                                teleGamepiecePointRatio) /
+                            2,
+                        (team.avgAutoGamepiecePoints *
+                                autoGamepiecePointRatio) /
+                            2,
                       ]
                           .map<int>(
                             (final double e) =>
@@ -72,12 +62,10 @@ class CompareSpiderChart extends StatelessWidget {
                     .toList(),
                 ticks: const <int>[0, 25, 50, 75, 100],
                 features: const <String>[
-                  "Endgame Balance%",
-                  "Auto Balance%",
-                  "Endgame Balance Score%",
-                  "Auto Balance Score%",
-                  "Tele Gamepieces",
-                  "Auto Gamepieces",
+                  "TODO",
+                  "TODO",
+                  "TODO",
+                  "TODO",
                 ],
               );
             },

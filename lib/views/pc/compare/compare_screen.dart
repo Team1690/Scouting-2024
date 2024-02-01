@@ -1,5 +1,4 @@
 import "dart:collection";
-
 import "package:carousel_slider/carousel_slider.dart";
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
@@ -9,8 +8,7 @@ import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
-import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
-import "package:scouting_frontend/views/pc/compare/models/fetch_compare.dart";
+import "package:scouting_frontend/views/pc/compare/models/compare_team_data.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_gamechart_card.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/spiderChart/spider_chart_card.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
@@ -107,17 +105,17 @@ class _CompareScreenState extends State<CompareScreen> {
             const SizedBox(height: defaultPadding),
             Expanded(
               flex: 5,
-              child: FutureBuilder<SplayTreeSet<CompareTeam>>(
+              child: FutureBuilder<SplayTreeSet<CompareTeamData>>(
                 future: teams.isEmpty
-                    ? Future<SplayTreeSet<CompareTeam>>(
-                        always(SplayTreeSet<CompareTeam>()),
+                    ? Future<SplayTreeSet<CompareTeamData>>(
+                        always(SplayTreeSet<CompareTeamData>()),
                       )
                     : fetchData(
                         teams.map((final LightTeam e) => e.id).toList(),
                       ),
                 builder: (
                   final BuildContext context,
-                  final AsyncSnapshot<SplayTreeSet<CompareTeam>?> snapshot,
+                  final AsyncSnapshot<SplayTreeSet<CompareTeamData>?> snapshot,
                 ) {
                   if (snapshot.hasError) {
                     return Text(snapshot.error!.toString());
@@ -156,8 +154,8 @@ class _CompareScreenState extends State<CompareScreen> {
                     }
                   }
 
-                  return snapshot.data
-                          .mapNullable((final SplayTreeSet<CompareTeam> data) {
+                  return snapshot.data.mapNullable(
+                          (final SplayTreeSet<CompareTeamData> data) {
                         if (isPC(context)) {
                           return Row(
                             children: <Widget>[
