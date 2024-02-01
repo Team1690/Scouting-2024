@@ -45,6 +45,6 @@ class CompareLineChartData {
     required this.defenseAmounts,
   });
   final List<int> points;
-  final List<RobotMatchStatus> matchStatuses;
+  final List<RobotFieldStatus> matchStatuses;
   final List<DefenseAmount> defenseAmounts;
 }

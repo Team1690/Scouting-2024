@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info_data.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
@@ -71,32 +72,47 @@ class _PickListState extends State<PickList> {
                                 children: <Widget>[
                                   Expanded(
                                     flex: 2,
-                                    child: Row(
+                                    child: Column(
                                       children: <Widget>[
-                                        const Spacer(),
                                         Expanded(
-                                          child: Icon(
-                                            pickListTeam.faultMessages.isEmpty
-                                                ? Icons.check
-                                                : Icons.warning,
-                                            color: pickListTeam
-                                                    .faultMessages.isEmpty
-                                                ? Colors.green
-                                                : Colors.yellow[700],
+                                          child: Text(
+                                            "Tele Amp Average: ${pickListTeam.teleAmpAvg.toStringAsFixed(2)}",
                                           ),
                                         ),
                                         Expanded(
-                                          flex: 2,
                                           child: Text(
-                                            pickListTeam.faultMessages
-                                                    .mapNullable(
-                                                  (
-                                                    final List<String> p0,
-                                                  ) =>
-                                                      "Faults: ${p0.length}",
-                                                ) ??
-                                                "No faults",
+                                            "Tele Speaker Average: ${pickListTeam.teleSpeakerAvg.toStringAsFixed(2)}",
                                           ),
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            const Spacer(),
+                                            Expanded(
+                                              child: Icon(
+                                                pickListTeam
+                                                        .faultMessages.isEmpty
+                                                    ? Icons.check
+                                                    : Icons.warning,
+                                                color: pickListTeam
+                                                        .faultMessages.isEmpty
+                                                    ? Colors.green
+                                                    : Colors.yellow[700],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                pickListTeam.faultMessages
+                                                        .mapNullable(
+                                                      (
+                                                        final List<String> p0,
+                                                      ) =>
+                                                          "Faults: ${p0.length}",
+                                                    ) ??
+                                                    "No faults",
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -134,6 +150,20 @@ class _PickListState extends State<PickList> {
                                 flex: 1,
                                 child: Text(
                                   pickListTeam.toString(),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                    "Climbed: ${pickListTeam.climbedPercentage.toStringAsFixed(2)}%"),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "Worked: ${pickListTeam.workedPercentage.toStringAsFixed(2)}%",
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "Auto Gamepieces Average: ${pickListTeam.autoGamepieceAvg.toStringAsFixed(2)}",
                                 ),
                               ),
                             ]

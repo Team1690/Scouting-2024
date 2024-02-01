@@ -26,7 +26,7 @@ class TechnicalMatchData {
     required this.scheduleMatchId,
   });
 
-  final RobotMatchStatus robotFieldStatus;
+  final RobotFieldStatus robotFieldStatus;
   final int teleSpeakerMissed;
   final int autoSpeakerMissed;
   final int gamepiecesPoints;
@@ -49,7 +49,7 @@ class TechnicalMatchData {
   static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
         teleSpeakerMissed: match["tele_speaker_missed"] as int,
         autoSpeakerMissed: match["auto_speaker_missed"] as int,
-        robotFieldStatus: robotMatchStatusTitleToEnum(
+        robotFieldStatus: robotFieldStatusTitleToEnum(
           match["robot_field_status"]["title"] as String,
         ),
         climbingPoints: match["climb"]["points"] as int,

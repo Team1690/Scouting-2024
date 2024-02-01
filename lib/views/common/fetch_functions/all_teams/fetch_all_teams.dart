@@ -3,6 +3,7 @@ import "package:scouting_frontend/models/helpers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
 import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
@@ -59,29 +60,29 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
         parserFn: (final Map<String, dynamic> data) {
           final List<dynamic> teams = data["team"] as List<dynamic>;
           return teams.map<AllTeamData>((final dynamic team) {
-            final List<RobotMatchStatus> robotMatchStatuses =
+            final List<RobotFieldStatus> robotFieldStatuses =
                 (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
                     .map(
-                      (final dynamic node) => robotMatchStatusTitleToEnum(
+                      (final dynamic node) => robotFieldStatusTitleToEnum(
                         node["robot_field_status"]["title"] as String,
                       ),
                     )
                     .toList();
             final dynamic avg =
                 team["technical_matches_aggregate"]["aggregate"]["avg"];
-            final bool nullValidator = avg["auto_amp"] == null;
-            final double autoGamepieceMissed = nullValidator
+            final bool avgNullValidator = avg["auto_amp"] == null;
+            final double autoGamepieceMissed = avgNullValidator
                 ? double.nan
                 : (avg["auto_amp_missed"] as double) +
                     (avg["auto_speaker_missed"] as double);
-            final double teleGamepieceMissed = nullValidator
+            final double teleGamepieceMissed = avgNullValidator
                 ? double.nan
                 : (avg["tele_amp_missed"] as double) +
                     (avg["tele_speaker_missed"] as double);
-            final double gamepiecePointsAvg = nullValidator
+            final double gamepiecePointsAvg = avgNullValidator
                 ? double.nan
                 : getPoints<double>(parseMatch<double>(avg));
-            final double autoGamepieceAvg = nullValidator
+            final double autoGamepieceAvg = avgNullValidator
                 ? double.nan
                 : getPieces<double>(
                     parseByMode<double>(
@@ -89,7 +90,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                       avg,
                     ),
                   );
-            final double teleGamepieceAvg = nullValidator
+            final double teleGamepieceAvg = avgNullValidator
                 ? double.nan
                 : getPieces<double>(
                     parseByMode<double>(
@@ -97,11 +98,11 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                       avg,
                     ),
                   );
-            final double gamepieceSum = nullValidator
+            final double gamepieceSum = avgNullValidator
                 ? double.nan
                 : getPieces<double>(parseMatch<double>(avg));
             final double avgTraps =
-                nullValidator ? double.nan : avg["trap_amount"] as double;
+                avgNullValidator ? double.nan : avg["trap_amount"] as double;
             final int firstPicklistIndex = team["first_picklist_index"] as int;
             final int secondPicklistIndex =
                 team["second_picklist_index"] as int;
@@ -109,8 +110,40 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
             final List<String> faultMessages = (team["faults"] as List<dynamic>)
                 .map((final dynamic e) => e["message"] as String)
                 .toList();
+            final int amountOfMatches =
+                (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
+                    .length;
+            final double workedPercentage = 100 *
+                (robotFieldStatuses
+                        .where(
+                          (final RobotFieldStatus robotMatchStatus) =>
+                              robotMatchStatus == RobotFieldStatus.worked,
+                        )
+                        .length /
+                    amountOfMatches);
+            final double teleAmpAvg =
+                avgNullValidator ? double.nan : avg["tele_amp"] as double;
+            final double teleSpeakerAvg =
+                avgNullValidator ? double.nan : avg["tele_speaker"] as double;
 
             final int thirdPicklistIndex = team["third_picklist_index"] as int;
+            final List<Climb> climbed =
+                (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
+                    .map(
+                      (final dynamic e) =>
+                          climbTitleToEnum(e["climb"]["title"] as String),
+                    )
+                    .toList();
+            final double climbedPercentage = 100 *
+                climbed
+                    .where(
+                      (final Climb element) =>
+                          element == Climb.climbed ||
+                          element == Climb.buddyClimbed,
+                    )
+                    .length /
+                climbed.length;
+
             return AllTeamData(
               amountOfMatches: (team["technical_matches_aggregate"]["nodes"]
                       as List<dynamic>)
@@ -125,10 +158,10 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                         title != "No attempt" && title != "Failed",
                   )
                   .length,
-              brokenMatches: robotMatchStatuses
+              brokenMatches: robotFieldStatuses
                   .where(
-                    (final RobotMatchStatus robotMatchStatus) =>
-                        robotMatchStatus != RobotMatchStatus.worked,
+                    (final RobotFieldStatus robotMatchStatus) =>
+                        robotMatchStatus != RobotFieldStatus.worked,
                   )
                   .length,
               autoGamepieceAvg: autoGamepieceAvg,
@@ -143,6 +176,10 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
               thirdPickListIndex: thirdPicklistIndex,
               taken: taken,
               faultMessages: faultMessages,
+              workedPercentage: workedPercentage,
+              teleAmpAvg: teleAmpAvg,
+              teleSpeakerAvg: teleSpeakerAvg,
+              climbedPercentage: climbedPercentage,
             );
           }).toList();
         },

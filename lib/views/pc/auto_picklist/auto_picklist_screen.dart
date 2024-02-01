@@ -261,6 +261,10 @@ void save(
               amountOfMatches: 0,
               matchesClimbed: 0,
               trapAverage: 0,
+              workedPercentage: 0,
+              teleAmpAvg: 0,
+              teleSpeakerAvg: 0,
+              climbedPercentage: 0,
             ),
           )
           .map(

@@ -2,6 +2,10 @@ import "package:scouting_frontend/models/team_model.dart";
 
 class AllTeamData {
   AllTeamData({
+    required this.climbedPercentage,
+    required this.teleAmpAvg,
+    required this.teleSpeakerAvg,
+    required this.workedPercentage,
     required this.faultMessages,
     required this.taken,
     required this.thirdPickListIndex,
@@ -24,6 +28,8 @@ class AllTeamData {
   int thirdPickListIndex;
   final double autoGamepieceAvg;
   final double teleGamepieceAvg;
+  final double teleAmpAvg;
+  final double teleSpeakerAvg;
   final double gamepieceAvg;
   final double missedAvg;
   final double gamepiecePointAvg;
@@ -31,6 +37,8 @@ class AllTeamData {
   final int brokenMatches;
   final int amountOfMatches;
   final int matchesClimbed;
+  final double workedPercentage;
+  final double climbedPercentage;
   bool taken;
   final List<String> faultMessages;
 
