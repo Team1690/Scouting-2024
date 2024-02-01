@@ -1,13 +1,18 @@
 import "package:scouting_frontend/models/helpers.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/fetch_all_teams.dart";
 import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
+import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 class TechnicalMatchData {
   TechnicalMatchData({
+    required this.gamepiecesPoints,
     required this.teleSpeakerMissed,
     required this.autoSpeakerMissed,
     required this.robotFieldStatus,
     required this.climbingPoints,
+    required this.autoGamepieces,
+    required this.teleGamepieces,
     required this.teleAmpMissed,
     required this.autoAmpMissed,
     required this.teleSpeaker,
@@ -15,14 +20,18 @@ class TechnicalMatchData {
     required this.matchNumber,
     required this.harmonyWith,
     required this.trapAmount,
+    required this.gamepieces,
     required this.autoAmp,
     required this.teleAmp,
     required this.climb,
   });
 
   final RobotMatchStatus robotFieldStatus;
-  final int autoSpeakerMissed;
   final int teleSpeakerMissed;
+  final int autoSpeakerMissed;
+  final int gamepiecesPoints;
+  final int teleGamepieces;
+  final int autoGamepieces;
   final int climbingPoints;
   final int teleAmpMissed;
   final int autoAmpMissed;
@@ -31,8 +40,9 @@ class TechnicalMatchData {
   final int matchNumber;
   final int harmonyWith;
   final int trapAmount;
-  final int autoAmp;
+  final int gamepieces;
   final int teleAmp;
+  final int autoAmp;
   final Climb climb;
 
   static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
@@ -52,5 +62,9 @@ class TechnicalMatchData {
         autoAmp: match["auto_amp"] as int,
         teleAmp: match["tele_amp"] as int,
         climb: climbTitleToEnum(match["climb"]["title"] as String),
+        gamepiecesPoints: getPoints(parseMatch(match)),
+        autoGamepieces: getPieces(parseByMode(MatchMode.auto, match)),
+        teleGamepieces: getPieces(parseByMode(MatchMode.tele, match)),
+        gamepieces: getPieces(parseMatch(match)),
       );
 }

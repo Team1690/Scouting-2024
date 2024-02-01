@@ -1,11 +1,10 @@
 import "dart:collection";
-
 import "package:graphql/client.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/helpers.dart";
-import "package:scouting_frontend/models/match_model.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
+import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
 import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
