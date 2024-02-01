@@ -5,8 +5,8 @@ class AllTeamData {
     required this.team,
     required this.firstPicklistIndex,
     required this.secondPicklistIndex,
-    required this.AmpGamepieceAvg,
-    required this.SpeakerGamepieceAvg,
+    required this.ampGamepieceAvg,
+    required this.speakerGamepieceAvg,
     required this.gamepieceAvg,
     required this.missedAvg,
     required this.gamepiecePointAvg,
@@ -18,8 +18,8 @@ class AllTeamData {
   final LightTeam team;
   final int firstPicklistIndex;
   final int secondPicklistIndex;
-  final double AmpGamepieceAvg;
-  final double SpeakerGamepieceAvg;
+  final double ampGamepieceAvg;
+  final double speakerGamepieceAvg;
   final double gamepieceAvg;
   final double missedAvg;
   final double gamepiecePointAvg;

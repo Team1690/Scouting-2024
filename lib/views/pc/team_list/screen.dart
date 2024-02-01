@@ -57,8 +57,10 @@ class TeamList extends StatelessWidget {
                                       sortedColumn == index && !isAscending;
                                   sortedColumn = index;
                                   data.sort(
-                                    (final AllTeamData a,
-                                            final AllTeamData b) =>
+                                    (
+                                      final AllTeamData a,
+                                      final AllTeamData b,
+                                    ) =>
                                         reverseUnless(
                                       isAscending,
                                       f(a).compareTo(f(b)),
@@ -85,12 +87,12 @@ class TeamList extends StatelessWidget {
                                   column(
                                     "Speaker Gamepieces",
                                     (final AllTeamData team) =>
-                                        team.SpeakerGamepieceAvg,
+                                        team.speakerGamepieceAvg,
                                   ),
                                   column(
                                     "Amp Gamepieces",
                                     (final AllTeamData team) =>
-                                        team.AmpGamepieceAvg,
+                                        team.ampGamepieceAvg,
                                   ),
                                   column(
                                     "Gamepieces Scored",
@@ -149,8 +151,8 @@ class TeamList extends StatelessWidget {
                                           ),
                                         ),
                                         ...<double>[
-                                          team.SpeakerGamepieceAvg,
-                                          team.AmpGamepieceAvg,
+                                          team.speakerGamepieceAvg,
+                                          team.ampGamepieceAvg,
                                           team.gamepieceAvg,
                                           team.missedAvg,
                                           team.gamepiecePointAvg,
