@@ -6,7 +6,6 @@ import "package:scouting_frontend/views/common/fetch_functions/all_teams/fetch_a
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
-import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
 import "package:scouting_frontend/views/pc/picklist/picklist_card.dart";
 
 class PickListScreen extends StatelessWidget {
@@ -33,10 +32,14 @@ class PickListScreen extends StatelessWidget {
             final AsyncSnapshot<List<AllTeamData>> snapshot,
           ) {
             if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
+              return Text(
+                snapshot.error.toString(),
+              );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
             if (snapshot.data == null) {
               return const Center(
@@ -147,15 +150,15 @@ extension CurrentPickListExtension on CurrentPickList {
     }
   }
 
-  int getIndex(final PickListTeam team) => map(
-        () => team.firstListIndex,
-        () => team.secondListIndex,
-        () => team.thirdListIndex,
+  int getIndex(final AllTeamData team) => map(
+        () => team.firstPicklistIndex,
+        () => team.secondPicklistIndex,
+        () => team.thirdPickListIndex,
       );
 
-  int setIndex(final PickListTeam team, final int index) => map(
-        () => team.firstListIndex = index,
-        () => team.secondListIndex = index,
-        () => team.thirdListIndex = index,
+  int setIndex(final AllTeamData team, final int index) => map(
+        () => team.firstPicklistIndex = index,
+        () => team.secondPicklistIndex = index,
+        () => team.thirdPickListIndex = index,
       );
 }

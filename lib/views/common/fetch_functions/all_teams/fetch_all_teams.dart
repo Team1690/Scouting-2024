@@ -1,4 +1,3 @@
-import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/helpers.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -107,8 +106,9 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
             final int secondPicklistIndex =
                 team["second_picklist_index"] as int;
             final bool taken = team["taken"] as bool;
-            final List<String> faultMessages =
-                team["faults"]["message"] as List<String>;
+            final List<String> faultMessages = (team["faults"] as List<dynamic>)
+                .map((final dynamic e) => e["message"] as String)
+                .toList();
 
             final int thirdPicklistIndex = team["third_picklist_index"] as int;
             return AllTeamData(

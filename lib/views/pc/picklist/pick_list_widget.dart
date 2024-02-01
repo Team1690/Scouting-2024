@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info_data.dart";
@@ -15,9 +14,8 @@ class PickList extends StatefulWidget {
     required this.onReorder,
   }) {
     uiList.sort(
-      (final AllTeamData a, final AllTeamData b) => screen
-          .getIndex(a as PickListTeam)
-          .compareTo(screen.getIndex(b as PickListTeam)),
+      (final AllTeamData a, final AllTeamData b) =>
+          screen.getIndex(a).compareTo(screen.getIndex(b)),
     );
   }
   final CurrentPickList screen;
@@ -36,7 +34,7 @@ class _PickListState extends State<PickList> {
     final AllTeamData item = widget.uiList.removeAt(oldindex);
     widget.uiList.insert(newindex, item);
     for (int i = 0; i < widget.uiList.length; i++) {
-      widget.screen.setIndex(widget.uiList[i] as PickListTeam, i);
+      widget.screen.setIndex(widget.uiList[i], i);
     }
     widget.onReorder(widget.uiList);
   }
@@ -52,7 +50,7 @@ class _PickListState extends State<PickList> {
         buildDefaultDragHandles: true,
         primary: false,
         children: widget.uiList
-            .map<Widget>(
+            .map(
               (final AllTeamData pickListTeam) => Card(
                 color: bgColor,
                 key: ValueKey<String>(pickListTeam.toString()),
@@ -159,14 +157,14 @@ class _PickListState extends State<PickList> {
                                   minLines: 1,
                                   maxLines: 1,
                                   style: const TextStyle(fontSize: 18),
-                                  controller: controllers[widget.screen
-                                      .getIndex(pickListTeam as PickListTeam)],
+                                  controller: controllers[
+                                      widget.screen.getIndex(pickListTeam)],
                                   keyboardType: TextInputType.number,
                                   onFieldSubmitted: (final String value) =>
                                       setState(() {
                                     reorderData(
                                       widget.screen.getIndex(
-                                        pickListTeam as PickListTeam,
+                                        pickListTeam,
                                       ),
                                       int.tryParse(value).mapNullable(
                                             (final int parsedInt) =>
@@ -174,7 +172,7 @@ class _PickListState extends State<PickList> {
                                                 widget.uiList.length,
                                           ) ??
                                           widget.screen.getIndex(
-                                            pickListTeam as PickListTeam,
+                                            pickListTeam,
                                           ),
                                     );
                                   }),
@@ -229,14 +227,14 @@ class _PickListState extends State<PickList> {
                                     style: const TextStyle(fontSize: 10),
                                     controller:
                                         controllers[widget.screen.getIndex(
-                                      pickListTeam as PickListTeam,
+                                      pickListTeam,
                                     )],
                                     keyboardType: TextInputType.number,
                                     onFieldSubmitted: (final String value) =>
                                         setState(() {
                                       reorderData(
                                         widget.screen.getIndex(
-                                          pickListTeam as PickListTeam,
+                                          pickListTeam,
                                         ),
                                         int.tryParse(value).mapNullable(
                                               (final int parsedInt) =>
@@ -244,7 +242,7 @@ class _PickListState extends State<PickList> {
                                                   widget.uiList.length,
                                             ) ??
                                             widget.screen.getIndex(
-                                              pickListTeam as PickListTeam,
+                                              pickListTeam,
                                             ),
                                       );
                                     }),
@@ -286,27 +284,4 @@ String validateName(final String name) =>
     name == "" ? throw ArgumentError("Invalid Team Name") : name;
 
 //TODO add season specific variables, make sure to include amountOfMatches and faultMessages which should always be useful.
-class PickListTeam {
-  PickListTeam({
-    required this.faultMessages,
-    required this.avgTeleGamepieces,
-    required this.avgAutoGamepieces,
-    required this.firstListIndex,
-    required this.secondListIndex,
-    required this.thirdListIndex,
-    required this.taken,
-    required this.team,
-  });
 
-  final LightTeam team;
-  int firstListIndex;
-  int secondListIndex;
-  int thirdListIndex;
-  bool taken;
-  double avgAutoGamepieces;
-  double avgTeleGamepieces;
-  List<String> faultMessages;
-
-  @override
-  String toString() => "${team.name} ${team.number}";
-}

@@ -11,7 +11,6 @@ import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/pc/auto_picklist/auto_picklist_widget.dart";
 import "package:scouting_frontend/views/pc/auto_picklist/value_sliders.dart";
-import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
 
 class AutoPickListScreen extends StatefulWidget {
   const AutoPickListScreen({super.key});
@@ -98,7 +97,7 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
                 color: Colors.blue,
                 onPress: () => save(
                   saveAs,
-                  List<PickListTeam>.from(
+                  List<AllTeamData>.from(
                     localList.map(
                       (final AutoPickListTeam autoTeam) =>
                           autoTeam.picklistTeam,
@@ -206,7 +205,7 @@ enum Picklists {
 
 void save(
   final Picklists? picklist,
-  final List<PickListTeam> teams, [
+  final List<AllTeamData> teams, [
   final BuildContext? context,
 ]) async {
   if (teams.isNotEmpty && picklist != null) {
@@ -240,32 +239,39 @@ void save(
     final Map<String, dynamic> vars = <String, dynamic>{
       "objects": teams
           .map(
-            (final PickListTeam e) => PickListTeam(
-              firstListIndex: picklist == Picklists.first
+            (final AllTeamData e) => AllTeamData(
+              firstPicklistIndex: picklist == Picklists.first
                   ? teams.indexOf(e)
-                  : e.firstListIndex,
-              secondListIndex: picklist == Picklists.second
+                  : e.firstPicklistIndex,
+              secondPicklistIndex: picklist == Picklists.second
                   ? teams.indexOf(e)
-                  : e.secondListIndex,
-              thirdListIndex: picklist == Picklists.third
+                  : e.secondPicklistIndex,
+              thirdPickListIndex: picklist == Picklists.third
                   ? teams.indexOf(e)
-                  : e.thirdListIndex,
+                  : e.thirdPickListIndex,
               taken: e.taken,
               team: e.team,
               faultMessages: <String>[],
-              avgTeleGamepieces: 0,
-              avgAutoGamepieces: 0,
+              autoGamepieceAvg: 0,
+              teleGamepieceAvg: 0,
+              gamepieceAvg: 0,
+              missedAvg: 0,
+              gamepiecePointAvg: 0,
+              brokenMatches: 0,
+              amountOfMatches: 0,
+              matchesClimbed: 0,
+              trapAverage: 0,
             ),
           )
           .map(
-            (final PickListTeam e) => <String, dynamic>{
+            (final AllTeamData e) => <String, dynamic>{
               "id": e.team.id,
               "name": e.team.name,
               "number": e.team.number,
               "colors_index": e.team.colorsIndex,
-              "first_picklist_index": e.firstListIndex,
-              "second_picklist_index": e.secondListIndex,
-              "third_picklist_index": e.thirdListIndex,
+              "first_picklist_index": e.firstPicklistIndex,
+              "second_picklist_index": e.secondPicklistIndex,
+              "third_picklist_index": e.thirdPickListIndex,
               "taken": e.taken,
             },
           )

@@ -1,7 +1,13 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/fetch_all_teams.dart";
 
 void main() {
+  group("description", () {
+    test("description", () {
+      expect(fetchAllTeams().first, completes);
+    });
+  });
   group("Map Extenstions", () {
     group("Map Nullable", () {
       test("Actually Null", () {

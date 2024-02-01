@@ -19,9 +19,9 @@ class AllTeamData {
     required this.trapAverage,
   });
   final LightTeam team;
-  final int firstPicklistIndex;
-  final int secondPicklistIndex;
-  final int thirdPickListIndex;
+  int firstPicklistIndex;
+  int secondPicklistIndex;
+  int thirdPickListIndex;
   final double autoGamepieceAvg;
   final double teleGamepieceAvg;
   final double gamepieceAvg;
@@ -33,4 +33,7 @@ class AllTeamData {
   final int matchesClimbed;
   bool taken;
   final List<String> faultMessages;
+
+  @override
+  String toString() => "${team.name}  ${team.number}";
 }

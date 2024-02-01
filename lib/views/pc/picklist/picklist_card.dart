@@ -92,7 +92,7 @@ class _PicklistCardState extends State<PicklistCard> {
                     data.where((final AllTeamData element) => element.taken);
                 data = (teamsUntaken..addAll(teamsTaken));
                 for (int i = 0; i < data.length; i++) {
-                  currentPickList.setIndex(data[i] as PickListTeam, i);
+                  currentPickList.setIndex(data[i], i);
                 }
               });
             },
