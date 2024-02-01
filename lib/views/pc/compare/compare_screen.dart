@@ -23,7 +23,8 @@ class CompareScreen extends StatefulWidget {
 
 class _CompareScreenState extends State<CompareScreen> {
   late final SplayTreeSet<LightTeam> teams = SplayTreeSet<LightTeam>(
-    (final LightTeam p0, final LightTeam p1) => p0.id.compareTo(p1.id),
+    (final LightTeam team1, final LightTeam team2) =>
+        team1.number.compareTo(team2.number),
   )..addAll(widget.initialTeams);
   final TextEditingController controller = TextEditingController();
   void removeTeam(final MapEntry<int, LightTeam> index) {
