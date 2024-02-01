@@ -75,19 +75,19 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
             final double gamepiecePointsAvg = nullValidator
                 ? double.nan
                 : getPoints<double>(parseMatch<double>(avg));
-            final double autoGamepieceAvg = nullValidator
+            final double speakerGamepieceAvg = nullValidator
                 ? double.nan
                 : getPieces<double>(
-                    parseByMode<double>(
-                      MatchMode.auto,
+                    parseByPlace<double>(
+                      PlaceLocation.speaker,
                       avg,
                     ),
                   );
-            final double teleGamepieceAvg = nullValidator
+            final double ampGamepieceAvg = nullValidator
                 ? double.nan
                 : getPieces<double>(
-                    parseByMode<double>(
-                      MatchMode.tele,
+                    parseByPlace<double>(
+                      PlaceLocation.amp,
                       avg,
                     ),
                   );
@@ -119,8 +119,8 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                         robotMatchStatus != RobotMatchStatus.worked,
                   )
                   .length,
-              speakerGamepieceAvg: autoGamepieceAvg,
-              ampGamepieceAvg: teleGamepieceAvg,
+              speakerGamepieceAvg: speakerGamepieceAvg,
+              ampGamepieceAvg: ampGamepieceAvg,
               gamepieceAvg: gamepieceSum,
               missedAvg: autoGamepieceMissed + teleGamepieceMissed,
               gamepiecePointAvg: gamepiecePointsAvg,
