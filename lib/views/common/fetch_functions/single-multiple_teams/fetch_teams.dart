@@ -96,6 +96,9 @@ query FetchTeams($ids: [Int!]) @cached {
     number
     id
     colors_index
+    first_picklist_index
+    second_picklist_index
+    third_picklist_index
     faults {
       message
       fault_status {
@@ -168,6 +171,12 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
         (teams["team"] as List<dynamic>)
             .map<TeamData>((final dynamic teamTable) {
           final LightTeam team = LightTeam.fromJson(teamTable);
+          final int firstPicklistIndex =
+              teamTable["first_picklist_index"] as int;
+          final int secondPicklistIndex =
+              teamTable["second_picklist_index"] as int;
+          final int thirdPicklistIndex =
+              teamTable["third_picklist_index"] as int;
           final List<dynamic> technicalMatchesTable =
               teamTable["technical_matches"] as List<dynamic>;
           final List<dynamic> specificMatchesTables =
@@ -187,6 +196,9 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
                 specificMatchesTables.map(SpecificMatchData.parse).toList(),
             summaryData: SpecificSummaryData.parse(specificSummaryTable),
             lightTeam: team,
+            firstPicklistIndex: firstPicklistIndex,
+            secondPicklistIndex: secondPicklistIndex,
+            thirdPicklistIndex: thirdPicklistIndex,
           );
         }),
         (final TeamData team1, final TeamData team2) =>
