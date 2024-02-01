@@ -15,6 +15,9 @@ class TeamData {
     required this.specificMatches,
     required this.aggregateData,
     required this.summaryData,
+    required this.firstPicklistIndex,
+    required this.secondPicklistIndex,
+    required this.thirdPicklistIndex,
   });
   final List<TechnicalMatchData> technicalMatches;
   final List<SpecificMatchData> specificMatches;
@@ -23,4 +26,7 @@ class TeamData {
   final PitData pitData;
   final SpecificSummaryData summaryData;
   final LightTeam lightTeam;
+  final int firstPicklistIndex;
+  final int secondPicklistIndex;
+  final int thirdPicklistIndex;
 }
