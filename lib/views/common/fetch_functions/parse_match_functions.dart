@@ -53,6 +53,8 @@ enum PointGiver {
   final MatchMode mode;
   final PlaceLocation place;
   final int points;
+
+  double calcPoints(final double amount) => points * amount;
 }
 
 Map<PointGiver, T> parseByMode<T extends num>(

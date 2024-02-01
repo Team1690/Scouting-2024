@@ -1,15 +1,16 @@
 import "dart:collection";
 import "dart:math";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/views/pc/compare/models/compare_team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
+import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/spiderChart/radar_chart.dart";
 
 class CompareSpiderChart extends StatelessWidget {
   const CompareSpiderChart(this.data);
-  final SplayTreeSet<CompareTeamData> data;
+  final SplayTreeSet<TeamData> data;
 
-  Iterable<CompareTeamData> get emptyTeams => data.where(
-        (final CompareTeamData team) => team.gamepieces.points.length < 2,
+  Iterable<TeamData> get emptyTeams => data.where(
+        (final TeamData team) => team.technicalMatches.length < 2,
       );
 
   @override
@@ -22,36 +23,42 @@ class CompareSpiderChart extends StatelessWidget {
               final double teleGamepiecePointRatio = 100 /
                   data
                       .map(
-                        (final CompareTeamData team) =>
-                            team.avgTeleGamepiecesPoints,
+                        (final TeamData team) =>
+                            team.aggregateData.avgTeleAmp +
+                            team.aggregateData.avgTeleSpeaker,
                       )
                       .reduce(max);
               final double autoGamepiecePointRatio = 100 /
                   data
                       .map(
-                        (final CompareTeamData team) =>
-                            team.avgAutoGamepiecePoints,
+                        (final TeamData team) =>
+                            team.aggregateData.avgAutoSpeaker +
+                            team.aggregateData.avgAutoAmp,
                       )
                       .reduce(max);
               return SpiderChart(
                 colors: data
                     .map(
-                      (final CompareTeamData team) => team.team.color,
+                      (final TeamData team) => team.lightTeam.color,
                     )
                     .toList(),
-                numberOfFeatures: 4,
+                //TODO: calc appropiate ratios and split speaker from amp
+                numberOfFeatures: 2,
                 data: data
                     .map(
-                      (final CompareTeamData team) => <double>[
-                        (team.avgTeleGamepiecesPoints *
+                      (final TeamData team) => <double>[
+                        ((PointGiver.autoAmp
+                                    .calcPoints(team.aggregateData.avgAutoAmp) +
+                                PointGiver.autoSpeaker.calcPoints(
+                                  team.aggregateData.avgAutoSpeaker,
+                                )) *
+                            autoGamepiecePointRatio),
+                        ((PointGiver.teleAmp
+                                    .calcPoints(team.aggregateData.avgTeleAmp) +
+                                PointGiver.teleSpeaker.calcPoints(
+                                  team.aggregateData.avgTeleSpeaker,
+                                )) *
                             teleGamepiecePointRatio),
-                        (team.avgAutoGamepiecePoints * autoGamepiecePointRatio),
-                        (team.avgTeleGamepiecesPoints *
-                                teleGamepiecePointRatio) /
-                            2,
-                        (team.avgAutoGamepiecePoints *
-                                autoGamepiecePointRatio) /
-                            2,
                       ]
                           .map<int>(
                             (final double e) =>
@@ -62,10 +69,10 @@ class CompareSpiderChart extends StatelessWidget {
                     .toList(),
                 ticks: const <int>[0, 25, 50, 75, 100],
                 features: const <String>[
-                  "TODO",
-                  "TODO",
-                  "TODO",
-                  "TODO",
+                  "Auto Amp",
+                  "Auto Speaker",
+                  "Tele Amp",
+                  "Tele Speaker",
                 ],
               );
             },
