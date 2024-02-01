@@ -119,8 +119,8 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                         robotMatchStatus != RobotMatchStatus.worked,
                   )
                   .length,
-              autoGamepieceAvg: autoGamepieceAvg,
-              teleGamepieceAvg: teleGamepieceAvg,
+              SpeakerGamepieceAvg: autoGamepieceAvg,
+              AmpGamepieceAvg: teleGamepieceAvg,
               gamepieceAvg: gamepieceSum,
               missedAvg: autoGamepieceMissed + teleGamepieceMissed,
               gamepiecePointAvg: gamepiecePointsAvg,
