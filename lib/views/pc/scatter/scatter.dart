@@ -1,11 +1,12 @@
 import "dart:math";
-
 import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/card.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/fetch_all_teams.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/pc/scatter/fetch_scatter.dart";
+
 import "package:orbit_standard_library/orbit_standard_library.dart";
 
 class Scatter extends StatefulWidget {
@@ -53,11 +54,11 @@ class _ScatterState extends State<Scatter> {
         children: <Widget>[
           Expanded(
             flex: 1,
-            child: FutureBuilder<List<ScatterData>>(
-              future: fetchScatterData(),
+            child: StreamBuilder<List<AllTeamData>>(
+              stream: fetchAllTeams(),
               builder: (
                 final BuildContext context,
-                final AsyncSnapshot<List<ScatterData>> snapshot,
+                final AsyncSnapshot<List<AllTeamData>> snapshot,
               ) {
                 if (snapshot.hasError) {
                   return Text(
@@ -70,27 +71,31 @@ class _ScatterState extends State<Scatter> {
                   );
                 } else {
                   return snapshot.data
-                          .mapNullable((final List<ScatterData> report) {
+                          .mapNullable((final List<AllTeamData> report) {
                         if (report.isEmpty) {
                           return const Text("No data");
                         }
                         final List<LightTeam> teams = report
                             .map(
-                              (final ScatterData e) => e.team,
+                              (final AllTeamData e) => e.team,
                             )
                             .toList();
                         return ScatterChart(
                           ScatterChartData(
                             scatterSpots: report
                                 .map(
-                                  (final ScatterData e) => isPoints
+                                  (final AllTeamData e) => isPoints
                                       ? ScatterSpot(
-                                          e.gamepiecePointsAvg,
-                                          e.yGamepiecePointsStddev,
+                                          e.gamepiecePointAvg.isNaN
+                                              ? 0
+                                              : e.gamepiecePointAvg,
+                                          e.yStddevGamepiecePoints,
                                           color: e.team.color,
                                         )
                                       : ScatterSpot(
-                                          e.avgGamepieces,
+                                          e.gamepieceAvg.isNaN
+                                              ? 0
+                                              : e.gamepieceAvg,
                                           e.gamepiecesStddev,
                                           color: e.team.color,
                                         ),
@@ -190,16 +195,21 @@ class _ScatterState extends State<Scatter> {
                             minY: 0,
                             maxX: report
                                 .map(
-                                  (final ScatterData e) => isPoints
-                                      ? (e.gamepiecePointsAvg + 1)
+                                  (final AllTeamData e) => isPoints
+                                      ? (e.gamepiecePointAvg.isNaN
+                                              ? 0
+                                              : e.gamepiecePointAvg + 1)
                                           .roundToDouble()
-                                      : (e.avgGamepieces + 1).roundToDouble(),
+                                      : (e.gamepieceAvg.isNaN
+                                              ? 0
+                                              : e.gamepieceAvg + 1)
+                                          .roundToDouble(),
                                 )
                                 .reduce(max),
                             maxY: report
                                 .map(
-                                  (final ScatterData e) => isPoints
-                                      ? (e.yGamepiecePointsStddev + 1)
+                                  (final AllTeamData e) => isPoints
+                                      ? (e.yStddevGamepiecePoints + 1)
                                           .roundToDouble()
                                       : (e.gamepiecesStddev + 1)
                                           .roundToDouble(),
@@ -217,19 +227,4 @@ class _ScatterState extends State<Scatter> {
       ),
     );
   }
-}
-
-class ScatterData {
-  const ScatterData(
-    this.gamepiecePointsAvg,
-    this.yGamepiecePointsStddev,
-    this.team,
-    this.avgGamepieces,
-    this.gamepiecesStddev,
-  );
-  final LightTeam team;
-  final double gamepiecePointsAvg;
-  final double yGamepiecePointsStddev;
-  final double avgGamepieces;
-  final double gamepiecesStddev;
 }
