@@ -28,59 +28,61 @@ class CompareSpiderChart extends StatelessWidget {
                   .toList(),
               numberOfFeatures: 5,
               data: data
-                  .map((final TeamData team) => <double>[
-                        100 *
-                            PointGiver.autoAmp
-                                .calcPoints(team.aggregateData.avgAutoAmp) /
-                            (PointGiver.autoAmp.calcPoints(
-                                  team.aggregateData.avgAutoAmp,
-                                ) +
-                                PointGiver.autoSpeaker.calcPoints(
-                                  team.aggregateData.avgAutoSpeaker,
-                                )),
-                        100 *
-                            PointGiver.autoSpeaker.calcPoints(
-                              team.aggregateData.avgAutoSpeaker,
-                            ) /
-                            (PointGiver.autoAmp.calcPoints(
-                                  team.aggregateData.avgAutoAmp,
-                                ) +
-                                PointGiver.autoSpeaker.calcPoints(
-                                  team.aggregateData.avgAutoSpeaker,
-                                )),
-                        100 *
-                            PointGiver.teleAmp
-                                .calcPoints(team.aggregateData.avgTeleAmp) /
-                            (PointGiver.teleAmp.calcPoints(
-                                  team.aggregateData.avgTeleAmp,
-                                ) +
-                                PointGiver.teleSpeaker.calcPoints(
-                                  team.aggregateData.avgTeleSpeaker,
-                                )),
-                        100 *
-                            PointGiver.teleSpeaker.calcPoints(
-                              team.aggregateData.avgTeleSpeaker,
-                            ) /
-                            (PointGiver.teleAmp.calcPoints(
-                                  team.aggregateData.avgTeleAmp,
-                                ) +
-                                PointGiver.teleSpeaker.calcPoints(
-                                  team.aggregateData.avgTeleSpeaker,
-                                )),
-                        100 *
-                            team.technicalMatches
-                                .where(
-                                  (final TechnicalMatchData element) =>
-                                      element.climb == Climb.climbed,
-                                )
-                                .length /
-                            team.technicalMatches.length,
-                      ]
-                          .map<int>(
-                            (final double e) =>
-                                e.isNaN || e.isInfinite ? 0 : e.toInt(),
-                          )
-                          .toList())
+                  .map(
+                    (final TeamData team) => <double>[
+                      100 *
+                          PointGiver.autoAmp
+                              .calcPoints(team.aggregateData.avgAutoAmp) /
+                          (PointGiver.autoAmp.calcPoints(
+                                team.aggregateData.avgAutoAmp,
+                              ) +
+                              PointGiver.autoSpeaker.calcPoints(
+                                team.aggregateData.avgAutoSpeaker,
+                              )),
+                      100 *
+                          PointGiver.autoSpeaker.calcPoints(
+                            team.aggregateData.avgAutoSpeaker,
+                          ) /
+                          (PointGiver.autoAmp.calcPoints(
+                                team.aggregateData.avgAutoAmp,
+                              ) +
+                              PointGiver.autoSpeaker.calcPoints(
+                                team.aggregateData.avgAutoSpeaker,
+                              )),
+                      100 *
+                          PointGiver.teleAmp
+                              .calcPoints(team.aggregateData.avgTeleAmp) /
+                          (PointGiver.teleAmp.calcPoints(
+                                team.aggregateData.avgTeleAmp,
+                              ) +
+                              PointGiver.teleSpeaker.calcPoints(
+                                team.aggregateData.avgTeleSpeaker,
+                              )),
+                      100 *
+                          PointGiver.teleSpeaker.calcPoints(
+                            team.aggregateData.avgTeleSpeaker,
+                          ) /
+                          (PointGiver.teleAmp.calcPoints(
+                                team.aggregateData.avgTeleAmp,
+                              ) +
+                              PointGiver.teleSpeaker.calcPoints(
+                                team.aggregateData.avgTeleSpeaker,
+                              )),
+                      100 *
+                          team.technicalMatches
+                              .where(
+                                (final TechnicalMatchData element) =>
+                                    element.climb == Climb.climbed,
+                              )
+                              .length /
+                          team.technicalMatches.length,
+                    ]
+                        .map<int>(
+                          (final double e) =>
+                              e.isNaN || e.isInfinite ? 0 : e.toInt(),
+                        )
+                        .toList(),
+                  )
                   .toList(),
               ticks: const <int>[0, 25, 50, 75, 100],
               features: const <String>[
