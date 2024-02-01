@@ -37,31 +37,33 @@ class PitData {
   final List<String>? faultMessages;
   final LightTeam team;
 
-  static PitData parse(final dynamic pit) => PitData(
-        driveTrainType:
-            driveTrainTitleToEnum(pit["drivetrain"]["title"] as String),
-        driveMotorAmount: pit["drive_motor_amount"] as int,
-        driveMotorType:
-            driveMotorTitleToEnum(pit["drivemotor"]["title"] as String),
-        driveWheelType:
-            driveWheelTitleToEnum(pit["wheel_type"]["title"] as String),
-        gearboxPurchased: pit["gearbox_purchased"] as bool?,
-        notes: pit["notes"] as String,
-        hasShifer: pit["has_shifter"] as bool?,
-        url: pit["url"] as String,
-        faultMessages: (pit["team"]["faults"] as List<dynamic>)
-            .map((final dynamic fault) => fault["message"] as String)
-            .toList(),
-        weight: (pit["weight"] as num).toDouble(),
-        team: LightTeam(
-          pit["team"]["id"] as int,
-          pit["team"]["number"] as int,
-          pit["team"]["name"] as String,
-          pit["team"]["colors_index"] as int,
-        ),
-        height: (pit["height"] as num).toDouble(),
-        harmony: pit["harmony"] as bool,
-        trap: pit["trap"] as int,
-        hasBuddyClimb: pit["has_buddy_climb"] as bool,
-      );
+  static PitData? parse(final dynamic pit) => pit["drivetrain"] != null
+      ? PitData(
+          driveTrainType:
+              driveTrainTitleToEnum(pit["drivetrain"]["title"] as String),
+          driveMotorAmount: pit["drive_motor_amount"] as int,
+          driveMotorType:
+              driveMotorTitleToEnum(pit["drivemotor"]["title"] as String),
+          driveWheelType:
+              driveWheelTitleToEnum(pit["wheel_type"]["title"] as String),
+          gearboxPurchased: pit["gearbox_purchased"] as bool?,
+          notes: pit["notes"] as String,
+          hasShifer: pit["has_shifter"] as bool?,
+          url: pit["url"] as String,
+          faultMessages: (pit["team"]["faults"] as List<dynamic>)
+              .map((final dynamic fault) => fault["message"] as String)
+              .toList(),
+          weight: (pit["weight"] as num).toDouble(),
+          team: LightTeam(
+            pit["team"]["id"] as int,
+            pit["team"]["number"] as int,
+            pit["team"]["name"] as String,
+            pit["team"]["colors_index"] as int,
+          ),
+          height: (pit["height"] as num).toDouble(),
+          harmony: pit["harmony"] as bool,
+          trap: pit["trap"] as int,
+          hasBuddyClimb: pit["has_buddy_climb"] as bool,
+        )
+      : null;
 }
