@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/helpers.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -28,6 +29,17 @@ subscription FetchAllTeams {
           tele_amp_missed
           tele_amp
         }
+        stddev {
+          auto_amp
+          auto_amp_missed
+          auto_speaker
+          auto_speaker_missed
+          tele_amp_missed
+          tele_speaker
+          tele_speaker_missed
+          tele_amp
+          trap_amount
+        }
       }
       nodes {
         climb {
@@ -40,9 +52,19 @@ subscription FetchAllTeams {
         }
       }
     }
+    technical_matches{
+      auto_amp
+          auto_amp_missed
+          auto_speaker
+          auto_speaker_missed
+          trap_amount
+          tele_speaker_missed
+          tele_speaker
+          tele_amp_missed
+          tele_amp
+    }
   }
 }
-
 
 """;
 
@@ -64,6 +86,8 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
             final dynamic avg =
                 team["technical_matches_aggregate"]["aggregate"]["avg"];
             final bool nullValidator = avg["auto_amp"] == null;
+            final dynamic stddev =
+                team["technical_matches_aggregate"]["aggregate"]["stddev"];
             final double autoGamepieceMissed = nullValidator
                 ? double.nan
                 : (avg["auto_amp_missed"] as double) +
@@ -72,9 +96,18 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                 ? double.nan
                 : (avg["tele_amp_missed"] as double) +
                     (avg["tele_speaker_missed"] as double);
+
+            final List<dynamic> matches =
+                team["technical_matches"] as List<dynamic>;
+
+            final double gamepiecesStddev = stddev["auto_cones_top"] == null
+                ? 0
+                : getPieces(parseMatch(stddev));
+
             final double gamepiecePointsAvg = nullValidator
                 ? double.nan
                 : getPoints<double>(parseMatch<double>(avg));
+
             final double autoGamepieceAvg = nullValidator
                 ? double.nan
                 : getPieces<double>(
@@ -83,6 +116,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                       avg,
                     ),
                   );
+
             final double teleGamepieceAvg = nullValidator
                 ? double.nan
                 : getPieces<double>(
@@ -91,9 +125,24 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                       avg,
                     ),
                   );
+
             final double gamepieceSum = nullValidator
                 ? double.nan
                 : getPieces<double>(parseMatch<double>(avg));
+
+            final Iterable<double> matchesGamepiecePoints = matches
+                .map((final dynamic match) => getPoints(parseMatch(match)));
+
+            final double yStddevGamepiecePoints =
+                matchesGamepiecePoints.isNotEmpty
+                    ? matchesGamepiecePoints
+                        .map(
+                          (final double matchPoints) =>
+                              (matchPoints - gamepiecePointsAvg).abs(),
+                        )
+                        .average
+                    : 0;
+
             final double avgTraps =
                 nullValidator ? double.nan : avg["trap_amount"] as double;
             final int firstPicklistIndex = team["first_picklist_index"] as int;
@@ -119,6 +168,8 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                         robotMatchStatus != RobotMatchStatus.worked,
                   )
                   .length,
+              gamepiecesStddev: gamepiecesStddev,
+              yStddevGamepiecePoints: yStddevGamepiecePoints,
               autoGamepieceAvg: autoGamepieceAvg,
               teleGamepieceAvg: teleGamepieceAvg,
               gamepieceAvg: gamepieceSum,

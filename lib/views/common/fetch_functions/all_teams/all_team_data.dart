@@ -14,7 +14,11 @@ class AllTeamData {
     required this.amountOfMatches,
     required this.matchesClimbed,
     required this.trapAverage,
+    required this.yStddevGamepiecePoints,
+    required this.gamepiecesStddev,
   });
+  final double gamepiecesStddev;
+  final double yStddevGamepiecePoints;
   final LightTeam team;
   final int firstPicklistIndex;
   final int secondPicklistIndex;
