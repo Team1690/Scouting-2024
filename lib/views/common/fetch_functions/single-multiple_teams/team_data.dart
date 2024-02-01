@@ -23,7 +23,7 @@ class TeamData {
   final List<SpecificMatchData> specificMatches;
   final List<FaultEntry> faultEntrys;
   final AggregateData aggregateData;
-  final PitData pitData;
+  final PitData? pitData;
   final SpecificSummaryData summaryData;
   final LightTeam lightTeam;
   final int firstPicklistIndex;
