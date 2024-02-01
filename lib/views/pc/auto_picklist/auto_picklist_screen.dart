@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/fetch_all_teams.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
@@ -9,7 +11,6 @@ import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/pc/auto_picklist/auto_picklist_widget.dart";
 import "package:scouting_frontend/views/pc/auto_picklist/value_sliders.dart";
-import "package:scouting_frontend/views/pc/picklist/fetch_picklist.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
 
 class AutoPickListScreen extends StatefulWidget {
@@ -114,11 +115,11 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
               hasValues
                   ? Padding(
                       padding: const EdgeInsets.all(defaultPadding),
-                      child: StreamBuilder<List<PickListTeam>>(
-                        stream: fetchPicklist(),
+                      child: StreamBuilder<List<AllTeamData>>(
+                        stream: fetchAllTeams(),
                         builder: (
                           final BuildContext context,
-                          final AsyncSnapshot<List<PickListTeam>> snapshot,
+                          final AsyncSnapshot<List<AllTeamData>> snapshot,
                         ) {
                           if (snapshot.hasError) {
                             return Text(snapshot.error.toString());
@@ -137,7 +138,7 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
                           final List<AutoPickListTeam> teamsList =
                               snapshot.data!
                                   .map(
-                                    (final PickListTeam e) => AutoPickListTeam(
+                                    (final AllTeamData e) => AutoPickListTeam(
                                       //TODO initialize actual data using the fetched data from the query
                                       factor1: 1,
                                       factor2: 1,
@@ -251,6 +252,9 @@ void save(
                   : e.thirdListIndex,
               taken: e.taken,
               team: e.team,
+              faultMessages: <String>[],
+              avgTeleGamepieces: 0,
+              avgAutoGamepieces: 0,
             ),
           )
           .map(

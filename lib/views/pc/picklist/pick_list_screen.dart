@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/fetch_all_teams.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
-import "package:scouting_frontend/views/pc/picklist/fetch_picklist.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
 import "package:scouting_frontend/views/pc/picklist/picklist_card.dart";
 
@@ -25,11 +26,11 @@ class PickListScreen extends StatelessWidget {
 
   Padding pickList(final BuildContext context) => Padding(
         padding: const EdgeInsets.all(defaultPadding),
-        child: StreamBuilder<List<PickListTeam>>(
-          stream: fetchPicklist(),
+        child: StreamBuilder<List<AllTeamData>>(
+          stream: fetchAllTeams(),
           builder: (
             final BuildContext context,
-            final AsyncSnapshot<List<PickListTeam>> snapshot,
+            final AsyncSnapshot<List<AllTeamData>> snapshot,
           ) {
             if (snapshot.hasError) {
               return Text(snapshot.error.toString());
@@ -49,7 +50,7 @@ class PickListScreen extends StatelessWidget {
 }
 
 void save(
-  final List<PickListTeam> teams, [
+  final List<AllTeamData> teams, [
   final BuildContext? context,
 ]) async {
   if (context != null) {
@@ -82,14 +83,14 @@ void save(
   final Map<String, dynamic> vars = <String, dynamic>{
     "objects": teams
         .map(
-          (final PickListTeam e) => <String, dynamic>{
+          (final AllTeamData e) => <String, dynamic>{
             "id": e.team.id,
             "name": e.team.name,
             "number": e.team.number,
             "colors_index": e.team.colorsIndex,
-            "first_picklist_index": e.firstListIndex,
-            "second_picklist_index": e.secondListIndex,
-            "third_picklist_index": e.thirdListIndex,
+            "first_picklist_index": e.firstPicklistIndex,
+            "second_picklist_index": e.secondPicklistIndex,
+            "third_picklist_index": e.thirdPickListIndex,
             "taken": e.taken,
           },
         )

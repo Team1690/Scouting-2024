@@ -1,3 +1,4 @@
+import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/helpers.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -14,6 +15,7 @@ subscription FetchAllTeams {
     number
     first_picklist_index
     second_picklist_index
+    third_picklist_index
     colors_index
     technical_matches_aggregate {
       aggregate {
@@ -40,8 +42,13 @@ subscription FetchAllTeams {
         }
       }
     }
+    taken
+    faults {
+      message
+    }
   }
 }
+
 
 
 """;
@@ -99,6 +106,11 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
             final int firstPicklistIndex = team["first_picklist_index"] as int;
             final int secondPicklistIndex =
                 team["second_picklist_index"] as int;
+            final bool taken = team["taken"] as bool;
+            final List<String> faultMessages =
+                team["faults"]["message"] as List<String>;
+
+            final int thirdPicklistIndex = team["third_picklist_index"] as int;
             return AllTeamData(
               amountOfMatches: (team["technical_matches_aggregate"]["nodes"]
                       as List<dynamic>)
@@ -128,6 +140,9 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
               firstPicklistIndex: firstPicklistIndex,
               secondPicklistIndex: secondPicklistIndex,
               trapAverage: avgTraps,
+              thirdPickListIndex: thirdPicklistIndex,
+              taken: taken,
+              faultMessages: faultMessages,
             );
           }).toList();
         },

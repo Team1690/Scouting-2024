@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/common/card.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
@@ -8,14 +9,14 @@ class PicklistCard extends StatefulWidget {
   PicklistCard({
     required this.initialData,
   });
-  final List<PickListTeam> initialData;
+  final List<AllTeamData> initialData;
 
   @override
   State<PicklistCard> createState() => _PicklistCardState();
 }
 
 class _PicklistCardState extends State<PicklistCard> {
-  late List<PickListTeam> data = widget.initialData;
+  late List<AllTeamData> data = widget.initialData;
 
   CurrentPickList currentPickList = CurrentPickList.first;
   @override
@@ -77,21 +78,21 @@ class _PicklistCardState extends State<PicklistCard> {
             },
           ),
           IconButton(
-            onPressed: () => save(List<PickListTeam>.from(data), context),
+            onPressed: () => save(List<AllTeamData>.from(data), context),
             icon: const Icon(Icons.save),
           ),
           IconButton(
             tooltip: "Sort taken",
             onPressed: () {
               setState(() {
-                final List<PickListTeam> teamsUntaken = data
-                    .where((final PickListTeam element) => !element.taken)
+                final List<AllTeamData> teamsUntaken = data
+                    .where((final AllTeamData element) => !element.taken)
                     .toList();
-                final Iterable<PickListTeam> teamsTaken =
-                    data.where((final PickListTeam element) => element.taken);
-                data = teamsUntaken..addAll(teamsTaken);
+                final Iterable<AllTeamData> teamsTaken =
+                    data.where((final AllTeamData element) => element.taken);
+                data = (teamsUntaken..addAll(teamsTaken));
                 for (int i = 0; i < data.length; i++) {
-                  currentPickList.setIndex(data[i], i);
+                  currentPickList.setIndex(data[i] as PickListTeam, i);
                 }
               });
             },
@@ -101,7 +102,7 @@ class _PicklistCardState extends State<PicklistCard> {
         title: "",
         body: PickList(
           uiList: data,
-          onReorder: (final List<PickListTeam> list) => setState(() {
+          onReorder: (final List<AllTeamData> list) => setState(() {
             data = list;
           }),
           screen: currentPickList,

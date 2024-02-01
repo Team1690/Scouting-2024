@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info_data.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
@@ -218,7 +219,7 @@ class AutoPickListTeam {
     required this.picklistTeam,
   });
 
-  final PickListTeam picklistTeam;
+  final AllTeamData picklistTeam;
   final double factor1;
   final double factor2;
   final double facotr3;
