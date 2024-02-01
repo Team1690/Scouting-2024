@@ -1,12 +1,8 @@
 import "package:flutter/material.dart";
-import "package:graphql/client.dart";
-import "package:scouting_frontend/models/helpers.dart";
-import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
-import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
-
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/fetch_all_teams.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 
@@ -190,33 +186,3 @@ DataCell show(final double value, [final bool isPercent = false]) => DataCell(
             : "${value.toStringAsFixed(2)}${isPercent ? "%" : ""}",
       ),
     );
-
-// class _Team {
-//   const _Team({
-//     required this.autoBalancePercentage,
-//     required this.autoGamepieceAvg,
-//     required this.teleGamepieceAvg,
-//     required this.gamepieceAvg,
-//     required this.team,
-//     required this.autoBalancePointsAvg,
-//     required this.endgameBalancePointsAvg,
-//     required this.gamepiecePointAvg,
-//     required this.brokenMatches,
-//     required this.amountOfMatches,
-//     required this.matchesBalanced,
-//     required this.deliveredAvg,
-//   });
-//   final double autoGamepieceAvg;
-//   final double teleGamepieceAvg;
-//   final double gamepieceAvg;
-//   final double deliveredAvg;
-//   final LightTeam team;
-//   final double gamepiecePointAvg;
-//   final double autoBalancePointsAvg;
-//   final double endgameBalancePointsAvg;
-//   final double autoBalancePercentage;
-//   final int brokenMatches;
-//   final int amountOfMatches;
-//   final int matchesBalanced;
-// }
-
