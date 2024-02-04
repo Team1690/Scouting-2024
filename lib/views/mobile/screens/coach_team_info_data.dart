@@ -1,12 +1,9 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/views/common/card.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/fetch_single_team.dart";
 import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
-import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting_card.dart";
-import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
 
 class CoachTeamData extends StatelessWidget {
   const CoachTeamData(this.team);
@@ -37,7 +34,7 @@ class CoachTeamData extends StatelessWidget {
                     (final TeamData data) => CarouselWithIndicator(
                       enableInfininteScroll: true,
                       initialPage: 0,
-                      widgets: <Widget>[
+                      widgets: const <Widget>[
                         // Padding(
                         //   padding: const EdgeInsets.all(10.0),
                         //   child: DashboardCard(

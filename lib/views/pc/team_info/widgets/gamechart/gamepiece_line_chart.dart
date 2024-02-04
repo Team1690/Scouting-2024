@@ -15,29 +15,30 @@ class GamepiecesLineChart extends StatelessWidget {
               Align(
                 alignment: const Alignment(-0.4, -1),
                 child: Row(
-                  children: [
-                    if (isPC(context)) ...[
+                  children: <Widget>[
+                    if (isPC(context)) ...<Widget>[
                       RichText(
-                          text: const TextSpan(
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: " Full Defense ",
-                            style: TextStyle(color: Colors.green),
-                          ),
-                          TextSpan(
-                            text: " Half Defense ",
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                          TextSpan(
-                            text: " Didnt Come ",
-                            style: TextStyle(color: Colors.purple),
-                          ),
-                          TextSpan(
-                            text: " Didnt Work ",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ],
-                      )),
+                        text: const TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: " Full Defense ",
+                              style: TextStyle(color: Colors.green),
+                            ),
+                            TextSpan(
+                              text: " Half Defense ",
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                            TextSpan(
+                              text: " Didnt Come ",
+                              style: TextStyle(color: Colors.purple),
+                            ),
+                            TextSpan(
+                              text: " Didnt Work ",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                     const Spacer(),
                     RichText(

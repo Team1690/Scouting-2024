@@ -25,13 +25,17 @@ class QuickDataCard extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                              "Avg Auto Amp: ${data.autoAmpAvg.toStringAsFixed(1)}"),
+                            "Avg Auto Amp: ${data.autoAmpAvg.toStringAsFixed(1)}",
+                          ),
                           Text(
-                              "Avg Tele Amp: ${data.teleAmpAvg.toStringAsFixed(1)}"),
+                            "Avg Tele Amp: ${data.teleAmpAvg.toStringAsFixed(1)}",
+                          ),
                           Text(
-                              "Avg Total Amp: ${(data.teleAmpAvg + data.autoAmpAvg).toStringAsFixed(1)}"),
+                            "Avg Total Amp: ${(data.teleAmpAvg + data.autoAmpAvg).toStringAsFixed(1)}",
+                          ),
                           Text(
-                              "Max Total Amp: ${(data.bestAmpGamepiecesSum).toStringAsFixed(1)}"),
+                            "Max Total Amp: ${(data.bestAmpGamepiecesSum).toStringAsFixed(1)}",
+                          ),
                         ],
                       ),
                       Column(
@@ -41,13 +45,17 @@ class QuickDataCard extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                              "Avg Auto Speaker: ${data.autoSpeakerAvg.toStringAsFixed(1)}"),
+                            "Avg Auto Speaker: ${data.autoSpeakerAvg.toStringAsFixed(1)}",
+                          ),
                           Text(
-                              "Avg Tele Speaker: ${data.teleSpeakerAvg.toStringAsFixed(1)}"),
+                            "Avg Tele Speaker: ${data.teleSpeakerAvg.toStringAsFixed(1)}",
+                          ),
                           Text(
-                              "Avg Total Speaker: ${(data.teleSpeakerAvg + data.autoSpeakerAvg).toStringAsFixed(1)}"),
+                            "Avg Total Speaker: ${(data.teleSpeakerAvg + data.autoSpeakerAvg).toStringAsFixed(1)}",
+                          ),
                           Text(
-                              "Max Total Speaker: ${(data.bestSpeakerGamepiecesSum).toStringAsFixed(1)}"),
+                            "Max Total Speaker: ${(data.bestSpeakerGamepiecesSum).toStringAsFixed(1)}",
+                          ),
                         ],
                       ),
                       Column(
@@ -69,7 +77,8 @@ class QuickDataCard extends StatelessWidget {
                             "Avg Trap Amount: ${data.avgTrapAmount.toStringAsFixed(1)}",
                           ),
                           Text(
-                              "Trap Success Rate: ${data.trapSuccessRate.isNaN ? "No Data" : "${data.trapSuccessRate.toStringAsFixed(1)}%"}")
+                            "Trap Success Rate: ${data.trapSuccessRate.isNaN ? "No Data" : "${data.trapSuccessRate.toStringAsFixed(1)}%"}",
+                          ),
                         ],
                       ),
                       Column(
@@ -85,11 +94,14 @@ class QuickDataCard extends StatelessWidget {
                             "Can Harmony: ${data.canHarmony ?? "No Data"}",
                           ),
                           Text(
-                              "Matches Climbed 1: ${data.matchesClimbedSingle}"),
+                            "Matches Climbed 1: ${data.matchesClimbedSingle}",
+                          ),
                           Text(
-                              "Matches Climbed 2: ${data.matchesClimbedDouble}"),
+                            "Matches Climbed 2: ${data.matchesClimbedDouble}",
+                          ),
                           Text(
-                              "Matches Climbed 3: ${data.matchesClimbedTriple}"),
+                            "Matches Climbed 3: ${data.matchesClimbedTriple}",
+                          ),
                         ],
                       ),
                       Column(

@@ -46,12 +46,15 @@ class Gamechart extends StatelessWidget {
                       context,
                       <List<int>>[
                         data.technicalMatches
-                            .map((final TechnicalMatchData e) =>
-                                e.autoGamepieces)
+                            .map(
+                              (final TechnicalMatchData e) => e.autoGamepieces,
+                            )
                             .toList(),
                         data.technicalMatches
-                            .map((final TechnicalMatchData e) =>
-                                e.autoSpeakerMissed + e.autoAmpMissed)
+                            .map(
+                              (final TechnicalMatchData e) =>
+                                  e.autoSpeakerMissed + e.autoAmpMissed,
+                            )
                             .toList(),
                       ],
                       "Auto Gamepieces",
@@ -62,12 +65,16 @@ class Gamechart extends StatelessWidget {
                       context,
                       <List<int>>[
                         data.technicalMatches
-                            .map((final TechnicalMatchData e) =>
-                                e.autoSpeaker + e.teleSpeaker)
+                            .map(
+                              (final TechnicalMatchData e) =>
+                                  e.autoSpeaker + e.teleSpeaker,
+                            )
                             .toList(),
                         data.technicalMatches
-                            .map((final TechnicalMatchData e) =>
-                                e.autoSpeakerMissed + e.teleSpeakerMissed)
+                            .map(
+                              (final TechnicalMatchData e) =>
+                                  e.autoSpeakerMissed + e.teleSpeakerMissed,
+                            )
                             .toList(),
                       ],
                       "Total Speaker",
@@ -78,12 +85,16 @@ class Gamechart extends StatelessWidget {
                       context,
                       <List<int>>[
                         data.technicalMatches
-                            .map((final TechnicalMatchData e) =>
-                                e.autoAmp + e.teleAmp)
+                            .map(
+                              (final TechnicalMatchData e) =>
+                                  e.autoAmp + e.teleAmp,
+                            )
                             .toList(),
                         data.technicalMatches
-                            .map((final TechnicalMatchData e) =>
-                                e.autoAmpMissed + e.teleAmpMissed)
+                            .map(
+                              (final TechnicalMatchData e) =>
+                                  e.autoAmpMissed + e.teleAmpMissed,
+                            )
                             .toList(),
                       ],
                       "Total Amp",
@@ -109,32 +120,33 @@ class Gamechart extends StatelessWidget {
                   ),
                   TitledLineChart(
                     data: getTitledData(
-                        context,
-                        <List<int>>[
-                          data.technicalMatches
-                              .map(
-                                (final TechnicalMatchData match) => match
-                                            .robotFieldStatus.name !=
-                                        RobotFieldStatus.didntComeToField.name
-                                    ? match.climb.title
-                                    : Climb.noAttempt.title,
-                              )
-                              .toList()
-                              .map<int>((final String title) {
-                            switch (title) {
-                              case "Failed":
-                                return 0;
-                              case "No Attempt":
-                                return -1;
-                              case "Climbed":
-                                return 1;
-                              case "Buddy Climbed":
-                                return 2;
-                            }
-                            throw Exception("Not a climb value");
-                          }).toList(),
-                        ],
-                        "Climb"),
+                      context,
+                      <List<int>>[
+                        data.technicalMatches
+                            .map(
+                              (final TechnicalMatchData match) =>
+                                  match.robotFieldStatus.name !=
+                                          RobotFieldStatus.didntComeToField.name
+                                      ? match.climb.title
+                                      : Climb.noAttempt.title,
+                            )
+                            .toList()
+                            .map<int>((final String title) {
+                          switch (title) {
+                            case "Failed":
+                              return 0;
+                            case "No Attempt":
+                              return -1;
+                            case "Climbed":
+                              return 1;
+                            case "Buddy Climbed":
+                              return 2;
+                          }
+                          throw Exception("Not a climb value");
+                        }).toList(),
+                      ],
+                      "Climb",
+                    ),
                     heightToTitles: const <int, String>{
                       -1: "No Attempt",
                       0: "Failed",
@@ -142,7 +154,8 @@ class Gamechart extends StatelessWidget {
                       2: "Buddy Climbed",
                     },
                   ),
-                  GamepiecesLineChart(getGamepieceChartData(
+                  GamepiecesLineChart(
+                    getGamepieceChartData(
                       context,
                       <List<int>>[
                         data.technicalMatches
@@ -152,12 +165,17 @@ class Gamechart extends StatelessWidget {
                             .map((final TechnicalMatchData e) => e.trapsMissed)
                             .toList(),
                       ],
-                      "Trap Amount"))
+                      "Trap Amount",
+                    ),
+                  ),
                 ],
               ),
       );
   LineChartData getTitledData(
-          final BuildContext context, List<List<int>> points, String title) =>
+    final BuildContext context,
+    final List<List<int>> points,
+    final String title,
+  ) =>
       LineChartData(
         gameNumbers: data.technicalMatches
             .map(

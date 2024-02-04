@@ -17,79 +17,116 @@ class ScoutingSpecific extends StatefulWidget {
 class _ScoutingSpecificState extends State<ScoutingSpecific> {
   @override
   Widget build(final BuildContext context) => SingleChildScrollView(
-      primary: false,
-      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        getSummaryText(
-            "Driving",
-            widget.msgs.drivingText,
-            widget.matchesData
-                .map((e) => e.drivetrainAndDriving == null
-                    ? null
-                    : (e.drivetrainAndDriving!, e.matchNumber))
-                .whereNotNull()
-                .toList()),
-        getSummaryText(
-            "Speaker",
-            widget.msgs.speakerText,
-            widget.matchesData
-                .map((e) =>
-                    e.speaker == null ? null : (e.speaker!, e.matchNumber))
-                .whereNotNull()
-                .toList()),
-        getSummaryText(
-            "Amp",
-            widget.msgs.ampText,
-            widget.matchesData
-                .map((e) => e.amp == null ? null : (e.amp!, e.matchNumber))
-                .whereNotNull()
-                .toList()),
-        getSummaryText(
-            "Intake",
-            widget.msgs.intakeText,
-            widget.matchesData
-                .map(
-                    (e) => e.intake == null ? null : (e.intake!, e.matchNumber))
-                .whereNotNull()
-                .toList()),
-        getSummaryText(
-            "Climb",
-            widget.msgs.climbText,
-            widget.matchesData
-                .map((e) => e.climb == null ? null : (e.climb!, e.matchNumber))
-                .whereNotNull()
-                .toList()),
-        getSummaryText(
-            "General",
-            widget.msgs.generalText,
-            widget.matchesData
-                .map((e) =>
-                    e.general == null ? null : (e.general!, e.matchNumber))
-                .whereNotNull()
-                .toList()),
-        getSummaryText(
-            "Defense",
-            widget.msgs.defenseText,
-            widget.matchesData
-                .map((e) =>
-                    e.defense == null ? null : (e.defense!, e.matchNumber))
-                .whereNotNull()
-                .toList()),
-        //TODO add a button to autoScreen when complete
-      ]));
+        primary: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            getSummaryText(
+              "Driving",
+              widget.msgs.drivingText,
+              widget.matchesData
+                  .map(
+                    (final SpecificMatchData e) =>
+                        e.drivetrainAndDriving == null
+                            ? null
+                            : (e.drivetrainAndDriving!, e.matchNumber),
+                  )
+                  .whereNotNull()
+                  .toList(),
+            ),
+            getSummaryText(
+              "Speaker",
+              widget.msgs.speakerText,
+              widget.matchesData
+                  .map(
+                    (final SpecificMatchData e) =>
+                        e.speaker == null ? null : (e.speaker!, e.matchNumber),
+                  )
+                  .whereNotNull()
+                  .toList(),
+            ),
+            getSummaryText(
+              "Amp",
+              widget.msgs.ampText,
+              widget.matchesData
+                  .map(
+                    (final SpecificMatchData e) =>
+                        e.amp == null ? null : (e.amp!, e.matchNumber),
+                  )
+                  .whereNotNull()
+                  .toList(),
+            ),
+            getSummaryText(
+              "Intake",
+              widget.msgs.intakeText,
+              widget.matchesData
+                  .map(
+                    (final SpecificMatchData e) =>
+                        e.intake == null ? null : (e.intake!, e.matchNumber),
+                  )
+                  .whereNotNull()
+                  .toList(),
+            ),
+            getSummaryText(
+              "Climb",
+              widget.msgs.climbText,
+              widget.matchesData
+                  .map(
+                    (final SpecificMatchData e) =>
+                        e.climb == null ? null : (e.climb!, e.matchNumber),
+                  )
+                  .whereNotNull()
+                  .toList(),
+            ),
+            getSummaryText(
+              "General",
+              widget.msgs.generalText,
+              widget.matchesData
+                  .map(
+                    (final SpecificMatchData e) =>
+                        e.general == null ? null : (e.general!, e.matchNumber),
+                  )
+                  .whereNotNull()
+                  .toList(),
+            ),
+            getSummaryText(
+              "Defense",
+              widget.msgs.defenseText,
+              widget.matchesData
+                  .map(
+                    (final SpecificMatchData e) =>
+                        e.defense == null ? null : (e.defense!, e.matchNumber),
+                  )
+                  .whereNotNull()
+                  .toList(),
+            ),
+            //TODO add a button to autoScreen when complete
+          ],
+        ),
+      );
 
-  Widget getSummaryText(final String title, final String text,
-      final List<(int, int)> ratingsToMatches) {
+  Widget getSummaryText(
+    final String title,
+    final String text,
+    final List<(int, int)> ratingsToMatches,
+  ) {
     final (String, Color) rating = getRating(
-        ratingsToMatches.map((e) => e.$1).toList().averageOrNull ?? 0);
+      ratingsToMatches
+              .map((final (int, int) e) => e.$1)
+              .toList()
+              .averageOrNull ??
+          0,
+    );
     return text.isNotEmpty
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ViewRatingDropdownLine(
-                  label: "$title (${rating.$1})",
-                  color: rating.$2,
-                  ratingToMatch: ratingsToMatches),
+                label: "$title (${rating.$1})",
+                color: rating.$2,
+                ratingToMatch: ratingsToMatches,
+              ),
               Text(
                 text,
                 textAlign: TextAlign.right,
@@ -100,15 +137,16 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                     element,
                     const SizedBox(
                       height: 5,
-                    )
+                    ),
                   ],
                 )
-                .toList())
+                .toList(),
+          )
         : Container();
   }
 }
 
-(String, Color) getRating(double numeralRating) {
+(String, Color) getRating(final double numeralRating) {
   switch (numeralRating.round()) {
     case 1:
       return ("F", Colors.red);
@@ -135,7 +173,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
   }
 }
 
-class ViewRatingDropdownLine<T> extends StatefulWidget {
+class ViewRatingDropdownLine extends StatefulWidget {
   ViewRatingDropdownLine({
     required this.color,
     required this.label,
@@ -146,11 +184,10 @@ class ViewRatingDropdownLine<T> extends StatefulWidget {
   final List<(int, int)> ratingToMatch;
 
   @override
-  State<ViewRatingDropdownLine<T>> createState() =>
-      _ViewRatingDropdownLineState<T>();
+  State<ViewRatingDropdownLine> createState() => _ViewRatingDropdownLineState();
 }
 
-class _ViewRatingDropdownLineState<T> extends State<ViewRatingDropdownLine<T>> {
+class _ViewRatingDropdownLineState extends State<ViewRatingDropdownLine> {
   bool isPressed = false;
 
   @override
@@ -176,12 +213,15 @@ class _ViewRatingDropdownLineState<T> extends State<ViewRatingDropdownLine<T>> {
             secondChild: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ...widget.ratingToMatch.map((e) => Tooltip(
+                ...widget.ratingToMatch.map(
+                  (final (int, int) e) => Tooltip(
                     message: "match number: ${e.$2}",
                     child: Text(
                       "${getRating(e.$1.toDouble()).$1}, ",
                       style: TextStyle(color: getRating(e.$1.toDouble()).$2),
-                    )))
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
