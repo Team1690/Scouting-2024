@@ -78,7 +78,10 @@ query FetchTeams($ids: [Int!]) @cached {
       schedule_match {
         match_number
         id
+        match_type_id
       }
+      
+      is_rematch
       auto_amp
       auto_amp_missed
       auto_speaker

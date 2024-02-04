@@ -189,7 +189,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                   )
                   .where(
                     (final String title) =>
-                        title != "No attempt" && title != "Failed",
+                        title != "No Attempt" && title != "Failed",
                   )
                   .length,
               brokenMatches: robotFieldStatuses
