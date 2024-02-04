@@ -77,6 +77,7 @@ class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
           general_text
           intake_text
           speaker_text
+          defense_text
         }
       }
 """;
@@ -101,6 +102,7 @@ class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
             drivingText: specificSummary[0]["driving_text"] as String,
             speakerText: specificSummary[0]["speaker_text"] as String,
             generalText: specificSummary[0]["general_text"] as String,
+            defenseText: specificSummary[0]["defense_text"] as String,
           );
         },
       ),
@@ -113,6 +115,7 @@ class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
 
 class SummaryEntry {
   const SummaryEntry({
+    required this.defenseText,
     required this.intakeText,
     required this.climbText,
     required this.drivingText,
@@ -126,6 +129,7 @@ class SummaryEntry {
   final String ampText;
   final String speakerText;
   final String generalText;
+  final String defenseText;
 
   @override
   String toString() =>

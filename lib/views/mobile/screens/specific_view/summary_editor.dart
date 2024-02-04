@@ -36,6 +36,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
     generalController.text = widget.summaryEntry?.generalText ?? "";
     climbController.text = widget.summaryEntry?.climbText ?? "";
     drivingController.text = widget.summaryEntry?.drivingText ?? "";
+    defenseController.text = widget.summaryEntry?.drivingText ?? "";
   }
 
   bool isEnabled = false;
@@ -45,6 +46,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
   final TextEditingController generalController = TextEditingController();
   final TextEditingController intakeController = TextEditingController();
   final TextEditingController speakerController = TextEditingController();
+  final TextEditingController defenseController = TextEditingController();
   @override
   Widget build(final BuildContext context) => Column(
         children: <Widget>[
@@ -67,6 +69,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
                   "driving_text": drivingController.text,
                   "general_text": generalController.text,
                   "intake_text": intakeController.text,
+                  "defense_text": defenseController.text,
                 },
                 mutation: widget.summaryEntry == null
                     ? _insertMutation
@@ -136,6 +139,16 @@ class _SummaryEditorState extends State<SummaryEditor> {
             controller: drivingController,
             label: "Driving",
           ),
+          SpecificSummaryTextField(
+            onTextChanged: () {
+              setState(() {
+                isEnabled = false;
+              });
+            },
+            isEnabled: isEnabled,
+            controller: drivingController,
+            label: "Defense",
+          ),
         ],
       );
 }
@@ -148,6 +161,7 @@ const String _insertMutation = """
     \$general_text: String, 
     \$intake_text: String, 
     \$speaker_text: String, 
+    \$defense_text: String, 
     \$team_id: Int) {
   insert_specific_summary(
     objects: {
@@ -157,6 +171,7 @@ const String _insertMutation = """
       general_text: \$general_text, 
       intake_text: \$intake_text, 
       speaker_text: \$speaker_text, 
+      defense_text: \$defense_text, 
       team_id: \$team_id}) {
     affected_rows
   }
@@ -165,8 +180,8 @@ const String _insertMutation = """
 """;
 
 const String _updateMutation = """
-mutation MyMutation(\$team_id: Int, \$amp_text: String, \$climb_text: String, \$driving_text: String, \$general_text: String, \$intake_text: String, \$speaker_text: String) {
-  update_specific_summary(where: {team_id: {_eq: \$team_id}}, _set: {amp_text: \$amp_text, climb_text: \$climb_text, driving_text: \$driving_text, general_text: \$general_text, intake_text: \$intake_text, speaker_text: \$speaker_text}) {
+mutation MyMutation(\$team_id: Int, \$amp_text: String, \$climb_text: String, \$driving_text: String, \$general_text: String, \$intake_text: String, \$speaker_text: String, \$defense_text: String) {
+  update_specific_summary(where: {team_id: {_eq: \$team_id}}, _set: {amp_text: \$amp_text, climb_text: \$climb_text, driving_text: \$driving_text, general_text: \$general_text, intake_text: \$intake_text, speaker_text: \$speaker_text, defense_text: \$defense_text}) {
     affected_rows
   }
 }
