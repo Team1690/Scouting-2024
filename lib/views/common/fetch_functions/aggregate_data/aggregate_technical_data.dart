@@ -7,6 +7,7 @@ class AggregateData {
     required this.avgTeleSpeaker,
     required this.avgAutoSpeaker,
     required this.avgTrapAmount,
+    required this.avgTrapsMissed,
     required this.avgAutoAmp,
     required this.avgTeleAmp,
     required this.maxAutoSpeakerMissed,
@@ -35,6 +36,7 @@ class AggregateData {
   final double avgTeleSpeaker;
   final double avgAutoSpeaker;
   final double avgTrapAmount;
+  final double avgTrapsMissed;
   final double avgAutoAmp;
   final double avgTeleAmp;
   final int maxAutoSpeakerMissed;
@@ -70,6 +72,7 @@ class AggregateData {
         avgAutoAmp: aggregateTable["avg"]["auto_amp"] as double? ?? 0,
         avgTeleAmp: aggregateTable["avg"]["tele_amp"] as double? ?? 0,
         avgTrapAmount: aggregateTable["avg"]["trap_amount"] as double? ?? 0,
+        avgTrapsMissed: aggregateTable["avg"]["traps_missed"] as double? ?? 0,
         maxAutoSpeakerMissed:
             aggregateTable["max"]["auto_speaker_missed"] as int? ?? 0,
         maxTeleSpeakerMissed:

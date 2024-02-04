@@ -25,6 +25,7 @@ query FetchTeams($ids: [Int!]) @cached {
           tele_speaker
           tele_speaker_missed
           trap_amount
+          traps_missed
         }
         max {
           auto_amp
@@ -36,8 +37,9 @@ query FetchTeams($ids: [Int!]) @cached {
           tele_speaker
           tele_speaker_missed
           trap_amount
+          traps_missed
         }
-        min{
+        min {
           auto_amp
           auto_amp_missed
           auto_speaker
@@ -47,6 +49,7 @@ query FetchTeams($ids: [Int!]) @cached {
           tele_speaker
           tele_speaker_missed
           trap_amount
+          traps_missed
         }
       }
     }
@@ -93,6 +96,7 @@ query FetchTeams($ids: [Int!]) @cached {
         title
       }
       harmony_with
+      trapsMissed
     }
     name
     number
@@ -158,6 +162,7 @@ query FetchTeams($ids: [Int!]) @cached {
     }
   }
 }
+
 
 """;
 
