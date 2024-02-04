@@ -23,6 +23,7 @@ class TechnicalMatchData {
     required this.autoAmp,
     required this.teleAmp,
     required this.climb,
+    required this.scheduleMatchId,
   });
 
   final RobotMatchStatus robotFieldStatus;
@@ -43,6 +44,7 @@ class TechnicalMatchData {
   final int teleAmp;
   final int autoAmp;
   final Climb climb;
+  final int scheduleMatchId;
 
   static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
         teleSpeakerMissed: match["tele_speaker_missed"] as int,
@@ -65,5 +67,6 @@ class TechnicalMatchData {
         autoGamepieces: getPieces(parseByMode(MatchMode.auto, match)),
         teleGamepieces: getPieces(parseByMode(MatchMode.tele, match)),
         gamepieces: getPieces(parseMatch(match)),
+        scheduleMatchId: match["schedule_match"]["id"] as int,
       );
 }
