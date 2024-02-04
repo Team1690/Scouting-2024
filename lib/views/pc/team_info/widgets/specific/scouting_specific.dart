@@ -1,13 +1,14 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
-import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
+import "package:scouting_frontend/views/common/fetch_functions/specific_summary_data.dart";
+import "package:scouting_frontend/views/mobile/section_divider.dart";
 
 class ScoutingSpecific extends StatefulWidget {
-  const ScoutingSpecific({required this.selectorValue, required this.msg});
-  final String selectorValue;
-  final SpecificData msg;
+  const ScoutingSpecific({required this.msgs, required this.matchesData});
+  final SpecificSummaryData msgs;
+  final List<SpecificMatchData> matchesData;
 
   @override
   State<ScoutingSpecific> createState() => _ScoutingSpecificState();
@@ -15,224 +16,165 @@ class ScoutingSpecific extends StatefulWidget {
 
 class _ScoutingSpecificState extends State<ScoutingSpecific> {
   @override
+  Widget build(final BuildContext context) => SingleChildScrollView(
+      primary: false,
+      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        getSummaryText(
+            "Driving",
+            widget.msgs.drivingText,
+            widget.matchesData
+                .map((e) => e.drivetrainAndDriving == null
+                    ? null
+                    : (e.drivetrainAndDriving!, e.matchNumber))
+                .whereNotNull()
+                .toList()),
+        getSummaryText(
+            "Speaker",
+            widget.msgs.speakerText,
+            widget.matchesData
+                .map((e) =>
+                    e.speaker == null ? null : (e.speaker!, e.matchNumber))
+                .whereNotNull()
+                .toList()),
+        getSummaryText(
+            "Amp",
+            widget.msgs.ampText,
+            widget.matchesData
+                .map((e) => e.amp == null ? null : (e.amp!, e.matchNumber))
+                .whereNotNull()
+                .toList()),
+        getSummaryText(
+            "Intake",
+            widget.msgs.intakeText,
+            widget.matchesData
+                .map(
+                    (e) => e.intake == null ? null : (e.intake!, e.matchNumber))
+                .whereNotNull()
+                .toList()),
+        getSummaryText(
+            "Climb",
+            widget.msgs.climbText,
+            widget.matchesData
+                .map((e) => e.climb == null ? null : (e.climb!, e.matchNumber))
+                .whereNotNull()
+                .toList()),
+        getSummaryText(
+            "General",
+            widget.msgs.generalText,
+            widget.matchesData
+                .map((e) =>
+                    e.general == null ? null : (e.general!, e.matchNumber))
+                .whereNotNull()
+                .toList()), //TODO add defense after new sppecific changes are introduced
+        //TODO add a button to autoScreen when complete
+      ]));
+
+  Widget getSummaryText(final String title, final String text,
+      final List<(int, int)> ratingsToMatches) {
+    final (String, Color) rating = getRating(
+        ratingsToMatches.map((e) => e.$1).toList().averageOrNull ?? 0);
+    return text.isNotEmpty
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ViewRatingDropdownLine(
+                  label: "$title (${rating.$1})",
+                  color: rating.$2,
+                  ratingToMatch: ratingsToMatches),
+              Text(
+                text,
+                textAlign: TextAlign.right,
+              ),
+            ]
+                .expand(
+                  (final Widget element) => <Widget>[
+                    element,
+                    const SizedBox(
+                      height: 5,
+                    )
+                  ],
+                )
+                .toList())
+        : Container();
+  }
+}
+
+(String, Color) getRating(double numeralRating) {
+  switch (numeralRating.round()) {
+    case 1:
+      return ("F", Colors.red);
+    case 2:
+      return ("F", Colors.red);
+    case 3:
+      return ("D", Colors.orange);
+    case 4:
+      return ("D", Colors.orange);
+    case 5:
+      return ("C", Colors.yellow);
+    case 6:
+      return ("C", Colors.yellow);
+    case 7:
+      return ("B", Colors.green);
+    case 8:
+      return ("B", Colors.green);
+    case 9:
+      return ("A", const Color.fromARGB(255, 30, 124, 33));
+    case 10:
+      return ("A", const Color.fromARGB(255, 30, 124, 33));
+    default:
+      return ("No Data", Colors.white);
+  }
+}
+
+class ViewRatingDropdownLine<T> extends StatefulWidget {
+  ViewRatingDropdownLine({
+    required this.color,
+    required this.label,
+    required this.ratingToMatch,
+  });
+  final String label;
+  final Color color;
+  final List<(int, int)> ratingToMatch;
+
+  @override
+  State<ViewRatingDropdownLine<T>> createState() =>
+      _ViewRatingDropdownLineState<T>();
+}
+
+class _ViewRatingDropdownLineState<T> extends State<ViewRatingDropdownLine<T>> {
+  bool isPressed = false;
+
+  @override
   Widget build(final BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SingleChildScrollView(
-            primary: false,
-            child: Column(
-              children: widget.msg.msg
-                  .map<Widget>(
-                    (final SpecificMatchData e) => e
-                            .isNull(widget.selectorValue)
-                        ? Container()
-                        : Card(
-                            // shape: ,
-                            elevation: 10,
-                            color: bgColor,
-                            margin: const EdgeInsets.fromLTRB(
-                              5,
-                              0,
-                              5,
-                              defaultPadding,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(defaultPadding),
-                              child: Column(
-                                children: <Widget>[
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          "${e.isRematch ? "Re " : ""}${IdProvider.of(context).matchType.idToName[e.matchTypeId].toString()} ${e.matchNumber}",
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          "${e.scouterNames}\n",
-                                          style: const TextStyle(height: 0.7),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        (e.drivetrainAndDriving != null &&
-                                                (widget.selectorValue ==
-                                                        "All" ||
-                                                    widget.selectorValue ==
-                                                        "Drivetrain And Driving"))
-                                            ? Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: <Widget>[
-                                                  const Text(
-                                                    "הנעה ונהיגה:",
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    style: TextStyle(
-                                                      color: primaryWhite,
-                                                      fontSize: 15,
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    e.drivetrainAndDriving!
-                                                        .toString(),
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    style: const TextStyle(
-                                                      color: primaryWhite,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(),
-                                        (e.intake != null &&
-                                                (widget.selectorValue ==
-                                                        "All" ||
-                                                    widget.selectorValue ==
-                                                        "Intake"))
-                                            ? Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: <Widget>[
-                                                  const Text(
-                                                    "איסוף:",
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    style: TextStyle(
-                                                      color: primaryWhite,
-                                                      fontSize: 15,
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    e.intake!.toString(),
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    style: const TextStyle(
-                                                      color: primaryWhite,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(),
-                                        (e.amp != null &&
-                                                (widget.selectorValue ==
-                                                        "All" ||
-                                                    widget.selectorValue ==
-                                                        "Placement"))
-                                            ? Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: <Widget>[
-                                                  const Text(
-                                                    "הנחה:",
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    style: TextStyle(
-                                                      color: primaryWhite,
-                                                      fontSize: 15,
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    e.amp!.toString(),
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    style: const TextStyle(
-                                                      color: primaryWhite,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(),
-                                        (e.defense != null &&
-                                                (widget.selectorValue ==
-                                                        "All" ||
-                                                    widget.selectorValue ==
-                                                        "Defense"))
-                                            ? Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: <Widget>[
-                                                  const Text(
-                                                    "הגנה:",
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    style: TextStyle(
-                                                      color: primaryWhite,
-                                                      fontSize: 15,
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    e.defense!.toString(),
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    style: const TextStyle(
-                                                      color: primaryWhite,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(),
-                                        (e.general != null &&
-                                                (widget.selectorValue ==
-                                                        "All" ||
-                                                    widget.selectorValue ==
-                                                        "General Notes"))
-                                            ? Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: <Widget>[
-                                                  const Text(
-                                                    "הערות כלליות:",
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    style: TextStyle(
-                                                      color: primaryWhite,
-                                                      fontSize: 15,
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    e.general!.toString(),
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                    style: const TextStyle(
-                                                      color: primaryWhite,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                  )
-                  .toList(),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isPressed = !isPressed;
+              });
+            },
+            child: SectionDivider(
+              label: widget.label,
+              color: widget.color,
+            ),
+          ),
+          AnimatedCrossFade(
+            duration: const Duration(milliseconds: 300),
+            crossFadeState: !isPressed
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            firstChild: Container(),
+            secondChild: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ...widget.ratingToMatch.map((e) => Tooltip(
+                    message: "match number: ${e.$2}",
+                    child: Text(
+                      "${getRating(e.$1.toDouble()).$1}, ",
+                      style: TextStyle(color: getRating(e.$1.toDouble()).$2),
+                    )))
+              ],
             ),
           ),
         ],
