@@ -42,7 +42,7 @@ class _PitViewState extends State<PitView> {
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
   FormFieldValidator<String> _numericValidator(final String error) =>
-      (final String? text) => int.tryParse(text ?? "").onNull(error);
+      (final String? text) => double.tryParse(text ?? "").onNull(error);
 
   void resetFrame() {
     setState(() {
@@ -291,9 +291,6 @@ class _PitViewState extends State<PitView> {
                         );
                       },
                       keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
                       decoration: const InputDecoration(
                         labelText: "Weight",
                         prefixIcon: Icon(Icons.fitness_center),
@@ -309,13 +306,10 @@ class _PitViewState extends State<PitView> {
                       controller: heightController,
                       onChanged: (final String height) {
                         vars = vars.copyWith(
-                          height: () => double.tryParse(height) ?? 0,
+                          height: () => double.tryParse(height),
                         );
                       },
                       keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
                       decoration: const InputDecoration(
                         labelText: "Height",
                         prefixIcon: Icon(Icons.swap_vert_rounded),
@@ -474,84 +468,18 @@ class _PitViewState extends State<PitView> {
 }
 
 const String insertMutation = r"""
-          mutation InsertPit(
-              $url: String,
-              $drive_motor_amount: Int,
-              $drivemotor_id: Int,
-              $drivetrain_id: Int,
-              $wheel_type_id: Int,
-              $other_wheel_type: String,
-              $gearbox_purchased: Boolean,
-              $notes:String,
-              $has_shifter:Boolean,
-              $team_id:Int,
-              $weight:Int,
-              $height: Int,
-              $harmonize: Boolean,
-              $trap: Int,
-              $has_buddy_climb: Boolean,
-              ) {
-          insert_pit(objects: {
-          url: $url,
-          drive_motor_amount: $drive_motor_amount,
-          drivemotor_id: $drivemotor_id,
-          drivetrain_id: $drivetrain_id,
-          wheel_type_id: $wheel_type_id,
-          other_wheel_type: $other_wheel_type,
-          gearbox_purchased: $gearbox_purchased,
-          notes: $notes,
-          has_shifter: $has_shifter,
-          team_id: $team_id,
-          weight:  $weight,
-          height: $height,
-          harmony: $harmonize,
-          trap: $trap,
-          has_buddy_climb: $has_buddy_climb,
-          }) {
-              returning {
-                url
-              }
-          }
-          }
-          """;
-
-const String updateMutation = r"""
-          mutation UpdatePit(
-              $drive_motor_amount: Int,
-              $drivemotor_id: Int,
-              $drivetrain_id: Int,
-              $wheel_type_id: Int,
-              $other_wheel_type: String,
-              $gearbox_purchased: Boolean,
-              $notes:String,
-              $has_shifter:Boolean,
-              $team_id:Int,
-              $weight:Int,
-              $height: Int,
-              $harmony: Boolean,
-              $trap: Int,
-              $has_buddy_climb: Boolean,
-              ) {
-          update_pit(where: {team_id: {_eq: $team_id}}, _set: {
-          drive_motor_amount: $drive_motor_amount,
-          drivemotor_id: $drivemotor_id,
-          drivetrain_id: $drivetrain_id,
-          wheel_type_id: $wheel_type_id
-          other_wheel_Type: $other_wheel_type,
-          gearbox_purchased: $gearbox_purchased,
-          notes: $notes,
-          has_shifter: $has_shifter,
-          team_id: $team_id,
-          weight:  $weight,
-          height: $height,
-          harmony: $harmonize,
-          trap: $trap
-          has_buddy_climb: $has_buddy_climb,
-          }) {
+mutation InsertPit($drive_motor_amount: Int, $drivemotor_id: Int, $drivetrain_id: Int, $wheel_type_id: Int, $other_wheel_type: String, $gearbox_purchased: Boolean!, $notes: String, $has_shifter: Boolean, $team_id: Int, $weight: float8!, $height: float8!, $harmony: Boolean!, $trap: Int!, $has_buddy_climb: Boolean!, $url: String!) {
+  insert_pit(objects: [{drive_motor_amount: $drive_motor_amount, drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, wheel_type_id: $wheel_type_id, other_wheel_type: $other_wheel_type, gearbox_purchased: $gearbox_purchased, notes: $notes, has_shifter: $has_shifter, team_id: $team_id, weight: $weight, height: $height, harmony: $harmony, trap: $trap, has_buddy_climb: $has_buddy_climb, url: $url}]) {
     affected_rows
   }
-          }
-          """;
+}""";
+
+const String updateMutation = r"""
+mutation UpdatePit($drive_motor_amount: Int, $drivemotor_id: Int, $drivetrain_id: Int, $wheel_type_id: Int, $other_wheel_type: String, $gearbox_purchased: Boolean!, $notes: String, $has_shifter: Boolean, $team_id: Int, $weight: float8!, $height: float8!, $harmony: Boolean!, $trap: Int!, $has_buddy_climb: Boolean!, $url: String!) {
+  update_pit(where: {team_id: {_eq: $team_id}}, _set: {drive_motor_amount: $drive_motor_amount, drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, wheel_type_id: $wheel_type_id, other_wheel_type: $other_wheel_type, gearbox_purchased: $gearbox_purchased, notes: $notes, has_shifter: $has_shifter, team_id: $team_id, weight: $weight, height: $height, harmony: $harmony, trap: $trap, has_buddy_climb: $has_buddy_climb, url: $url}) {
+    affected_rows
+  }
+}""";
 
 Stream<List<LightTeam>> fetchTeamsWithoutPit() => getClient()
     .subscribe(
