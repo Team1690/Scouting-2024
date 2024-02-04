@@ -1,5 +1,6 @@
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/fetch_functions/aggregate_data/aggregate_technical_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
 
 class AllTeamData {
   //TODO: make const + add copywith
@@ -21,6 +22,8 @@ class AllTeamData {
     required this.matchesClimbed,
     required this.aggregateData,
     required this.aim,
+    required this.pitData,
+    required this.harmony,
   });
   final LightTeam team;
   int firstPicklistIndex;
@@ -36,7 +39,9 @@ class AllTeamData {
   final double workedPercentage;
   final double climbedPercentage;
   final double aim;
+  final bool harmony;
   bool taken;
+  final PitData? pitData;
   final AggregateData aggregateData;
   final List<String> faultMessages;
 

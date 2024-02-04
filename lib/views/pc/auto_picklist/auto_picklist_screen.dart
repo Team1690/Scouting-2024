@@ -279,6 +279,8 @@ void save(
               climbedPercentage: e.climbedPercentage,
               aggregateData: e.aggregateData,
               aim: e.aim,
+              pitData: e.pitData,
+              harmony: e.harmony,
             ),
           )
           .map(

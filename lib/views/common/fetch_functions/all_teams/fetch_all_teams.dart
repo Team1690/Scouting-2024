@@ -6,6 +6,7 @@ import "package:scouting_frontend/views/common/fetch_functions/aggregate_data/ag
 import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
 import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
+import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 const String subscription = r"""
@@ -63,11 +64,53 @@ subscription FetchAllTeams {
         robot_field_status {
           title
         }
+        harmony_with
       }
     }
     taken
     faults {
       message
+    }
+    pit {
+      drive_motor_amount
+      drivemotor {
+        title
+      }
+      drivetrain {
+        title
+      }
+      gearbox_purchased
+      harmony
+      has_buddy_climb
+      has_shifter
+      height
+      notes
+      trap
+      url
+      weight
+      wheel_type {
+        title
+      }
+      other_wheel_type
+      team  {
+        faults {
+      message
+      fault_status {
+        title
+      }
+      match_number
+      match_type {
+        title
+      }
+      id
+      team {
+        name
+        number
+        id
+        colors_index
+      }
+    }
+      }
     }
   }
 }
@@ -188,8 +231,10 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                                   RobotFieldStatus.worked,
                         )
                         .length;
+            final dynamic pit = team["pit"];
 
             return AllTeamData(
+              pitData: PitData.parse(pit),
               amountOfMatches: (team["technical_matches_aggregate"]["nodes"]
                       as List<dynamic>)
                   .length,
@@ -229,6 +274,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                       AggregateData.parse(aggregateTable).avgAutoSpeakerMissed +
                       AggregateData.parse(aggregateTable).avgAutoAmpMissed +
                       gamepieceSum),
+              harmony: (team["harmony_with"] as double) != 0,
             );
           }).toList();
         },
