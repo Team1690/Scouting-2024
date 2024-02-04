@@ -1,4 +1,5 @@
 import "package:scouting_frontend/models/enums/climb_enum.dart";
+import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
@@ -6,6 +7,7 @@ import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class AllTeamData {
   AllTeamData({
+    required this.pitData,
     required this.technicalMatches,
     required this.team,
     required this.firstPicklistIndex,
@@ -23,6 +25,7 @@ class AllTeamData {
   int thirdPickListIndex;
   bool taken;
   final AggregateData aggregateData;
+  final PitData? pitData;
   final List<TechnicalMatchData> technicalMatches;
   final List<String> faultMessages;
 
@@ -60,6 +63,9 @@ class AllTeamData {
               (aggregateData.avgData.gamepieces +
                   aggregateData.avgData.totalMissed))
           .clamp(double.minPositive, double.maxFinite);
+  bool get harmony => technicalMatches
+      .where((final TechnicalMatchData element) => element.harmonyWith != 0)
+      .isNotEmpty;
   @override
   String toString() => "${team.name}  ${team.number}";
 }

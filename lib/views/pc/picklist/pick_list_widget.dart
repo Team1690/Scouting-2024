@@ -177,6 +177,22 @@ class _PickListState extends State<PickList> {
                                   "Matches: ${pickListTeam.aggregateData.gamesPlayed}",
                                 ),
                               ),
+                              Icon(
+                                pickListTeam.harmony
+                                    ? Icons.done_all_rounded
+                                    : (pickListTeam.pitData != null
+                                            ? pickListTeam.pitData!.harmony
+                                            : false)
+                                        ? Icons.check_circle_rounded
+                                        : Icons.priority_high_rounded,
+                                color: pickListTeam.harmony
+                                    ? Colors.blue
+                                    : (pickListTeam.pitData != null
+                                            ? pickListTeam.pitData!.harmony
+                                            : false)
+                                        ? Colors.grey
+                                        : Colors.amber,
+                              )
                             ]
                                 .expand(
                                   (final Widget element) => <Widget>[

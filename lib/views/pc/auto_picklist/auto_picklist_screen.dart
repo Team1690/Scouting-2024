@@ -267,6 +267,7 @@ void save(
               faultMessages: <String>[],
               aggregateData: e.aggregateData,
               technicalMatches: e.technicalMatches,
+              pitData: e.pitData,
             ),
           )
           .map(
