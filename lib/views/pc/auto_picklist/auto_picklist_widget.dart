@@ -37,75 +37,96 @@ class _AutoPickListState extends State<AutoPickList> {
                               children: <Widget>[
                                 ListTile(
                                   title: Row(
-                                    //TODO, the commented part should remain the same if you initialized a fault messages variable.
                                     children: <Widget>[
                                       Expanded(
-                                        flex: 2,
-                                        child: Row(
-                                          children: <Widget>[
-                                            const Spacer(),
-                                            Expanded(
-                                              child: Icon(
-                                                autoPickListTeam.faultMessages
-                                                    .fold(
-                                                  Icons.check,
-                                                  (final _, final __) =>
-                                                      Icons.warning,
-                                                ),
-                                                color: autoPickListTeam
-                                                    .faultMessages
-                                                    .fold(
-                                                  Colors.green,
-                                                  (final _, final __) =>
-                                                      Colors.yellow[700],
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                autoPickListTeam.faultMessages
-                                                        .mapNullable(
-                                                      (
-                                                        final List<String> p0,
-                                                      ) =>
-                                                          "Faults: ${p0.length}",
-                                                    ) ??
-                                                    "No faults",
-                                              ),
-                                            ),
-                                          ],
+                                        child: Text(
+                                          "Tele Amp\n Average: ${autoPickListTeam.aggregateData.avgData.teleAmp.toStringAsFixed(2)}",
+                                          textAlign: TextAlign.center,
                                         ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          "Tele Speaker\n Average: ${autoPickListTeam.aggregateData.avgData.teleSpeaker.toStringAsFixed(2)}",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          "Auto Amp\n Average: ${autoPickListTeam.aggregateData.avgData.autoAmp.toStringAsFixed(2)}",
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          "Auto Speaker\n Average: ${autoPickListTeam.aggregateData.avgData.autoSpeaker.toStringAsFixed(2)}",
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          "Trap Amount\n Average: ${autoPickListTeam.aggregateData.avgData.trapAmount.toStringAsFixed(2)}",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                ListTile(
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Icon(
+                                            autoPickListTeam.faultMessages.fold(
+                                              Icons.check,
+                                              (final _, final __) =>
+                                                  Icons.warning,
+                                            ),
+                                            color: autoPickListTeam
+                                                .faultMessages
+                                                .fold(
+                                              Colors.green,
+                                              (final _, final __) =>
+                                                  Colors.yellow[700],
+                                            ),
+                                          ),
+                                          Text(
+                                            autoPickListTeam.faultMessages
+                                                    .mapNullable(
+                                                  (
+                                                    final List<String> p0,
+                                                  ) =>
+                                                      "Faults: ${p0.length}",
+                                                ) ??
+                                                "No faults",
+                                          ),
+                                        ],
                                       ),
 
                                       //TODO display the rest of your variables
-                                      Expanded(
-                                        flex: 2,
-                                        child: ElevatedButton(
-                                          onPressed: () =>
-                                              Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute<TeamInfoScreen>(
-                                              builder: (
-                                                final BuildContext context,
-                                              ) =>
-                                                  TeamInfoScreen(
-                                                initalTeam:
-                                                    autoPickListTeam.team,
-                                              ),
+                                      ElevatedButton(
+                                        onPressed: () =>
+                                            Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute<TeamInfoScreen>(
+                                            builder: (
+                                              final BuildContext context,
+                                            ) =>
+                                                TeamInfoScreen(
+                                              initalTeam: autoPickListTeam.team,
                                             ),
                                           ),
-                                          child: const Text(
-                                            "Team info",
-                                          ),
+                                        ),
+                                        child: const Text(
+                                          "Team info",
                                         ),
                                       ),
-                                      const Spacer(),
                                     ],
                                   ),
                                 ),
                               ],
                               title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Expanded(
                                     flex: 1,
@@ -113,16 +134,27 @@ class _AutoPickListState extends State<AutoPickList> {
                                       autoPickListTeam.toString(),
                                     ),
                                   ),
-                                ]
-                                    .expand(
-                                      (final Widget element) => <Widget>[
-                                        const SizedBox(
-                                          width: 2,
-                                        ),
-                                        element,
-                                      ],
-                                    )
-                                    .toList(),
+                                  Expanded(
+                                    child: Text(
+                                      "Aim: ${autoPickListTeam.aim.toStringAsFixed(2)}%",
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      "Climbed: ${autoPickListTeam.climbPercentage.toStringAsFixed(2)}%",
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      "Worked: ${autoPickListTeam.workedPercentage.toStringAsFixed(2)}%",
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      "Matches: ${autoPickListTeam.aggregateData.gamesPlayed}",
+                                    ),
+                                  ),
+                                ],
                               ),
                               trailing: const SizedBox(),
                               leading: Row(
