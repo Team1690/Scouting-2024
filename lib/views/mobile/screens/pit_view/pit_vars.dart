@@ -105,7 +105,7 @@ class PitVars implements HasuraVars {
         "team_id": teamId,
         "weight": weight,
         "height": height,
-        "harmonize": harmony,
+        "harmony": harmony,
         "trap": trap,
         "has_buddy_climb": hasBuddyClimb,
       };

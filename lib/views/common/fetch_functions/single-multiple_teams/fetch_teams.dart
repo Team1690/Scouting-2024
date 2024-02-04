@@ -25,6 +25,7 @@ query FetchTeams($ids: [Int!]) @cached {
           tele_speaker
           tele_speaker_missed
           trap_amount
+          traps_missed
         }
         max {
           auto_amp
@@ -36,8 +37,9 @@ query FetchTeams($ids: [Int!]) @cached {
           tele_speaker
           tele_speaker_missed
           trap_amount
+          traps_missed
         }
-        min{
+        min {
           auto_amp
           auto_amp_missed
           auto_speaker
@@ -47,6 +49,7 @@ query FetchTeams($ids: [Int!]) @cached {
           tele_speaker
           tele_speaker_missed
           trap_amount
+          traps_missed
         }
       }
     }
@@ -65,6 +68,7 @@ query FetchTeams($ids: [Int!]) @cached {
       climb_rating
       amp_rating
       schedule_match {
+        id
         match_number
         match_type_id
       }
@@ -73,6 +77,7 @@ query FetchTeams($ids: [Int!]) @cached {
     technical_matches(where: {ignored: {_eq: false}}, order_by: [{schedule_match: {match_type: {order: asc}}}, {schedule_match: {match_number: asc}}, {is_rematch: asc}]) {
       schedule_match {
         match_number
+        id
       }
       auto_amp
       auto_amp_missed
@@ -91,6 +96,7 @@ query FetchTeams($ids: [Int!]) @cached {
         title
       }
       harmony_with
+      trapsMissed
     }
     name
     number
@@ -157,6 +163,7 @@ query FetchTeams($ids: [Int!]) @cached {
   }
 }
 
+
 """;
 
 Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
@@ -186,6 +193,7 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
           final dynamic pitTable = teamTable["pit"];
           final List<dynamic> faultTable = teamTable["faults"] as List<dynamic>;
           final dynamic specificSummaryTable = teamTable["specific_summary"];
+
           return TeamData(
             aggregateData: AggregateData.parse(aggregateTable),
             technicalMatches:

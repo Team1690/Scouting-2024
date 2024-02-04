@@ -5,6 +5,7 @@ import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.da
 
 class TechnicalMatchData {
   TechnicalMatchData({
+    required this.trapsMissed,
     required this.gamepiecesPoints,
     required this.teleSpeakerMissed,
     required this.autoSpeakerMissed,
@@ -23,9 +24,10 @@ class TechnicalMatchData {
     required this.autoAmp,
     required this.teleAmp,
     required this.climb,
+    required this.scheduleMatchId,
   });
 
-  final RobotMatchStatus robotFieldStatus;
+  final RobotFieldStatus robotFieldStatus;
   final int teleSpeakerMissed;
   final int autoSpeakerMissed;
   final int gamepiecesPoints;
@@ -38,16 +40,18 @@ class TechnicalMatchData {
   final int autoSpeaker;
   final int matchNumber;
   final int harmonyWith;
+  final int trapsMissed;
   final int trapAmount;
   final int gamepieces;
   final int teleAmp;
   final int autoAmp;
   final Climb climb;
+  final int scheduleMatchId;
 
   static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
         teleSpeakerMissed: match["tele_speaker_missed"] as int,
         autoSpeakerMissed: match["auto_speaker_missed"] as int,
-        robotFieldStatus: robotMatchStatusTitleToEnum(
+        robotFieldStatus: robotFieldStatusTitleToEnum(
           match["robot_field_status"]["title"] as String,
         ),
         climbingPoints: match["climb"]["points"] as int,
@@ -57,6 +61,7 @@ class TechnicalMatchData {
         autoSpeaker: match["auto_speaker"] as int,
         matchNumber: match["schedule_match"]["match_number"] as int,
         harmonyWith: match["harmony_with"] as int,
+        trapsMissed: match["traps_missed"] as int,
         trapAmount: match["trap_amount"] as int,
         autoAmp: match["auto_amp"] as int,
         teleAmp: match["tele_amp"] as int,
@@ -65,5 +70,6 @@ class TechnicalMatchData {
         autoGamepieces: getPieces(parseByMode(MatchMode.auto, match)),
         teleGamepieces: getPieces(parseByMode(MatchMode.tele, match)),
         gamepieces: getPieces(parseMatch(match)),
+        scheduleMatchId: match["schedule_match"]["id"] as int,
       );
 }

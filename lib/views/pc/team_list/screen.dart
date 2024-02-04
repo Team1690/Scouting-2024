@@ -266,10 +266,10 @@ Stream<List<_Team>> _fetchTeamList() => getClient()
                           node["endgame_balance"]["endgame_points"] as int,
                     )
                     .toList();
-            final List<RobotMatchStatus> robotMatchStatuses =
+            final List<RobotFieldStatus> robotMatchStatuses =
                 (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
                     .map(
-                      (final dynamic node) => robotMatchStatusTitleToEnum(
+                      (final dynamic node) => robotFieldStatusTitleToEnum(
                         node["robot_match_status"]["title"] as String,
                       ),
                     )
@@ -344,8 +344,8 @@ Stream<List<_Team>> _fetchTeamList() => getClient()
               autoBalancePercentage: autoBalancePercentage,
               brokenMatches: robotMatchStatuses
                   .where(
-                    (final RobotMatchStatus robotMatchStatus) =>
-                        robotMatchStatus != RobotMatchStatus.worked,
+                    (final RobotFieldStatus robotMatchStatus) =>
+                        robotMatchStatus != RobotFieldStatus.worked,
                   )
                   .length,
               autoGamepieceAvg: autoGamepieceAvg - autoGamepieceDelivered,

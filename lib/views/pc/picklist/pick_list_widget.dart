@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info_data.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
@@ -14,16 +14,16 @@ class PickList extends StatefulWidget {
     required this.onReorder,
   }) {
     uiList.sort(
-      (final PickListTeam a, final PickListTeam b) =>
+      (final AllTeamData a, final AllTeamData b) =>
           screen.getIndex(a).compareTo(screen.getIndex(b)),
     );
   }
   final CurrentPickList screen;
-  final void Function(List<PickListTeam> list) onReorder;
+  final void Function(List<AllTeamData> list) onReorder;
 
   @override
   State<PickList> createState() => _PickListState();
-  final List<PickListTeam> uiList;
+  final List<AllTeamData> uiList;
 }
 
 class _PickListState extends State<PickList> {
@@ -31,7 +31,7 @@ class _PickListState extends State<PickList> {
     if (newindex > oldindex) {
       newindex -= 1;
     }
-    final PickListTeam item = widget.uiList.removeAt(oldindex);
+    final AllTeamData item = widget.uiList.removeAt(oldindex);
     widget.uiList.insert(newindex, item);
     for (int i = 0; i < widget.uiList.length; i++) {
       widget.screen.setIndex(widget.uiList[i], i);
@@ -50,8 +50,8 @@ class _PickListState extends State<PickList> {
         buildDefaultDragHandles: true,
         primary: false,
         children: widget.uiList
-            .map<Widget>(
-              (final PickListTeam pickListTeam) => Card(
+            .map(
+              (final AllTeamData pickListTeam) => Card(
                 color: bgColor,
                 key: ValueKey<String>(pickListTeam.toString()),
                 elevation: 2,
@@ -67,51 +67,68 @@ class _PickListState extends State<PickList> {
                           children: <Widget>[
                             ListTile(
                               title: Row(
-                                //TODO, the commented part should remain the same if you initialized a fault messages variable.
                                 children: <Widget>[
-                                  // Expanded(
-                                  //   flex: 2,
-                                  //   child: Row(
-                                  //     children: <Widget>[
-                                  //       const Spacer(),
-                                  //       Expanded(
-                                  //         child: Icon(
-                                  //           pickListTeam.faultMessages.fold(
-                                  //             () => Icons.check,
-                                  //             (final List<String> _) =>
-                                  //                 Icons.warning,
-                                  //           ),
-                                  //           color:
-                                  //               pickListTeam.faultMessages.fold(
-                                  //             () => Colors.green,
-                                  //             (final List<String> _) =>
-                                  //                 Colors.yellow[700],
-                                  //           ),
-                                  //         ),
-                                  //       ),
-                                  //       Expanded(
-                                  //         flex: 2,
-                                  //         child: Text(
-                                  //           pickListTeam.faultMessages
-                                  //                   .mapNullable(
-                                  //                 (
-                                  //                   final List<String> p0,
-                                  //                 ) =>
-                                  //                     "Faults: ${p0.length}",
-                                  //               ) ??
-                                  //               "No faults",
-                                  //         ),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  // if (pickListTeam.amountOfMatches !=
-                                  //     0)
-
-                                  //TODO display the rest of your variables
                                   Expanded(
-                                    flex: 2,
-                                    child: ElevatedButton(
+                                    child: Text(
+                                      "Tele Amp\n Average: ${pickListTeam.aggregateData.avgTeleAmp.toStringAsFixed(2)}",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      "Tele Speaker\n Average: ${pickListTeam.aggregateData.avgTeleSpeaker.toStringAsFixed(2)}",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      "Auto Amp\n Average: ${pickListTeam.aggregateData.avgAutoAmp.toStringAsFixed(2)}",
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      "Auto Speaker\n Average: ${pickListTeam.aggregateData.avgAutoSpeaker.toStringAsFixed(2)}",
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      "Trap Amount\n Average: ${pickListTeam.aggregateData.avgTrapAmount.toStringAsFixed(2)}",
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ListTile(
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        pickListTeam.faultMessages.isEmpty
+                                            ? Icons.check
+                                            : Icons.warning,
+                                        color:
+                                            pickListTeam.faultMessages.isEmpty
+                                                ? Colors.green
+                                                : Colors.yellow[700],
+                                      ),
+                                      Text(
+                                        pickListTeam.faultMessages.mapNullable(
+                                              (
+                                                final List<String> p0,
+                                              ) =>
+                                                  "Faults: ${p0.length}",
+                                            ) ??
+                                            "No faults",
+                                      ),
+                                    ],
+                                  ),
+                                  if (pickListTeam.amountOfMatches != 0)
+
+                                    //TODO display the rest of your variables
+                                    ElevatedButton(
                                       onPressed: () =>
                                           Navigator.pushReplacement(
                                         context,
@@ -127,8 +144,6 @@ class _PickListState extends State<PickList> {
                                         "Team info",
                                       ),
                                     ),
-                                  ),
-                                  const Spacer(),
                                 ],
                               ),
                             ),
@@ -139,6 +154,16 @@ class _PickListState extends State<PickList> {
                                 flex: 1,
                                 child: Text(
                                   pickListTeam.toString(),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "Climbed: ${pickListTeam.climbedPercentage.toStringAsFixed(2)}%",
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "Worked: ${pickListTeam.workedPercentage.toStringAsFixed(2)}%",
                                 ),
                               ),
                             ]
@@ -168,13 +193,17 @@ class _PickListState extends State<PickList> {
                                   onFieldSubmitted: (final String value) =>
                                       setState(() {
                                     reorderData(
-                                      widget.screen.getIndex(pickListTeam),
+                                      widget.screen.getIndex(
+                                        pickListTeam,
+                                      ),
                                       int.tryParse(value).mapNullable(
                                             (final int parsedInt) =>
                                                 (parsedInt - 1) %
                                                 widget.uiList.length,
                                           ) ??
-                                          widget.screen.getIndex(pickListTeam),
+                                          widget.screen.getIndex(
+                                            pickListTeam,
+                                          ),
                                     );
                                   }),
                                 ),
@@ -226,20 +255,25 @@ class _PickListState extends State<PickList> {
                                     minLines: 1,
                                     maxLines: 1,
                                     style: const TextStyle(fontSize: 10),
-                                    controller: controllers[
-                                        widget.screen.getIndex(pickListTeam)],
+                                    controller:
+                                        controllers[widget.screen.getIndex(
+                                      pickListTeam,
+                                    )],
                                     keyboardType: TextInputType.number,
                                     onFieldSubmitted: (final String value) =>
                                         setState(() {
                                       reorderData(
-                                        widget.screen.getIndex(pickListTeam),
+                                        widget.screen.getIndex(
+                                          pickListTeam,
+                                        ),
                                         int.tryParse(value).mapNullable(
                                               (final int parsedInt) =>
                                                   (parsedInt - 1) %
                                                   widget.uiList.length,
                                             ) ??
-                                            widget.screen
-                                                .getIndex(pickListTeam),
+                                            widget.screen.getIndex(
+                                              pickListTeam,
+                                            ),
                                       );
                                     }),
                                   ),
@@ -278,24 +312,3 @@ int validateNumber(final int number) =>
     number < 0 ? throw ArgumentError("Invalid Team Number") : number;
 String validateName(final String name) =>
     name == "" ? throw ArgumentError("Invalid Team Name") : name;
-
-//TODO add season specific variables, make sure to include amountOfMatches and faultMessages which should always be useful.
-class PickListTeam {
-  PickListTeam({
-    required this.firstListIndex,
-    required this.secondListIndex,
-    required this.thirdListIndex,
-    required this.taken,
-    required this.team,
-  });
-
-  final LightTeam team;
-
-  int firstListIndex;
-  int secondListIndex;
-  int thirdListIndex;
-  bool taken;
-
-  @override
-  String toString() => "${team.name} ${team.number}";
-}
