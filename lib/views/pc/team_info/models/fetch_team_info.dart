@@ -139,7 +139,8 @@ Future<Team> fetchTeamInfo(
             (teamByPk["technical_matches"] as List<dynamic>);
 
         const SpecificData specificData = SpecificData(
-            <SpecificMatchData>[]); //this view will be deleted in a future pr
+          <SpecificMatchData>[],
+        ); //this view will be deleted in a future pr
 
         //TODO initialize and add season-specific variables and replace 0s
         final QuickData quickData = QuickData(
