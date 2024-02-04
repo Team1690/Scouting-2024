@@ -65,7 +65,15 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                 .map((e) =>
                     e.general == null ? null : (e.general!, e.matchNumber))
                 .whereNotNull()
-                .toList()), //TODO add defense after new sppecific changes are introduced
+                .toList()),
+        getSummaryText(
+            "Defense",
+            widget.msgs.defenseText,
+            widget.matchesData
+                .map((e) =>
+                    e.defense == null ? null : (e.defense!, e.matchNumber))
+                .whereNotNull()
+                .toList()),
         //TODO add a button to autoScreen when complete
       ]));
 
