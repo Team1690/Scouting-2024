@@ -20,11 +20,11 @@ class TeamData {
     required this.thirdPicklistIndex,
   });
   final List<TechnicalMatchData> technicalMatches;
-  final List<SpecificMatchData> specificMatches;
+  final List<SpecificMatchData?> specificMatches;
   final List<FaultEntry> faultEntrys;
   final AggregateData aggregateData;
   final PitData? pitData;
-  final SpecificSummaryData summaryData;
+  final SpecificSummaryData? summaryData;
   final LightTeam lightTeam;
   final int firstPicklistIndex;
   final int secondPicklistIndex;
