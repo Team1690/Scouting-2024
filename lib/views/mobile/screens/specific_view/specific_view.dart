@@ -144,7 +144,8 @@ class _SpecificState extends State<Specific> {
                                       snapshot.data!.isNotEmpty
                                   ? null
                                   : MaterialStateProperty.all<Color>(
-                                      Colors.grey),
+                                      Colors.grey,
+                                    ),
                             ),
                             onPressed: () async {
                               fieldImages =
@@ -214,7 +215,7 @@ class _SpecificState extends State<Specific> {
                                       ),
                                     ],
                                     isSelected: <bool>[
-                                      vars.faultMessage != null
+                                      vars.faultMessage != null,
                                     ],
                                     onPressed: (final int index) {
                                       assert(index == 0);
@@ -249,7 +250,8 @@ class _SpecificState extends State<Specific> {
                                     vars.copyWith(faultMessage: always(value));
                               },
                               decoration: const InputDecoration(
-                                  hintText: "Robot fault"),
+                                hintText: "Robot fault",
+                              ),
                             ),
                           ),
                           const SizedBox(
