@@ -1,4 +1,5 @@
 import "package:scouting_frontend/models/helpers.dart";
+import "package:scouting_frontend/models/matches_model.dart";
 import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
 import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
@@ -23,6 +24,7 @@ class TechnicalMatchData {
     required this.autoAmp,
     required this.teleAmp,
     required this.climb,
+    required this.scheduleMatchId,
   });
 
   final RobotMatchStatus robotFieldStatus;
@@ -43,6 +45,7 @@ class TechnicalMatchData {
   final int teleAmp;
   final int autoAmp;
   final Climb climb;
+  final int scheduleMatchId;
 
   static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
         teleSpeakerMissed: match["tele_speaker_missed"] as int,
@@ -65,5 +68,6 @@ class TechnicalMatchData {
         autoGamepieces: getPieces(parseByMode(MatchMode.auto, match)),
         teleGamepieces: getPieces(parseByMode(MatchMode.tele, match)),
         gamepieces: getPieces(parseMatch(match)),
+        scheduleMatchId: match["schedule_match"]["id"] as int,
       );
 }
