@@ -11,6 +11,7 @@ import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.da
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
 
 class TeamInfoData extends StatelessWidget {
   TeamInfoData(this.team);
@@ -49,14 +50,17 @@ class TeamInfoData extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // const SizedBox(width: defaultPadding),
-                    // Expanded(
-                    //   flex: 2,
-                    //   child: SpecificCard(data.specificData),
-                    // ),
-                    // const SizedBox(
-                    //   width: defaultPadding,
-                    // ),
+                    const SizedBox(width: defaultPadding),
+                    Expanded(
+                      flex: 2,
+                      child: SpecificCard(
+                        matchData: data.specificMatches,
+                        summaryData: data.summaryData,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: defaultPadding,
+                    ),
                     // Expanded(
                     //   flex: 2,
                     //   child: PitScouting(data.pitViewData),
@@ -118,11 +122,15 @@ QuickData getQuickdata(final TeamData data) => QuickData(
           .where((final TechnicalMatchData element) => element.harmonyWith == 2)
           .length,
       gamepiecePoints: data.technicalMatches
-          .map((final TechnicalMatchData e) => e.gamepiecesPoints)
-          .average,
+              .map((final TechnicalMatchData e) => e.gamepiecesPoints)
+              .toList()
+              .averageOrNull ??
+          0,
       gamepiecesScored: data.technicalMatches
-          .map((final TechnicalMatchData e) => e.gamepieces)
-          .average,
+              .map((final TechnicalMatchData e) => e.gamepieces)
+              .toList()
+              .averageOrNull ??
+          0,
       avgAutoSpeakerMissed: data.aggregateData.avgAutoSpeakerMissed,
       avgTeleSpeakerMissed: data.aggregateData.avgTeleSpeakerMissed,
       trapAmount: data.pitData?.trap,
