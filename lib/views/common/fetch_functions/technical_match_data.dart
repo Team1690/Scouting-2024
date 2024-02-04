@@ -25,6 +25,8 @@ class TechnicalMatchData {
     required this.teleAmp,
     required this.climb,
     required this.scheduleMatchId,
+    required this.matchTypeId,
+    required this.isRematch,
   });
 
   final RobotFieldStatus robotFieldStatus;
@@ -47,29 +49,32 @@ class TechnicalMatchData {
   final int autoAmp;
   final Climb climb;
   final int scheduleMatchId;
+  final int matchTypeId;
+  final bool isRematch;
 
   static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
-        teleSpeakerMissed: match["tele_speaker_missed"] as int,
-        autoSpeakerMissed: match["auto_speaker_missed"] as int,
-        robotFieldStatus: robotFieldStatusTitleToEnum(
-          match["robot_field_status"]["title"] as String,
-        ),
-        climbingPoints: match["climb"]["points"] as int,
-        teleAmpMissed: match["tele_amp_missed"] as int,
-        autoAmpMissed: match["auto_amp_missed"] as int,
-        teleSpeaker: match["tele_speaker"] as int,
-        autoSpeaker: match["auto_speaker"] as int,
-        matchNumber: match["schedule_match"]["match_number"] as int,
-        harmonyWith: match["harmony_with"] as int,
-        trapsMissed: match["traps_missed"] as int,
-        trapAmount: match["trap_amount"] as int,
-        autoAmp: match["auto_amp"] as int,
-        teleAmp: match["tele_amp"] as int,
-        climb: climbTitleToEnum(match["climb"]["title"] as String),
-        gamepiecesPoints: getPoints(parseMatch(match)),
-        autoGamepieces: getPieces(parseByMode(MatchMode.auto, match)),
-        teleGamepieces: getPieces(parseByMode(MatchMode.tele, match)),
-        gamepieces: getPieces(parseMatch(match)),
-        scheduleMatchId: match["schedule_match"]["id"] as int,
-      );
+      teleSpeakerMissed: match["tele_speaker_missed"] as int,
+      autoSpeakerMissed: match["auto_speaker_missed"] as int,
+      robotFieldStatus: robotFieldStatusTitleToEnum(
+        match["robot_field_status"]["title"] as String,
+      ),
+      climbingPoints: match["climb"]["points"] as int,
+      teleAmpMissed: match["tele_amp_missed"] as int,
+      autoAmpMissed: match["auto_amp_missed"] as int,
+      teleSpeaker: match["tele_speaker"] as int,
+      autoSpeaker: match["auto_speaker"] as int,
+      matchNumber: match["schedule_match"]["match_number"] as int,
+      harmonyWith: match["harmony_with"] as int,
+      trapsMissed: match["traps_missed"] as int,
+      trapAmount: match["trap_amount"] as int,
+      autoAmp: match["auto_amp"] as int,
+      teleAmp: match["tele_amp"] as int,
+      climb: climbTitleToEnum(match["climb"]["title"] as String),
+      gamepiecesPoints: getPoints(parseMatch(match)),
+      autoGamepieces: getPieces(parseByMode(MatchMode.auto, match)),
+      teleGamepieces: getPieces(parseByMode(MatchMode.tele, match)),
+      gamepieces: getPieces(parseMatch(match)),
+      scheduleMatchId: match["schedule_match"]["id"] as int,
+      isRematch: match["is_rematch"] as bool,
+      matchTypeId: match["schedule_match"]["match_type_id"] as int);
 }

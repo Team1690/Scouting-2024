@@ -8,6 +8,7 @@ import "package:scouting_frontend/views/common/fetch_functions/specific_match_da
 import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
+import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 
@@ -41,10 +42,10 @@ class TeamInfoData extends StatelessWidget {
                             child: QuickDataCard(getQuickdata(data)),
                           ),
                           const SizedBox(height: defaultPadding),
-                          // Expanded(
-                          //   flex: 6,
-                          //   child: Gamechart(data),
-                          // ),
+                          Expanded(
+                            flex: 6,
+                            child: Gamechart(data),
+                          ),
                         ],
                       ),
                     ),
@@ -85,21 +86,28 @@ QuickData getQuickdata(final TeamData data) => QuickData(
       climbPercentage: data.technicalMatches
               .where(
                 (final TechnicalMatchData element) =>
-                    element.climb.title == Climb.climbed.title ||
-                    element.climb.title == Climb.buddyClimbed.title,
-              )
-              .length /
-          data.technicalMatches
-              .where(
-                (final TechnicalMatchData element) =>
                     element.climb.title != Climb.noAttempt.title,
               )
-              .length *
-          100,
+              .isNotEmpty
+          ? data.technicalMatches
+                  .where(
+                    (final TechnicalMatchData element) =>
+                        element.climb.title == Climb.climbed.title ||
+                        element.climb.title == Climb.buddyClimbed.title,
+                  )
+                  .length /
+              data.technicalMatches
+                  .where(
+                    (final TechnicalMatchData element) =>
+                        element.climb.title != Climb.noAttempt.title,
+                  )
+                  .length *
+              100
+          : double.nan,
       matchesClimbedSingle: data.technicalMatches
           .where(
             (final TechnicalMatchData element) =>
-                element.robotFieldStatus.name == "Worked" &&
+                element.robotFieldStatus.name == RobotFieldStatus.worked.name &&
                 element.harmonyWith == 0,
           )
           .length,
