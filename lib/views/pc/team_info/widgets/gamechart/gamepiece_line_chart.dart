@@ -14,49 +14,47 @@ class GamepiecesLineChart extends StatelessWidget {
               const Spacer(),
               Align(
                 alignment: const Alignment(-0.4, -1),
-                child: RichText(
-                  text: TextSpan(
-                    children: <InlineSpan>[
-                      if (isPC(context)) ...<TextSpan>[
-                        const TextSpan(
-                          text: " Full Defense ",
-                          style: TextStyle(color: Colors.green),
-                        ),
-                        const TextSpan(
-                          text: " Half Defense ",
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                        const TextSpan(
-                          text: " Didnt Come ",
-                          style: TextStyle(color: Colors.purple),
-                        ),
-                        const TextSpan(
-                          text: " Didnt Work ",
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ],
-                      const TextSpan(
-                        text: " Top ",
-                        style: TextStyle(color: Colors.green),
-                      ),
-                      const TextSpan(
-                        text: " Mid ",
-                        style: TextStyle(color: Colors.yellow),
-                      ),
-                      const TextSpan(
-                        text: " Low ",
-                        style: TextStyle(color: Colors.orange),
-                      ),
-                      const TextSpan(
-                        text: " Delivered ",
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                      const TextSpan(
-                        text: " Failed ",
-                        style: TextStyle(color: Colors.red),
-                      ),
+                child: Row(
+                  children: [
+                    if (isPC(context)) ...[
+                      RichText(
+                          text: const TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: " Full Defense ",
+                            style: TextStyle(color: Colors.green),
+                          ),
+                          TextSpan(
+                            text: " Half Defense ",
+                            style: TextStyle(color: Colors.blue),
+                          ),
+                          TextSpan(
+                            text: " Didnt Come ",
+                            style: TextStyle(color: Colors.purple),
+                          ),
+                          TextSpan(
+                            text: " Didnt Work ",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      )),
                     ],
-                  ),
+                    const Spacer(),
+                    RichText(
+                      text: const TextSpan(
+                        children: <InlineSpan>[
+                          TextSpan(
+                            text: " Scored ",
+                            style: TextStyle(color: Colors.green),
+                          ),
+                          TextSpan(
+                            text: " Missed ",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -79,9 +77,6 @@ class GamepiecesLineChart extends StatelessWidget {
               gameNumbers: data.gameNumbers,
               inputedColors: const <Color>[
                 Colors.green,
-                Colors.yellow,
-                Colors.orange,
-                Colors.blue,
                 Colors.red,
               ],
               distanceFromHighest: 4,
