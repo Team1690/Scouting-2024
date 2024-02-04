@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
-import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/models/team_data/all_team_data.dart";
@@ -24,13 +23,14 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
   bool hasValues = false;
 
 //TODO rename to your selected factors and filters
-  double factor2 = 0.5;
-  double factor1 = 0.5;
-  double factor3 = 0.5;
+  double speakerFactor = 0.5;
+  double ampFactor = 0.5;
+  double climbFactor = 0.5;
+  double trapFactor = 0.5;
   bool filter = false;
   Picklists? saveAs;
 
-  List<AutoPickListTeam> localList = <AutoPickListTeam>[];
+  List<AllTeamData> localList = <AllTeamData>[];
 
   @override
   Widget build(final BuildContext context) => isPC(context)
@@ -57,16 +57,18 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
             children: <Widget>[
               ValueSliders(
                 onButtonPress: (
-                  final double slider0,
-                  final double slider1,
-                  final double slider2,
+                  final double climbSlider,
+                  final double ampSlider,
+                  final double speakerSlider,
+                  final double trapSlider,
                   final bool feeder,
                 ) =>
                     setState(() {
                   hasValues = true;
-                  factor1 = slider0;
-                  factor2 = slider1;
-                  factor3 = slider2;
+                  climbFactor = climbSlider;
+                  ampFactor = ampSlider;
+                  speakerFactor = speakerSlider;
+                  trapFactor = trapSlider;
                   filter = feeder;
                 }),
               ),
@@ -98,12 +100,11 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
                 color: Colors.blue,
                 onPress: () => save(
                   saveAs,
-                  List<AllTeamData>.from(
-                    localList.map(
-                      (final AutoPickListTeam autoTeam) =>
-                          autoTeam.picklistTeam,
-                    ),
-                  ),
+                  localList
+                      .map(
+                        (final AllTeamData autoTeam) => autoTeam,
+                      )
+                      .toList(),
                   context,
                 ),
                 icon: Icons.save_as,
@@ -120,72 +121,51 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
                         builder: (
                           final BuildContext context,
                           final AsyncSnapshot<List<AllTeamData>> snapshot,
-                        ) {
-                          if (snapshot.hasError) {
-                            return Text(snapshot.error.toString());
-                          }
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
+                        ) =>
+                            snapshot.mapSnapshot(
+                          onSuccess: (final List<AllTeamData> teams) {
+                            final List<AllTeamData> teamsList = snapshot.data!;
+                            teamsList.sort(
+                              (
+                                final AllTeamData b,
+                                final AllTeamData a,
+                              ) =>
+                                  (a.climbPercentage * climbFactor +
+                                          (a.aggregateData.avgData.autoAmp +
+                                                  a.aggregateData.avgData
+                                                      .teleAmp) *
+                                              ampFactor +
+                                          (a.aggregateData.avgData.autoSpeaker +
+                                                  a.aggregateData.avgData
+                                                      .teleSpeaker) *
+                                              speakerFactor +
+                                          a.aggregateData.avgData.trapAmount *
+                                              trapFactor)
+                                      .compareTo(
+                                b.climbPercentage * climbFactor +
+                                    (b.aggregateData.avgData.autoAmp +
+                                            b.aggregateData.avgData.teleAmp) *
+                                        ampFactor +
+                                    (b.aggregateData.avgData.autoSpeaker +
+                                            b.aggregateData.avgData
+                                                .teleSpeaker) *
+                                        speakerFactor +
+                                    b.aggregateData.avgData.trapAmount *
+                                        trapFactor,
+                              ),
                             );
-                          }
-                          if (snapshot.data == null) {
-                            return const Center(
-                              child: Text("No Teams"),
-                            );
-                          }
-                          final List<AutoPickListTeam> teamsList =
-                              snapshot.data!
-                                  .map(
-                                    (final AllTeamData e) => AutoPickListTeam(
-                                      //TODO initialize actual data using the fetched data from the query
-                                      factor1: 1,
-                                      factor2: 1,
-                                      facotr3: 1,
-                                      picklistTeam: e,
-                                    ),
-                                  )
-                                  .toList();
-                          teamsList.sort(
-                            (
-                              final AutoPickListTeam a,
-                              final AutoPickListTeam b,
-                            ) =>
-                                (b.facotr3 * factor3 +
-                                        b.factor1 * factor1 +
-                                        b.factor2 * factor2)
-                                    .compareTo(
-                              a.facotr3 * factor3 +
-                                  a.factor1 * factor1 +
-                                  a.factor2 * factor2,
-                            ),
-                          );
-                          //TODO in order to filter out according to the filter selected, there should be a similar if statement to the one commented below
-
-                          // if (filterFeeder) {
-                          // localList = teamsList
-                          //     .where(
-                          //       (final AutoPickListTeam element) =>
-                          //           element
-                          //               .picklistTeam.filter1 !=
-                          //           true,
-                          //     )
-                          //     .toList();
-                          // teamsList.removeWhere(
-                          //   (final AutoPickListTeam element) =>
-                          //       element.picklistTeam.filter !=
-                          //       true,
-                          // );
-                          // localList.insertAll(0, teamsList);
-                          // teamsList.clear();
-                          // teamsList.addAll(localList);
-                          // } else
-                          {
                             localList = teamsList;
-                          }
-                          return AutoPickList(uiList: localList);
-                        },
+                            return AutoPickList(uiList: localList);
+                          },
+                          onWaiting: () => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          onNoData: () => const Center(
+                            child: Text("No Teams"),
+                          ),
+                          onError: (final Object error) =>
+                              Text(snapshot.error.toString()),
+                        ),
                       ),
                     )
                   : Container(),
@@ -254,7 +234,7 @@ void save(
               team: e.team,
               faultMessages: <String>[],
               aggregateData: e.aggregateData,
-              technicalMatches: <TechnicalMatchData>[],
+              technicalMatches: e.technicalMatches,
             ),
           )
           .map(

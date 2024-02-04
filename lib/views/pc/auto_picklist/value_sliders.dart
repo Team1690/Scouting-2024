@@ -6,9 +6,10 @@ class ValueSliders extends StatefulWidget {
   const ValueSliders({required this.onButtonPress});
 //TODO rename to season specific vars
   final Function(
-    double slider0,
-    double slider1,
-    double slider2,
+    double climbSlider,
+    double ampSlider,
+    double speakerSlider,
+    double trapSlider,
     bool filter1,
   ) onButtonPress;
 
@@ -18,34 +19,42 @@ class ValueSliders extends StatefulWidget {
 
 class _ValueSlidersState extends State<ValueSliders> {
   //TODO rename to season specific vars
-  double factor1 = 0.5;
-  double factor2 = 0.5;
-  double factor3 = 0.5;
+  double climbFactor = 0.5;
+  double ampFactor = 0.5;
+  double speakerFactor = 0.5;
+  double trapFactor = 0.5;
   bool filter1 = false;
   @override
   Widget build(final BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SectionDivider(label: "GamePiece Sum"),
+          SectionDivider(label: "Climb Percentage"),
           ...<Widget>[
             Slider(
-              value: factor1,
+              value: climbFactor,
               onChanged: (final double newValue) => setState(() {
-                factor1 = newValue;
+                climbFactor = newValue;
               }),
             ),
-            SectionDivider(label: "GamePiece Points"),
+            SectionDivider(label: "Amp Points"),
             Slider(
-              value: factor2,
+              value: ampFactor,
               onChanged: (final double newValue) => setState(() {
-                factor2 = newValue;
+                ampFactor = newValue;
               }),
             ),
-            SectionDivider(label: "Auto Balance Points"),
+            SectionDivider(label: "Speaker Points"),
             Slider(
-              value: factor3,
+              value: speakerFactor,
               onChanged: (final double newValue) => setState(() {
-                factor3 = newValue;
+                speakerFactor = newValue;
+              }),
+            ),
+            SectionDivider(label: "Traps"),
+            Slider(
+              value: trapFactor,
+              onChanged: (final double newValue) => setState(() {
+                trapFactor = newValue;
               }),
             ),
           ].expand(
@@ -79,16 +88,18 @@ class _ValueSlidersState extends State<ValueSliders> {
           RoundedIconButton(
             color: Colors.green,
             onPress: () => widget.onButtonPress(
-              factor2,
-              factor1,
-              factor3,
+              ampFactor,
+              climbFactor,
+              speakerFactor,
+              trapFactor,
               filter1,
             ),
             icon: Icons.calculate_outlined,
             onLongPress: () => widget.onButtonPress(
-              factor2,
-              factor1,
-              factor3,
+              ampFactor,
+              climbFactor,
+              speakerFactor,
+              trapFactor,
               filter1,
             ),
           ),

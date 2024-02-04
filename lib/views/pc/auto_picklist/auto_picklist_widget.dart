@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/team_data/all_team_data.dart";
+import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info_data.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
@@ -12,7 +13,7 @@ class AutoPickList extends StatefulWidget {
 
   @override
   State<AutoPickList> createState() => _AutoPickListState();
-  final List<AutoPickListTeam> uiList;
+  final List<AllTeamData> uiList;
 }
 
 class _AutoPickListState extends State<AutoPickList> {
@@ -23,16 +24,13 @@ class _AutoPickListState extends State<AutoPickList> {
             mainAxisSize: MainAxisSize.min,
             children: widget.uiList
                 .map<Widget>(
-                  (final AutoPickListTeam autoPickListTeam) => Card(
+                  (final AllTeamData autoPickListTeam) => Card(
                     color: bgColor,
                     key: ValueKey<String>(autoPickListTeam.toString()),
                     elevation: 2,
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(
-                        0,
-                        defaultPadding / 4,
-                        0,
-                        defaultPadding / 4,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: defaultPadding / 4,
                       ),
                       child: isPC(context)
                           ? ExpansionTile(
@@ -41,46 +39,44 @@ class _AutoPickListState extends State<AutoPickList> {
                                   title: Row(
                                     //TODO, the commented part should remain the same if you initialized a fault messages variable.
                                     children: <Widget>[
-                                      // Expanded(
-                                      //   flex: 2,
-                                      //   child: Row(
-                                      //     children: <Widget>[
-                                      //       const Spacer(),
-                                      //       Expanded(
-                                      //         child: Icon(
-                                      //           autoPickListTeam
-                                      //               .picklistTeam.faultMessages
-                                      //               .fold(
-                                      //             () => Icons.check,
-                                      //             (final List<String> _) =>
-                                      //                 Icons.warning,
-                                      //           ),
-                                      //           color: autoPickListTeam
-                                      //               .picklistTeam.faultMessages
-                                      //               .fold(
-                                      //             () => Colors.green,
-                                      //             (final List<String> _) =>
-                                      //                 Colors.yellow[700],
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       Expanded(
-                                      //         flex: 2,
-                                      //         child: Text(
-                                      //           autoPickListTeam.picklistTeam
-                                      //                   .faultMessages
-                                      //                   .mapNullable(
-                                      //                 (
-                                      //                   final List<String> p0,
-                                      //                 ) =>
-                                      //                     "Faults: ${p0.length}",
-                                      //               ) ??
-                                      //               "No faults",
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Row(
+                                          children: <Widget>[
+                                            const Spacer(),
+                                            Expanded(
+                                              child: Icon(
+                                                autoPickListTeam.faultMessages
+                                                    .fold(
+                                                  Icons.check,
+                                                  (final _, final __) =>
+                                                      Icons.warning,
+                                                ),
+                                                color: autoPickListTeam
+                                                    .faultMessages
+                                                    .fold(
+                                                  Colors.green,
+                                                  (final _, final __) =>
+                                                      Colors.yellow[700],
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                autoPickListTeam.faultMessages
+                                                        .mapNullable(
+                                                      (
+                                                        final List<String> p0,
+                                                      ) =>
+                                                          "Faults: ${p0.length}",
+                                                    ) ??
+                                                    "No faults",
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
 
                                       //TODO display the rest of your variables
                                       Expanded(
@@ -94,8 +90,8 @@ class _AutoPickListState extends State<AutoPickList> {
                                                 final BuildContext context,
                                               ) =>
                                                   TeamInfoScreen(
-                                                initalTeam: autoPickListTeam
-                                                    .picklistTeam.team,
+                                                initalTeam:
+                                                    autoPickListTeam.team,
                                               ),
                                             ),
                                           ),
@@ -136,13 +132,13 @@ class _AutoPickListState extends State<AutoPickList> {
                                     width: 10,
                                   ),
                                   FlutterSwitch(
-                                    value: autoPickListTeam.picklistTeam.taken,
+                                    value: autoPickListTeam.taken,
                                     activeColor: Colors.red,
                                     inactiveColor: primaryColor,
                                     height: 25,
                                     width: 100,
                                     onToggle: (final bool val) {
-                                      autoPickListTeam.picklistTeam.taken = val;
+                                      autoPickListTeam.taken = val;
                                     },
                                   ),
                                 ],
@@ -154,7 +150,7 @@ class _AutoPickListState extends State<AutoPickList> {
                                   MaterialPageRoute<CoachTeamData>(
                                     builder: (final BuildContext context) =>
                                         CoachTeamData(
-                                      autoPickListTeam.picklistTeam.team,
+                                      autoPickListTeam.team,
                                     ),
                                   ),
                                 );
@@ -178,15 +174,13 @@ class _AutoPickListState extends State<AutoPickList> {
                                       width: 10,
                                     ),
                                     FlutterSwitch(
-                                      value:
-                                          autoPickListTeam.picklistTeam.taken,
+                                      value: autoPickListTeam.taken,
                                       activeColor: Colors.red,
                                       inactiveColor: primaryColor,
                                       height: 25,
                                       width: 50,
                                       onToggle: (final bool val) {
-                                        autoPickListTeam.picklistTeam.taken =
-                                            val;
+                                        autoPickListTeam.taken = val;
                                       },
                                     ),
                                   ],
@@ -208,21 +202,3 @@ int validateNumber(final int number) =>
     number < 0 ? throw ArgumentError("Invalid Team Number") : number;
 String validateName(final String name) =>
     name == "" ? throw ArgumentError("Invalid Team Name") : name;
-
-//TODO add your season specific factors
-class AutoPickListTeam {
-  AutoPickListTeam({
-    required this.factor1,
-    required this.factor2,
-    required this.facotr3,
-    required this.picklistTeam,
-  });
-
-  final AllTeamData picklistTeam;
-  final double factor1;
-  final double factor2;
-  final double facotr3;
-
-  @override
-  String toString() => "${picklistTeam.team.name} ${picklistTeam.team.number}";
-}
