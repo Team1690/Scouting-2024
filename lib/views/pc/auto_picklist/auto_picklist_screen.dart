@@ -1,3 +1,5 @@
+import "dart:math";
+
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -65,10 +67,10 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
                 ) =>
                     setState(() {
                   hasValues = true;
-                  climbFactor = climbSlider;
-                  ampFactor = ampSlider;
-                  speakerFactor = speakerSlider;
-                  trapFactor = trapSlider;
+                  climbFactor = 1 - climbSlider;
+                  ampFactor = 1 - ampSlider;
+                  speakerFactor = 1 - speakerSlider;
+                  trapFactor = 1 - trapSlider;
                   filter = feeder;
                 }),
               ),
@@ -125,33 +127,63 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
                             snapshot.mapSnapshot(
                           onSuccess: (final List<AllTeamData> teams) {
                             final List<AllTeamData> teamsList = snapshot.data!;
+                            final double maxAmp = teamsList
+                                    .map(
+                                      (final AllTeamData e) =>
+                                          e.aggregateData.avgData.autoAmp,
+                                    )
+                                    .fold(0.0, max) +
+                                teamsList
+                                    .map(
+                                      (final AllTeamData e) =>
+                                          e.aggregateData.avgData.teleAmp,
+                                    )
+                                    .fold(0.0, max);
+                            final double maxSpeaker = teamsList
+                                    .map(
+                                      (final AllTeamData e) =>
+                                          e.aggregateData.avgData.autoSpeaker,
+                                    )
+                                    .fold(0.0, max) +
+                                teamsList
+                                    .map(
+                                      (final AllTeamData e) =>
+                                          e.aggregateData.avgData.teleSpeaker,
+                                    )
+                                    .fold(0.0, max);
                             teamsList.sort(
                               (
                                 final AllTeamData b,
                                 final AllTeamData a,
                               ) =>
-                                  (a.climbPercentage * climbFactor +
+                                  (a.climbPercentage * climbFactor / 100 +
                                           (a.aggregateData.avgData.autoAmp +
                                                   a.aggregateData.avgData
                                                       .teleAmp) *
-                                              ampFactor +
+                                              ampFactor /
+                                              maxAmp +
                                           (a.aggregateData.avgData.autoSpeaker +
                                                   a.aggregateData.avgData
                                                       .teleSpeaker) *
-                                              speakerFactor +
+                                              speakerFactor /
+                                              maxSpeaker +
                                           a.aggregateData.avgData.trapAmount *
-                                              trapFactor)
+                                              trapFactor /
+                                              2)
                                       .compareTo(
-                                b.climbPercentage * climbFactor +
+                                b.climbPercentage * climbFactor / 100 +
                                     (b.aggregateData.avgData.autoAmp +
                                             b.aggregateData.avgData.teleAmp) *
-                                        ampFactor +
+                                        ampFactor /
+                                        maxAmp +
                                     (b.aggregateData.avgData.autoSpeaker +
                                             b.aggregateData.avgData
                                                 .teleSpeaker) *
-                                        speakerFactor +
+                                        speakerFactor /
+                                        maxSpeaker +
                                     b.aggregateData.avgData.trapAmount *
-                                        trapFactor,
+                                        trapFactor /
+                                        2,
                               ),
                             );
                             localList = teamsList;
