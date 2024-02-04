@@ -2,6 +2,9 @@ import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
+import "package:scouting_frontend/views/common/fetch_functions/aggregate_data/aggregate_technical_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/all_teams/fetch_all_teams.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
@@ -9,8 +12,6 @@ import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/pc/auto_picklist/auto_picklist_widget.dart";
 import "package:scouting_frontend/views/pc/auto_picklist/value_sliders.dart";
-import "package:scouting_frontend/views/pc/picklist/fetch_picklist.dart";
-import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
 
 class AutoPickListScreen extends StatefulWidget {
   const AutoPickListScreen({super.key});
@@ -97,7 +98,7 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
                 color: Colors.blue,
                 onPress: () => save(
                   saveAs,
-                  List<PickListTeam>.from(
+                  List<AllTeamData>.from(
                     localList.map(
                       (final AutoPickListTeam autoTeam) =>
                           autoTeam.picklistTeam,
@@ -114,11 +115,11 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
               hasValues
                   ? Padding(
                       padding: const EdgeInsets.all(defaultPadding),
-                      child: StreamBuilder<List<PickListTeam>>(
-                        stream: fetchPicklist(),
+                      child: StreamBuilder<List<AllTeamData>>(
+                        stream: fetchAllTeams(),
                         builder: (
                           final BuildContext context,
-                          final AsyncSnapshot<List<PickListTeam>> snapshot,
+                          final AsyncSnapshot<List<AllTeamData>> snapshot,
                         ) {
                           if (snapshot.hasError) {
                             return Text(snapshot.error.toString());
@@ -137,7 +138,7 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
                           final List<AutoPickListTeam> teamsList =
                               snapshot.data!
                                   .map(
-                                    (final PickListTeam e) => AutoPickListTeam(
+                                    (final AllTeamData e) => AutoPickListTeam(
                                       //TODO initialize actual data using the fetched data from the query
                                       factor1: 1,
                                       factor2: 1,
@@ -205,7 +206,7 @@ enum Picklists {
 
 void save(
   final Picklists? picklist,
-  final List<PickListTeam> teams, [
+  final List<AllTeamData> teams, [
   final BuildContext? context,
 ]) async {
   if (teams.isNotEmpty && picklist != null) {
@@ -239,29 +240,40 @@ void save(
     final Map<String, dynamic> vars = <String, dynamic>{
       "objects": teams
           .map(
-            (final PickListTeam e) => PickListTeam(
-              firstListIndex: picklist == Picklists.first
+            (final AllTeamData e) => AllTeamData(
+              firstPicklistIndex: picklist == Picklists.first
                   ? teams.indexOf(e)
-                  : e.firstListIndex,
-              secondListIndex: picklist == Picklists.second
+                  : e.firstPicklistIndex,
+              secondPicklistIndex: picklist == Picklists.second
                   ? teams.indexOf(e)
-                  : e.secondListIndex,
-              thirdListIndex: picklist == Picklists.third
+                  : e.secondPicklistIndex,
+              thirdPickListIndex: picklist == Picklists.third
                   ? teams.indexOf(e)
-                  : e.thirdListIndex,
+                  : e.thirdPickListIndex,
               taken: e.taken,
               team: e.team,
+              faultMessages: <String>[],
+              autoGamepieceAvg: 0,
+              teleGamepieceAvg: 0,
+              gamepieceAvg: 0,
+              gamepiecePointAvg: 0,
+              brokenMatches: 0,
+              amountOfMatches: 0,
+              matchesClimbed: 0,
+              workedPercentage: 0,
+              climbedPercentage: 0,
+              aggregateData: AggregateData.parse(0),
             ),
           )
           .map(
-            (final PickListTeam e) => <String, dynamic>{
+            (final AllTeamData e) => <String, dynamic>{
               "id": e.team.id,
               "name": e.team.name,
               "number": e.team.number,
               "colors_index": e.team.colorsIndex,
-              "first_picklist_index": e.firstListIndex,
-              "second_picklist_index": e.secondListIndex,
-              "third_picklist_index": e.thirdListIndex,
+              "first_picklist_index": e.firstPicklistIndex,
+              "second_picklist_index": e.secondPicklistIndex,
+              "third_picklist_index": e.thirdPickListIndex,
               "taken": e.taken,
             },
           )
