@@ -93,29 +93,30 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                     .toList();
             final dynamic aggregateTable =
                 team["technical_matches_aggregate"]["aggregate"];
-            final bool avgNullValidator = aggregateTable["auto_amp"] == null;
-            final double gamepiecePointsAvg = avgNullValidator
+            final bool aggregateNullValidator =
+                (aggregateTable["avg"]["auto_amp"] as double?) == null;
+            final double gamepiecePointsAvg = aggregateNullValidator
                 ? double.nan
-                : getPoints<double>(parseMatch<double>(aggregateTable));
-            final double autoGamepieceAvg = avgNullValidator
+                : getPoints<double>(parseMatch<double>(aggregateTable["avg"]));
+            final double autoGamepieceAvg = aggregateNullValidator
                 ? double.nan
                 : getPieces<double>(
                     parseByMode<double>(
                       MatchMode.auto,
-                      aggregateTable,
+                      aggregateTable["avg"],
                     ),
                   );
-            final double teleGamepieceAvg = avgNullValidator
+            final double teleGamepieceAvg = aggregateNullValidator
                 ? double.nan
                 : getPieces<double>(
                     parseByMode<double>(
                       MatchMode.tele,
-                      aggregateTable,
+                      aggregateTable["avg"],
                     ),
                   );
-            final double gamepieceSum = avgNullValidator
+            final double gamepieceSum = aggregateNullValidator
                 ? double.nan
-                : getPieces<double>(parseMatch<double>(aggregateTable));
+                : getPieces<double>(parseMatch<double>(aggregateTable["avg"]));
             final int firstPicklistIndex = team["first_picklist_index"] as int;
             final int secondPicklistIndex =
                 team["second_picklist_index"] as int;
@@ -136,22 +137,43 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                     amountOfMatches);
 
             final int thirdPicklistIndex = team["third_picklist_index"] as int;
-            final List<Climb> climbed =
+            final List<({Climb climb, RobotFieldStatus robotFieldStatus})>
+                climbed =
                 (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
                     .map(
-                      (final dynamic e) =>
-                          climbTitleToEnum(e["climb"]["title"] as String),
+                      (final dynamic e) => (
+                        climb: climbTitleToEnum(e["climb"]["title"] as String),
+                        robotFieldStatus: robotFieldStatusTitleToEnum(
+                          e["robot_field_status"]["title"] as String,
+                        )
+                      ),
                     )
                     .toList();
             final double climbedPercentage = 100 *
                 climbed
                     .where(
-                      (final Climb element) =>
-                          element == Climb.climbed ||
-                          element == Climb.buddyClimbed,
+                      (
+                        final ({
+                          Climb climb,
+                          RobotFieldStatus robotFieldStatus
+                        }) element,
+                      ) =>
+                          element.climb == Climb.climbed ||
+                          element.climb == Climb.buddyClimbed,
                     )
                     .length /
-                climbed.length;
+                climbed
+                    .where(
+                      (
+                        final ({
+                          Climb climb,
+                          RobotFieldStatus robotFieldStatus
+                        }) element,
+                      ) =>
+                          element.climb != Climb.noAttempt &&
+                          element.robotFieldStatus == RobotFieldStatus.worked,
+                    )
+                    .length;
 
             return AllTeamData(
               amountOfMatches: (team["technical_matches_aggregate"]["nodes"]

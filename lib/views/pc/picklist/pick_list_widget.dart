@@ -312,6 +312,3 @@ int validateNumber(final int number) =>
     number < 0 ? throw ArgumentError("Invalid Team Number") : number;
 String validateName(final String name) =>
     name == "" ? throw ArgumentError("Invalid Team Name") : name;
-
-//TODO add season specific variables, make sure to include amountOfMatches and faultMessages which should always be useful.
-
