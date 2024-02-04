@@ -53,26 +53,6 @@ class QuickDataCard extends StatelessWidget {
                       Column(
                         children: <Widget>[
                           const Text(
-                            "Climb",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(
-                            "Climb Percentage: ${data.climbPercentage.isNaN ? "No Data" : data.climbPercentage.toStringAsFixed(1)}%",
-                          ),
-                          Text(
-                            "Can Harmony: ${data.canHarmony ?? "No Data"}",
-                          ),
-                          Text(
-                              "Matches Climbed 1: ${data.matchesClimbedSingle}"),
-                          Text(
-                              "Matches Climbed 2: ${data.matchesClimbedDouble}"),
-                          Text(
-                              "Matches Climbed 3: ${data.matchesClimbedTriple}"),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          const Text(
                             "Misc",
                             style: TextStyle(fontSize: 18),
                           ),
@@ -88,6 +68,28 @@ class QuickDataCard extends StatelessWidget {
                           Text(
                             "Avg Trap Amount: ${data.avgTrapAmount.toStringAsFixed(1)}",
                           ),
+                          Text(
+                              "Trap Success Rate: ${data.trapSuccessRate.isNaN ? "No Data" : "${data.trapSuccessRate.toStringAsFixed(1)}%"}")
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          const Text(
+                            "Climb",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          Text(
+                            "Climb Percentage: ${data.climbPercentage.isNaN ? "No Data" : data.climbPercentage.toStringAsFixed(1)}%",
+                          ),
+                          Text(
+                            "Can Harmony: ${data.canHarmony ?? "No Data"}",
+                          ),
+                          Text(
+                              "Matches Climbed 1: ${data.matchesClimbedSingle}"),
+                          Text(
+                              "Matches Climbed 2: ${data.matchesClimbedDouble}"),
+                          Text(
+                              "Matches Climbed 3: ${data.matchesClimbedTriple}"),
                         ],
                       ),
                       Column(

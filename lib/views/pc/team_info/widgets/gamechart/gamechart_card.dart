@@ -108,7 +108,33 @@ class Gamechart extends StatelessWidget {
                     ),
                   ),
                   TitledLineChart(
-                    data: getClimbData(context),
+                    data: getTitledData(
+                        context,
+                        <List<int>>[
+                          data.technicalMatches
+                              .map(
+                                (final TechnicalMatchData match) => match
+                                            .robotFieldStatus.name !=
+                                        RobotFieldStatus.didntComeToField.name
+                                    ? match.climb.title
+                                    : Climb.noAttempt.title,
+                              )
+                              .toList()
+                              .map<int>((final String title) {
+                            switch (title) {
+                              case "Failed":
+                                return 0;
+                              case "No Attempt":
+                                return -1;
+                              case "Climbed":
+                                return 1;
+                              case "Buddy Climbed":
+                                return 2;
+                            }
+                            throw Exception("Not a climb value");
+                          }).toList(),
+                        ],
+                        "Climb"),
                     heightToTitles: const <int, String>{
                       -1: "No Attempt",
                       0: "Failed",
@@ -116,10 +142,23 @@ class Gamechart extends StatelessWidget {
                       2: "Buddy Climbed",
                     },
                   ),
+                  GamepiecesLineChart(getGamepieceChartData(
+                      context,
+                      <List<int>>[
+                        data.technicalMatches
+                            .map((final TechnicalMatchData e) => e.trapAmount)
+                            .toList(),
+                        data.technicalMatches
+                            .map((final TechnicalMatchData e) => e.trapsMissed)
+                            .toList(),
+                      ],
+                      "Trap Amount"))
                 ],
               ),
       );
-  LineChartData getClimbData(final BuildContext context) => LineChartData(
+  LineChartData getTitledData(
+          final BuildContext context, List<List<int>> points, String title) =>
+      LineChartData(
         gameNumbers: data.technicalMatches
             .map(
               (final TechnicalMatchData e) => MatchIdentifier(
@@ -129,31 +168,8 @@ class Gamechart extends StatelessWidget {
               ),
             )
             .toList(),
-        points: <List<int>>[
-          data.technicalMatches
-              .map(
-                (final TechnicalMatchData match) =>
-                    match.robotFieldStatus.name !=
-                            RobotFieldStatus.didntComeToField.name
-                        ? match.climb.title
-                        : Climb.noAttempt.title,
-              )
-              .toList()
-              .map<int>((final String title) {
-            switch (title) {
-              case "Failed":
-                return 0;
-              case "No Attempt":
-                return -1;
-              case "Climbed":
-                return 1;
-              case "Buddy Climbed":
-                return 2;
-            }
-            throw Exception("Not a climb value");
-          }).toList(),
-        ],
-        title: "Climb",
+        points: points,
+        title: title,
         robotMatchStatuses: List<List<RobotFieldStatus>>.filled(
           1,
           data.technicalMatches

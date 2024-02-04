@@ -91,6 +91,7 @@ query FetchTeams($ids: [Int!]) @cached {
       tele_speaker
       tele_speaker_missed
       trap_amount
+      traps_missed
       climb {
         title
         points
@@ -99,7 +100,6 @@ query FetchTeams($ids: [Int!]) @cached {
         title
       }
       harmony_with
-      trapsMissed
     }
     name
     number
@@ -162,6 +162,7 @@ query FetchTeams($ids: [Int!]) @cached {
       general_text
       intake_text
       speaker_text
+      defense_text
     }
   }
 }

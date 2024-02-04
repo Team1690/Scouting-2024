@@ -6,6 +6,7 @@ class SpecificSummaryData {
     required this.generalText,
     required this.intakeText,
     required this.speakerText,
+    required this.defenseText,
   });
   final String ampText;
   final String climbText;
@@ -13,6 +14,7 @@ class SpecificSummaryData {
   final String generalText;
   final String intakeText;
   final String speakerText;
+  final String defenseText;
 
   static SpecificSummaryData? parse(
     final dynamic specificSummaryTable,
@@ -25,6 +27,7 @@ class SpecificSummaryData {
               generalText: specificSummaryTable["general_text"] as String,
               intakeText: specificSummaryTable["intake_text"] as String,
               speakerText: specificSummaryTable["speaker_text"] as String,
+              defenseText: specificSummaryTable["defense_text"] as String,
             )
           : null;
 }

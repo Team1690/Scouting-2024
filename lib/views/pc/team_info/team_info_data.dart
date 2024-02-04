@@ -189,4 +189,15 @@ QuickData getQuickdata(final TeamData data) => QuickData(
               .toList()
               .averageOrNull ??
           double.nan,
+      trapSuccessRate: data.technicalMatches
+              .where((e) => e.trapAmount != 0 || e.trapsMissed != 0)
+              .isNotEmpty
+          ? data.technicalMatches
+                  .map((element) => element.trapAmount != 0)
+                  .length /
+              data.technicalMatches
+                  .map((e) => e.trapAmount != 0 || e.trapsMissed != 0)
+                  .length *
+              100
+          : double.nan,
     );
