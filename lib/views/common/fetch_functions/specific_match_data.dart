@@ -16,9 +16,11 @@ class SpecificMatchData {
     required this.general,
     required this.defenseAmount,
     required this.url,
+    required this.scheduleMatchId,
   });
   final int matchNumber;
   final int matchTypeId;
+  final int scheduleMatchId;
   final String scouterNames;
   final bool isRematch;
 
@@ -62,24 +64,29 @@ class SpecificMatchData {
     }
   }
 
-  static SpecificMatchData parse(final dynamic specificMatchTable) =>
-      SpecificMatchData(
-        isRematch: specificMatchTable["is_rematch"] as bool,
-        matchNumber:
-            specificMatchTable["schedule_match"]["match_number"] as int,
-        matchTypeId:
-            specificMatchTable["schedule_match"]["match_type_id"] as int,
-        scouterNames: specificMatchTable["scouter_name"] as String,
-        drivetrainAndDriving: specificMatchTable["driving_rating"] as int?,
-        intake: specificMatchTable["intake_rating"] as int?,
-        amp: specificMatchTable["amp_rating"] as int?,
-        speaker: specificMatchTable["speaker_rating"] as int?,
-        climb: specificMatchTable["climb_rating"] as int?,
-        defense: specificMatchTable["defense_rating"] as int?,
-        general: specificMatchTable["general_rating"] as int?,
-        defenseAmount: defenseAmountTitleToEnum(
-          specificMatchTable["defense"]["title"] as String,
-        ),
-        url: specificMatchTable["url"] as String,
-      );
+  static SpecificMatchData? parse(final dynamic specificMatchTable) =>
+      specificMatchTable["is_rematch"] != null
+          ? SpecificMatchData(
+              scheduleMatchId:
+                  specificMatchTable["schedule_match"]["id"] as int,
+              isRematch: specificMatchTable["is_rematch"] as bool,
+              matchNumber:
+                  specificMatchTable["schedule_match"]["match_number"] as int,
+              matchTypeId:
+                  specificMatchTable["schedule_match"]["match_type_id"] as int,
+              scouterNames: specificMatchTable["scouter_name"] as String,
+              drivetrainAndDriving:
+                  specificMatchTable["driving_rating"] as int?,
+              intake: specificMatchTable["intake_rating"] as int?,
+              amp: specificMatchTable["amp_rating"] as int?,
+              speaker: specificMatchTable["speaker_rating"] as int?,
+              climb: specificMatchTable["climb_rating"] as int?,
+              defense: specificMatchTable["defense_rating"] as int?,
+              general: specificMatchTable["general_rating"] as int?,
+              defenseAmount: defenseAmountTitleToEnum(
+                specificMatchTable["defense"]["title"] as String,
+              ),
+              url: specificMatchTable["url"] as String,
+            )
+          : null;
 }

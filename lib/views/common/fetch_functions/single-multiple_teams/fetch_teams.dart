@@ -65,6 +65,7 @@ query FetchTeams($ids: [Int!]) @cached {
       climb_rating
       amp_rating
       schedule_match {
+        id
         match_number
         match_type_id
       }
@@ -73,6 +74,7 @@ query FetchTeams($ids: [Int!]) @cached {
     technical_matches(where: {ignored: {_eq: false}}, order_by: [{schedule_match: {match_type: {order: asc}}}, {schedule_match: {match_number: asc}}, {is_rematch: asc}]) {
       schedule_match {
         match_number
+        id
       }
       auto_amp
       auto_amp_missed
@@ -96,6 +98,9 @@ query FetchTeams($ids: [Int!]) @cached {
     number
     id
     colors_index
+    first_picklist_index
+    second_picklist_index
+    third_picklist_index
     faults {
       message
       fault_status {
@@ -168,6 +173,12 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
         (teams["team"] as List<dynamic>)
             .map<TeamData>((final dynamic teamTable) {
           final LightTeam team = LightTeam.fromJson(teamTable);
+          final int firstPicklistIndex =
+              teamTable["first_picklist_index"] as int;
+          final int secondPicklistIndex =
+              teamTable["second_picklist_index"] as int;
+          final int thirdPicklistIndex =
+              teamTable["third_picklist_index"] as int;
           final List<dynamic> technicalMatchesTable =
               teamTable["technical_matches"] as List<dynamic>;
           final List<dynamic> specificMatchesTables =
@@ -177,6 +188,7 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
           final dynamic pitTable = teamTable["pit"];
           final List<dynamic> faultTable = teamTable["faults"] as List<dynamic>;
           final dynamic specificSummaryTable = teamTable["specific_summary"];
+
           return TeamData(
             aggregateData: AggregateData.parse(aggregateTable),
             technicalMatches:
@@ -187,6 +199,9 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
                 specificMatchesTables.map(SpecificMatchData.parse).toList(),
             summaryData: SpecificSummaryData.parse(specificSummaryTable),
             lightTeam: team,
+            firstPicklistIndex: firstPicklistIndex,
+            secondPicklistIndex: secondPicklistIndex,
+            thirdPicklistIndex: thirdPicklistIndex,
           );
         }),
         (final TeamData team1, final TeamData team2) =>

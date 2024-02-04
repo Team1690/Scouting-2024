@@ -47,13 +47,13 @@ class LineChartData {
     required this.defenseAmounts,
   });
   final List<List<int>> points;
-  final List<List<RobotMatchStatus>> robotMatchStatuses;
+  final List<List<RobotFieldStatus>> robotMatchStatuses;
   final List<List<DefenseAmount>> defenseAmounts;
   final List<MatchIdentifier> gameNumbers;
   final String title;
 }
 
-enum RobotMatchStatus { worked, didntComeToField, didntWorkOnField }
+enum RobotFieldStatus { worked, didntComeToField, didntWorkOnField }
 
 enum DefenseAmount { noDefense, halfDefense, fullDefense }
 
