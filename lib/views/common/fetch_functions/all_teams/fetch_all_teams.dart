@@ -157,7 +157,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                           RobotFieldStatus robotFieldStatus
                         }) element,
                       ) =>
-                          element.climb != Climb.noAttempt &&
+                          element.climb != Climb.noAttempt ||
                           element.robotFieldStatus == RobotFieldStatus.worked,
                     )
                     .isEmpty
@@ -183,7 +183,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                               RobotFieldStatus robotFieldStatus
                             }) element,
                           ) =>
-                              element.climb != Climb.noAttempt &&
+                              element.climb != Climb.noAttempt ||
                               element.robotFieldStatus ==
                                   RobotFieldStatus.worked,
                         )
