@@ -26,6 +26,7 @@ subscription FetchAllTeams {
           auto_speaker
           auto_speaker_missed
           trap_amount
+          traps_missed
           tele_speaker_missed
           tele_speaker
           tele_amp_missed
@@ -37,6 +38,7 @@ subscription FetchAllTeams {
           auto_speaker
           auto_speaker_missed
           trap_amount
+          traps_missed
           tele_speaker_missed
           tele_speaker
           tele_amp_missed
@@ -48,6 +50,7 @@ subscription FetchAllTeams {
           auto_speaker
           auto_speaker_missed
           trap_amount
+          traps_missed
           tele_speaker_missed
           tele_speaker
           tele_amp_missed

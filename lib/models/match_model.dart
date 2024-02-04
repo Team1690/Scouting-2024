@@ -24,9 +24,11 @@ class Match implements HasuraVars {
         climbId = null,
         harmonyWith = 0,
         trapAmount = 0,
+        trapsMissed = 0,
         startingPositionID = null,
         scoutedTeam = null;
   Match.all({
+    required this.trapsMissed,
     required this.isRematch,
     required this.scheduleMatch,
     required this.scouterName,
@@ -65,6 +67,7 @@ class Match implements HasuraVars {
     final int Function()? climbId,
     final int Function()? harmonyWith,
     final int Function()? trapAmount,
+    final int Function()? trapsMissed,
     final int Function()? startingPositionID,
     final LightTeam? Function()? scoutedTeam,
   }) =>
@@ -93,6 +96,7 @@ class Match implements HasuraVars {
         climbId: climbId != null ? climbId() : this.climbId,
         harmonyWith: harmonyWith != null ? harmonyWith() : this.harmonyWith,
         trapAmount: trapAmount != null ? trapAmount() : this.trapAmount,
+        trapsMissed: trapsMissed != null ? trapsMissed() : this.trapsMissed,
         scoutedTeam: scoutedTeam != null ? scoutedTeam() : this.scoutedTeam,
         startingPositionID: startingPositionID != null
             ? startingPositionID()
@@ -114,6 +118,7 @@ class Match implements HasuraVars {
   final int? climbId;
   final int harmonyWith;
   final int trapAmount;
+  final int trapsMissed;
   final int? startingPositionID;
   final LightTeam? scoutedTeam;
 
@@ -135,6 +140,7 @@ class Match implements HasuraVars {
         "climb_id": climbId,
         "harmony_with": harmonyWith,
         "trap_amount": trapAmount,
+        "traps_missed": trapsMissed,
         "starting_position_id": startingPositionID,
       };
 }
