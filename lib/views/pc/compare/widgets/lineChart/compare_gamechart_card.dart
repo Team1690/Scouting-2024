@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/card.dart";
-import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
 import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/common/no_team_selected.dart";
@@ -64,7 +63,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.gamepiecesPoints,
+                                            match.gamePiecesPoints,
                                       )
                                       .toList(),
                             )
@@ -80,10 +79,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.teleAmpMissed +
-                                            match.autoAmpMissed +
-                                            match.teleSpeakerMissed +
-                                            match.autoSpeakerMissed,
+                                            match.totalMissed,
                                       )
                                       .toList(),
                             )
@@ -131,7 +127,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.autoAmp + match.teleAmp,
+                                            match.ampGamepieces,
                                       )
                                       .toList(),
                             )
@@ -143,13 +139,13 @@ class CompareGamechartCard extends StatelessWidget {
                         teamDatas: data.toList(),
                         data: data
                             .map(
-                              (final TeamData element) => element
-                                  .technicalMatches
-                                  .map(
-                                    (final TechnicalMatchData match) =>
-                                        match.autoSpeaker + match.teleSpeaker,
-                                  )
-                                  .toList(),
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.speakerGamepieces,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
                         colors: colors,
@@ -159,16 +155,13 @@ class CompareGamechartCard extends StatelessWidget {
                         teamDatas: data.toList(),
                         data: data
                             .map(
-                              (final TeamData element) => element
-                                  .technicalMatches
-                                  .map(
-                                    (final TechnicalMatchData match) =>
-                                        match.climb == Climb.failed ||
-                                                match.climb == Climb.noAttempt
-                                            ? 0
-                                            : 1,
-                                  )
-                                  .toList(),
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.climb.chartHeight,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
                         colors: colors,

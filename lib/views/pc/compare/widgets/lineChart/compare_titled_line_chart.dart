@@ -1,5 +1,6 @@
 import "dart:math";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
 import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
@@ -32,9 +33,11 @@ class CompareClimbLineChart extends StatelessWidget {
               top: 40,
             ),
             child: DashboardTitledLineChart(
-              heightsToTitles: const <int, String>{
-                0: "Didn't Climb",
-                1: "Climbed",
+              maxY: 4,
+              minY: -1,
+              heightsToTitles: <int, String>{
+                for (final Climb climb in Climb.values)
+                  climb.chartHeight: climb.title,
               },
               defenseAmounts: teamDatas
                   .map(

@@ -56,11 +56,7 @@ class CompareLineChart extends StatelessWidget {
                   isRematch: false,
                 ),
               ),
-              dataSet: data
-                  .map(
-                    (final List<int> e) => e,
-                  )
-                  .toList(),
+              dataSet: data,
             ),
           ),
         ],

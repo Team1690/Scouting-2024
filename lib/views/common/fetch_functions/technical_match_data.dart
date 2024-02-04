@@ -5,13 +5,10 @@ import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.da
 
 class TechnicalMatchData {
   TechnicalMatchData({
-    required this.gamepiecesPoints,
     required this.teleSpeakerMissed,
     required this.autoSpeakerMissed,
     required this.robotFieldStatus,
     required this.climbingPoints,
-    required this.autoGamepieces,
-    required this.teleGamepieces,
     required this.teleAmpMissed,
     required this.autoAmpMissed,
     required this.teleSpeaker,
@@ -19,7 +16,6 @@ class TechnicalMatchData {
     required this.matchNumber,
     required this.harmonyWith,
     required this.trapAmount,
-    required this.gamepieces,
     required this.autoAmp,
     required this.teleAmp,
     required this.climb,
@@ -29,9 +25,6 @@ class TechnicalMatchData {
   final RobotFieldStatus robotFieldStatus;
   final int teleSpeakerMissed;
   final int autoSpeakerMissed;
-  final int gamepiecesPoints;
-  final int teleGamepieces;
-  final int autoGamepieces;
   final int climbingPoints;
   final int teleAmpMissed;
   final int autoAmpMissed;
@@ -40,7 +33,6 @@ class TechnicalMatchData {
   final int matchNumber;
   final int harmonyWith;
   final int trapAmount;
-  final int gamepieces;
   final int teleAmp;
   final int autoAmp;
   final Climb climb;
@@ -63,10 +55,23 @@ class TechnicalMatchData {
         autoAmp: match["auto_amp"] as int,
         teleAmp: match["tele_amp"] as int,
         climb: climbTitleToEnum(match["climb"]["title"] as String),
-        gamepiecesPoints: getPoints(parseMatch(match)),
-        autoGamepieces: getPieces(parseByMode(MatchMode.auto, match)),
-        teleGamepieces: getPieces(parseByMode(MatchMode.tele, match)),
-        gamepieces: getPieces(parseMatch(match)),
         scheduleMatchId: match["schedule_match"]["id"] as int,
       );
+
+  int get speakerGamepieces => teleSpeaker + autoSpeaker;
+  int get ampGamepieces => teleAmp + autoAmp;
+  int get autoGamepieces => autoAmp + autoSpeaker;
+  int get teleGamepieces => teleAmp + teleSpeaker;
+  int get gamepieces => autoGamepieces + teleGamepieces;
+  int get autoSpeakerPoints => PointGiver.autoSpeaker.points * autoSpeaker;
+  int get autoAmpPoints => PointGiver.autoAmp.points * autoAmp;
+  int get teleSpeakerPoints => PointGiver.teleSpeaker.points * teleSpeaker;
+  int get teleAmpPoints => PointGiver.teleAmp.points * teleAmp;
+  int get autoPoints => autoAmpPoints + autoSpeakerPoints;
+  int get telePoints => teleSpeakerPoints + teleAmpPoints;
+  int get ampPoints => autoAmpPoints + teleAmpPoints;
+  int get speakerPoints => autoSpeakerPoints + teleSpeakerPoints;
+  int get gamePiecesPoints => autoPoints + telePoints;
+  int get totalMissed =>
+      teleAmpMissed + autoAmpMissed + teleSpeakerMissed + autoSpeakerMissed;
 }
