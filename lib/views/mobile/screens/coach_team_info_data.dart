@@ -2,7 +2,8 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/views/pc/team_info/models/fetch_team_info.dart";
+import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/fetch_single_team.dart";
+import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
@@ -18,11 +19,11 @@ class CoachTeamData extends StatelessWidget {
             "${team.number} ${team.name}",
           ),
         ),
-        body: FutureBuilder<Team>(
-          future: fetchTeamInfo(team, context), //fetchTeam(team.id, context),
+        body: FutureBuilder<TeamData>(
+          future: fetchSingleTeamData(team.id), //fetchTeam(team.id, context),
           builder: (
             final BuildContext context,
-            final AsyncSnapshot<Team> snapshot,
+            final AsyncSnapshot<TeamData> snapshot,
           ) {
             if (snapshot.hasError) {
               return Text(snapshot.error.toString());
@@ -33,58 +34,58 @@ class CoachTeamData extends StatelessWidget {
               );
             } else {
               return snapshot.data.mapNullable(
-                    (final Team data) => CarouselWithIndicator(
+                    (final TeamData data) => CarouselWithIndicator(
                       enableInfininteScroll: true,
                       initialPage: 0,
                       widgets: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: DashboardCard(
-                            title: "Line charts",
-                            body: data.quickData.amoutOfMatches < 2
-                                ? const Center(
-                                    child: Text("No data :("),
-                                  )
-                                : CoachTeamInfoLineCharts(data),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: DashboardCard(
-                            title: "Specific",
-                            body: data.specificData.msg.isEmpty
-                                ? const Center(
-                                    child: Text("No data :("),
-                                  )
-                                : SpecificCard(data.specificData),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: DashboardCard(
-                            title: "Auto Data",
-                            body: CoachAutoData(data.autoData),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: DashboardCard(
-                            title: "Quick data",
-                            body: CoachQuickData(data.quickData),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: data.pitViewData.mapNullable(
-                                PitScoutingCard.new,
-                              ) ??
-                              const DashboardCard(
-                                title: "Pit scouting",
-                                body: Center(
-                                  child: Text("No data"),
-                                ),
-                              ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(10.0),
+                        //   child: DashboardCard(
+                        //     title: "Line charts",
+                        //     body: data.quickData.amoutOfMatches < 2
+                        //         ? const Center(
+                        //             child: Text("No data :("),
+                        //           )
+                        //         : CoachTeamInfoLineCharts(data),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(10.0),
+                        //   child: DashboardCard(
+                        //     title: "Specific",
+                        //     body: data.specificData.msg.isEmpty
+                        //         ? const Center(
+                        //             child: Text("No data :("),
+                        //           )
+                        //         : SpecificCard(data.specificData),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(10),
+                        //   child: DashboardCard(
+                        //     title: "Auto Data",
+                        //     body: CoachAutoData(data.autoData),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(10),
+                        //   child: DashboardCard(
+                        //     title: "Quick data",
+                        //     body: CoachQuickData(data.quickData),
+                        //   ),
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(10),
+                        //   child: data.pitViewData.mapNullable(
+                        //         PitScoutingCard.new,
+                        //       ) ??
+                        //       const DashboardCard(
+                        //         title: "Pit scouting",
+                        //         body: Center(
+                        //           child: Text("No data"),
+                        //         ),
+                        //       ),
+                        // ),
                       ],
                     ),
                   ) ??
