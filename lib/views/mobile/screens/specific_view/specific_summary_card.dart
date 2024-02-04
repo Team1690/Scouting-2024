@@ -59,16 +59,16 @@ class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
                     onWaiting: CircularProgressIndicator.new,
                     onNoData: () =>
                         SummaryEditor(summaryEntry: null, team: team!),
-                    onError: (final Object error) =>
-                        Text("${error.runtimeType}"),
+                    onError: (final Object error) => Text("$error"),
                   ),
                 ),
             ],
           ),
         ),
       );
+}
 
-  final String specificSummarySubscription = """
+const String specificSummarySubscription = """
       subscription MySubscription(\$team_id: Int) {
         specific_summary(where: {team_id: {_eq: \$team_id}}) {
           amp_text
@@ -81,36 +81,37 @@ class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
         }
       }
 """;
-  Stream<SummaryEntry?> fetchSpecificSummary(
-    final int teamId,
-  ) {
-    final GraphQLClient client = getClient();
-    final Stream<QueryResult<SummaryEntry?>> result = client.subscribe(
-      SubscriptionOptions<SummaryEntry?>(
-        document: gql(specificSummarySubscription),
-        variables: <String, dynamic>{"team_id": teamId},
-        parserFn: (final Map<String, dynamic> data) {
-          final List<dynamic> specificSummary =
-              data["specific_summary"] as List<dynamic>;
-          if (specificSummary.isEmpty) {
-            return null;
-          }
-          return SummaryEntry(
-            intakeText: specificSummary[0]["intake_text"] as String,
-            ampText: specificSummary[0]["amp_text"] as String,
-            climbText: specificSummary[0]["climb_text"] as String,
-            drivingText: specificSummary[0]["driving_text"] as String,
-            speakerText: specificSummary[0]["speaker_text"] as String,
-            generalText: specificSummary[0]["general_text"] as String,
-            defenseText: specificSummary[0]["defense_text"] as String,
-          );
-        },
-      ),
-    );
-    return result.map(
-      (final QueryResult<SummaryEntry?> result) => result.mapQueryResult(),
-    );
-  }
+
+Stream<SummaryEntry?> fetchSpecificSummary(
+  final int teamId,
+) {
+  final GraphQLClient client = getClient();
+  final Stream<QueryResult<SummaryEntry?>> result = client.subscribe(
+    SubscriptionOptions<SummaryEntry?>(
+      document: gql(specificSummarySubscription),
+      variables: <String, dynamic>{"team_id": teamId},
+      parserFn: (final Map<String, dynamic> data) {
+        final List<dynamic> specificSummary =
+            data["specific_summary"] as List<dynamic>;
+        if (specificSummary.isEmpty) {
+          return null;
+        }
+        return SummaryEntry(
+          intakeText: specificSummary[0]["intake_text"] as String,
+          ampText: specificSummary[0]["amp_text"] as String,
+          climbText: specificSummary[0]["climb_text"] as String,
+          drivingText: specificSummary[0]["driving_text"] as String,
+          speakerText: specificSummary[0]["speaker_text"] as String,
+          generalText: specificSummary[0]["general_text"] as String,
+          defenseText: specificSummary[0]["defense_text"] as String,
+        );
+      },
+    ),
+  );
+  return result.map(
+    (final QueryResult<SummaryEntry?> result) =>
+        result.mapQueryResultNullable(),
+  );
 }
 
 class SummaryEntry {
@@ -133,5 +134,5 @@ class SummaryEntry {
 
   @override
   String toString() =>
-      "$intakeText $climbText $drivingText $ampText $speakerText $generalText";
+      "$intakeText $climbText $drivingText $ampText $speakerText $generalText $defenseText";
 }

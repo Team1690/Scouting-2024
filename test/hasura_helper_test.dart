@@ -1,7 +1,13 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/specific_summary_card.dart";
 
 void main() {
+  group("Query", () {
+    test("Query", () {
+      expect(fetchSpecificSummary(10).first, completes);
+    });
+  });
   group("Map Extenstions", () {
     group("Map Nullable", () {
       test("Actually Null", () {

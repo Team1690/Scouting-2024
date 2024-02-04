@@ -20,12 +20,14 @@ GraphQLClient getClient() {
   );
 }
 
-extension MapQueryResult<A> on QueryResult<A> {
+extension MapQueryResult<A> on QueryResult<A?> {
   A mapQueryResult() => (hasException
       ? throw exception!
       : data == null
           ? (throw Exception("Data returned null"))
           : parsedData!);
+
+  A? mapQueryResultNullable() => (hasException ? throw exception! : parsedData);
 }
 
 A queryResultToParsed<A>(final QueryResult<A> result) =>
