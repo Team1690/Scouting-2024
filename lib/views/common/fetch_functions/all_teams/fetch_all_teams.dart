@@ -149,20 +149,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                       ),
                     )
                     .toList();
-            final double climbedPercentage = 100 *
-                climbed
-                    .where(
-                      (
-                        final ({
-                          Climb climb,
-                          RobotFieldStatus robotFieldStatus
-                        }) element,
-                      ) =>
-                          element.climb == Climb.climbed ||
-                          element.climb == Climb.buddyClimbed,
-                    )
-                    .length /
-                climbed
+            final double climbedPercentage = climbed
                     .where(
                       (
                         final ({
@@ -173,7 +160,34 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                           element.climb != Climb.noAttempt &&
                           element.robotFieldStatus == RobotFieldStatus.worked,
                     )
-                    .length;
+                    .isEmpty
+                ? 0
+                : 100 *
+                    climbed
+                        .where(
+                          (
+                            final ({
+                              Climb climb,
+                              RobotFieldStatus robotFieldStatus
+                            }) element,
+                          ) =>
+                              element.climb == Climb.climbed ||
+                              element.climb == Climb.buddyClimbed,
+                        )
+                        .length /
+                    climbed
+                        .where(
+                          (
+                            final ({
+                              Climb climb,
+                              RobotFieldStatus robotFieldStatus
+                            }) element,
+                          ) =>
+                              element.climb != Climb.noAttempt &&
+                              element.robotFieldStatus ==
+                                  RobotFieldStatus.worked,
+                        )
+                        .length;
 
             return AllTeamData(
               amountOfMatches: (team["technical_matches_aggregate"]["nodes"]
