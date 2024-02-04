@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
+import "package:scouting_frontend/views/common/fetch_functions/aggregate_data/aggregate_technical_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/all_teams/fetch_all_teams.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -255,16 +256,13 @@ void save(
               autoGamepieceAvg: 0,
               teleGamepieceAvg: 0,
               gamepieceAvg: 0,
-              missedAvg: 0,
               gamepiecePointAvg: 0,
               brokenMatches: 0,
               amountOfMatches: 0,
               matchesClimbed: 0,
-              trapAverage: 0,
               workedPercentage: 0,
-              teleAmpAvg: 0,
-              teleSpeakerAvg: 0,
               climbedPercentage: 0,
+              aggregateData: AggregateData.parse(0),
             ),
           )
           .map(

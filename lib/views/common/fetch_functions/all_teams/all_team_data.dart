@@ -1,10 +1,10 @@
 import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/views/common/fetch_functions/aggregate_data/aggregate_technical_data.dart";
 
 class AllTeamData {
+  //TODO: make const + add copywith
   AllTeamData({
     required this.climbedPercentage,
-    required this.teleAmpAvg,
-    required this.teleSpeakerAvg,
     required this.workedPercentage,
     required this.faultMessages,
     required this.taken,
@@ -15,12 +15,11 @@ class AllTeamData {
     required this.autoGamepieceAvg,
     required this.teleGamepieceAvg,
     required this.gamepieceAvg,
-    required this.missedAvg,
     required this.gamepiecePointAvg,
     required this.brokenMatches,
     required this.amountOfMatches,
     required this.matchesClimbed,
-    required this.trapAverage,
+    required this.aggregateData,
   });
   final LightTeam team;
   int firstPicklistIndex;
@@ -28,18 +27,15 @@ class AllTeamData {
   int thirdPickListIndex;
   final double autoGamepieceAvg;
   final double teleGamepieceAvg;
-  final double teleAmpAvg;
-  final double teleSpeakerAvg;
   final double gamepieceAvg;
-  final double missedAvg;
   final double gamepiecePointAvg;
-  final double trapAverage;
   final int brokenMatches;
   final int amountOfMatches;
   final int matchesClimbed;
   final double workedPercentage;
   final double climbedPercentage;
   bool taken;
+  final AggregateData aggregateData;
   final List<String> faultMessages;
 
   @override

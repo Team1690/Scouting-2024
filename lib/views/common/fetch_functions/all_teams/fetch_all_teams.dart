@@ -2,6 +2,7 @@ import "package:graphql/client.dart";
 import "package:scouting_frontend/models/helpers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
+import "package:scouting_frontend/views/common/fetch_functions/aggregate_data/aggregate_technical_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
 import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
 import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
@@ -20,6 +21,28 @@ subscription FetchAllTeams {
     technical_matches_aggregate {
       aggregate {
         avg {
+          auto_amp
+          auto_amp_missed
+          auto_speaker
+          auto_speaker_missed
+          trap_amount
+          tele_speaker_missed
+          tele_speaker
+          tele_amp_missed
+          tele_amp
+        }
+        max {
+          auto_amp
+          auto_amp_missed
+          auto_speaker
+          auto_speaker_missed
+          trap_amount
+          tele_speaker_missed
+          tele_speaker
+          tele_amp_missed
+          tele_amp
+        }
+        min {
           auto_amp
           auto_amp_missed
           auto_speaker
@@ -68,26 +91,18 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                       ),
                     )
                     .toList();
-            final dynamic avg =
-                team["technical_matches_aggregate"]["aggregate"]["avg"];
-            final bool avgNullValidator = avg["auto_amp"] == null;
-            final double autoGamepieceMissed = avgNullValidator
-                ? double.nan
-                : (avg["auto_amp_missed"] as double) +
-                    (avg["auto_speaker_missed"] as double);
-            final double teleGamepieceMissed = avgNullValidator
-                ? double.nan
-                : (avg["tele_amp_missed"] as double) +
-                    (avg["tele_speaker_missed"] as double);
+            final dynamic aggregateTable =
+                team["technical_matches_aggregate"]["aggregate"];
+            final bool avgNullValidator = aggregateTable["auto_amp"] == null;
             final double gamepiecePointsAvg = avgNullValidator
                 ? double.nan
-                : getPoints<double>(parseMatch<double>(avg));
+                : getPoints<double>(parseMatch<double>(aggregateTable));
             final double autoGamepieceAvg = avgNullValidator
                 ? double.nan
                 : getPieces<double>(
                     parseByMode<double>(
                       MatchMode.auto,
-                      avg,
+                      aggregateTable,
                     ),
                   );
             final double teleGamepieceAvg = avgNullValidator
@@ -95,14 +110,12 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                 : getPieces<double>(
                     parseByMode<double>(
                       MatchMode.tele,
-                      avg,
+                      aggregateTable,
                     ),
                   );
             final double gamepieceSum = avgNullValidator
                 ? double.nan
-                : getPieces<double>(parseMatch<double>(avg));
-            final double avgTraps =
-                avgNullValidator ? double.nan : avg["trap_amount"] as double;
+                : getPieces<double>(parseMatch<double>(aggregateTable));
             final int firstPicklistIndex = team["first_picklist_index"] as int;
             final int secondPicklistIndex =
                 team["second_picklist_index"] as int;
@@ -121,10 +134,6 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                         )
                         .length /
                     amountOfMatches);
-            final double teleAmpAvg =
-                avgNullValidator ? double.nan : avg["tele_amp"] as double;
-            final double teleSpeakerAvg =
-                avgNullValidator ? double.nan : avg["tele_speaker"] as double;
 
             final int thirdPicklistIndex = team["third_picklist_index"] as int;
             final List<Climb> climbed =
@@ -167,19 +176,16 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
               autoGamepieceAvg: autoGamepieceAvg,
               teleGamepieceAvg: teleGamepieceAvg,
               gamepieceAvg: gamepieceSum,
-              missedAvg: autoGamepieceMissed + teleGamepieceMissed,
               gamepiecePointAvg: gamepiecePointsAvg,
               team: LightTeam.fromJson(team),
               firstPicklistIndex: firstPicklistIndex,
               secondPicklistIndex: secondPicklistIndex,
-              trapAverage: avgTraps,
               thirdPickListIndex: thirdPicklistIndex,
               taken: taken,
               faultMessages: faultMessages,
               workedPercentage: workedPercentage,
-              teleAmpAvg: teleAmpAvg,
-              teleSpeakerAvg: teleSpeakerAvg,
               climbedPercentage: climbedPercentage,
+              aggregateData: AggregateData.parse(aggregateTable),
             );
           }).toList();
         },
