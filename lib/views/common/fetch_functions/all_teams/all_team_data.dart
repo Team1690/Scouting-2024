@@ -20,6 +20,7 @@ class AllTeamData {
     required this.amountOfMatches,
     required this.matchesClimbed,
     required this.aggregateData,
+    required this.aim,
   });
   final LightTeam team;
   int firstPicklistIndex;
@@ -34,6 +35,7 @@ class AllTeamData {
   final int matchesClimbed;
   final double workedPercentage;
   final double climbedPercentage;
+  final double aim;
   bool taken;
   final AggregateData aggregateData;
   final List<String> faultMessages;

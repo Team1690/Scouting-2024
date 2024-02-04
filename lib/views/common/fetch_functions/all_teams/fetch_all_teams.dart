@@ -222,6 +222,13 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
               workedPercentage: workedPercentage,
               climbedPercentage: climbedPercentage,
               aggregateData: AggregateData.parse(aggregateTable),
+              aim: 100 *
+                  gamepieceSum /
+                  (AggregateData.parse(aggregateTable).avgTeleSpeakerMissed +
+                      AggregateData.parse(aggregateTable).avgTeleAmpMissed +
+                      AggregateData.parse(aggregateTable).avgAutoSpeakerMissed +
+                      AggregateData.parse(aggregateTable).avgAutoAmpMissed +
+                      gamepieceSum),
             );
           }).toList();
         },

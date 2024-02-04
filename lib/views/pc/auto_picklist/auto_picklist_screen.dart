@@ -245,6 +245,7 @@ void save(
               workedPercentage: e.workedPercentage,
               climbedPercentage: e.climbedPercentage,
               aggregateData: e.aggregateData,
+              aim: e.aim,
             ),
           )
           .map(
