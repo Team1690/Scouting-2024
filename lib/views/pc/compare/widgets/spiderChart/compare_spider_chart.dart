@@ -106,7 +106,7 @@ class CompareSpiderChart extends StatelessWidget {
                 "Tele Amp",
                 "Tele Speaker",
                 "Climb Percentage",
-                "Average Trap"
+                "Average Trap",
               ],
             ),
           ),
