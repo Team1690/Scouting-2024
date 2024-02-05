@@ -159,7 +159,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.climb.chartHeight,
+                                            match.climb.chartHeight.toInt(),
                                       )
                                       .toList(),
                             )

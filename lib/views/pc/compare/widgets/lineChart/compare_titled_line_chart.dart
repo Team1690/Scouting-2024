@@ -33,11 +33,19 @@ class CompareClimbLineChart extends StatelessWidget {
               top: 40,
             ),
             child: DashboardTitledLineChart(
-              maxY: 4,
-              minY: -1,
+              maxY: 1 +
+                  Climb.values.fold(
+                      0,
+                      (final double previousValue, final Climb element) =>
+                          max(previousValue, element.chartHeight)),
+              minY: -1 +
+                  Climb.values.fold(
+                      0,
+                      (final double previousValue, final Climb element) =>
+                          min(previousValue, element.chartHeight)),
               heightsToTitles: <int, String>{
                 for (final Climb climb in Climb.values)
-                  climb.chartHeight: climb.title,
+                  climb.chartHeight.toInt(): climb.title,
               },
               defenseAmounts: teamDatas
                   .map(

@@ -26,6 +26,8 @@ class TitledLineChart extends StatelessWidget {
               top: 40,
             ),
             child: DashboardTitledLineChart(
+              maxY: 2,
+              minY: -1,
               showShadow: true,
               defenseAmounts: data.defenseAmounts,
               inputedColors: const <Color>[primaryColor],

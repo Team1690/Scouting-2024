@@ -6,7 +6,7 @@ enum Climb {
 
   const Climb(this.title, this.chartHeight);
   final String title;
-  final int chartHeight;
+  final double chartHeight;
 }
 
 Climb climbTitleToEnum(final String title) =>
