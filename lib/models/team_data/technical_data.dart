@@ -1,4 +1,4 @@
-import "package:scouting_frontend/models/parse_match_functions.dart";
+import "package:scouting_frontend/models/enums/point_giver_enum.dart";
 
 class TechnicalData {
   TechnicalData({

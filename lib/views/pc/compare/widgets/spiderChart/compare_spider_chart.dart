@@ -3,7 +3,7 @@ import "dart:math";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
-import "package:scouting_frontend/models/parse_match_functions.dart";
+import "package:scouting_frontend/models/enums/point_giver_enum.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/spiderChart/radar_chart.dart";

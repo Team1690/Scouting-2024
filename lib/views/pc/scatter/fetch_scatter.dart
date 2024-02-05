@@ -2,7 +2,7 @@ import "package:collection/collection.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/models/parse_match_functions.dart";
+import "package:scouting_frontend/models/enums/point_giver_enum.dart";
 import "package:scouting_frontend/views/pc/scatter/scatter.dart";
 
 const String query = """
