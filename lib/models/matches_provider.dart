@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:scouting_frontend/models/schedule_match.dart';
+import "package:scouting_frontend/models/schedule_match.dart";
 
 class MatchesProvider extends InheritedWidget {
   MatchesProvider({

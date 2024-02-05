@@ -1,5 +1,5 @@
 import "package:graphql/client.dart";
-import 'package:scouting_frontend/models/schedule_match.dart';
+import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 

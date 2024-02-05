@@ -1,5 +1,5 @@
 import "package:scouting_frontend/models/team_model.dart";
-import 'package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart';
+import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
 
 class AllTeamData {
   //TODO: make const + add copywith

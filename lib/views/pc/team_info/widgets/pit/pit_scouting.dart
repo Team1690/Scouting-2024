@@ -4,7 +4,7 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/robot_image_card.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import 'package:scouting_frontend/models/team_data/pit_data/pit_data.dart';
+import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
 
 class PitScouting extends StatelessWidget {
   const PitScouting(this.p0);

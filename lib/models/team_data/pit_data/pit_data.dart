@@ -1,7 +1,7 @@
 import "package:scouting_frontend/models/team_model.dart";
-import 'package:scouting_frontend/models/team_data/pit_data/drive_motor_enum.dart';
-import 'package:scouting_frontend/models/team_data/pit_data/drive_train_enum.dart';
-import 'package:scouting_frontend/models/team_data/pit_data/drive_wheel_enum.dart';
+import "package:scouting_frontend/models/team_data/pit_data/drive_motor_enum.dart";
+import "package:scouting_frontend/models/team_data/pit_data/drive_train_enum.dart";
+import "package:scouting_frontend/models/team_data/pit_data/drive_wheel_enum.dart";
 
 class PitData {
   PitData({

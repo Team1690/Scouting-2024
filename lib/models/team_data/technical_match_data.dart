@@ -1,6 +1,6 @@
 import "package:scouting_frontend/models/helpers.dart";
-import 'package:scouting_frontend/models/enums/climb_enum.dart';
-import 'package:scouting_frontend/models/parse_match_functions.dart';
+import "package:scouting_frontend/models/enums/climb_enum.dart";
+import "package:scouting_frontend/models/parse_match_functions.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 class TechnicalMatchData {

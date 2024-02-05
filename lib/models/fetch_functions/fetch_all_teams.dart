@@ -2,10 +2,10 @@ import "package:graphql/client.dart";
 import "package:scouting_frontend/models/helpers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import 'package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart';
-import 'package:scouting_frontend/models/team_data/all_team_data.dart';
-import 'package:scouting_frontend/models/enums/climb_enum.dart';
-import 'package:scouting_frontend/models/parse_match_functions.dart';
+import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
+import "package:scouting_frontend/models/team_data/all_team_data.dart";
+import "package:scouting_frontend/models/enums/climb_enum.dart";
+import "package:scouting_frontend/models/parse_match_functions.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 const String subscription = r"""
