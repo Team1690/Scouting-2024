@@ -14,6 +14,7 @@ import "package:scouting_frontend/views/mobile/screens/input_view/climbing.dart"
 import "package:scouting_frontend/views/mobile/screens/input_view/game_piece_counter.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/starting_pos.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/trap_amount.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/traps_missed.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
 import "package:scouting_frontend/views/mobile/screens/scouter_name_input.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
@@ -236,14 +237,35 @@ class _UserInputState extends State<UserInput> {
                           });
                         },
                       ),
-                      TrapAmount(
-                        onTrapChange: (final int trap) {
-                          setState(() {
-                            match = match.copyWith(trapAmount: always(trap));
-                          });
-                        },
-                        match: match,
-                        flickerScreen: flickerScreen,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            child: TrapAmount(
+                              onTrapChange: (final int trap) {
+                                setState(() {
+                                  match =
+                                      match.copyWith(trapAmount: always(trap));
+                                });
+                              },
+                              match: match,
+                              flickerScreen: flickerScreen,
+                            ),
+                          ),
+                          const VerticalDivider(),
+                          Expanded(
+                            child: TrapsMissed(
+                              onTrapChange: (final int trap) {
+                                setState(() {
+                                  match =
+                                      match.copyWith(trapsMissed: always(trap));
+                                });
+                              },
+                              flickerScreen: flickerScreen,
+                              match: match,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 20,
@@ -403,8 +425,8 @@ class _UserInputState extends State<UserInput> {
       );
 
   String insertMutation = r"""
-mutation MyMutation($auto_amp: Int!, $auto_amp_missed: Int!, $auto_speaker: Int!, $auto_speaker_missed: Int!, $climb_id: Int!, $tele_amp: Int!, $tele_amp_missed: Int!, $tele_speaker: Int!, $tele_speaker_missed: Int!, $trap_amount: Int!, $harmony_with: Int!, $is_rematch: Boolean!, $robot_field_status_id: Int, $schedule_id: Int!, $starting_position_id: Int!, $team_id: Int!, $scouter_name: String!) {
-  insert_technical_match(objects: {auto_amp: $auto_amp, auto_amp_missed: $auto_amp_missed, auto_speaker: $auto_speaker, auto_speaker_missed: $auto_speaker_missed, cilmb_id: $climb_id, tele_amp: $tele_amp, tele_amp_missed: $tele_amp_missed, tele_speaker: $tele_speaker, tele_speaker_missed: $tele_speaker_missed, trap_amount: $trap_amount, harmony_with: $harmony_with, is_rematch: $is_rematch, robot_field_status_id: $robot_field_status_id, schedule_id: $schedule_id, starting_position_id: $starting_position_id, team_id: $team_id, scouter_name: $scouter_name}) {
+mutation MyMutation($auto_amp: Int!, $auto_amp_missed: Int!, $auto_speaker: Int!, $auto_speaker_missed: Int!, $climb_id: Int!, $tele_amp: Int!, $tele_amp_missed: Int!, $tele_speaker: Int!, $tele_speaker_missed: Int!, $trap_amount: Int!, $traps_missed: Int!, $harmony_with: Int!, $is_rematch: Boolean!, $robot_field_status_id: Int, $schedule_id: Int!, $starting_position_id: Int!, $team_id: Int!, $scouter_name: String!) {
+  insert_technical_match(objects: {auto_amp: $auto_amp, auto_amp_missed: $auto_amp_missed, auto_speaker: $auto_speaker, auto_speaker_missed: $auto_speaker_missed, cilmb_id: $climb_id, tele_amp: $tele_amp, tele_amp_missed: $tele_amp_missed, tele_speaker: $tele_speaker, tele_speaker_missed: $tele_speaker_missed, trap_amount: $trap_amount, traps_missed: $traps_missed, harmony_with: $harmony_with, is_rematch: $is_rematch, robot_field_status_id: $robot_field_status_id, schedule_id: $schedule_id, starting_position_id: $starting_position_id, team_id: $team_id, scouter_name: $scouter_name}) {
     affected_rows
   }
 }

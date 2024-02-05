@@ -5,6 +5,7 @@ import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.da
 
 class TechnicalMatchData {
   TechnicalMatchData({
+    required this.trapsMissed,
     required this.teleSpeakerMissed,
     required this.autoSpeakerMissed,
     required this.robotFieldStatus,
@@ -32,6 +33,7 @@ class TechnicalMatchData {
   final int autoSpeaker;
   final int matchNumber;
   final int harmonyWith;
+  final int trapsMissed;
   final int trapAmount;
   final int teleAmp;
   final int autoAmp;
@@ -51,6 +53,7 @@ class TechnicalMatchData {
         autoSpeaker: match["auto_speaker"] as int,
         matchNumber: match["schedule_match"]["match_number"] as int,
         harmonyWith: match["harmony_with"] as int,
+        trapsMissed: match["traps_missed"] as int,
         trapAmount: match["trap_amount"] as int,
         autoAmp: match["auto_amp"] as int,
         teleAmp: match["tele_amp"] as int,
