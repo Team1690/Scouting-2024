@@ -192,7 +192,7 @@ class _PickListState extends State<PickList> {
                                             : false)
                                         ? Colors.grey
                                         : Colors.amber,
-                              )
+                              ),
                             ]
                                 .expand(
                                   (final Widget element) => <Widget>[

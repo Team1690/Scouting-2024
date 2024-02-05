@@ -57,14 +57,7 @@ class _ValueSlidersState extends State<ValueSliders> {
                 trapFactor = newValue;
               }),
             ),
-          ].expand(
-            (final Widget element) => <Widget>[
-              const SizedBox(
-                height: 10,
-              ),
-              element,
-            ],
-          ),
+          ],
           const SizedBox(
             height: 10,
           ),
