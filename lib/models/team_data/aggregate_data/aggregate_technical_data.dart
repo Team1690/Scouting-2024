@@ -1,4 +1,4 @@
-import 'package:scouting_frontend/models/team_data/technical_data.dart';
+import "package:scouting_frontend/models/team_data/technical_data.dart";
 
 class AggregateData {
   AggregateData({
@@ -8,6 +8,7 @@ class AggregateData {
     required this.stddev,
     required this.variance,
     required this.sumTotal,
+    required this.gamesPlayed,
   });
 
   final TechnicalData avgData;
@@ -16,6 +17,7 @@ class AggregateData {
   final TechnicalData stddev;
   final TechnicalData variance;
   final TechnicalData sumTotal;
+  final int gamesPlayed;
 
   static AggregateData parse(final dynamic aggregateTable) => AggregateData(
         avgData: TechnicalData.parse(aggregateTable["avg"]),
@@ -24,5 +26,6 @@ class AggregateData {
         stddev: TechnicalData.parse(aggregateTable["stddev"]),
         variance: TechnicalData.parse(aggregateTable["var"]),
         sumTotal: TechnicalData.parse(aggregateTable["sum"]),
+        gamesPlayed: aggregateTable["count"] as int? ?? 0,
       );
 }

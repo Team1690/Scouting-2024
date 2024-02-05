@@ -42,16 +42,16 @@ class CompareSpiderChart extends StatelessWidget {
                 final double maxTeleAmp = data
                     .map(
                       (final TeamData element) =>
-                          element.aggregateData.maxTeleAmp,
+                          element.aggregateData.maxData.teleAmp,
                     )
-                    .fold(0, max)
+                    .fold(0.0, max)
                     .toDouble();
                 final double maxTeleSpeaker = data
                     .map(
                       (final TeamData element) =>
-                          element.aggregateData.maxTeleSpeaker,
+                          element.aggregateData.maxData.teleSpeaker,
                     )
-                    .fold(0, max)
+                    .fold(0.0, max)
                     .toDouble();
                 const double maxTrapAmount = 2;
                 return <double>[
@@ -63,11 +63,11 @@ class CompareSpiderChart extends StatelessWidget {
                       maxAutoPoints,
                   100 *
                       PointGiver.teleAmp
-                          .calcPoints(team.aggregateData.avgTeleAmp) /
+                          .calcPoints(team.aggregateData.avgData.teleAmp) /
                       PointGiver.teleAmp.calcPoints(maxTeleAmp),
                   100 *
                       PointGiver.teleSpeaker.calcPoints(
-                        team.aggregateData.avgTeleSpeaker,
+                        team.aggregateData.avgData.teleSpeaker,
                       ) /
                       PointGiver.teleSpeaker.calcPoints(maxTeleSpeaker),
                   100 *
@@ -92,7 +92,7 @@ class CompareSpiderChart extends StatelessWidget {
                                   )
                                   .length),
                   //TODO: trap percentage if it is suddenly important
-                  100 * team.aggregateData.avgTrapAmount / maxTrapAmount,
+                  100 * team.aggregateData.avgData.trapAmount / maxTrapAmount,
                 ]
                     .map<int>(
                       (final double e) =>

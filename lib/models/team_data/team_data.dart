@@ -3,8 +3,8 @@ import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_tech
 import "package:scouting_frontend/models/team_data/specific_match_data.dart";
 import "package:scouting_frontend/models/team_data/specific_summary_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
-import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
 
 class TeamData {
   TeamData({
