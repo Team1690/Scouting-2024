@@ -3,7 +3,7 @@ import "dart:io";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/matches_model.dart";
+import 'package:scouting_frontend/models/schedule_match.dart';
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/fetch_matches.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";

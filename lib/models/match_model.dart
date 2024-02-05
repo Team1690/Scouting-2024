@@ -1,6 +1,6 @@
 import "package:flutter/cupertino.dart";
 import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/models/matches_model.dart";
+import 'package:scouting_frontend/models/schedule_match.dart';
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 
@@ -143,57 +143,4 @@ class Match implements HasuraVars {
         "traps_missed": trapsMissed,
         "starting_position_id": startingPositionID,
       };
-}
-
-enum MatchMode {
-  auto(1, "auto"),
-  tele(0, "tele");
-
-  const MatchMode(this.pointAddition, this.title);
-  final int pointAddition;
-  final String title;
-}
-
-enum Gamepiece {
-  cone("cones"),
-  cube("cubes");
-
-  const Gamepiece(this.title);
-  final String title;
-}
-
-enum GridLevel {
-  top(5, "top"),
-  mid(3, "mid"),
-  low(2, "low"),
-  none(0, "delivered");
-
-  const GridLevel(this.points, this.title);
-  final int points;
-  final String title;
-}
-
-class EffectiveScore {
-  const EffectiveScore({
-    required this.mode,
-    required this.piece,
-    required this.level,
-  });
-  final MatchMode mode;
-  final Gamepiece piece;
-  final GridLevel? level;
-
-  @override
-  int get hashCode => Object.hashAll(<Object?>[
-        mode,
-        piece,
-        level,
-      ]);
-
-  @override
-  bool operator ==(final Object other) =>
-      other is EffectiveScore &&
-      other.level == level &&
-      other.mode == mode &&
-      other.piece == piece;
 }

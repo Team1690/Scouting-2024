@@ -3,7 +3,7 @@ import "dart:ui" as ui;
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/models/matches_model.dart";
+import 'package:scouting_frontend/models/schedule_match.dart';
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";

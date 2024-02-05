@@ -3,12 +3,12 @@ import "package:graphql/client.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_motor_enum.dart";
-import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_train_enum.dart";
-import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_wheel_enum.dart";
-import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
+import 'package:scouting_frontend/models/team_data/pit_data/drive_motor_enum.dart';
+import 'package:scouting_frontend/models/team_data/pit_data/drive_train_enum.dart';
+import 'package:scouting_frontend/models/team_data/pit_data/drive_wheel_enum.dart';
+import 'package:scouting_frontend/models/team_data/specific_match_data.dart';
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
-import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
+import 'package:scouting_frontend/models/team_data/pit_data/pit_data.dart';
 
 //TODO add season specific vars and tables to the query
 const String teamInfoQuery = """
