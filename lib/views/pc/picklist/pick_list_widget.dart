@@ -159,7 +159,7 @@ class _PickListState extends State<PickList> {
                               ),
                               Expanded(
                                 child: Text(
-                                  "Climbed: ${pickListTeam..climbPercentage.toStringAsFixed(2)}%",
+                                  "Climbed: ${pickListTeam.climbPercentage.toStringAsFixed(2)}%",
                                 ),
                               ),
                               Expanded(

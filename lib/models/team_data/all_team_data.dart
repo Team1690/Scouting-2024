@@ -49,9 +49,11 @@ class AllTeamData {
             element.climb == Climb.buddyClimbed,
       )
       .length;
-  double get climbPercentage => aggregateData.gamesPlayed == 0
-      ? 0
-      : matchesClimbed / aggregateData.gamesPlayed;
+  double get climbPercentage =>
+      100 *
+      (aggregateData.gamesPlayed == 0
+          ? 0
+          : matchesClimbed / aggregateData.gamesPlayed);
   @override
   String toString() => "${team.name}  ${team.number}";
 }
