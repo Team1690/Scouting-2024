@@ -20,6 +20,7 @@ class PitData {
     required this.harmony,
     required this.trap,
     required this.hasBuddyClimb,
+    required this.otherWheelType,
   });
   final DriveTrain driveTrainType;
   final int driveMotorAmount;
@@ -36,6 +37,7 @@ class PitData {
   final String url;
   final List<String>? faultMessages;
   final LightTeam team;
+  final String? otherWheelType;
 
   static PitData? parse(final dynamic pit) =>
       pit != null && pit["drivetrain"] != null
@@ -65,6 +67,7 @@ class PitData {
               harmony: pit["harmony"] as bool,
               trap: pit["trap"] as int,
               hasBuddyClimb: pit["has_buddy_climb"] as bool,
+              otherWheelType: pit["other_wheel_type"] as String?,
             )
           : null;
 }

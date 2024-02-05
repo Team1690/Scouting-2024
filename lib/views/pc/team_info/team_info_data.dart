@@ -9,6 +9,7 @@ import "package:scouting_frontend/views/common/fetch_functions/technical_match_d
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart_card.dart";
+import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
@@ -61,10 +62,10 @@ class TeamInfoData extends StatelessWidget {
                     const SizedBox(
                       width: defaultPadding,
                     ),
-                    // Expanded(
-                    //   flex: 2,
-                    //   child: PitScouting(data.pitViewData),
-                    // ),
+                    Expanded(
+                      flex: 2,
+                      child: PitScouting(data),
+                    ),
                   ],
                 ),
               ) ??
