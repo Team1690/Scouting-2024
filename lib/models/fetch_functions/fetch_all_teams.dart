@@ -109,6 +109,10 @@ subscription FetchAllTeams {
         tele_speaker_missed
         trap_amount
         traps_missed
+        schedule_match {
+          id
+          match_number
+        }
       }
     }
     taken

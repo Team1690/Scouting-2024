@@ -7,7 +7,6 @@ class TechnicalMatchData {
   TechnicalMatchData({
     required this.robotFieldStatus,
     required this.data,
-    required this.climbingPoints,
     required this.matchNumber,
     required this.harmonyWith,
     required this.climb,
@@ -16,7 +15,6 @@ class TechnicalMatchData {
 
   final RobotFieldStatus robotFieldStatus;
   final TechnicalData data;
-  final int climbingPoints;
   final int matchNumber;
   final int harmonyWith;
   final Climb climb;
@@ -26,7 +24,6 @@ class TechnicalMatchData {
         robotFieldStatus: robotFieldStatusTitleToEnum(
           match["robot_field_status"]["title"] as String,
         ),
-        climbingPoints: match["climb"]["points"] as int,
         matchNumber: match["schedule_match"]["match_number"] as int,
         harmonyWith: match["harmony_with"] as int,
         climb: climbTitleToEnum(match["climb"]["title"] as String),
