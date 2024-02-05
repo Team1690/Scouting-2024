@@ -1,27 +1,27 @@
 import "dart:collection";
-
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/card.dart";
+import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/common/no_team_selected.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_titled_line_chart.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_line_chart.dart";
 
 class CompareGamechartCard extends StatelessWidget {
   const CompareGamechartCard(this.data, this.teams);
-  final SplayTreeSet<CompareTeam> data;
+  final SplayTreeSet<TeamData> data;
   final SplayTreeSet<LightTeam> teams;
   @override
   Widget build(final BuildContext context) {
-    final Iterable<CompareTeam> emptyTeams = data.where(
-      (final CompareTeam element) => element.gamepieces.points.length < 2,
+    final Iterable<TeamData> emptyTeams = data.where(
+      (final TeamData element) => element.technicalMatches.length < 2,
     );
     final List<Color> colors = data
         .map(
-          (final CompareTeam element) => element.team.color,
+          (final TeamData teamData) => teamData.lightTeam.color,
         )
         .toList();
     return DashboardCard(
@@ -30,7 +30,7 @@ class CompareGamechartCard extends StatelessWidget {
           ? NoTeamSelected()
           : emptyTeams.isNotEmpty
               ? Text(
-                  "teams: ${emptyTeams.map((final CompareTeam compareTeam) => compareTeam.team.number).toString()} have insufficient data, please remove them",
+                  "teams: ${emptyTeams.map((final TeamData compareTeam) => compareTeam.lightTeam.number).toString()} have insufficient data, please remove them",
                 )
               : Builder(
                   builder: (
@@ -40,91 +40,148 @@ class CompareGamechartCard extends StatelessWidget {
                     direction: isPC(context) ? Axis.horizontal : Axis.vertical,
                     widgets: <Widget>[
                       CompareLineChart(
-                        data
+                        teamDatas: data.toList(),
+                        data: data
                             .map(
-                              (final CompareTeam element) => element.gamepieces,
+                              (final TeamData teamData) =>
+                                  teamData.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.gamepieces,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
-                        colors,
-                        "Total Gamepieces",
+                        colors: colors,
+                        title: "Total Gamepieces",
                       ),
                       CompareLineChart(
-                        data
+                        teamDatas: data.toList(),
+                        data: data
                             .map(
-                              (final CompareTeam element) =>
-                                  element.gamepiecePoints,
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.gamePiecesPoints,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
-                        colors,
-                        "Gamepiece Points",
+                        colors: colors,
+                        title: "Gamepiece Points",
                       ),
                       CompareLineChart(
-                        data
+                        teamDatas: data.toList(),
+                        data: data
                             .map(
-                              (final CompareTeam element) =>
-                                  element.totalDelivered,
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.totalMissed,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
-                        colors,
-                        "Total Delivered",
+                        colors: colors,
+                        title: "Total Missed",
                       ),
                       CompareLineChart(
-                        data
+                        teamDatas: data.toList(),
+                        data: data
                             .map(
-                              (final CompareTeam element) =>
-                                  element.autoGamepieces,
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.autoGamepieces,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
-                        colors,
-                        "Auto Gamepieces",
+                        colors: colors,
+                        title: "Auto Gamepieces",
                       ),
                       CompareLineChart(
-                        data
+                        teamDatas: data.toList(),
+                        data: data
                             .map(
-                              (final CompareTeam element) =>
-                                  element.teleGamepieces,
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.teleGamepieces,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
-                        colors,
-                        "Teleop Gamepieces",
+                        colors: colors,
+                        title: "Teleop Gamepieces",
                       ),
                       CompareLineChart(
-                        data
+                        teamDatas: data.toList(),
+                        data: data
                             .map(
-                              (final CompareTeam element) => element.totalCones,
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.ampGamepieces,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
-                        colors,
-                        "Total Cones",
+                        colors: colors,
+                        title: "Total Amps",
                       ),
                       CompareLineChart(
-                        data
+                        teamDatas: data.toList(),
+                        data: data
                             .map(
-                              (final CompareTeam element) => element.totalCubes,
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.speakerGamepieces,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
-                        colors,
-                        "Total Cubes",
+                        colors: colors,
+                        title: "Total Speakers",
+                      ),
+                      CompareLineChart(
+                        teamDatas: data.toList(),
+                        data: data
+                            .map(
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.trapAmount,
+                                      )
+                                      .toList(),
+                            )
+                            .toList(),
+                        colors: colors,
+                        title: "Total Traps",
                       ),
                       CompareClimbLineChart(
-                        data
+                        teamDatas: data.toList(),
+                        data: data
                             .map(
-                              (final CompareTeam element) =>
-                                  element.autoBalanceVals,
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.climb.chartHeight.toInt(),
+                                      )
+                                      .toList(),
                             )
                             .toList(),
-                        colors,
-                        "Auto Balance Values",
-                      ),
-                      CompareClimbLineChart(
-                        data
-                            .map(
-                              (final CompareTeam element) =>
-                                  element.endgameBalanceVals,
-                            )
-                            .toList(),
-                        colors,
-                        "Endgame Balance Values",
+                        colors: colors,
+                        title: "Climbed",
                       ),
                     ],
                   ),

@@ -73,20 +73,20 @@ class _BaseLineChart extends StatelessWidget {
                               : Colors.blue,
                 ),
                 checkToShowDot:
-                    (final FlSpot spot, final LineChartBarData data) {
-                  if (robotMatchStatuses[index][spot.x.toInt()] ==
-                          RobotFieldStatus.didntComeToField ||
-                      robotMatchStatuses[index][spot.x.toInt()] ==
-                          RobotFieldStatus.didntWorkOnField) {
-                    return true;
-                  } else if (defenseAmounts[index][spot.x.toInt()] ==
-                          DefenseAmount.halfDefense ||
-                      defenseAmounts[index][spot.x.toInt()] ==
-                          DefenseAmount.fullDefense) {
-                    return true;
-                  }
-                  return false;
-                },
+                    // print(defenseAmounts[index].length);
+                    // if (robotMatchStatuses[index][spot.x.toInt()] ==
+                    //         RobotFieldStatus.didntComeToField ||
+                    //     robotMatchStatuses[index][spot.x.toInt()] ==
+                    //         RobotFieldStatus.didntWorkOnField) {
+                    //   return true;
+                    // } else if (defenseAmounts[index][spot.x.toInt()] ==
+                    //         DefenseAmount.halfDefense ||
+                    //     defenseAmounts[index][spot.x.toInt()] ==
+                    //         DefenseAmount.fullDefense) {
+                    //   return true;
+                    // }
+                    //TODO: fix defense amount so that technical and specific match datas are joined
+                    (final FlSpot spot, final LineChartBarData data) => false,
               ),
               belowBarData: BarAreaData(
                 show: true,
@@ -156,12 +156,16 @@ class DashboardTitledLineChart extends StatelessWidget {
     required this.showShadow,
     required this.robotMatchStatuses,
     required this.heightsToTitles,
+    required this.maxY,
+    required this.minY,
   });
   final List<List<DefenseAmount>> defenseAmounts;
   final List<Color> inputedColors;
   final List<MatchIdentifier> gameNumbers;
   final List<List<RobotFieldStatus>> robotMatchStatuses;
   final Map<int, String> heightsToTitles;
+  final double maxY;
+  final double minY;
 
   final List<List<int>> dataSet;
   final bool showShadow;
@@ -196,8 +200,8 @@ class DashboardTitledLineChart extends StatelessWidget {
           showTitles: true,
           reservedSize: 120,
         ),
-        minY: -1,
-        maxY: 2,
+        minY: minY,
+        maxY: maxY,
       );
 }
 

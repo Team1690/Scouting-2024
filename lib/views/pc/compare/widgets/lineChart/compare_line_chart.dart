@@ -1,13 +1,20 @@
 import "dart:math";
-
 import "package:flutter/material.dart";
-import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
+import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 class CompareLineChart extends StatelessWidget {
-  const CompareLineChart(this.data, this.colors, this.title);
-  final List<CompareLineChartData> data;
+  const CompareLineChart({
+    required this.data,
+    required this.colors,
+    required this.title,
+    required this.teamDatas,
+  });
+  final List<List<int>> data;
+  final List<TeamData> teamDatas;
   final List<Color> colors;
   final String title;
   @override
@@ -25,29 +32,31 @@ class CompareLineChart extends StatelessWidget {
               top: 40,
             ),
             child: DashboardLineChart(
-              defenseAmounts: data
-                  .map((final CompareLineChartData e) => e.defenseAmounts)
+              defenseAmounts: teamDatas
+                  .map(
+                    (final TeamData teamData) => teamData.specificMatches
+                        .map((final SpecificMatchData e) => e.defenseAmount)
+                        .toList(),
+                  )
                   .toList(),
-              robotMatchStatuses: data
-                  .map((final CompareLineChartData e) => e.matchStatuses)
+              robotMatchStatuses: teamDatas
+                  .map(
+                    (final TeamData teamData) => teamData.technicalMatches
+                        .map((final TechnicalMatchData e) => e.robotFieldStatus)
+                        .toList(),
+                  )
                   .toList(),
               showShadow: false,
               inputedColors: colors,
               gameNumbers: List<MatchIdentifier>.generate(
-                data
-                    .map((final CompareLineChartData e) => e.points.length)
-                    .reduce(max),
+                data.map((final List<int> e) => e.length).reduce(max),
                 (final int index) => MatchIdentifier(
                   number: index + 1,
                   type: "Quals",
                   isRematch: false,
                 ),
               ),
-              dataSet: data
-                  .map(
-                    (final CompareLineChartData e) => e.points,
-                  )
-                  .toList(),
+              dataSet: data,
             ),
           ),
         ],
