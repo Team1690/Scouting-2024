@@ -1,16 +1,15 @@
 import "dart:collection";
-
 import "package:carousel_slider/carousel_slider.dart";
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/fetch_teams.dart";
+import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
-import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
-import "package:scouting_frontend/views/pc/compare/models/fetch_compare.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_gamechart_card.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/spiderChart/spider_chart_card.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
@@ -24,7 +23,8 @@ class CompareScreen extends StatefulWidget {
 
 class _CompareScreenState extends State<CompareScreen> {
   late final SplayTreeSet<LightTeam> teams = SplayTreeSet<LightTeam>(
-    (final LightTeam p0, final LightTeam p1) => p0.id.compareTo(p1.id),
+    (final LightTeam team1, final LightTeam team2) =>
+        team1.number.compareTo(team2.number),
   )..addAll(widget.initialTeams);
   final TextEditingController controller = TextEditingController();
   void removeTeam(final MapEntry<int, LightTeam> index) {
@@ -107,17 +107,17 @@ class _CompareScreenState extends State<CompareScreen> {
             const SizedBox(height: defaultPadding),
             Expanded(
               flex: 5,
-              child: FutureBuilder<SplayTreeSet<CompareTeam>>(
+              child: FutureBuilder<SplayTreeSet<TeamData>>(
                 future: teams.isEmpty
-                    ? Future<SplayTreeSet<CompareTeam>>(
-                        always(SplayTreeSet<CompareTeam>()),
+                    ? Future<SplayTreeSet<TeamData>>(
+                        always(SplayTreeSet<TeamData>()),
                       )
-                    : fetchData(
+                    : fetchMultipleTeamData(
                         teams.map((final LightTeam e) => e.id).toList(),
                       ),
                 builder: (
                   final BuildContext context,
-                  final AsyncSnapshot<SplayTreeSet<CompareTeam>?> snapshot,
+                  final AsyncSnapshot<SplayTreeSet<TeamData>?> snapshot,
                 ) {
                   if (snapshot.hasError) {
                     return Text(snapshot.error!.toString());
@@ -157,7 +157,7 @@ class _CompareScreenState extends State<CompareScreen> {
                   }
 
                   return snapshot.data
-                          .mapNullable((final SplayTreeSet<CompareTeam> data) {
+                          .mapNullable((final SplayTreeSet<TeamData> data) {
                         if (isPC(context)) {
                           return Row(
                             children: <Widget>[

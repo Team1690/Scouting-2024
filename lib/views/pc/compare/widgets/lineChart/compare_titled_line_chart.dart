@@ -1,13 +1,21 @@
 import "dart:math";
-
 import "package:flutter/material.dart";
-import "package:scouting_frontend/views/pc/compare/models/compare_classes.dart";
+import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
+import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
+import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 class CompareClimbLineChart extends StatelessWidget {
-  const CompareClimbLineChart(this.data, this.colors, this.title);
-  final List<CompareLineChartData> data;
+  const CompareClimbLineChart({
+    required this.colors,
+    required this.data,
+    required this.title,
+    required this.teamDatas,
+  });
+  final List<List<int>> data;
+  final List<TeamData> teamDatas;
   final List<Color> colors;
   final String title;
   @override
@@ -25,15 +33,34 @@ class CompareClimbLineChart extends StatelessWidget {
               top: 40,
             ),
             child: DashboardTitledLineChart(
-              //TODO add titles
-              heightsToTitles: const <int, String>{},
-              defenseAmounts: data
-                  .map((final CompareLineChartData e) => e.defenseAmounts)
-                  .toList(),
-              robotMatchStatuses: data
+              maxY: 1 +
+                  Climb.values.fold(
+                    0,
+                    (final double previousValue, final Climb element) =>
+                        max(previousValue, element.chartHeight),
+                  ),
+              minY: -1 +
+                  Climb.values.fold(
+                    0,
+                    (final double previousValue, final Climb element) =>
+                        min(previousValue, element.chartHeight),
+                  ),
+              heightsToTitles: <int, String>{
+                for (final Climb climb in Climb.values)
+                  climb.chartHeight.toInt(): climb.title,
+              },
+              defenseAmounts: teamDatas
                   .map(
-                    (final CompareLineChartData chartData) =>
-                        chartData.matchStatuses,
+                    (final TeamData teamData) => teamData.specificMatches
+                        .map((final SpecificMatchData e) => e.defenseAmount)
+                        .toList(),
+                  )
+                  .toList(),
+              robotMatchStatuses: teamDatas
+                  .map(
+                    (final TeamData teamData) => teamData.technicalMatches
+                        .map((final TechnicalMatchData e) => e.robotFieldStatus)
+                        .toList(),
                   )
                   .toList(),
               showShadow: false,
@@ -41,8 +68,7 @@ class CompareClimbLineChart extends StatelessWidget {
               gameNumbers: List<MatchIdentifier>.generate(
                 data
                     .map(
-                      (final CompareLineChartData chartData) =>
-                          chartData.points.length,
+                      (final List<int> chartData) => chartData.length,
                     )
                     .reduce(max),
                 (final int index) => MatchIdentifier(
@@ -53,7 +79,7 @@ class CompareClimbLineChart extends StatelessWidget {
               ),
               dataSet: data
                   .map(
-                    (final CompareLineChartData chartData) => chartData.points,
+                    (final List<int> chartData) => chartData,
                   )
                   .toList(),
             ),
