@@ -151,6 +151,22 @@ class CompareGamechartCard extends StatelessWidget {
                         colors: colors,
                         title: "Total Speakers",
                       ),
+                      CompareLineChart(
+                        teamDatas: data.toList(),
+                        data: data
+                            .map(
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.trapAmount,
+                                      )
+                                      .toList(),
+                            )
+                            .toList(),
+                        colors: colors,
+                        title: "Total Traps",
+                      ),
                       CompareClimbLineChart(
                         teamDatas: data.toList(),
                         data: data

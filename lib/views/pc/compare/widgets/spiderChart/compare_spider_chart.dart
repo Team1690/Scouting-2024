@@ -1,4 +1,6 @@
 import "dart:collection";
+import "dart:math";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
 import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
@@ -27,70 +29,84 @@ class CompareSpiderChart extends StatelessWidget {
                   )
                   .toList(),
               numberOfFeatures: 5,
-              data: data
-                  .map(
-                    (final TeamData team) => <double>[
-                      100 *
-                          PointGiver.autoAmp
-                              .calcPoints(team.aggregateData.avgAutoAmp) /
-                          (PointGiver.autoAmp.calcPoints(
-                                team.aggregateData.avgAutoAmp,
-                              ) +
-                              PointGiver.autoSpeaker.calcPoints(
-                                team.aggregateData.avgAutoSpeaker,
-                              )),
-                      100 *
-                          PointGiver.autoSpeaker.calcPoints(
-                            team.aggregateData.avgAutoSpeaker,
-                          ) /
-                          (PointGiver.autoAmp.calcPoints(
-                                team.aggregateData.avgAutoAmp,
-                              ) +
-                              PointGiver.autoSpeaker.calcPoints(
-                                team.aggregateData.avgAutoSpeaker,
-                              )),
-                      100 *
-                          PointGiver.teleAmp
-                              .calcPoints(team.aggregateData.avgTeleAmp) /
-                          (PointGiver.teleAmp.calcPoints(
-                                team.aggregateData.avgTeleAmp,
-                              ) +
-                              PointGiver.teleSpeaker.calcPoints(
-                                team.aggregateData.avgTeleSpeaker,
-                              )),
-                      100 *
-                          PointGiver.teleSpeaker.calcPoints(
-                            team.aggregateData.avgTeleSpeaker,
-                          ) /
-                          (PointGiver.teleAmp.calcPoints(
-                                team.aggregateData.avgTeleAmp,
-                              ) +
-                              PointGiver.teleSpeaker.calcPoints(
-                                team.aggregateData.avgTeleSpeaker,
-                              )),
-                      100 *
-                          team.technicalMatches
+              data: data.map((final TeamData team) {
+                //TODO: fetch and getters
+                final double maxAutoPoints = data
+                    .map(
+                      (final TeamData element) => element.technicalMatches
+                          .map((final TechnicalMatchData e) => e.autoPoints)
+                          .fold(0, max),
+                    )
+                    .fold(0, max)
+                    .toDouble();
+                final double maxTeleAmp = data
+                    .map(
+                      (final TeamData element) =>
+                          element.aggregateData.maxTeleAmp,
+                    )
+                    .fold(0, max)
+                    .toDouble();
+                final double maxTeleSpeaker = data
+                    .map(
+                      (final TeamData element) =>
+                          element.aggregateData.maxTeleSpeaker,
+                    )
+                    .fold(0, max)
+                    .toDouble();
+                const double maxTrapAmount = 2;
+                return <double>[
+                  100 *
+                      (team.technicalMatches
+                              .map((final TechnicalMatchData e) => e.autoPoints)
+                              .sum /
+                          team.technicalMatches.length) /
+                      maxAutoPoints,
+                  100 *
+                      PointGiver.teleAmp
+                          .calcPoints(team.aggregateData.avgTeleAmp) /
+                      PointGiver.teleAmp.calcPoints(maxTeleAmp),
+                  100 *
+                      PointGiver.teleSpeaker.calcPoints(
+                        team.aggregateData.avgTeleSpeaker,
+                      ) /
+                      PointGiver.teleSpeaker.calcPoints(maxTeleSpeaker),
+                  100 *
+                      (team.technicalMatches
                               .where(
                                 (final TechnicalMatchData element) =>
-                                    element.climb == Climb.climbed,
+                                    element.climb != Climb.noAttempt,
                               )
-                              .length /
-                          team.technicalMatches.length,
-                    ]
-                        .map<int>(
-                          (final double e) =>
-                              e.isNaN || e.isInfinite ? 0 : e.toInt(),
-                        )
-                        .toList(),
-                  )
-                  .toList(),
+                              .isEmpty
+                          ? 0
+                          : team.technicalMatches
+                                  .where(
+                                    (final TechnicalMatchData element) =>
+                                        element.climb == Climb.climbed ||
+                                        element.climb == Climb.buddyClimbed,
+                                  )
+                                  .length /
+                              team.technicalMatches
+                                  .where(
+                                    (final TechnicalMatchData element) =>
+                                        element.climb != Climb.noAttempt,
+                                  )
+                                  .length),
+                  //TODO: trap percentage if it is suddenly important
+                  100 * team.aggregateData.avgTrapAmount / maxTrapAmount,
+                ]
+                    .map<int>(
+                      (final double e) =>
+                          e.isNaN || e.isInfinite ? 0 : e.toInt(),
+                    )
+                    .toList();
+              }).toList(),
               ticks: const <int>[0, 25, 50, 75, 100],
               features: const <String>[
-                "Auto Amp",
-                "Auto Speaker",
+                "Auto Gamepieces",
                 "Tele Amp",
                 "Tele Speaker",
                 "Climb Percentage",
+                "Average Trap"
               ],
             ),
           ),
