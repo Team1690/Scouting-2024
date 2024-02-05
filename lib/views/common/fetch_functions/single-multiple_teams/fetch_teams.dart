@@ -96,7 +96,7 @@ query FetchTeams($ids: [Int!]) @cached {
         title
       }
       harmony_with
-      trapsMissed
+      traps_missed
     }
     name
     number
