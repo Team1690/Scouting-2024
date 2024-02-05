@@ -125,7 +125,8 @@ class _PickListState extends State<PickList> {
                                       ),
                                     ],
                                   ),
-                                  if (pickListTeam.amountOfMatches != 0)
+                                  if (pickListTeam.aggregateData.gamesPlayed !=
+                                      0)
 
                                     //TODO display the rest of your variables
                                     ElevatedButton(
@@ -158,7 +159,7 @@ class _PickListState extends State<PickList> {
                               ),
                               Expanded(
                                 child: Text(
-                                  "Climbed: ${pickListTeam.climbedPercentage.toStringAsFixed(2)}%",
+                                  "Climbed: ${pickListTeam..climbPercentage.toStringAsFixed(2)}%",
                                 ),
                               ),
                               Expanded(

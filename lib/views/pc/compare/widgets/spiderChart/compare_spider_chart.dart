@@ -34,7 +34,10 @@ class CompareSpiderChart extends StatelessWidget {
                 final double maxAutoPoints = data
                     .map(
                       (final TeamData element) => element.technicalMatches
-                          .map((final TechnicalMatchData e) => e.autoPoints)
+                          .map(
+                            (final TechnicalMatchData match) =>
+                                match.data.autoPoints,
+                          )
                           .fold(0, max),
                     )
                     .fold(0, max)
@@ -57,7 +60,10 @@ class CompareSpiderChart extends StatelessWidget {
                 return <double>[
                   100 *
                       (team.technicalMatches
-                              .map((final TechnicalMatchData e) => e.autoPoints)
+                              .map(
+                                (final TechnicalMatchData e) =>
+                                    e.data.autoPoints,
+                              )
                               .sum /
                           team.technicalMatches.length) /
                       maxAutoPoints,

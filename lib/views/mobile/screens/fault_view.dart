@@ -7,8 +7,7 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/add_fault.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/fault_tile.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
-
-import "fault_entry.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
 
 class FaultView extends StatelessWidget {
   @override
