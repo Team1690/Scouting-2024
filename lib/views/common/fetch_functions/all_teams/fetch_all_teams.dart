@@ -232,28 +232,35 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                         )
                         .length;
             final dynamic pit = team["pit"];
+            final double aim = 100 *
+                gamepieceSum /
+                (AggregateData.parse(aggregateTable).avgTeleSpeakerMissed +
+                    AggregateData.parse(aggregateTable).avgTeleAmpMissed +
+                    AggregateData.parse(aggregateTable).avgAutoSpeakerMissed +
+                    AggregateData.parse(aggregateTable).avgAutoAmpMissed +
+                    gamepieceSum);
+            final int brokenMatches = robotFieldStatuses
+                .where(
+                  (final RobotFieldStatus robotMatchStatus) =>
+                      robotMatchStatus != RobotFieldStatus.worked,
+                )
+                .length;
+            final int matchesClimbed =
+                (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
+                    .map(
+                      (final dynamic node) => node["climb"]["title"] as String,
+                    )
+                    .where(
+                      (final String title) =>
+                          title != "No attempt" && title != "Failed",
+                    )
+                    .length;
 
             return AllTeamData(
               pitData: PitData.parse(pit),
-              amountOfMatches: (team["technical_matches_aggregate"]["nodes"]
-                      as List<dynamic>)
-                  .length,
-              matchesClimbed: (team["technical_matches_aggregate"]["nodes"]
-                      as List<dynamic>)
-                  .map(
-                    (final dynamic node) => node["climb"]["title"] as String,
-                  )
-                  .where(
-                    (final String title) =>
-                        title != "No attempt" && title != "Failed",
-                  )
-                  .length,
-              brokenMatches: robotFieldStatuses
-                  .where(
-                    (final RobotFieldStatus robotMatchStatus) =>
-                        robotMatchStatus != RobotFieldStatus.worked,
-                  )
-                  .length,
+              amountOfMatches: amountOfMatches,
+              matchesClimbed: matchesClimbed,
+              brokenMatches: brokenMatches,
               autoGamepieceAvg: autoGamepieceAvg,
               teleGamepieceAvg: teleGamepieceAvg,
               gamepieceAvg: gamepieceSum,
@@ -267,14 +274,8 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
               workedPercentage: workedPercentage,
               climbedPercentage: climbedPercentage,
               aggregateData: AggregateData.parse(aggregateTable),
-              aim: 100 *
-                  gamepieceSum /
-                  (AggregateData.parse(aggregateTable).avgTeleSpeakerMissed +
-                      AggregateData.parse(aggregateTable).avgTeleAmpMissed +
-                      AggregateData.parse(aggregateTable).avgAutoSpeakerMissed +
-                      AggregateData.parse(aggregateTable).avgAutoAmpMissed +
-                      gamepieceSum),
-              harmony: (team["harmony_with"] as double) != 0,
+              aim: aim,
+              harmony: (team["harmony_with"] as int) != 0,
             );
           }).toList();
         },
