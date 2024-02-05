@@ -1,3 +1,5 @@
+import "package:scouting_frontend/models/parse_match_functions.dart";
+
 class TechnicalData {
   TechnicalData({
     required this.autoSpeakerMissed,
@@ -30,6 +32,15 @@ class TechnicalData {
   num get gamepieces => autoGamepieces + teleGamepieces;
   num get totalMissed =>
       teleAmpMissed + autoAmpMissed + teleSpeakerMissed + autoSpeakerMissed;
+  num get autoSpeakerPoints => PointGiver.autoSpeaker.points * autoSpeaker;
+  num get autoAmpPoints => PointGiver.autoAmp.points * autoAmp;
+  num get teleSpeakerPoints => PointGiver.teleSpeaker.points * teleSpeaker;
+  num get teleAmpPoints => PointGiver.teleAmp.points * teleAmp;
+  num get autoPoints => autoAmpPoints + autoSpeakerPoints;
+  num get telePoints => teleSpeakerPoints + teleAmpPoints;
+  num get ampPoints => autoAmpPoints + teleAmpPoints;
+  num get speakerPoints => autoSpeakerPoints + teleSpeakerPoints;
+  num get gamePiecesPoints => autoPoints + telePoints;
 
   static TechnicalData parse(final dynamic table) => TechnicalData(
         autoSpeakerMissed: table["auto_speaker_missed"] as num? ?? 0,

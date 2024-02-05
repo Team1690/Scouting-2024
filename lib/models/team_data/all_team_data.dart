@@ -1,43 +1,50 @@
+import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
+import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 class AllTeamData {
-  //TODO: make const + add copywith
   AllTeamData({
-    required this.climbedPercentage,
-    required this.workedPercentage,
-    required this.faultMessages,
-    required this.taken,
-    required this.thirdPickListIndex,
+    required this.technicalMatches,
     required this.team,
     required this.firstPicklistIndex,
     required this.secondPicklistIndex,
-    required this.autoGamepieceAvg,
-    required this.teleGamepieceAvg,
-    required this.gamepieceAvg,
-    required this.gamepiecePointAvg,
-    required this.brokenMatches,
-    required this.amountOfMatches,
+    required this.thirdPickListIndex,
     required this.matchesClimbed,
+    required this.climbedPercentage,
+    required this.taken,
     required this.aggregateData,
+    required this.faultMessages,
   });
+
+  //TODO: make const + add copywith
   final LightTeam team;
   int firstPicklistIndex;
   int secondPicklistIndex;
   int thirdPickListIndex;
-  final double autoGamepieceAvg;
-  final double teleGamepieceAvg;
-  final double gamepieceAvg;
-  final double gamepiecePointAvg;
-  final int brokenMatches;
-  final int amountOfMatches;
   final int matchesClimbed;
-  final double workedPercentage;
   final double climbedPercentage;
   bool taken;
   final AggregateData aggregateData;
+  final List<TechnicalMatchData> technicalMatches;
   final List<String> faultMessages;
 
+  int get brokenMatches => technicalMatches
+      .where(
+        (final TechnicalMatchData match) =>
+            match.robotFieldStatus != RobotFieldStatus.worked,
+      )
+      .length;
+
+  double get workedPercentage =>
+      100 *
+      (technicalMatches
+              .where(
+                (final TechnicalMatchData match) =>
+                    match.robotFieldStatus == RobotFieldStatus.worked,
+              )
+              .length /
+          aggregateData.gamesPlayed);
   @override
   String toString() => "${team.name}  ${team.number}";
 }
