@@ -46,7 +46,9 @@ class PickListScreen extends StatelessWidget {
                 child: Text("No Teams"),
               );
             }
-            return PicklistCard(initialData: snapshot.data!);
+            return PicklistCard(
+              initialData: snapshot.data!,
+            );
           },
         ),
       );

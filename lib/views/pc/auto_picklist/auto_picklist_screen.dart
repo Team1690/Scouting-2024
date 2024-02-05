@@ -184,7 +184,7 @@ class _AutoPickListScreenState extends State<AutoPickListScreen> {
                                         2,
                               ),
                             );
-                            teamsList.forEach((final a) {
+                            teamsList.forEach((final AllTeamData a) {
                               print(
                                 "${a.team.number} ${a.climbedPercentage * climbFactor / 100 + (a.aggregateData.avgAutoAmp + a.aggregateData.avgTeleAmp) * ampFactor / maxAmp + (a.aggregateData.avgAutoSpeaker + a.aggregateData.avgTeleSpeaker) * speakerFactor / maxSpeaker + a.aggregateData.avgTrapAmount * trapFactor / 2} climb: ${a.climbedPercentage}",
                               );

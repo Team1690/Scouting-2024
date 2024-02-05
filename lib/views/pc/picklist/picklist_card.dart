@@ -2,11 +2,12 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
 import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/views/pc/picklist/auto_picklist_popup.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
 
 class PicklistCard extends StatefulWidget {
-  PicklistCard({
+  const PicklistCard({
     required this.initialData,
   });
   final List<AllTeamData> initialData;
@@ -97,6 +98,18 @@ class _PicklistCardState extends State<PicklistCard> {
               });
             },
             icon: const Icon(Icons.sort),
+          ),
+          TextButton(
+            onPressed: () => showDialog<String>(
+              context: context,
+              builder: (final BuildContext context) => AutoPickListPopUp(
+                onReorder: (final List<AllTeamData> list) => setState(() {
+                  data = list;
+                }),
+                teamsToSort: widget.initialData,
+              ),
+            ),
+            child: const Text("Filter"),
           ),
         ],
         title: "",
