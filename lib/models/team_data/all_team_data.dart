@@ -54,6 +54,12 @@ class AllTeamData {
       (aggregateData.gamesPlayed == 0
           ? 0
           : matchesClimbed / aggregateData.gamesPlayed);
+  double get aim =>
+      100 *
+      (aggregateData.avgData.gamepieces /
+              (aggregateData.avgData.gamepieces +
+                  aggregateData.avgData.totalMissed))
+          .clamp(double.minPositive, double.maxFinite);
   @override
   String toString() => "${team.name}  ${team.number}";
 }
