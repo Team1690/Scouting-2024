@@ -45,15 +45,15 @@ class TechnicalData<T extends num> {
 
   static TechnicalData<T> parse<T extends num>(final dynamic table) =>
       TechnicalData<T>(
-        autoSpeakerMissed: (table["auto_speaker_missed"] as T? ?? 0) as T,
-        teleSpeakerMissed: (table["tele_speaker_missed"] as T? ?? 0) as T,
-        teleAmpMissed: (table["tele_amp_missed"] as T? ?? 0) as T,
-        autoAmpMissed: (table["auto_amp_missed"] as T? ?? 0) as T,
-        teleSpeaker: (table["tele_speaker"] as T? ?? 0) as T,
-        autoSpeaker: (table["auto_speaker"] as T? ?? 0) as T,
-        autoAmp: (table["auto_amp"] as T? ?? 0) as T,
-        teleAmp: (table["tele_amp"] as T? ?? 0) as T,
-        trapAmount: (table["trap_amount"] as T? ?? 0) as T,
-        trapsMissed: (table["traps_missed"] as T? ?? 0) as T,
+        autoSpeakerMissed: (table["auto_speaker_missed"] as num? ?? 0) as T,
+        teleSpeakerMissed: (table["tele_speaker_missed"] as num? ?? 0) as T,
+        teleAmpMissed: (table["tele_amp_missed"] as num? ?? 0) as T,
+        autoAmpMissed: (table["auto_amp_missed"] as num? ?? 0) as T,
+        teleSpeaker: (table["tele_speaker"] as num? ?? 0) as T,
+        autoSpeaker: (table["auto_speaker"] as num? ?? 0) as T,
+        autoAmp: (table["auto_amp"] as num? ?? 0) as T,
+        teleAmp: (table["tele_amp"] as num? ?? 0) as T,
+        trapAmount: (table["trap_amount"] as num? ?? 0) as T,
+        trapsMissed: (table["traps_missed"] as num? ?? 0) as T,
       );
 }
