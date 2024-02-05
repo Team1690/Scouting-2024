@@ -123,7 +123,7 @@ QuickData getQuickdata(final TeamData data) => QuickData(
           .where((final TechnicalMatchData element) => element.harmonyWith == 2)
           .length,
       gamepiecePoints: data.technicalMatches
-              .map((final TechnicalMatchData e) => e.gamepiecesPoints)
+              .map((final TechnicalMatchData e) => e.gamePiecesPoints)
               .toList()
               .averageOrNull ??
           0,
