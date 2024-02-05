@@ -1,9 +1,9 @@
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
 import "package:scouting_frontend/models/team_data/all_team_data.dart";
-import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 const String subscription = r"""
 subscription FetchAllTeams {
@@ -135,51 +135,19 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
             final dynamic aggregateTable =
                 team["technical_matches_aggregate"]["aggregate"];
             final List<dynamic> faultTable = (team["faults"] as List<dynamic>);
-            // final double climbedPercentage = 100 *
-            //     climbed
-            //         .where(
-            //           (
-            //             final ({
-            //               Climb climb,
-            //               RobotFieldStatus robotFieldStatus
-            //             }) element,
-            //           ) =>
-            //               element.climb == Climb.climbed ||
-            //               element.climb == Climb.buddyClimbed,
-            //         )
-            //         .length /
-            //     climbed
-            //         .where(
-            //           (
-            //             final ({
-            //               Climb climb,
-            //               RobotFieldStatus robotFieldStatus
-            //             }) element,
-            //           ) =>
-            //               element.climb != Climb.noAttempt &&
-            //               element.robotFieldStatus == RobotFieldStatus.worked,
-            //         )
-            //         .length;
 
             return AllTeamData(
-              matchesClimbed: (team["technical_matches_aggregate"]["nodes"]
-                      as List<dynamic>)
-                  .map(
-                    (final dynamic node) => node["climb"]["title"] as String,
-                  )
-                  .where(
-                    (final String title) =>
-                        title != "No attempt" && title != "Failed",
-                  )
-                  .length,
               team: LightTeam.fromJson(team),
               firstPicklistIndex: team["first_picklist_index"] as int,
               secondPicklistIndex: team["second_picklist_index"] as int,
               thirdPickListIndex: team["third_picklist_index"] as int,
               taken: team["taken"] as bool,
-              faultMessages: faultMessages,
-              climbedPercentage: climbedPercentage,
+              faultMessages: faultTable
+                  .map((final dynamic fault) => fault["message"] as String)
+                  .toList(),
               aggregateData: AggregateData.parse(aggregateTable),
+              technicalMatches:
+                  technicalMatchesTable.map(TechnicalMatchData.parse).toList(),
             );
           }).toList();
         },

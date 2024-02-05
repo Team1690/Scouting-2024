@@ -1,3 +1,4 @@
+import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
@@ -10,8 +11,6 @@ class AllTeamData {
     required this.firstPicklistIndex,
     required this.secondPicklistIndex,
     required this.thirdPickListIndex,
-    required this.matchesClimbed,
-    required this.climbedPercentage,
     required this.taken,
     required this.aggregateData,
     required this.faultMessages,
@@ -22,8 +21,6 @@ class AllTeamData {
   int firstPicklistIndex;
   int secondPicklistIndex;
   int thirdPickListIndex;
-  final int matchesClimbed;
-  final double climbedPercentage;
   bool taken;
   final AggregateData aggregateData;
   final List<TechnicalMatchData> technicalMatches;
@@ -45,6 +42,16 @@ class AllTeamData {
               )
               .length /
           aggregateData.gamesPlayed);
+  int get matchesClimbed => technicalMatches
+      .where(
+        (final TechnicalMatchData element) =>
+            element.climb == Climb.climbed ||
+            element.climb == Climb.buddyClimbed,
+      )
+      .length;
+  double get climbPercentage => aggregateData.gamesPlayed == 0
+      ? 0
+      : matchesClimbed / aggregateData.gamesPlayed;
   @override
   String toString() => "${team.name}  ${team.number}";
 }
