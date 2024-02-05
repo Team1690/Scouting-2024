@@ -54,7 +54,7 @@ enum PointGiver {
   final PlaceLocation place;
   final int points;
 
-  double calcPoints(final double amount) => points * amount;
+  num calcPoints(final num amount) => points * amount;
 }
 
 Map<PointGiver, T> parseByMode<T extends num>(

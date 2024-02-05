@@ -24,7 +24,7 @@ class AggregateData {
         minData: TechnicalData.parse(aggregateTable["min"]),
         maxData: TechnicalData.parse(aggregateTable["max"]),
         stddev: TechnicalData.parse(aggregateTable["stddev"]),
-        variance: TechnicalData.parse(aggregateTable["var"]),
+        variance: TechnicalData.parse(aggregateTable["variance"]),
         sumTotal: TechnicalData.parse(aggregateTable["sum"]),
         gamesPlayed: aggregateTable["count"] as int? ?? 0,
       );

@@ -12,35 +12,35 @@ class TechnicalData {
     required this.teleAmp,
   });
 
-  final double autoSpeakerMissed;
-  final double teleSpeakerMissed;
-  final double teleAmpMissed;
-  final double autoAmpMissed;
-  final double teleSpeaker;
-  final double autoSpeaker;
-  final double trapAmount;
-  final double trapsMissed;
-  final double autoAmp;
-  final double teleAmp;
+  final num autoSpeakerMissed;
+  final num teleSpeakerMissed;
+  final num teleAmpMissed;
+  final num autoAmpMissed;
+  final num teleSpeaker;
+  final num autoSpeaker;
+  final num trapAmount;
+  final num trapsMissed;
+  final num autoAmp;
+  final num teleAmp;
 
-  double get ampGamepieces => teleAmp + autoAmp;
-  double get speakerGamepieces => teleSpeaker + autoSpeaker;
-  double get autoGamepieces => autoAmp + autoSpeaker;
-  double get teleGamepieces => teleAmp + teleSpeaker;
-  double get gamepieces => autoGamepieces + teleGamepieces;
-  double get totalMissed =>
+  num get ampGamepieces => teleAmp + autoAmp;
+  num get speakerGamepieces => teleSpeaker + autoSpeaker;
+  num get autoGamepieces => autoAmp + autoSpeaker;
+  num get teleGamepieces => teleAmp + teleSpeaker;
+  num get gamepieces => autoGamepieces + teleGamepieces;
+  num get totalMissed =>
       teleAmpMissed + autoAmpMissed + teleSpeakerMissed + autoSpeakerMissed;
 
   static TechnicalData parse(final dynamic table) => TechnicalData(
-        autoSpeakerMissed: table["auto_speaker_missed"] as double? ?? 0,
-        teleSpeakerMissed: table["tele_speaker_missed"] as double? ?? 0,
-        teleAmpMissed: table["tele_amp_missed"] as double? ?? 0,
-        autoAmpMissed: table["auto_amp_missed"] as double? ?? 0,
-        teleSpeaker: table["tele_speaker"] as double? ?? 0,
-        autoSpeaker: table["auto_speaker"] as double? ?? 0,
-        autoAmp: table["auto_amp"] as double? ?? 0,
-        teleAmp: table["tele_amp"] as double? ?? 0,
-        trapAmount: table["trap_amount"] as double? ?? 0,
-        trapsMissed: table["traps_missed"] as double? ?? 0,
+        autoSpeakerMissed: table["auto_speaker_missed"] as num? ?? 0,
+        teleSpeakerMissed: table["tele_speaker_missed"] as num? ?? 0,
+        teleAmpMissed: table["tele_amp_missed"] as num? ?? 0,
+        autoAmpMissed: table["auto_amp_missed"] as num? ?? 0,
+        teleSpeaker: table["tele_speaker"] as num? ?? 0,
+        autoSpeaker: table["auto_speaker"] as num? ?? 0,
+        autoAmp: table["auto_amp"] as num? ?? 0,
+        teleAmp: table["tele_amp"] as num? ?? 0,
+        trapAmount: table["trap_amount"] as num? ?? 0,
+        trapsMissed: table["traps_missed"] as num? ?? 0,
       );
 }

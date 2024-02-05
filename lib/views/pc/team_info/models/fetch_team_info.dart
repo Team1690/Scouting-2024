@@ -133,6 +133,7 @@ Future<Team> fetchTeamInfo(
             harmony: pitTable["harmony"] as bool,
             hasBuddyClimb: pitTable["hasBuddyClimb"] as bool,
             trap: pitTable["trap"] as int,
+            otherWheelType: "",
           ),
         );
         final List<dynamic> matches =
