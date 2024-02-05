@@ -136,6 +136,7 @@ query FetchTeams($ids: [Int!]) @cached {
       drivetrain {
         title
       }
+      other_wheel_type
       gearbox_purchased
       harmony
       has_buddy_climb
