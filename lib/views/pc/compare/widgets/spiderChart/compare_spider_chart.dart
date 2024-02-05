@@ -47,14 +47,14 @@ class CompareSpiderChart extends StatelessWidget {
                       (final TeamData element) =>
                           element.aggregateData.maxData.teleAmp,
                     )
-                    .fold(0.0, max)
+                    .fold(0, max)
                     .toDouble();
                 final double maxTeleSpeaker = data
                     .map(
                       (final TeamData element) =>
                           element.aggregateData.maxData.teleSpeaker,
                     )
-                    .fold(0.0, max)
+                    .fold(0, max)
                     .toDouble();
                 const double maxTrapAmount = 2;
                 return <double>[

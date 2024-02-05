@@ -11,12 +11,12 @@ class AggregateData {
     required this.gamesPlayed,
   });
 
-  final TechnicalData avgData;
-  final TechnicalData minData;
-  final TechnicalData maxData;
-  final TechnicalData stddev;
-  final TechnicalData variance;
-  final TechnicalData sumTotal;
+  final TechnicalData<double> avgData;
+  final TechnicalData<int> minData;
+  final TechnicalData<int> maxData;
+  final TechnicalData<double> stddev;
+  final TechnicalData<double> variance;
+  final TechnicalData<int> sumTotal;
   final int gamesPlayed;
 
   static AggregateData parse(final dynamic aggregateTable) => AggregateData(

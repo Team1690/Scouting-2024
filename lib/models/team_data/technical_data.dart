@@ -1,6 +1,6 @@
 import "package:scouting_frontend/models/enums/point_giver_enum.dart";
 
-class TechnicalData {
+class TechnicalData<T extends num> {
   TechnicalData({
     required this.autoSpeakerMissed,
     required this.teleSpeakerMissed,
@@ -14,44 +14,46 @@ class TechnicalData {
     required this.teleAmp,
   });
 
-  final num autoSpeakerMissed;
-  final num teleSpeakerMissed;
-  final num teleAmpMissed;
-  final num autoAmpMissed;
-  final num teleSpeaker;
-  final num autoSpeaker;
-  final num trapAmount;
-  final num trapsMissed;
-  final num autoAmp;
-  final num teleAmp;
+  final T autoSpeakerMissed;
+  final T teleSpeakerMissed;
+  final T teleAmpMissed;
+  final T autoAmpMissed;
+  final T teleSpeaker;
+  final T autoSpeaker;
+  final T trapAmount;
+  final T trapsMissed;
+  final T autoAmp;
+  final T teleAmp;
 
-  num get ampGamepieces => teleAmp + autoAmp;
-  num get speakerGamepieces => teleSpeaker + autoSpeaker;
-  num get autoGamepieces => autoAmp + autoSpeaker;
-  num get teleGamepieces => teleAmp + teleSpeaker;
-  num get gamepieces => autoGamepieces + teleGamepieces;
-  num get totalMissed =>
-      teleAmpMissed + autoAmpMissed + teleSpeakerMissed + autoSpeakerMissed;
-  num get autoSpeakerPoints => PointGiver.autoSpeaker.points * autoSpeaker;
-  num get autoAmpPoints => PointGiver.autoAmp.points * autoAmp;
-  num get teleSpeakerPoints => PointGiver.teleSpeaker.points * teleSpeaker;
-  num get teleAmpPoints => PointGiver.teleAmp.points * teleAmp;
-  num get autoPoints => autoAmpPoints + autoSpeakerPoints;
-  num get telePoints => teleSpeakerPoints + teleAmpPoints;
-  num get ampPoints => autoAmpPoints + teleAmpPoints;
-  num get speakerPoints => autoSpeakerPoints + teleSpeakerPoints;
-  num get gamePiecesPoints => autoPoints + telePoints;
+  T get ampGamepieces => teleAmp + autoAmp as T;
+  T get speakerGamepieces => teleSpeaker + autoSpeaker as T;
+  T get autoGamepieces => autoAmp + autoSpeaker as T;
+  T get teleGamepieces => teleAmp + teleSpeaker as T;
+  T get gamepieces => autoGamepieces + teleGamepieces as T;
+  T get totalMissed =>
+      teleAmpMissed + autoAmpMissed + teleSpeakerMissed + autoSpeakerMissed
+          as T;
+  T get autoSpeakerPoints => PointGiver.autoSpeaker.points * autoSpeaker as T;
+  T get autoAmpPoints => PointGiver.autoAmp.points * autoAmp as T;
+  T get teleSpeakerPoints => PointGiver.teleSpeaker.points * teleSpeaker as T;
+  T get teleAmpPoints => PointGiver.teleAmp.points * teleAmp as T;
+  T get autoPoints => autoAmpPoints + autoSpeakerPoints as T;
+  T get telePoints => teleSpeakerPoints + teleAmpPoints as T;
+  T get ampPoints => autoAmpPoints + teleAmpPoints as T;
+  T get speakerPoints => autoSpeakerPoints + teleSpeakerPoints as T;
+  T get gamePiecesPoints => autoPoints + telePoints as T;
 
-  static TechnicalData parse(final dynamic table) => TechnicalData(
-        autoSpeakerMissed: table["auto_speaker_missed"] as num? ?? 0,
-        teleSpeakerMissed: table["tele_speaker_missed"] as num? ?? 0,
-        teleAmpMissed: table["tele_amp_missed"] as num? ?? 0,
-        autoAmpMissed: table["auto_amp_missed"] as num? ?? 0,
-        teleSpeaker: table["tele_speaker"] as num? ?? 0,
-        autoSpeaker: table["auto_speaker"] as num? ?? 0,
-        autoAmp: table["auto_amp"] as num? ?? 0,
-        teleAmp: table["tele_amp"] as num? ?? 0,
-        trapAmount: table["trap_amount"] as num? ?? 0,
-        trapsMissed: table["traps_missed"] as num? ?? 0,
+  static TechnicalData<T> parse<T extends num>(final dynamic table) =>
+      TechnicalData<T>(
+        autoSpeakerMissed: (table["auto_speaker_missed"] as T? ?? 0) as T,
+        teleSpeakerMissed: (table["tele_speaker_missed"] as T? ?? 0) as T,
+        teleAmpMissed: (table["tele_amp_missed"] as T? ?? 0) as T,
+        autoAmpMissed: (table["auto_amp_missed"] as T? ?? 0) as T,
+        teleSpeaker: (table["tele_speaker"] as T? ?? 0) as T,
+        autoSpeaker: (table["auto_speaker"] as T? ?? 0) as T,
+        autoAmp: (table["auto_amp"] as T? ?? 0) as T,
+        teleAmp: (table["tele_amp"] as T? ?? 0) as T,
+        trapAmount: (table["trap_amount"] as T? ?? 0) as T,
+        trapsMissed: (table["traps_missed"] as T? ?? 0) as T,
       );
 }

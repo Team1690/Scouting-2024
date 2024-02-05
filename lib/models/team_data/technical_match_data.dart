@@ -14,7 +14,7 @@ class TechnicalMatchData {
   });
 
   final RobotFieldStatus robotFieldStatus;
-  final TechnicalData data;
+  final TechnicalData<int> data;
   final int matchNumber;
   final int harmonyWith;
   final Climb climb;
