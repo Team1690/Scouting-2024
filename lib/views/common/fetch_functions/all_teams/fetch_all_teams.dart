@@ -92,29 +92,26 @@ subscription FetchAllTeams {
         title
       }
       other_wheel_type
-      team  {
-        faults {
-      message
-      fault_status {
-        title
-      }
-      match_number
-      match_type {
-        title
-      }
-      id
       team {
+        faults {
+          message
+          fault_status {
+            title
+          }
+          match_number
+          match_type {
+            title
+          }
+          id
+        }
+        id
         name
         number
-        id
         colors_index
-      }
-    }
       }
     }
   }
 }
-
 
 
 """;
@@ -122,6 +119,7 @@ subscription FetchAllTeams {
 Stream<List<AllTeamData>> fetchAllTeams() => getClient()
     .subscribe(
       SubscriptionOptions<List<AllTeamData>>(
+        fetchPolicy: FetchPolicy.noCache,
         document: gql(subscription),
         parserFn: (final Map<String, dynamic> data) {
           final List<dynamic> teams = data["team"] as List<dynamic>;
@@ -255,7 +253,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                           title != "No attempt" && title != "Failed",
                     )
                     .length;
-
+            final bool harmony = ((team["harmony_with"] as int?) ?? 0) != 0;
             return AllTeamData(
               pitData: PitData.parse(pit),
               amountOfMatches: amountOfMatches,
@@ -275,7 +273,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
               climbedPercentage: climbedPercentage,
               aggregateData: AggregateData.parse(aggregateTable),
               aim: aim,
-              harmony: (team["harmony_with"] as int) != 0,
+              harmony: harmony,
             );
           }).toList();
         },
