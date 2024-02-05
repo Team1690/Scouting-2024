@@ -23,6 +23,14 @@ class TechnicalData {
   final double autoAmp;
   final double teleAmp;
 
+  double get ampGamepieces => teleAmp + autoAmp;
+  double get speakerGamepieces => teleSpeaker + autoSpeaker;
+  double get autoGamepieces => autoAmp + autoSpeaker;
+  double get teleGamepieces => teleAmp + teleSpeaker;
+  double get gamepieces => autoGamepieces + teleGamepieces;
+  double get totalMissed =>
+      teleAmpMissed + autoAmpMissed + teleSpeakerMissed + autoSpeakerMissed;
+
   static TechnicalData parse(final dynamic table) => TechnicalData(
         autoSpeakerMissed: table["auto_speaker_missed"] as double? ?? 0,
         teleSpeakerMissed: table["tele_speaker_missed"] as double? ?? 0,
