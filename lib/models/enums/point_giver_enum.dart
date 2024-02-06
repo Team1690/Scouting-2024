@@ -1,21 +1,6 @@
 import "package:collection/collection.dart";
-
-enum MatchMode {
-  auto("auto"),
-  tele("tele");
-
-  const MatchMode(this.title);
-  final String title;
-}
-
-enum PlaceLocation {
-  speaker("speaker"),
-  amp("amp"),
-  trap("trap");
-
-  const PlaceLocation(this.title);
-  final String title;
-}
+import "package:scouting_frontend/models/enums/match_mode_enum.dart";
+import "package:scouting_frontend/models/enums/place_location_enum.dart";
 
 enum PointGiver {
   autoSpeaker(
@@ -54,7 +39,7 @@ enum PointGiver {
   final PlaceLocation place;
   final int points;
 
-  double calcPoints(final double amount) => points * amount;
+  num calcPoints(final num amount) => points * amount;
 }
 
 Map<PointGiver, T> parseByMode<T extends num>(

@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
+import "package:scouting_frontend/models/team_data/all_team_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info_data.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
@@ -70,29 +70,29 @@ class _PickListState extends State<PickList> {
                                 children: <Widget>[
                                   Expanded(
                                     child: Text(
-                                      "Tele Amp\n Average: ${pickListTeam.aggregateData.avgTeleAmp.toStringAsFixed(2)}",
+                                      "Tele Amp\n Average: ${pickListTeam.aggregateData.avgData.teleAmp.toStringAsFixed(2)}",
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
                                   Expanded(
                                     child: Text(
-                                      "Tele Speaker\n Average: ${pickListTeam.aggregateData.avgTeleSpeaker.toStringAsFixed(2)}",
+                                      "Tele Speaker\n Average: ${pickListTeam.aggregateData.avgData.teleSpeaker.toStringAsFixed(2)}",
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
                                   Expanded(
                                     child: Text(
-                                      "Auto Amp\n Average: ${pickListTeam.aggregateData.avgAutoAmp.toStringAsFixed(2)}",
+                                      "Auto Amp\n Average: ${pickListTeam.aggregateData.avgData.autoAmp.toStringAsFixed(2)}",
                                     ),
                                   ),
                                   Expanded(
                                     child: Text(
-                                      "Auto Speaker\n Average: ${pickListTeam.aggregateData.avgAutoSpeaker.toStringAsFixed(2)}",
+                                      "Auto Speaker\n Average: ${pickListTeam.aggregateData.avgData.autoSpeaker.toStringAsFixed(2)}",
                                     ),
                                   ),
                                   Expanded(
                                     child: Text(
-                                      "Trap Amount\n Average: ${pickListTeam.aggregateData.avgTrapAmount.toStringAsFixed(2)}",
+                                      "Trap Amount\n Average: ${pickListTeam.aggregateData.avgData.trapAmount.toStringAsFixed(2)}",
                                     ),
                                   ),
                                 ],
@@ -125,7 +125,8 @@ class _PickListState extends State<PickList> {
                                       ),
                                     ],
                                   ),
-                                  if (pickListTeam.amountOfMatches != 0)
+                                  if (pickListTeam.aggregateData.gamesPlayed !=
+                                      0)
 
                                     //TODO display the rest of your variables
                                     ElevatedButton(
@@ -158,7 +159,7 @@ class _PickListState extends State<PickList> {
                               ),
                               Expanded(
                                 child: Text(
-                                  "Climbed: ${pickListTeam.climbedPercentage.toStringAsFixed(2)}%",
+                                  "Climbed: ${pickListTeam.climbPercentage.toStringAsFixed(2)}%",
                                 ),
                               ),
                               Expanded(

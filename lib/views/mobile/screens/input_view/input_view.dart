@@ -2,9 +2,8 @@ import "dart:async";
 import "dart:convert";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/id_providers.dart";
-
 import "package:scouting_frontend/models/match_model.dart";
-import "package:scouting_frontend/models/matches_model.dart";
+import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/local_save_button.dart";
@@ -23,6 +22,7 @@ import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/submit_button.dart";
 import "package:scouting_frontend/views/mobile/team_and_match_selection.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/enums/match_mode_enum.dart";
 
 class UserInput extends StatefulWidget {
   const UserInput([this.initialVars]);

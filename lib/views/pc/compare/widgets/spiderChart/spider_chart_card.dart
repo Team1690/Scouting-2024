@@ -2,7 +2,7 @@ import "dart:collection";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/card.dart";
-import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
+import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/spiderChart/compare_spider_chart.dart";
 
 class SpiderChartCard extends StatelessWidget {

@@ -1,11 +1,9 @@
 import "dart:collection";
 import "dart:math";
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
-import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
-import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
+import "package:scouting_frontend/models/enums/point_giver_enum.dart";
+import "package:scouting_frontend/models/team_data/team_data.dart";
+import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/spiderChart/radar_chart.dart";
 
 class CompareSpiderChart extends StatelessWidget {
@@ -28,13 +26,16 @@ class CompareSpiderChart extends StatelessWidget {
                     (final TeamData team) => team.lightTeam.color,
                   )
                   .toList(),
-              numberOfFeatures: 5,
+              numberOfFeatures: 6,
               data: data.map((final TeamData team) {
                 //TODO: fetch and getters
                 final double maxAutoPoints = data
                     .map(
                       (final TeamData element) => element.technicalMatches
-                          .map((final TechnicalMatchData e) => e.autoPoints)
+                          .map(
+                            (final TechnicalMatchData match) =>
+                                match.data.autoPoints,
+                          )
                           .fold(0, max),
                     )
                     .fold(0, max)
@@ -42,57 +43,30 @@ class CompareSpiderChart extends StatelessWidget {
                 final double maxTeleAmp = data
                     .map(
                       (final TeamData element) =>
-                          element.aggregateData.maxTeleAmp,
+                          element.aggregateData.maxData.teleAmp,
                     )
                     .fold(0, max)
                     .toDouble();
                 final double maxTeleSpeaker = data
                     .map(
                       (final TeamData element) =>
-                          element.aggregateData.maxTeleSpeaker,
+                          element.aggregateData.maxData.teleSpeaker,
                     )
                     .fold(0, max)
                     .toDouble();
                 const double maxTrapAmount = 2;
                 return <double>[
+                  100 * (team.aggregateData.avgData.autoPoints) / maxAutoPoints,
                   100 *
-                      (team.technicalMatches
-                              .map((final TechnicalMatchData e) => e.autoPoints)
-                              .sum /
-                          team.technicalMatches.length) /
-                      maxAutoPoints,
-                  100 *
-                      PointGiver.teleAmp
-                          .calcPoints(team.aggregateData.avgTeleAmp) /
+                      team.aggregateData.avgData.teleAmpPoints /
                       PointGiver.teleAmp.calcPoints(maxTeleAmp),
                   100 *
-                      PointGiver.teleSpeaker.calcPoints(
-                        team.aggregateData.avgTeleSpeaker,
-                      ) /
+                      team.aggregateData.avgData.teleSpeakerPoints /
                       PointGiver.teleSpeaker.calcPoints(maxTeleSpeaker),
-                  100 *
-                      (team.technicalMatches
-                              .where(
-                                (final TechnicalMatchData element) =>
-                                    element.climb != Climb.noAttempt,
-                              )
-                              .isEmpty
-                          ? 0
-                          : team.technicalMatches
-                                  .where(
-                                    (final TechnicalMatchData element) =>
-                                        element.climb == Climb.climbed ||
-                                        element.climb == Climb.buddyClimbed,
-                                  )
-                                  .length /
-                              team.technicalMatches
-                                  .where(
-                                    (final TechnicalMatchData element) =>
-                                        element.climb != Climb.noAttempt,
-                                  )
-                                  .length),
+                  team.climbPercentage,
+                  team.aim,
                   //TODO: trap percentage if it is suddenly important
-                  100 * team.aggregateData.avgTrapAmount / maxTrapAmount,
+                  100 * team.aggregateData.avgData.trapAmount / maxTrapAmount,
                 ]
                     .map<int>(
                       (final double e) =>
@@ -106,6 +80,7 @@ class CompareSpiderChart extends StatelessWidget {
                 "Tele Amp",
                 "Tele Speaker",
                 "Climb Percentage",
+                "Aim",
                 "Average Trap",
               ],
             ),

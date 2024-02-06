@@ -1,5 +1,5 @@
 import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/models/matches_model.dart";
+import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
