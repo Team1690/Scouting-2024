@@ -6,8 +6,11 @@ import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/value_sliders.dart";
 
 class AutoPickListPopUp extends StatefulWidget {
-  const AutoPickListPopUp(
-      {super.key, required this.teamsToSort, required this.currentPickList});
+  const AutoPickListPopUp({
+    super.key,
+    required this.teamsToSort,
+    required this.currentPickList,
+  });
   final List<AllTeamData> teamsToSort;
   final CurrentPickList currentPickList;
   @override

@@ -112,7 +112,6 @@ class _PicklistCardState extends State<PicklistCard> {
               if (newAllTeamData != null) {
                 setState(() {
                   data = newAllTeamData;
-                  print(data);
                 });
               }
             },
