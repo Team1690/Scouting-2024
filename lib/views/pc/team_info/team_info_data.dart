@@ -171,7 +171,7 @@ QuickData getQuickdata(final TeamData data) => QuickData(
                 ),
               )
               .firstOrNull
-              ?.map((final TechnicalMatchData e) => e.gamepieces)
+              ?.map((final TechnicalMatchData e) => e.data.gamepieces)
               .toList()
               .averageOrNull ??
           double.nan,
@@ -189,26 +189,26 @@ QuickData getQuickdata(final TeamData data) => QuickData(
                 ),
               )
               .firstOrNull
-              ?.map((final TechnicalMatchData e) => e.gamepieces)
+              ?.map((final TechnicalMatchData e) => e.data.gamepieces)
               .toList()
               .averageOrNull ??
           double.nan,
       trapSuccessRate: data.technicalMatches
               .where(
                 (final TechnicalMatchData e) =>
-                    e.trapAmount != 0 || e.trapsMissed != 0,
+                    e.data.trapAmount != 0 || e.data.trapsMissed != 0,
               )
               .isNotEmpty
           ? data.technicalMatches
                   .map(
                     (final TechnicalMatchData element) =>
-                        element.trapAmount != 0,
+                        element.data.trapAmount != 0,
                   )
                   .length /
               data.technicalMatches
                   .map(
                     (final TechnicalMatchData e) =>
-                        e.trapAmount != 0 || e.trapsMissed != 0,
+                        e.data.trapAmount != 0 || e.data.trapsMissed != 0,
                   )
                   .length *
               100

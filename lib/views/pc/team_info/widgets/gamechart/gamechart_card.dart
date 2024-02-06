@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/enums/climb_enum.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/enums/point_giver_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
+import "package:scouting_frontend/models/team_data/team_data.dart";
+import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/views/common/card.dart";
-import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
-import "package:scouting_frontend/views/common/fetch_functions/parse_match_functions.dart";
-import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamepiece_line_chart.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/points_linechart.dart";
@@ -26,15 +28,14 @@ class Gamechart extends StatelessWidget {
                       context,
                       <List<int>>[
                         data.technicalMatches
-                            .map((final TechnicalMatchData e) => e.gamepieces)
+                            .map(
+                              (final TechnicalMatchData e) => e.data.gamepieces,
+                            )
                             .toList(),
                         data.technicalMatches
                             .map(
                               (final TechnicalMatchData e) =>
-                                  e.autoSpeakerMissed +
-                                  e.teleSpeakerMissed +
-                                  e.autoAmpMissed +
-                                  e.teleAmpMissed,
+                                  e.data.totalMissed,
                             )
                             .toList(),
                       ],
@@ -47,13 +48,15 @@ class Gamechart extends StatelessWidget {
                       <List<int>>[
                         data.technicalMatches
                             .map(
-                              (final TechnicalMatchData e) => e.autoGamepieces,
+                              (final TechnicalMatchData e) =>
+                                  e.data.autoGamepieces,
                             )
                             .toList(),
                         data.technicalMatches
                             .map(
                               (final TechnicalMatchData e) =>
-                                  e.autoSpeakerMissed + e.autoAmpMissed,
+                                  e.data.autoSpeakerMissed +
+                                  e.data.autoAmpMissed,
                             )
                             .toList(),
                       ],
@@ -67,13 +70,14 @@ class Gamechart extends StatelessWidget {
                         data.technicalMatches
                             .map(
                               (final TechnicalMatchData e) =>
-                                  e.autoSpeaker + e.teleSpeaker,
+                                  e.data.speakerGamepieces,
                             )
                             .toList(),
                         data.technicalMatches
                             .map(
                               (final TechnicalMatchData e) =>
-                                  e.autoSpeakerMissed + e.teleSpeakerMissed,
+                                  e.data.autoSpeakerMissed +
+                                  e.data.teleSpeakerMissed,
                             )
                             .toList(),
                       ],
@@ -87,13 +91,13 @@ class Gamechart extends StatelessWidget {
                         data.technicalMatches
                             .map(
                               (final TechnicalMatchData e) =>
-                                  e.autoAmp + e.teleAmp,
+                                  e.data.ampGamepieces,
                             )
                             .toList(),
                         data.technicalMatches
                             .map(
                               (final TechnicalMatchData e) =>
-                                  e.autoAmpMissed + e.teleAmpMissed,
+                                  e.data.autoAmpMissed + e.data.teleAmpMissed,
                             )
                             .toList(),
                       ],
@@ -107,11 +111,12 @@ class Gamechart extends StatelessWidget {
                         data.technicalMatches
                             .map(
                               (final TechnicalMatchData e) =>
-                                  e.autoAmp * PointGiver.autoAmp.points +
-                                  e.teleAmp * PointGiver.teleAmp.points +
-                                  e.autoSpeaker *
+                                  e.data.autoAmp * PointGiver.autoAmp.points +
+                                  e.data.teleAmp * PointGiver.teleAmp.points +
+                                  e.data.autoSpeaker *
                                       PointGiver.autoSpeaker.points +
-                                  e.teleSpeaker * PointGiver.teleSpeaker.points,
+                                  e.data.teleSpeaker *
+                                      PointGiver.teleSpeaker.points,
                             )
                             .toList(),
                       ],
@@ -159,10 +164,15 @@ class Gamechart extends StatelessWidget {
                       context,
                       <List<int>>[
                         data.technicalMatches
-                            .map((final TechnicalMatchData e) => e.trapAmount)
+                            .map(
+                              (final TechnicalMatchData e) => e.data.trapAmount,
+                            )
                             .toList(),
                         data.technicalMatches
-                            .map((final TechnicalMatchData e) => e.trapsMissed)
+                            .map(
+                              (final TechnicalMatchData e) =>
+                                  e.data.trapsMissed,
+                            )
                             .toList(),
                       ],
                       "Trap Amount",
@@ -181,7 +191,9 @@ class Gamechart extends StatelessWidget {
             .map(
               (final TechnicalMatchData e) => MatchIdentifier(
                 number: e.matchNumber,
-                type: IdProvider.of(context).matchType.idToName[e.matchTypeId]!,
+                type: matchTypeTitleToEnum(
+                  IdProvider.of(context).matchType.idToName[e.matchTypeId]!,
+                ),
                 isRematch: e.isRematch,
               ),
             )
@@ -214,7 +226,9 @@ class Gamechart extends StatelessWidget {
             .map(
               (final TechnicalMatchData e) => MatchIdentifier(
                 number: e.matchNumber,
-                type: IdProvider.of(context).matchType.idToName[e.matchTypeId]!,
+                type: matchTypeTitleToEnum(
+                  IdProvider.of(context).matchType.idToName[e.matchTypeId]!,
+                ),
                 isRematch: e.isRematch,
               ),
             )

@@ -1,8 +1,8 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/team_data/specific_match_data.dart";
+import "package:scouting_frontend/models/team_data/specific_summary_data.dart";
 import "package:scouting_frontend/views/common/card.dart";
-import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/specific_summary_data.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/scouting_specific.dart";
 
 class SpecificCard extends StatefulWidget {

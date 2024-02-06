@@ -1,7 +1,7 @@
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/drive_wheel_enum.dart";
 import "package:scouting_frontend/views/common/card.dart";
-import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_wheel_enum.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/edit_pit.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
