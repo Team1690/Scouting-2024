@@ -16,6 +16,8 @@ import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/submit_button.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/teams_without_pit.dart";
 
+const double kgToPoundFactor = 2.20462262;
+
 class PitView extends StatefulWidget {
   const PitView([this.initialVars]);
   final PitVars? initialVars;
@@ -282,21 +284,71 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
-                      controller: weightController,
-                      onChanged: (final String weight) {
-                        vars = vars.copyWith(
-                          weight: () => double.tryParse(weight),
-                        );
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: "Weight",
-                        prefixIcon: Icon(Icons.fitness_center),
-                      ),
-                      validator: _numericValidator(
-                        "please enter the robot's weight",
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: TextFormField(
+                            controller: weightController,
+                            onChanged: (final String weight) {
+                              vars = vars.copyWith(
+                                weight: () =>
+                                    double.tryParse(weight).mapNullable(
+                                  (final double parsedWeight) =>
+                                      parsedWeight *
+                                      (vars.kg ? 1 : 1 / kgToPoundFactor),
+                                ),
+                              );
+                              print(vars.weight);
+                            },
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: "Weight",
+                              prefixIcon: Icon(Icons.fitness_center),
+                            ),
+                            validator: _numericValidator(
+                              "please enter the robot's weight",
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Switcher(
+                            height: 60,
+                            labels: const <String>["KG", "LBS"],
+                            colors: const <Color>[
+                              Colors.white,
+                              Colors.white,
+                            ],
+                            onChange: (final int selection) {
+                              final bool newKg =
+                                  <int, bool>{1: false, 0: true}[selection]!;
+                              final String newWeightText = vars.weight
+                                      .mapNullable(
+                                        (final double weight) =>
+                                            weight *
+                                            (newKg ? 1 : kgToPoundFactor),
+                                      )
+                                      ?.toString() ??
+                                  "";
+                              weightController.text = newWeightText;
+                              setState(() {
+                                vars = vars.copyWith(
+                                  kg: () => newKg,
+                                );
+                              });
+                            },
+                            selected: vars.kg.mapNullable(
+                                  (final bool kg) => kg ? 0 : 1,
+                                ) ??
+                                -1,
+                            borderRadiusGeometry: defaultBorderRadius,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 20,

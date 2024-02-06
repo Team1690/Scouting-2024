@@ -17,7 +17,8 @@ class PitVars implements HasuraVars {
         height = null,
         harmony = null,
         trap = 0,
-        hasBuddyClimb = null;
+        hasBuddyClimb = null,
+        kg = true;
 
   PitVars.all({
     required this.driveTrainType,
@@ -34,6 +35,7 @@ class PitVars implements HasuraVars {
     required this.trap,
     required this.hasBuddyClimb,
     required this.otherDriveWheelType,
+    required this.kg,
   });
 
   PitVars copyWith({
@@ -51,6 +53,7 @@ class PitVars implements HasuraVars {
     final bool? Function()? harmony,
     final int Function()? trap,
     final bool? Function()? hasBuddyClimb,
+    final bool Function()? kg,
   }) =>
       PitVars.all(
         driveTrainType:
@@ -77,12 +80,14 @@ class PitVars implements HasuraVars {
         trap: trap != null ? trap() : this.trap,
         hasBuddyClimb:
             hasBuddyClimb != null ? hasBuddyClimb() : this.hasBuddyClimb,
+        kg: kg != null ? kg() : this.kg,
       );
   final int? driveTrainType;
   final int? driveMotorType;
   final int driveMotorAmount;
   final bool? hasShifter;
   final bool? gearboxPurchased;
+  final bool kg;
   final String notes;
   final int? driveWheelType;
   final String? otherDriveWheelType;
@@ -108,6 +113,7 @@ class PitVars implements HasuraVars {
         "harmony": harmony,
         "trap": trap,
         "has_buddy_climb": hasBuddyClimb,
+        "kg": kg,
       };
 
   PitVars reset() => copyWith(
@@ -125,5 +131,6 @@ class PitVars implements HasuraVars {
         trap: always(0),
         hasBuddyClimb: always(null),
         otherDriveWheelType: always(null),
+        kg: always(true),
       );
 }
