@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
-import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
@@ -91,7 +90,7 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
             .matches
             .where(
               (final ScheduleMatch match) =>
-                  match.matchNumber ==
+                  match.matchIdentifier.number ==
                   scoutedMatchTable["match"]["match_number"] as int,
             )
             .toList()
@@ -125,11 +124,8 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
         final ScheduleMatch match =
             MatchesProvider.of(context).matches.firstWhere(
                   (final ScheduleMatch element) =>
-                      element.matchNumber == identifier.number &&
-                      element.matchTypeId ==
-                          IdProvider.of(context)
-                              .matchType
-                              .nameToId[identifier.type.title],
+                      element.matchIdentifier.number == identifier.number &&
+                      element.matchIdentifier.type == identifier.type,
                 );
 
         return <LightTeam>[

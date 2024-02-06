@@ -1,14 +1,14 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/team_data/specific_match_data.dart";
 import "package:scouting_frontend/models/team_data/specific_summary_data.dart";
+import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
 
 class ScoutingSpecific extends StatefulWidget {
   const ScoutingSpecific({required this.msgs, required this.matchesData});
   final SpecificSummaryData msgs;
-  final List<SpecificMatchData> matchesData;
+  final List<MatchData> matchesData;
 
   @override
   State<ScoutingSpecific> createState() => _ScoutingSpecificState();
@@ -26,10 +26,13 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.msgs.drivingText,
               widget.matchesData
                   .map(
-                    (final SpecificMatchData e) =>
-                        e.drivetrainAndDriving == null
-                            ? null
-                            : (e.drivetrainAndDriving!, e.matchNumber),
+                    (final MatchData e) =>
+                        e.specificMatchData?.drivetrainAndDriving.mapNullable(
+                      (final int a) => (
+                        e.specificMatchData!.drivetrainAndDriving!,
+                        e.scheduleMatch.matchIdentifier.number
+                      ),
+                    ),
                   )
                   .whereNotNull()
                   .toList(),
@@ -39,8 +42,13 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.msgs.speakerText,
               widget.matchesData
                   .map(
-                    (final SpecificMatchData e) =>
-                        e.speaker == null ? null : (e.speaker!, e.matchNumber),
+                    (final MatchData e) =>
+                        e.specificMatchData?.speaker.mapNullable(
+                      (final int a) => (
+                        e.specificMatchData!.speaker!,
+                        e.scheduleMatch.matchIdentifier.number
+                      ),
+                    ),
                   )
                   .whereNotNull()
                   .toList(),
@@ -50,8 +58,12 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.msgs.ampText,
               widget.matchesData
                   .map(
-                    (final SpecificMatchData e) =>
-                        e.amp == null ? null : (e.amp!, e.matchNumber),
+                    (final MatchData e) => e.specificMatchData?.amp.mapNullable(
+                      (final int a) => (
+                        e.specificMatchData!.amp!,
+                        e.scheduleMatch.matchIdentifier.number
+                      ),
+                    ),
                   )
                   .whereNotNull()
                   .toList(),
@@ -61,8 +73,13 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.msgs.intakeText,
               widget.matchesData
                   .map(
-                    (final SpecificMatchData e) =>
-                        e.intake == null ? null : (e.intake!, e.matchNumber),
+                    (final MatchData e) =>
+                        e.specificMatchData?.intake.mapNullable(
+                      (final int a) => (
+                        e.specificMatchData!.intake!,
+                        e.scheduleMatch.matchIdentifier.number
+                      ),
+                    ),
                   )
                   .whereNotNull()
                   .toList(),
@@ -72,8 +89,13 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.msgs.climbText,
               widget.matchesData
                   .map(
-                    (final SpecificMatchData e) =>
-                        e.climb == null ? null : (e.climb!, e.matchNumber),
+                    (final MatchData e) =>
+                        e.specificMatchData?.climb.mapNullable(
+                      (final int a) => (
+                        e.specificMatchData!.climb!,
+                        e.scheduleMatch.matchIdentifier.number
+                      ),
+                    ),
                   )
                   .whereNotNull()
                   .toList(),
@@ -83,8 +105,13 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.msgs.generalText,
               widget.matchesData
                   .map(
-                    (final SpecificMatchData e) =>
-                        e.general == null ? null : (e.general!, e.matchNumber),
+                    (final MatchData e) =>
+                        e.specificMatchData?.general.mapNullable(
+                      (final int a) => (
+                        e.specificMatchData!.general!,
+                        e.scheduleMatch.matchIdentifier.number
+                      ),
+                    ),
                   )
                   .whereNotNull()
                   .toList(),
@@ -94,8 +121,13 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.msgs.defenseText,
               widget.matchesData
                   .map(
-                    (final SpecificMatchData e) =>
-                        e.defense == null ? null : (e.defense!, e.matchNumber),
+                    (final MatchData e) =>
+                        e.specificMatchData?.defense.mapNullable(
+                      (final int a) => (
+                        e.specificMatchData!.defense!,
+                        e.scheduleMatch.matchIdentifier.number
+                      ),
+                    ),
                   )
                   .whereNotNull()
                   .toList(),

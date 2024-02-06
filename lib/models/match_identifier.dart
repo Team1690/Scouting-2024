@@ -13,4 +13,13 @@ class MatchIdentifier {
 
   @override
   String toString() => "${isRematch ? "R" : ""}${type.title}$number";
+
+  static MatchIdentifier fromJson(final dynamic scheduleMatch) =>
+      MatchIdentifier(
+        type: matchTypeTitleToEnum(
+          scheduleMatch["match_type"]["title"] as String,
+        ),
+        number: scheduleMatch["number"] as int,
+        isRematch: scheduleMatch["is_rematch"] as bool,
+      );
 }

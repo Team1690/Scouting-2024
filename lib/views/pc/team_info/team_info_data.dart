@@ -20,7 +20,7 @@ class TeamInfoData extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => FutureBuilder<TeamData>(
-        future: fetchSingleTeamData(team.id),
+        future: fetchSingleTeamData(team.id, context),
         builder: (
           final BuildContext context,
           final AsyncSnapshot<TeamData> snapShot,
@@ -55,7 +55,7 @@ class TeamInfoData extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: SpecificCard(
-                        matchData: data.specificMatches,
+                        matchData: data.matches,
                         summaryData: data.summaryData,
                       ),
                     ),

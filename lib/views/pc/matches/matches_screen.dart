@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
-import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/fetch_matches.dart";
@@ -61,7 +60,7 @@ class MatchesScreen extends StatelessWidget {
                                           ? Colors.green
                                           : Colors.white,
                                     ),
-                                    "${IdProvider.of(context).matchType.idToName[e.matchTypeId]} ${e.matchNumber}",
+                                    "${e.matchIdentifier.type.title} ${e.matchIdentifier.number}",
                                   ),
                                 ),
                                 ...e.blueAlliance.map(

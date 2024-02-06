@@ -72,11 +72,11 @@ class _UserInputState extends State<UserInput> {
 
   void updateTextFields() {
     matchController.text =
-        "${IdProvider.of(context).matchType.idToName[match.scheduleMatch!.matchTypeId]} ${match.scheduleMatch!.matchNumber}";
-    teamNumberController.text = <int?>[
-      IdProvider.of(context).matchType.nameToId["Practice"],
-      IdProvider.of(context).matchType.nameToId["Pre scouting"],
-    ].contains(match.scheduleMatch!.matchTypeId)
+        "${match.scheduleMatch!.matchIdentifier.type.title} ${match.scheduleMatch!.matchIdentifier.number}";
+    teamNumberController.text = <String>[
+      "Practice",
+      "Pre scouting",
+    ].contains(match.scheduleMatch!.matchIdentifier.type.title)
         ? "${match.scoutedTeam!.number} ${match.scoutedTeam!.name}"
         : match.scheduleMatch!.getTeamStation(match.scoutedTeam!) ?? "";
     scouterNameController.text = match.scouterName!;

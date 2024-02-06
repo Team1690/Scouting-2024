@@ -1,18 +1,18 @@
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_model.dart";
 
 class ScheduleMatch {
   ScheduleMatch({
-    required this.matchNumber,
-    required this.matchTypeId,
-    required this.id,
+    required this.matchIdentifier,
     required this.happened,
+    required this.id,
     required this.redAlliance,
     required this.blueAlliance,
   });
+
+  final MatchIdentifier matchIdentifier;
   final bool happened;
   final int id;
-  final int matchNumber;
-  final int matchTypeId;
   final List<LightTeam> redAlliance;
   final List<LightTeam> blueAlliance;
 

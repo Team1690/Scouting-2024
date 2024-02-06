@@ -17,7 +17,10 @@ class CoachTeamData extends StatelessWidget {
           ),
         ),
         body: FutureBuilder<TeamData>(
-          future: fetchSingleTeamData(team.id), //fetchTeam(team.id, context),
+          future: fetchSingleTeamData(
+            team.id,
+            context,
+          ), //fetchTeam(team.id, context),
           builder: (
             final BuildContext context,
             final AsyncSnapshot<TeamData> snapshot,

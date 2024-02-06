@@ -1,5 +1,10 @@
 import "dart:collection";
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/matches_provider.dart";
+import "package:scouting_frontend/models/schedule_match.dart";
+import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
@@ -99,6 +104,9 @@ query FetchTeams($ids: [Int!]) @cached {
       }
     }
     specific_matches {
+      schedule_match {
+        id
+      }
       defense_amount_id
       defense {
         title
@@ -112,47 +120,12 @@ query FetchTeams($ids: [Int!]) @cached {
       url
       climb_rating
       amp_rating
-      schedule_match {
-        id
-        match_number
-        match_type_id
-      }
       scouter_name
     }
     technical_matches(where: {ignored: {_eq: false}}, order_by: [{schedule_match: {match_type: {order: asc}}}, {schedule_match: {match_number: asc}}, {is_rematch: asc}]) {
       schedule_match {
-        match_number
         id
-        match_type_id
-        blue_0 {
-          number
-        }
-        blue_1 {
-          number
-        }
-        blue_2 {
-          number
-        }
-        blue_3 {
-          number
-        }
-        match_type {
-          title
-        }
-        red_0 {
-          number
-        }
-        red_1 {
-          number
-        }
-        red_2 {
-          number
-        }
-        red_3 {
-          number
-        }
       }
-      
       is_rematch
       auto_amp
       auto_amp_missed
@@ -251,6 +224,7 @@ query FetchTeams($ids: [Int!]) @cached {
 
 Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
   final List<int> ids,
+  final BuildContext context,
 ) async {
   final GraphQLClient client = getClient();
 
@@ -261,16 +235,32 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
         (teams["team"] as List<dynamic>)
             .map<TeamData>((final dynamic teamTable) {
           final LightTeam team = LightTeam.fromJson(teamTable);
+          final List<ScheduleMatch> matches = MatchesProvider.of(context)
+              .matches
+              .where(
+                (final ScheduleMatch element) =>
+                    element.blueAlliance.contains(team) ||
+                    element.redAlliance.contains(team),
+              )
+              .toList();
+
           final int firstPicklistIndex =
               teamTable["first_picklist_index"] as int;
           final int secondPicklistIndex =
               teamTable["second_picklist_index"] as int;
           final int thirdPicklistIndex =
               teamTable["third_picklist_index"] as int;
-          final List<dynamic> technicalMatchesTable =
-              teamTable["technical_matches"] as List<dynamic>;
-          final List<dynamic> specificMatchesTables =
-              teamTable["specific_matches"] as List<dynamic>;
+
+          final List<TechnicalMatchData> technicalMatches =
+              (teamTable["technical_matches"] as List<dynamic>)
+                  .map(TechnicalMatchData.parse)
+                  .toList();
+
+          final List<SpecificMatchData> specificMatches =
+              (teamTable["specific_matches"] as List<dynamic>)
+                  .map(SpecificMatchData.parse)
+                  .toList();
+
           final dynamic aggregateTable =
               teamTable["technical_matches_aggregate"]["aggregate"];
           final dynamic pitTable = teamTable["pit"];
@@ -279,17 +269,28 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
 
           return TeamData(
             aggregateData: AggregateData.parse(aggregateTable),
-            technicalMatches:
-                technicalMatchesTable.map(TechnicalMatchData.parse).toList(),
             pitData: PitData.parse(pitTable),
             faultEntrys: faultTable.map(FaultEntry.parse).toList(),
-            specificMatches:
-                specificMatchesTables.map(SpecificMatchData.parse).toList(),
             summaryData: SpecificSummaryData.parse(specificSummaryTable),
             lightTeam: team,
             firstPicklistIndex: firstPicklistIndex,
             secondPicklistIndex: secondPicklistIndex,
             thirdPicklistIndex: thirdPicklistIndex,
+            matches: matches
+                .map(
+                  (final ScheduleMatch match) => MatchData(
+                    technicalMatchData: technicalMatches.firstWhereOrNull(
+                      (final TechnicalMatchData element) =>
+                          match.id == element.scheduleMatchId,
+                    ),
+                    specificMatchData: specificMatches.firstWhereOrNull(
+                      (final SpecificMatchData element) =>
+                          match.id == element.scheduleMatchId,
+                    ),
+                    scheduleMatch: match,
+                  ),
+                )
+                .toList(),
           );
         }),
         (final TeamData team1, final TeamData team2) =>

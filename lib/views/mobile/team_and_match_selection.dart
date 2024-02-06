@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_typeahead/flutter_typeahead.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
@@ -26,12 +27,10 @@ class TeamAndMatchSelectionState extends State<TeamAndMatchSelection> {
   ScheduleMatch? scheduleMatch;
   List<LightTeam> teams = <LightTeam>[];
   LightTeam? team;
-  late final Map<String, int> provider =
-      IdProvider.of(context).matchType.nameToId;
-  bool isUnofficial(final ScheduleMatch match) => <int>[
-        provider["Practice"]!,
-        provider["Pre scouting"]!,
-      ].contains(match.matchTypeId);
+  bool isUnofficial(final ScheduleMatch match) => <MatchType>[
+        MatchType.pre,
+        MatchType.practice,
+      ].contains(match.matchIdentifier.type);
 
   @override
   Widget build(final BuildContext context) => Column(
@@ -101,11 +100,11 @@ class MatchSearchBox extends StatelessWidget {
               try {
                 final ScheduleMatch match = matches.firstWhere(
                   (final ScheduleMatch match) =>
-                      match.matchNumber.toString() == number,
+                      match.matchIdentifier.number.toString() == number,
                 );
                 onChange(match);
                 typeAheadController.text =
-                    "${match.matchTypeId} ${match.matchNumber}";
+                    "${match.matchIdentifier.type.title} ${match.matchIdentifier.number}";
               } on StateError catch (_) {
                 //ignoed
               }
@@ -122,14 +121,14 @@ class MatchSearchBox extends StatelessWidget {
           suggestionsCallback: (final String pattern) => matches
               .where(
                 (final ScheduleMatch match) =>
-                    match.matchNumber.toString().startsWith(pattern),
+                    match.matchIdentifier.number.toString().startsWith(pattern),
               )
               .toList(),
           itemBuilder:
               (final BuildContext context, final ScheduleMatch suggestion) =>
                   ListTile(
             title: Text(
-              "${IdProvider.of(context).matchType.idToName[suggestion.matchTypeId]} ${suggestion.matchNumber}",
+              "${suggestion.matchIdentifier.type.title} ${suggestion.matchIdentifier.number}",
             ),
           ),
           transitionBuilder: (
@@ -156,12 +155,13 @@ class MatchSearchBox extends StatelessWidget {
           hideSuggestionsOnKeyboardHide: false,
           onSuggestionSelected: (final ScheduleMatch suggestion) {
             typeAheadController.text =
-                "${IdProvider.of(context).matchType.idToName[suggestion.matchTypeId]} ${suggestion.matchNumber}";
+                "${suggestion.matchIdentifier.type.title} ${suggestion.matchIdentifier.number}";
 
             onChange(
               matches[matches.indexWhere(
                 (final ScheduleMatch match) =>
-                    match.matchNumber == suggestion.matchNumber,
+                    match.matchIdentifier.number ==
+                    suggestion.matchIdentifier.number,
               )],
             );
           },

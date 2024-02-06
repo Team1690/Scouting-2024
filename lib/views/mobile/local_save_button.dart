@@ -86,7 +86,7 @@ class _LocalSaveButtonState extends State<LocalSaveButton> {
           });
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString(
-            "SM${widget.vars.scheduleMatch!.matchNumber}_RM${widget.vars.isRematch}_T${widget.vars.scoutedTeam!.number}",
+            "SM${widget.vars.scheduleMatch!.matchIdentifier.number}_RM${widget.vars.isRematch}_T${widget.vars.scoutedTeam!.number}",
             jsonEncode(widget.vars),
           );
           widget.resetForm();

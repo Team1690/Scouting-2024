@@ -1,11 +1,9 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
-import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/enums/point_giver_enum.dart";
-import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
+import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
@@ -187,16 +185,11 @@ class Gamechart extends StatelessWidget {
     final String title,
   ) =>
       LineChartData(
-        gameNumbers: data.technicalMatches
-            .map(
-              (final TechnicalMatchData e) => MatchIdentifier(
-                number: e.matchNumber,
-                type: matchTypeTitleToEnum(
-                  IdProvider.of(context).matchType.idToName[e.matchTypeId]!,
-                ),
-                isRematch: e.isRematch,
-              ),
+        gameNumbers: data.matches
+            .where(
+              (final MatchData element) => element.technicalMatchData != null,
             )
+            .map((final MatchData e) => e.scheduleMatch.matchIdentifier)
             .toList(),
         points: points,
         title: title,
@@ -222,16 +215,8 @@ class Gamechart extends StatelessWidget {
     final String title,
   ) =>
       LineChartData(
-        gameNumbers: data.technicalMatches
-            .map(
-              (final TechnicalMatchData e) => MatchIdentifier(
-                number: e.matchNumber,
-                type: matchTypeTitleToEnum(
-                  IdProvider.of(context).matchType.idToName[e.matchTypeId]!,
-                ),
-                isRematch: e.isRematch,
-              ),
-            )
+        gameNumbers: data.matches
+            .map((final MatchData e) => e.scheduleMatch.matchIdentifier)
             .toList(),
         points: selectedData,
         title: title,
