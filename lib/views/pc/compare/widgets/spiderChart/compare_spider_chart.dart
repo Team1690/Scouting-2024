@@ -1,8 +1,6 @@
 import "dart:collection";
 import "dart:math";
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/point_giver_enum.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
@@ -28,7 +26,7 @@ class CompareSpiderChart extends StatelessWidget {
                     (final TeamData team) => team.lightTeam.color,
                   )
                   .toList(),
-              numberOfFeatures: 5,
+              numberOfFeatures: 6,
               data: data.map((final TeamData team) {
                 //TODO: fetch and getters
                 final double maxAutoPoints = data
@@ -58,45 +56,15 @@ class CompareSpiderChart extends StatelessWidget {
                     .toDouble();
                 const double maxTrapAmount = 2;
                 return <double>[
+                  100 * (team.aggregateData.avgData.autoPoints) / maxAutoPoints,
                   100 *
-                      (team.technicalMatches
-                              .map(
-                                (final TechnicalMatchData e) =>
-                                    e.data.autoPoints,
-                              )
-                              .sum /
-                          team.technicalMatches.length) /
-                      maxAutoPoints,
-                  100 *
-                      PointGiver.teleAmp
-                          .calcPoints(team.aggregateData.avgData.teleAmp) /
+                      team.aggregateData.avgData.teleAmpPoints /
                       PointGiver.teleAmp.calcPoints(maxTeleAmp),
                   100 *
-                      PointGiver.teleSpeaker.calcPoints(
-                        team.aggregateData.avgData.teleSpeaker,
-                      ) /
+                      team.aggregateData.avgData.teleSpeakerPoints /
                       PointGiver.teleSpeaker.calcPoints(maxTeleSpeaker),
-                  100 *
-                      (team.technicalMatches
-                              .where(
-                                (final TechnicalMatchData element) =>
-                                    element.climb != Climb.noAttempt,
-                              )
-                              .isEmpty
-                          ? 0
-                          : team.technicalMatches
-                                  .where(
-                                    (final TechnicalMatchData element) =>
-                                        element.climb == Climb.climbed ||
-                                        element.climb == Climb.buddyClimbed,
-                                  )
-                                  .length /
-                              team.technicalMatches
-                                  .where(
-                                    (final TechnicalMatchData element) =>
-                                        element.climb != Climb.noAttempt,
-                                  )
-                                  .length),
+                  team.climbPercentage,
+                  team.aim,
                   //TODO: trap percentage if it is suddenly important
                   100 * team.aggregateData.avgData.trapAmount / maxTrapAmount,
                 ]
@@ -112,6 +80,7 @@ class CompareSpiderChart extends StatelessWidget {
                 "Tele Amp",
                 "Tele Speaker",
                 "Climb Percentage",
+                "Aim",
                 "Average Trap",
               ],
             ),

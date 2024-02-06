@@ -1,3 +1,4 @@
+import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
 import "package:scouting_frontend/models/team_data/specific_match_data.dart";
@@ -29,4 +30,23 @@ class TeamData {
   final int firstPicklistIndex;
   final int secondPicklistIndex;
   final int thirdPicklistIndex;
+
+  int get matchesClimbed => technicalMatches
+      .where(
+        (final TechnicalMatchData element) =>
+            element.climb == Climb.climbed ||
+            element.climb == Climb.buddyClimbed,
+      )
+      .length;
+  double get climbPercentage =>
+      100 *
+      (aggregateData.gamesPlayed == 0
+          ? 0
+          : matchesClimbed / (aggregateData.gamesPlayed));
+  double get aim =>
+      100 *
+      (aggregateData.avgData.gamepieces /
+              (aggregateData.avgData.gamepieces +
+                  aggregateData.avgData.totalMissed))
+          .clamp(double.minPositive, double.maxFinite);
 }
