@@ -299,7 +299,6 @@ class _PitViewState extends State<PitView> {
                                       (vars.kg ? 1 : 1 / kgToPoundFactor),
                                 ),
                               );
-                              print(vars.weight);
                             },
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
