@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/views/pc/alliance_auto_planner/auto_planner_screen.dart";
 import "package:scouting_frontend/views/pc/auto_picklist/auto_picklist_screen.dart";
 
 import "package:scouting_frontend/views/pc/matches/matches_screen.dart";
@@ -58,6 +59,19 @@ class NavigationTab extends StatelessWidget {
                   MaterialPageRoute<AutoPickListScreen>(
                     builder: (final BuildContext context) =>
                         const AutoPickListScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text("Alliance Auto"),
+              leading: const Icon(Icons.route),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute<AutoPlannerScreen>(
+                    builder: (final BuildContext context) =>
+                        const AutoPlannerScreen(),
                   ),
                 );
               },
