@@ -122,7 +122,9 @@ class _AutoPathState extends State<AutoPath> {
                         ) =>
                             CustomPaint(
                           painter: DrawingCanvas(
-                            sketch: path.value,
+                            sketches: <(Sketch?, ui.Color)>[
+                              (path.value, Colors.white),
+                            ],
                             fieldBackground: path.value.isRed
                                 ? widget.fieldBackgrounds.$1
                                 : widget.fieldBackgrounds.$2,
@@ -162,11 +164,6 @@ class _AutoPathState extends State<AutoPath> {
                       context: context,
                       builder: (final BuildContext dialogContext) => SelectPath(
                         fieldBackgrounds: widget.fieldBackgrounds,
-                        drawnPath: Sketch(
-                          isRed: path.value.isRed,
-                          points: convertToMeters(path.value.points),
-                          url: path.value.url,
-                        ),
                         existingPaths: widget.existingPaths,
                         onNewSketch: (final Sketch sketch) {
                           Navigator.pop(context);
@@ -228,11 +225,11 @@ class _AutoPathState extends State<AutoPath> {
 
 class DrawingCanvas extends CustomPainter {
   DrawingCanvas({
-    required this.sketch,
+    required this.sketches,
     required this.fieldBackground,
     this.width = 6.0,
   });
-  final Sketch? sketch;
+  final List<(Sketch?, Color)> sketches;
   final ui.Image fieldBackground;
   final double width;
 
@@ -249,28 +246,30 @@ class DrawingCanvas extends CustomPainter {
       Rect.fromLTWH(0, 0, size.width, size.height),
       Paint(),
     );
-    final List<Offset> points = sketch?.points ?? <ui.Offset>[];
-    if (points.isNotEmpty) {
-      final Path path = Path();
-      path.moveTo(points.first.dx, points.first.dy);
-      points
-          .take(points.length - 1)
-          .forEachIndexed((final int index, final Offset element) {
-        final Offset nextPoint = points[index + 1];
-        path.quadraticBezierTo(
-          element.dx,
-          element.dy,
-          (nextPoint.dx + element.dx) / 2,
-          (nextPoint.dy + element.dy) / 2,
-        );
-      });
-      final Paint paint = Paint()
-        ..color = Colors.white
-        ..strokeCap = StrokeCap.round
-        ..strokeWidth = width
-        ..style = PaintingStyle.stroke;
+    for (final (Sketch?, ui.Color) sketch in sketches) {
+      final List<Offset> points = sketch.$1?.points ?? <ui.Offset>[];
+      if (points.isNotEmpty) {
+        final Path path = Path();
+        path.moveTo(points.first.dx, points.first.dy);
+        points
+            .take(points.length - 1)
+            .forEachIndexed((final int index, final Offset element) {
+          final Offset nextPoint = points[index + 1];
+          path.quadraticBezierTo(
+            element.dx,
+            element.dy,
+            (nextPoint.dx + element.dx) / 2,
+            (nextPoint.dy + element.dy) / 2,
+          );
+        });
+        final Paint paint = Paint()
+          ..color = sketch.$2
+          ..strokeCap = StrokeCap.round
+          ..strokeWidth = width
+          ..style = PaintingStyle.stroke;
 
-      canvas.drawPath(path, paint);
+        canvas.drawPath(path, paint);
+      }
     }
   }
 
