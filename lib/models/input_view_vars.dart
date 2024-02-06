@@ -6,8 +6,8 @@ import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 
 import "package:orbit_standard_library/orbit_standard_library.dart";
 
-class Match implements HasuraVars {
-  Match(final BuildContext context)
+class InputViewVars implements HasuraVars {
+  InputViewVars(final BuildContext context)
       : isRematch = false,
         scheduleMatch = null,
         scouterName = "",
@@ -27,7 +27,7 @@ class Match implements HasuraVars {
         trapsMissed = 0,
         startingPositionID = null,
         scoutedTeam = null;
-  Match.all({
+  InputViewVars.all({
     required this.trapsMissed,
     required this.isRematch,
     required this.scheduleMatch,
@@ -48,10 +48,10 @@ class Match implements HasuraVars {
     required this.startingPositionID,
   });
 
-  Match cleared(final BuildContext context) =>
-      Match(context).copyWith(scouterName: always(scouterName));
+  InputViewVars cleared(final BuildContext context) =>
+      InputViewVars(context).copyWith(scouterName: always(scouterName));
 
-  Match copyWith({
+  InputViewVars copyWith({
     final bool Function()? isRematch,
     final ScheduleMatch? Function()? scheduleMatch,
     final String? Function()? scouterName,
@@ -71,7 +71,7 @@ class Match implements HasuraVars {
     final int Function()? startingPositionID,
     final LightTeam? Function()? scoutedTeam,
   }) =>
-      Match.all(
+      InputViewVars.all(
         isRematch: isRematch != null ? isRematch() : this.isRematch,
         scheduleMatch:
             scheduleMatch != null ? scheduleMatch() : this.scheduleMatch,

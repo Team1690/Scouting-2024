@@ -1,11 +1,12 @@
 import "dart:math";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/models/team_data/specific_match_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
-import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 class CompareClimbLineChart extends StatelessWidget {
   const CompareClimbLineChart({
@@ -73,7 +74,7 @@ class CompareClimbLineChart extends StatelessWidget {
                     .reduce(max),
                 (final int index) => MatchIdentifier(
                   number: index + 1,
-                  type: "Quals",
+                  type: MatchType.quals,
                   isRematch: false,
                 ),
               ),

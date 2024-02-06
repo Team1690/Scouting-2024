@@ -1,5 +1,6 @@
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/drive_wheel_enum.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/edit_pit.dart";
@@ -75,51 +76,51 @@ class PitScoutingCard extends StatelessWidget {
                         .toList(),
                   ),
                 ),
+                const Divider(),
               ],
+              HasSomething(
+                title: "Trap: ",
+                value: data.trap != 0,
+                numeralValue: data.trap,
+              ),
+              HasSomething(title: "Harmony: ", value: data.harmony),
+              if (data.hasBuddyClimb)
+                HasSomething(title: "Buddy Climb: ", value: data.hasBuddyClimb),
               Align(
-                alignment: Alignment.center,
+                alignment: Alignment.centerLeft,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    //TODO add season specific variables here
-                    const Text(
-                      textAlign: TextAlign.center,
-                      "Drivetrain",
-                      style: TextStyle(fontSize: 18),
+                    Text(
+                      "Height: ${data.height}cm",
                     ),
                     Text(
-                      textAlign: TextAlign.center,
                       "Drivetrain: ${data.driveTrainType}",
                     ),
                     Text(
-                      textAlign: TextAlign.center,
                       "Drive motor: ${data.driveMotorType}",
                     ),
                     Text(
-                      textAlign: TextAlign.center,
                       "Drive motor amount: ${data.driveMotorAmount}",
                     ),
                     Text(
-                      textAlign: TextAlign.center,
-                      "Drive wheel: ${data.driveWheelType}",
+                      "Drive wheel: ${data.driveWheelType == DriveWheel.other ? data.otherWheelType : data.driveWheelType}",
                     ),
                     HasSomething(
                       title: "Has shifter:",
                       value: data.hasShifer,
                     ),
                     Text(
-                      textAlign: TextAlign.center,
                       "Gearbox: ${data.gearboxPurchased.mapNullable((final bool p0) => p0 ? "purchased" : "custom") ?? "Not answered"}",
                     ),
                     Text(
-                      textAlign: TextAlign.center,
                       "Weight: ${data.weight}Kg",
                     ),
                   ],
                 ),
               ),
               Align(
-                alignment: Alignment.center,
+                alignment: Alignment.centerLeft,
                 child: Column(
                   children: <Widget>[
                     const Text(
@@ -214,26 +215,32 @@ class PitScoutingCard extends StatelessWidget {
 }
 
 class HasSomething extends StatelessWidget {
-  const HasSomething({required this.title, required this.value});
+  const HasSomething({
+    required this.title,
+    required this.value,
+    this.numeralValue,
+  });
   final bool? value;
   final String title;
+  final int? numeralValue;
   @override
   Widget build(final BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(textAlign: TextAlign.center, title),
           value.mapNullable(
-                (final bool hasShifter) => hasShifter
-                    ? const Icon(
-                        Icons.done,
-                        color: Colors.lightGreen,
-                      )
+                (final bool hasSomething) => hasSomething
+                    ? numeralValue == null
+                        ? const Icon(
+                            Icons.done,
+                            color: Colors.lightGreen,
+                          )
+                        : Text("$numeralValue")
                     : const Icon(
                         Icons.close,
                         color: Colors.red,
                       ),
               ) ??
-              const Text(textAlign: TextAlign.center, " Not answered"),
+              const Text(" Not answered"),
         ],
       );
 }

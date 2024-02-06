@@ -17,9 +17,10 @@ class ChangeMatch extends StatefulWidget {
 }
 
 class _ChangeMatchState extends State<ChangeMatch> {
-  late MatchesVars vars =
-      widget.initialVars.mapNullable(MatchesVars.fromScheduleMatch) ??
-          MatchesVars();
+  late MatchesVars vars = widget.initialVars.mapNullable(
+        (final ScheduleMatch p) => MatchesVars.fromScheduleMatch(p, context),
+      ) ??
+      MatchesVars();
   List<TextEditingController> teamControllers =
       List<TextEditingController>.generate(
     8,

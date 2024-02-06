@@ -1,14 +1,13 @@
 import "package:flutter/material.dart";
-
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/models/match_model.dart";
+import "package:scouting_frontend/models/input_view_vars.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
-import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 class EditTechnicalMatch extends StatelessWidget {
   const EditTechnicalMatch({
@@ -30,12 +29,12 @@ class EditTechnicalMatch extends StatelessWidget {
           ),
           body: editTechnicalMatch(context),
         );
-  FutureBuilder<Match> editTechnicalMatch(final BuildContext context) =>
-      FutureBuilder<Match>(
+  FutureBuilder<InputViewVars> editTechnicalMatch(final BuildContext context) =>
+      FutureBuilder<InputViewVars>(
         future: fetchTechnicalMatch(matchIdentifier, teamForQuery, context),
         builder: (
           final BuildContext context,
-          final AsyncSnapshot<Match> snapshot,
+          final AsyncSnapshot<InputViewVars> snapshot,
         ) {
           if (snapshot.hasError) {
             return Text(snapshot.error.toString());
@@ -56,22 +55,24 @@ const String query = """
 
 """;
 
-Future<Match> fetchTechnicalMatch(
+Future<InputViewVars> fetchTechnicalMatch(
   final MatchIdentifier matchIdentifier,
   final LightTeam teamForQuery,
   final BuildContext context,
 ) async {
   final GraphQLClient client = getClient();
 
-  final QueryResult<Match> result = await client.query(
-    QueryOptions<Match>(
+  final QueryResult<InputViewVars> result = await client.query(
+    QueryOptions<InputViewVars>(
       //TODO add json parsing and create a Match containing the data
-      parserFn: (final Map<String, dynamic> technicalMatch) => Match(context),
+      parserFn: (final Map<String, dynamic> technicalMatch) =>
+          InputViewVars(context),
       document: gql(query),
       variables: <String, dynamic>{
         "team_id": teamForQuery.id,
-        "match_type_id":
-            IdProvider.of(context).matchType.nameToId[matchIdentifier.type],
+        "match_type_id": IdProvider.of(context)
+            .matchType
+            .nameToId[matchIdentifier.type.title],
         "match_number": matchIdentifier.number,
         "is_rematch": matchIdentifier.isRematch,
       },

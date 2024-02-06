@@ -25,14 +25,16 @@ ${isSubscription ? "subscription" : "query"} FetchMatches{
     }""",
         ).join("\n")}
     id
-    match_type_id
+    match_type {
+      title
+    }
     match_number
     happened
   }
 }
   """;
 
-List<LightTeam> fromJson(final dynamic json, final String color) {
+List<LightTeam> alliancefromJson(final dynamic json, final String color) {
   final String optional = "${color}_3";
   return <LightTeam>[
     ...(<int>[0, 1, 2]
@@ -43,15 +45,11 @@ List<LightTeam> fromJson(final dynamic json, final String color) {
 
 List<ScheduleMatch> parserFn(final Map<String, dynamic> matches) =>
     (matches["schedule_matches"] as List<dynamic>)
-        .map(
-          (final dynamic e) => ScheduleMatch(
-            happened: e["happened"] as bool,
-            id: e["id"] as int,
-            matchTypeId: e["match_type_id"] as int,
-            matchNumber: e["match_number"] as int,
-            redAlliance: <LightTeam>[...fromJson(e, "red")],
-            blueAlliance: <LightTeam>[...fromJson(e, "blue")],
-          ),
+        .expand(
+          (final dynamic e) => <ScheduleMatch>[
+            ScheduleMatch.fromJson(e, false),
+            ScheduleMatch.fromJson(e, true),
+          ],
         )
         .toList();
 

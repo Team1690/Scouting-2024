@@ -1,27 +1,26 @@
+import "package:collection/collection.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
+import "package:scouting_frontend/models/team_data/specific_match_data.dart";
+import "package:scouting_frontend/models/team_data/team_match_data.dart";
+import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
-import "package:scouting_frontend/models/team_data/specific_match_data.dart";
 import "package:scouting_frontend/models/team_data/specific_summary_data.dart";
-import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
 
 class TeamData {
   TeamData({
-    required this.technicalMatches,
+    required this.matches,
     required this.pitData,
     required this.lightTeam,
     required this.faultEntrys,
-    required this.specificMatches,
     required this.aggregateData,
     required this.summaryData,
     required this.firstPicklistIndex,
     required this.secondPicklistIndex,
     required this.thirdPicklistIndex,
   });
-  final List<TechnicalMatchData> technicalMatches;
-  final List<SpecificMatchData> specificMatches;
   final List<FaultEntry> faultEntrys;
   final AggregateData aggregateData;
   final PitData? pitData;
@@ -30,12 +29,22 @@ class TeamData {
   final int firstPicklistIndex;
   final int secondPicklistIndex;
   final int thirdPicklistIndex;
+  final List<MatchData> matches;
 
-  int get matchesClimbed => technicalMatches
+  List<TechnicalMatchData> get technicalMatches => matches
+      .map((final MatchData e) => e.technicalMatchData)
+      .whereNotNull()
+      .toList();
+  List<SpecificMatchData> get specificMatches => matches
+      .map((final MatchData e) => e.specificMatchData)
+      .whereNotNull()
+      .toList();
+  int get matchesClimbed => matches
       .where(
-        (final TechnicalMatchData element) =>
-            element.climb == Climb.climbed ||
-            element.climb == Climb.buddyClimbed,
+        (final MatchData element) =>
+            element.technicalMatchData != null &&
+            (element.technicalMatchData?.climb == Climb.climbed ||
+                element.technicalMatchData?.climb == Climb.buddyClimbed),
       )
       .length;
   double get climbPercentage =>

@@ -1,31 +1,32 @@
 import "package:flutter/material.dart";
+import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/robot_image_card.dart";
-import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
 
 class PitScouting extends StatelessWidget {
   const PitScouting(this.p0);
 
-  final PitData? p0;
+  final TeamData? p0;
 
   @override
   Widget build(final BuildContext context) =>
-      p0.mapNullable(
-        (final PitData p0) => Column(
+      p0?.pitData.mapNullable(
+        (final PitData pitData) => Column(
           children: <Widget>[
             Expanded(
               flex: 3,
-              child: RobotImageCard(p0.url),
+              child: RobotImageCard(pitData.url),
             ),
             const SizedBox(
               height: defaultPadding,
             ),
             Expanded(
               flex: 6,
-              child: PitScoutingCard(p0),
+              child: PitScoutingCard(pitData),
             ),
           ],
         ),

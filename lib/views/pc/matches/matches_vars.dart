@@ -1,3 +1,5 @@
+import "package:flutter/material.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
@@ -20,14 +22,17 @@ class MatchesVars implements HasuraVars {
 
   MatchesVars.fromScheduleMatch(
     final ScheduleMatch match,
+    final BuildContext context,
   ) : this(
           blue0: match.blueAlliance[0],
           blue1: match.blueAlliance[1],
           blue2: match.blueAlliance[2],
           blue3: match.blueAlliance.length == 4 ? match.blueAlliance[3] : null,
           happened: match.happened,
-          matchNumber: match.matchNumber,
-          matchTypeId: match.matchTypeId,
+          matchNumber: match.matchIdentifier.number,
+          matchTypeId: IdProvider.of(context)
+              .matchType
+              .nameToId[(match.matchIdentifier.type.title)],
           matchesIdToUpdate: match.id,
           red0: match.redAlliance[0],
           red1: match.redAlliance[1],

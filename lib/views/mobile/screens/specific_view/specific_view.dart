@@ -2,7 +2,7 @@ import "dart:async";
 import "dart:ui" as ui;
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -101,13 +101,13 @@ class _SpecificState extends State<Specific> {
                                 }
                                 final ScheduleMatch? scheduleMatch =
                                     vars.scheduleMatch;
-                                final Map<String, int> matchTypes =
-                                    IdProvider.of(context).matchType.nameToId;
                                 if (scheduleMatch != null &&
-                                    !<int>[
-                                      matchTypes["Pre scouting"]!,
-                                      matchTypes["Practice"]!,
-                                    ].contains(scheduleMatch.matchTypeId)) {
+                                    !<MatchType>[
+                                      MatchType.pre,
+                                      MatchType.practice,
+                                    ].contains(
+                                      scheduleMatch.matchIdentifier.type,
+                                    )) {
                                   intialIsRed = scheduleMatch.redAlliance
                                       .contains(vars.team);
                                 }

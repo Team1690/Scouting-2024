@@ -1,17 +1,61 @@
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/models/team_data/specific_match_data.dart";
 import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
 
 class QuickData {
   QuickData({
-    //TODO add season specific variables
     required this.amoutOfMatches,
     required this.firstPicklistIndex,
     required this.secondPicklistIndex,
+    required this.thirdPicklistIndex,
+    required this.autoAmpAvg,
+    required this.teleAmpAvg,
+    required this.bestAmpGamepiecesSum,
+    required this.autoSpeakerAvg,
+    required this.teleSpeakerAvg,
+    required this.bestSpeakerGamepiecesSum,
+    required this.matchesClimbedSingle,
+    required this.matchesClimbedDouble,
+    required this.matchesClimbedTriple,
+    required this.climbPercentage,
+    required this.canHarmony,
+    required this.gamepiecePoints,
+    required this.gamepiecesScored,
+    required this.avgAutoSpeakerMissed,
+    required this.avgTeleSpeakerMissed,
+    required this.avgTrapAmount,
+    required this.trapAmount,
+    required this.avgGamepiecesNoDefense,
+    required this.avgGamepiecesHalfDefense,
+    required this.avgGamepiecesFullDefense,
+    required this.trapSuccessRate,
   });
   final int amoutOfMatches;
   final int firstPicklistIndex;
   final int secondPicklistIndex;
+  final int thirdPicklistIndex;
+  final double autoAmpAvg;
+  final double teleAmpAvg;
+  final int bestAmpGamepiecesSum;
+  final double autoSpeakerAvg;
+  final double teleSpeakerAvg;
+  final int bestSpeakerGamepiecesSum;
+  final int matchesClimbedSingle;
+  final int matchesClimbedDouble;
+  final int matchesClimbedTriple;
+  final double climbPercentage;
+  final bool? canHarmony;
+  final double gamepiecePoints;
+  final double gamepiecesScored;
+  final double avgAutoSpeakerMissed;
+  final double avgTeleSpeakerMissed;
+  final double avgTrapAmount;
+  final int? trapAmount;
+  final double avgGamepiecesNoDefense;
+  final double avgGamepiecesHalfDefense;
+  final double avgGamepiecesFullDefense;
+  final double trapSuccessRate;
 }
 
 class AutoByPosData {
@@ -56,54 +100,6 @@ class LineChartData {
 enum RobotFieldStatus { worked, didntComeToField, didntWorkOnField }
 
 enum DefenseAmount { noDefense, halfDefense, fullDefense }
-
-class MatchIdentifier {
-  const MatchIdentifier({
-    required this.number,
-    required this.type,
-    required this.isRematch,
-  });
-  final String type;
-  final int number;
-  final bool isRematch;
-
-  @override
-  bool operator ==(final Object other) =>
-      other is MatchIdentifier &&
-      other.type == type &&
-      other.number == number &&
-      other.isRematch == isRematch;
-
-  @override
-  int get hashCode => Object.hash(type, number, isRematch);
-
-  @override
-  String toString() => "${isRematch ? "R" : ""}${shortenType(type)}$number";
-
-  static String shortenType(final String matchType) {
-    switch (matchType) {
-      case "Pre scouting":
-        return "pre";
-      case "Practice":
-        return "pra";
-      case "Quals":
-        return "";
-      case "Finals":
-        return "f";
-      case "Semi finals":
-        return "sf";
-      case "Quarter finals":
-        return "qf";
-      case "Round robin":
-        return "rb";
-      case "Einstein finals":
-        return "ef";
-      case "Double elims":
-        return "de";
-    }
-    throw Exception("Not a supported match type");
-  }
-}
 
 class Team {
   Team({

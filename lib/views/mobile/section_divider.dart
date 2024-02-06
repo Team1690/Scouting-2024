@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 
 class SectionDivider extends StatelessWidget {
-  SectionDivider({required this.label});
-
+  SectionDivider({required this.label, this.color});
+  final Color? color;
   final String label;
 
   Expanded get line => horizontalLine();
@@ -10,7 +10,10 @@ class SectionDivider extends StatelessWidget {
   Widget build(final BuildContext context) => Row(
         children: <Widget>[
           line,
-          Text(label),
+          Text(
+            label,
+            style: TextStyle(color: color),
+          ),
           line,
         ],
       );
