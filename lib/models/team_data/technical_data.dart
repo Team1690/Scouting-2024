@@ -45,15 +45,30 @@ class TechnicalData<T extends num> {
 
   static TechnicalData<T> parse<T extends num>(final dynamic table) =>
       TechnicalData<T>(
-        autoSpeakerMissed: (table["auto_speaker_missed"] as num? ?? 0) as T,
-        teleSpeakerMissed: (table["tele_speaker_missed"] as num? ?? 0) as T,
-        teleAmpMissed: (table["tele_amp_missed"] as num? ?? 0) as T,
-        autoAmpMissed: (table["auto_amp_missed"] as num? ?? 0) as T,
-        teleSpeaker: (table["tele_speaker"] as num? ?? 0) as T,
-        autoSpeaker: (table["auto_speaker"] as num? ?? 0) as T,
-        autoAmp: (table["auto_amp"] as num? ?? 0) as T,
-        teleAmp: (table["tele_amp"] as num? ?? 0) as T,
-        trapAmount: (table["trap_amount"] as num? ?? 0) as T,
-        trapsMissed: (table["traps_missed"] as num? ?? 0) as T,
+        autoSpeakerMissed:
+            (table["auto_speaker_missed"] as num? ?? 0).numericCast(),
+        teleSpeakerMissed:
+            (table["tele_speaker_missed"] as num? ?? 0).numericCast(),
+        teleAmpMissed: (table["tele_amp_missed"] as num? ?? 0).numericCast(),
+        autoAmpMissed: (table["auto_amp_missed"] as num? ?? 0).numericCast(),
+        teleSpeaker: (table["tele_speaker"] as num? ?? 0).numericCast(),
+        autoSpeaker: (table["auto_speaker"] as num? ?? 0).numericCast(),
+        autoAmp: (table["auto_amp"] as num? ?? 0).numericCast(),
+        teleAmp: (table["tele_amp"] as num? ?? 0).numericCast(),
+        trapAmount: (table["trap_amount"] as num? ?? 0).numericCast(),
+        trapsMissed: (table["traps_missed"] as num? ?? 0).numericCast(),
       );
+}
+
+//TODO: util folder
+extension NumericExtension on num {
+  T numericCast<T extends num>() {
+    if (T == double) {
+      return toDouble() as T;
+    } else if (T == int) {
+      return toInt() as T;
+    } else {
+      throw Exception("Invalid num implmenetor");
+    }
+  }
 }
