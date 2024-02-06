@@ -312,23 +312,24 @@ class _PitViewState extends State<PitView> {
                       height: 20,
                     ),
                     MeasurementConversion(
-                        controller: heightController,
-                        title: "Height",
-                        unitTypes: const <String>["Meters", "Ft"],
-                        regularUnitsToOtherUnitsFactor: mToFt,
-                        onValueChange: (final double? value) {
-                          setState(() {
-                            vars = vars.copyWith(height: () => value);
-                          });
-                        },
-                        onRegularUnits: meters,
-                        currentValue: vars.height,
-                        onUnitsChange: (final bool newMeters) {
-                          setState(() {
-                            meters = newMeters;
-                          });
-                        },
-                        icon: Icons.swap_vert_rounded),
+                      controller: heightController,
+                      title: "Height",
+                      unitTypes: const <String>["Meters", "Ft"],
+                      regularUnitsToOtherUnitsFactor: mToFt,
+                      onValueChange: (final double? value) {
+                        setState(() {
+                          vars = vars.copyWith(height: () => value);
+                        });
+                      },
+                      onRegularUnits: meters,
+                      currentValue: vars.height,
+                      onUnitsChange: (final bool newMeters) {
+                        setState(() {
+                          meters = newMeters;
+                        });
+                      },
+                      icon: Icons.swap_vert_rounded,
+                    ),
                     SectionDivider(label: "OnStage"),
                     const SizedBox(
                       height: 20,
