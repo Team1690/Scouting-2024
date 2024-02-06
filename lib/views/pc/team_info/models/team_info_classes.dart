@@ -1,3 +1,4 @@
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/models/team_data/specific_match_data.dart";
 import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
@@ -99,54 +100,6 @@ class LineChartData {
 enum RobotFieldStatus { worked, didntComeToField, didntWorkOnField }
 
 enum DefenseAmount { noDefense, halfDefense, fullDefense }
-
-class MatchIdentifier {
-  const MatchIdentifier({
-    required this.number,
-    required this.type,
-    required this.isRematch,
-  });
-  final String type;
-  final int number;
-  final bool isRematch;
-
-  @override
-  bool operator ==(final Object other) =>
-      other is MatchIdentifier &&
-      other.type == type &&
-      other.number == number &&
-      other.isRematch == isRematch;
-
-  @override
-  int get hashCode => Object.hash(type, number, isRematch);
-
-  @override
-  String toString() => "${isRematch ? "R" : ""}${shortenType(type)}$number";
-
-  static String shortenType(final String matchType) {
-    switch (matchType) {
-      case "Pre scouting":
-        return "pre";
-      case "Practice":
-        return "pra";
-      case "Quals":
-        return "";
-      case "Finals":
-        return "f";
-      case "Semi finals":
-        return "sf";
-      case "Quarter finals":
-        return "qf";
-      case "Round robin":
-        return "rb";
-      case "Einstein finals":
-        return "ef";
-      case "Double elims":
-        return "de";
-    }
-    throw Exception("Not a supported match type");
-  }
-}
 
 class Team {
   Team({

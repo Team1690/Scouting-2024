@@ -1,17 +1,17 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/enums/climb_enum.dart";
+import "package:scouting_frontend/models/fetch_functions/fetch_single_team.dart";
+import "package:scouting_frontend/models/team_data/specific_match_data.dart";
+import "package:scouting_frontend/models/team_data/team_data.dart";
+import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/views/common/fetch_functions/climb_enum.dart";
-import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/fetch_single_team.dart";
-import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data.dart";
-import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
 
 class TeamInfoData extends StatelessWidget {
@@ -79,14 +79,16 @@ QuickData getQuickdata(final TeamData data) => QuickData(
       firstPicklistIndex: data.firstPicklistIndex,
       secondPicklistIndex: data.secondPicklistIndex,
       thirdPicklistIndex: data.thirdPicklistIndex,
-      autoAmpAvg: data.aggregateData.avgAutoAmp,
-      teleAmpAvg: data.aggregateData.avgTeleAmp,
+      autoAmpAvg: data.aggregateData.avgData.autoAmp,
+      teleAmpAvg: data.aggregateData.avgData.teleAmp,
       bestAmpGamepiecesSum:
-          data.aggregateData.maxAutoAmp + data.aggregateData.maxTeleAmp,
-      autoSpeakerAvg: data.aggregateData.avgAutoSpeaker,
-      teleSpeakerAvg: data.aggregateData.avgTeleSpeaker,
-      bestSpeakerGamepiecesSum:
-          data.aggregateData.maxAutoSpeaker + data.aggregateData.maxTeleSpeaker,
+          //TODO: proper max in aggregate data
+          data.aggregateData.maxData.autoAmp +
+              data.aggregateData.maxData.teleAmp,
+      autoSpeakerAvg: data.aggregateData.avgData.autoSpeaker,
+      teleSpeakerAvg: data.aggregateData.avgData.teleSpeaker,
+      bestSpeakerGamepiecesSum: data.aggregateData.maxData.autoSpeaker +
+          data.aggregateData.maxData.teleSpeaker,
       canHarmony: data.pitData?.harmony,
       climbPercentage: data.technicalMatches
               .where(
@@ -123,36 +125,37 @@ QuickData getQuickdata(final TeamData data) => QuickData(
           .where((final TechnicalMatchData element) => element.harmonyWith == 2)
           .length,
       gamepiecePoints: data.technicalMatches
-              .map((final TechnicalMatchData e) => e.gamePiecesPoints)
+              .map((final TechnicalMatchData e) => e.data.gamePiecesPoints)
               .toList()
               .averageOrNull ??
           0,
       gamepiecesScored: data.technicalMatches
-              .map((final TechnicalMatchData e) => e.gamepieces)
+              .map((final TechnicalMatchData e) => e.data.gamepieces)
               .toList()
               .averageOrNull ??
           0,
-      avgAutoSpeakerMissed: data.aggregateData.avgAutoSpeakerMissed,
-      avgTeleSpeakerMissed: data.aggregateData.avgTeleSpeakerMissed,
+      avgAutoSpeakerMissed: data.aggregateData.avgData.autoSpeakerMissed,
+      avgTeleSpeakerMissed: data.aggregateData.avgData.teleSpeakerMissed,
       trapAmount: data.pitData?.trap,
-      avgTrapAmount: data.aggregateData.avgTrapAmount,
+      avgTrapAmount: data.aggregateData.avgData.trapAmount,
       avgGamepiecesNoDefense: data.specificMatches
               .where(
-                (final SpecificMatchData? element) =>
-                    element != null &&
+                (final SpecificMatchData element) =>
                     element.defenseAmount == DefenseAmount.noDefense,
               )
               .map(
-                (final SpecificMatchData? e) => data.technicalMatches.where(
-                  (final TechnicalMatchData technicalMatchData) =>
-                      (e?.scheduleMatchId ?? 0) ==
-                      technicalMatchData.scheduleMatchId,
-                ),
+                (final SpecificMatchData e) => data.technicalMatches
+                    .where(
+                      (final TechnicalMatchData technicalMatchData) =>
+                          e.scheduleMatchId ==
+                          technicalMatchData.scheduleMatchId,
+                    )
+                    .toList(),
               )
               .firstOrNull
-              ?.map((final TechnicalMatchData e) => e.gamepieces)
+              ?.map((final TechnicalMatchData e) => e.data.gamepieces)
               .toList()
-              .averageOrNull ??
+              .average ??
           double.nan,
       avgGamepiecesFullDefense: data.specificMatches
               .where(

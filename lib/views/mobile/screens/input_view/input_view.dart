@@ -2,7 +2,7 @@ import "dart:async";
 import "dart:convert";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/models/match_model.dart";
+import "package:scouting_frontend/models/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -26,7 +26,7 @@ import "package:scouting_frontend/models/enums/match_mode_enum.dart";
 
 class UserInput extends StatefulWidget {
   const UserInput([this.initialVars]);
-  final Match? initialVars;
+  final InputViewVars? initialVars;
   @override
   State<UserInput> createState() => _UserInputState();
 }
@@ -55,7 +55,7 @@ class _UserInputState extends State<UserInput> {
   final TextEditingController teamNumberController = TextEditingController();
   final TextEditingController scouterNameController = TextEditingController();
   bool toggleLightsState = false;
-  late Match match = Match(context);
+  late InputViewVars match = InputViewVars(context);
   // -1 means nothing
   late final Map<int, int> robotFieldStatusIndexToId = <int, int>{
     -1: IdProvider.of(context).robotFieldStatus.nameToId["Worked"]!,
@@ -195,7 +195,7 @@ class _UserInputState extends State<UserInput> {
                       ),
                       StartingPos(
                         match: match,
-                        onNewMatch: (final Match newMatch) {
+                        onNewMatch: (final InputViewVars newMatch) {
                           setState(() {
                             match = newMatch;
                           });
@@ -208,7 +208,7 @@ class _UserInputState extends State<UserInput> {
                       MatchModeGamePieceCounter(
                         flickerScreen: flickerScreen,
                         match: match,
-                        onNewMatch: (final Match match) {
+                        onNewMatch: (final InputViewVars match) {
                           setState(() {
                             this.match = match;
                           });
@@ -222,7 +222,7 @@ class _UserInputState extends State<UserInput> {
                       MatchModeGamePieceCounter(
                         flickerScreen: flickerScreen,
                         match: match,
-                        onNewMatch: (final Match match) {
+                        onNewMatch: (final InputViewVars match) {
                           setState(() {
                             this.match = match;
                           });
@@ -231,7 +231,7 @@ class _UserInputState extends State<UserInput> {
                       ),
                       Climbing(
                         match: match,
-                        onNewMatch: (final Match newMatch) {
+                        onNewMatch: (final InputViewVars newMatch) {
                           setState(() {
                             match = newMatch;
                           });

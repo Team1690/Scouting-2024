@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
-import "package:scouting_frontend/models/match_model.dart" as m;
+import "package:scouting_frontend/models/input_view_vars.dart" as m;
 import "package:scouting_frontend/models/enums/match_mode_enum.dart" as m;
 
 class GamePieceCounter extends StatelessWidget {
@@ -100,9 +100,9 @@ class MatchModeGamePieceCounter extends StatelessWidget {
     required this.matchMode,
     required this.flickerScreen,
   });
-  final m.Match match;
+  final m.InputViewVars match;
   final m.MatchMode matchMode;
-  final void Function(m.Match) onNewMatch;
+  final void Function(m.InputViewVars) onNewMatch;
   final void Function(int newValue, int oldValue) flickerScreen;
 
   int modeValue(final int autoValue, final int teleValue) =>

@@ -1,12 +1,12 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/models/match_model.dart";
+import "package:scouting_frontend/models/input_view_vars.dart";
 
 class HarmonyWith extends StatelessWidget {
   const HarmonyWith({super.key, required this.match, required this.onNewMatch});
-  final Match match;
-  final void Function(Match) onNewMatch;
+  final InputViewVars match;
+  final void Function(InputViewVars) onNewMatch;
   @override
   Widget build(final BuildContext context) => Slider(
         thumbColor: Colors.blue[400],
@@ -23,8 +23,8 @@ class HarmonyWith extends StatelessWidget {
 
 class ClimbingSelector extends StatelessWidget {
   const ClimbingSelector({required this.match, required this.onNewMatch});
-  final Match match;
-  final void Function(Match) onNewMatch;
+  final InputViewVars match;
+  final void Function(InputViewVars) onNewMatch;
   @override
   Widget build(final BuildContext context) => Selector<int>(
         options: IdProvider.of(context).climb.idToName.keys.toList(),
@@ -49,8 +49,8 @@ class ClimbingSelector extends StatelessWidget {
 
 class Climbing extends StatelessWidget {
   const Climbing({required this.match, required this.onNewMatch});
-  final Match match;
-  final void Function(Match) onNewMatch;
+  final InputViewVars match;
+  final void Function(InputViewVars) onNewMatch;
   @override
   Widget build(final BuildContext context) => Column(
         children: <Widget>[

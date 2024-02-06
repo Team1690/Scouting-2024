@@ -1,9 +1,8 @@
 import "dart:convert";
-
 import "package:flutter/material.dart";
 import "package:progress_state_button/iconed_button.dart";
 import "package:progress_state_button/progress_button.dart";
-import "package:scouting_frontend/models/match_model.dart";
+import "package:scouting_frontend/models/input_view_vars.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 class LocalSaveButton extends StatefulWidget {
@@ -14,7 +13,7 @@ class LocalSaveButton extends StatefulWidget {
     required this.validate,
   });
   final bool Function() validate;
-  final Match vars;
+  final InputViewVars vars;
   final String mutation;
   final void Function() resetForm;
 

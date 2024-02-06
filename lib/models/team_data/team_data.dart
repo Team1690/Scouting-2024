@@ -31,6 +31,9 @@ class TeamData {
   final int secondPicklistIndex;
   final int thirdPicklistIndex;
 
+
+  List<(TechnicalMatchData?, SpecificMatchData?)> getMatches
+
   int get matchesClimbed => technicalMatches
       .where(
         (final TechnicalMatchData element) =>
