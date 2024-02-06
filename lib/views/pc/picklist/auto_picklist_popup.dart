@@ -1,19 +1,15 @@
 import "dart:math";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/fetch_functions/fetch_all_teams.dart";
 import "package:scouting_frontend/models/team_data/all_team_data.dart";
-import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/auto_picklist/value_sliders.dart";
+import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 
 class AutoPickListPopUp extends StatefulWidget {
-  const AutoPickListPopUp({
-    super.key,
-    required this.onReorder,
-    required this.teamsToSort,
-  });
-  final void Function(List<AllTeamData>) onReorder;
+  const AutoPickListPopUp(
+      {super.key, required this.teamsToSort, required this.currentPickList});
   final List<AllTeamData> teamsToSort;
+  final CurrentPickList currentPickList;
   @override
   State<AutoPickListPopUp> createState() => _AutoPickListPopUpState();
 }
@@ -25,6 +21,40 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
   double climbFactor = 0.5;
   double trapFactor = 0.5;
   bool filter = false;
+
+  double calculateValue(final AllTeamData val) {
+    final List<AllTeamData> teamsList = widget.teamsToSort;
+    return (val.climbPercentage * climbFactor / 100 +
+        (val.aggregateData.avgData.autoAmp +
+                val.aggregateData.avgData.teleAmp) *
+            ampFactor /
+            teamsList.fold(
+              0,
+              (
+                final num previousValue,
+                final AllTeamData element,
+              ) =>
+                  max(
+                previousValue,
+                element.aggregateData.maxData.autoAmp,
+              ),
+            ) +
+        (val.aggregateData.avgData.autoSpeaker +
+                val.aggregateData.avgData.teleSpeaker) *
+            speakerFactor /
+            teamsList.fold(
+              0,
+              (
+                final num previousValue,
+                final AllTeamData element,
+              ) =>
+                  max(
+                previousValue,
+                element.aggregateData.maxData.autoSpeaker,
+              ),
+            ) +
+        val.aggregateData.avgData.trapAmount * trapFactor / 2);
+  }
 
   @override
   Widget build(final BuildContext context) => AlertDialog(
@@ -45,127 +75,25 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
                 speakerFactor = 1 - speakerSlider;
                 trapFactor = 1 - trapSlider;
                 filter = feeder;
-                final List<AllTeamData> teamsList = widget.teamsToSort;
-                hasValues
-                  ? Padding(
-                      padding: const EdgeInsets.all(defaultPadding),
-                      child: StreamBuilder<List<AllTeamData>>(
-                        stream: fetchAllTeams(),
-                        builder: (
-                          final BuildContext context,
-                          final AsyncSnapshot<List<AllTeamData>> snapshot,
-                        ) =>
-                            snapshot.mapSnapshot(
-                          onSuccess: (final List<AllTeamData> teams) {
-                            final List<AllTeamData> teamsList = snapshot.data!;
-                            final double maxAmp = teamsList
-                                    .map(
-                                      (final AllTeamData e) =>
-                                          e.aggregateData.avgAutoAmp,
-                                    )
-                                    .fold(0.0, max) +
-                                teamsList
-                                    .map(
-                                      (final AllTeamData e) =>
-                                          e.aggregateData.avgTeleAmp,
-                                    )
-                                    .fold(0.0, max);
-                            final double maxSpeaker = teamsList
-                                    .map(
-                                      (final AllTeamData e) =>
-                                          e.aggregateData.avgAutoSpeaker,
-                                    )
-                                    .fold(0.0, max) +
-                                teamsList
-                                    .map(
-                                      (final AllTeamData e) =>
-                                          e.aggregateData.avgTeleSpeaker,
-                                    )
-                                    .fold(0.0, max);
-                teamsList.sort(
+                final List<AllTeamData> newSortedTeamList =
+                    widget.teamsToSort.sorted(
                   (
                     final AllTeamData b,
                     final AllTeamData a,
                   ) =>
-                      (a.climbedPercentage * climbFactor / 100 +
-                              (a.aggregateData.avgAutoAmp +
-                                      a.aggregateData.avgTeleAmp) *
-                                  ampFactor /
-                                  teamsList.fold(
-                                    0,
-                                    (
-                                      final num previousValue,
-                                      final AllTeamData element,
-                                    ) =>
-                                        max(
-                                      previousValue,
-                                      element.aggregateData.maxAutoAmp,
-                                    ),
-                                  ) +
-                              (a.aggregateData.avgAutoSpeaker +
-                                      a.aggregateData.avgTeleSpeaker) *
-                                  speakerFactor /
-                                  teamsList.fold(
-                                    0,
-                                    (
-                                      final num previousValue,
-                                      final AllTeamData element,
-                                    ) =>
-                                        max(
-                                      previousValue,
-                                      element.aggregateData.maxAutoSpeaker,
-                                    ),
-                                  ) +
-                              a.aggregateData.avgTrapAmount * trapFactor / 2)
-                          .compareTo(
-                    b.climbedPercentage * climbFactor / 100 +
-                        (b.aggregateData.avgAutoAmp +
-                                b.aggregateData.avgTeleAmp) *
-                            ampFactor /
-                            teamsList.fold(
-                              0,
-                              (
-                                final num previousValue,
-                                final AllTeamData element,
-                              ) =>
-                                  max(
-                                previousValue,
-                                element.aggregateData.maxAutoAmp,
-                              ),
-                            ) +
-                        (b.aggregateData.avgAutoSpeaker +
-                                b.aggregateData.avgTeleSpeaker) *
-                            speakerFactor /
-                            teamsList.fold(
-                              0,
-                              (
-                                final num previousValue,
-                                final AllTeamData element,
-                              ) =>
-                                  max(
-                                previousValue,
-                                element.aggregateData.maxAutoSpeaker,
-                              ),
-                            ) +
-                        b.aggregateData.avgTrapAmount * trapFactor / 2,
+                      calculateValue(a).compareTo(
+                    calculateValue(b),
                   ),
                 );
-                widget.onReorder(teamsList);
+
+                newSortedTeamList
+                    .forEachIndexed((final int index, final AllTeamData team) {
+                  widget.currentPickList.setIndex(team, index);
+                });
+
+                Navigator.pop(context, newSortedTeamList);
               }),
             ),
-
-                          onWaiting: () => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          onNoData: () => const Center(
-                            child: Text("No Teams"),
-                          ),
-                          onError: (final Object error) =>
-                              Text(snapshot.error.toString()),
-                        ),
-                      ),
-                    )
-                  : Container(),
           ],
         ),
       );
