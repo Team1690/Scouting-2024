@@ -116,7 +116,7 @@ class _PicklistCardState extends State<PicklistCard> {
                 });
               }
             },
-            child: const Text("Sort"),
+            child: const Text("Sort By"),
           ),
         ],
         title: "",
