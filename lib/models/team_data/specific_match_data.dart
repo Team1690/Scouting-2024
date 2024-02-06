@@ -1,4 +1,5 @@
 import "package:scouting_frontend/models/helpers.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 class SpecificMatchData {
@@ -13,6 +14,7 @@ class SpecificMatchData {
     required this.general,
     required this.defenseAmount,
     required this.url,
+    required this.matchIdentifier,
     required this.scheduleMatchId,
   });
   final String scouterNames;
@@ -26,10 +28,12 @@ class SpecificMatchData {
   final int? defense;
   final int? general;
   final String url;
+  final MatchIdentifier matchIdentifier;
   final DefenseAmount defenseAmount;
 
   static SpecificMatchData parse(final dynamic specificMatchTable) =>
       SpecificMatchData(
+        matchIdentifier: MatchIdentifier.fromJson(specificMatchTable),
         scheduleMatchId: specificMatchTable["schedule_match"]["id"] as int,
         scouterNames: specificMatchTable["scouter_name"] as String,
         drivetrainAndDriving: specificMatchTable["driving_rating"] as int?,

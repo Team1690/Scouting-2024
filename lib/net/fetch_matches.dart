@@ -1,5 +1,4 @@
 import "package:graphql/client.dart";
-import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -31,12 +30,11 @@ ${isSubscription ? "subscription" : "query"} FetchMatches{
     }
     match_number
     happened
-    is_rematch
   }
 }
   """;
 
-List<LightTeam> fromJson(final dynamic json, final String color) {
+List<LightTeam> alliancefromJson(final dynamic json, final String color) {
   final String optional = "${color}_3";
   return <LightTeam>[
     ...(<int>[0, 1, 2]
@@ -47,14 +45,11 @@ List<LightTeam> fromJson(final dynamic json, final String color) {
 
 List<ScheduleMatch> parserFn(final Map<String, dynamic> matches) =>
     (matches["schedule_matches"] as List<dynamic>)
-        .map(
-          (final dynamic e) => ScheduleMatch(
-            happened: e["happened"] as bool,
-            id: e["id"] as int,
-            matchIdentifier: MatchIdentifier.fromJson(e),
-            redAlliance: <LightTeam>[...fromJson(e, "red")],
-            blueAlliance: <LightTeam>[...fromJson(e, "blue")],
-          ),
+        .expand(
+          (final dynamic e) => <ScheduleMatch>[
+            ScheduleMatch.fromJson(e, false),
+            ScheduleMatch.fromJson(e, true),
+          ],
         )
         .toList();
 

@@ -1,5 +1,6 @@
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/net/fetch_matches.dart";
 
 class ScheduleMatch {
   ScheduleMatch({
@@ -15,6 +16,16 @@ class ScheduleMatch {
   final int id;
   final List<LightTeam> redAlliance;
   final List<LightTeam> blueAlliance;
+
+  static ScheduleMatch fromJson(final dynamic e, final bool isRematch) =>
+      ScheduleMatch(
+        happened: e["happened"] as bool,
+        id: e["id"] as int,
+        matchIdentifier:
+            MatchIdentifier.fromJson({"schedule_match": e}, isRematch),
+        redAlliance: <LightTeam>[...alliancefromJson(e, "red")],
+        blueAlliance: <LightTeam>[...alliancefromJson(e, "blue")],
+      );
 
   String? getTeamStation(final LightTeam team) {
     String? fieldPositionOf(

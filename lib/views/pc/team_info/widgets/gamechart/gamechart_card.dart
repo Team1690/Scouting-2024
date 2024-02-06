@@ -214,9 +214,10 @@ class Gamechart extends StatelessWidget {
     final List<List<int>> selectedData,
     final String title,
   ) =>
+      //TODO: get rid of line chart data
       LineChartData(
-        gameNumbers: data.matches
-            .map((final MatchData e) => e.scheduleMatch.matchIdentifier)
+        gameNumbers: data.technicalMatches
+            .map((final TechnicalMatchData e) => e.matchIdentifier)
             .toList(),
         points: selectedData,
         title: title,

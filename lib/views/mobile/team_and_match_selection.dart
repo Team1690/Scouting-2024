@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_typeahead/flutter_typeahead.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
@@ -40,7 +41,13 @@ class TeamAndMatchSelectionState extends State<TeamAndMatchSelection> {
           else
             MatchSearchBox(
               typeAheadController: widget.matchController,
-              matches: MatchesProvider.of(context).matches,
+              matches: MatchesProvider.of(context)
+                  .matches
+                  .whereNot(
+                    (final ScheduleMatch element) =>
+                        element.matchIdentifier.isRematch,
+                  )
+                  .toList(),
               onChange: (final ScheduleMatch selectedMatch) {
                 setState(() {
                   scheduleMatch = selectedMatch;

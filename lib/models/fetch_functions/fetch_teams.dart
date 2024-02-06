@@ -106,7 +106,12 @@ query FetchTeams($ids: [Int!]) @cached {
     specific_matches {
       schedule_match {
         id
+        match_type {
+          title
+        }
+        match_number
       }
+      is_rematch
       defense_amount_id
       defense {
         title
@@ -115,7 +120,6 @@ query FetchTeams($ids: [Int!]) @cached {
       driving_rating
       general_rating
       intake_rating
-      is_rematch
       speaker_rating
       url
       climb_rating
@@ -125,6 +129,10 @@ query FetchTeams($ids: [Int!]) @cached {
     technical_matches(where: {ignored: {_eq: false}}, order_by: [{schedule_match: {match_type: {order: asc}}}, {schedule_match: {match_number: asc}}, {is_rematch: asc}]) {
       schedule_match {
         id
+        match_type {
+          title
+        }
+        match_number
       }
       is_rematch
       auto_amp
@@ -266,6 +274,9 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
           final dynamic pitTable = teamTable["pit"];
           final List<dynamic> faultTable = teamTable["faults"] as List<dynamic>;
           final dynamic specificSummaryTable = teamTable["specific_summary"];
+          technicalMatches.forEach((e) {
+            print("${e.matchIdentifier.isRematch} ${e.matchIdentifier.number}");
+          });
 
           return TeamData(
             aggregateData: AggregateData.parse(aggregateTable),
@@ -281,11 +292,11 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
                   (final ScheduleMatch match) => MatchData(
                     technicalMatchData: technicalMatches.firstWhereOrNull(
                       (final TechnicalMatchData element) =>
-                          match.id == element.scheduleMatchId,
+                          match.matchIdentifier == element.matchIdentifier,
                     ),
                     specificMatchData: specificMatches.firstWhereOrNull(
                       (final SpecificMatchData element) =>
-                          match.id == element.scheduleMatchId,
+                          match.matchIdentifier == element.matchIdentifier,
                     ),
                     scheduleMatch: match,
                   ),

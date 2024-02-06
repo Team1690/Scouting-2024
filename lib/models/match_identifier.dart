@@ -12,14 +12,27 @@ class MatchIdentifier {
   final bool isRematch;
 
   @override
+  bool operator ==(final Object other) =>
+      other is MatchIdentifier &&
+      other.isRematch == isRematch &&
+      other.number == number &&
+      other.type == type;
+
+  @override
+  int get hashCode => Object.hashAll(<Object?>[isRematch, number, type]);
+
+  @override
   String toString() => "${isRematch ? "R" : ""}${type.title}$number";
 
-  static MatchIdentifier fromJson(final dynamic scheduleMatch) =>
+  static MatchIdentifier fromJson(
+    final dynamic match, [
+    final bool? isRematch,
+  ]) =>
       MatchIdentifier(
         type: matchTypeTitleToEnum(
-          scheduleMatch["match_type"]["title"] as String,
+          match["schedule_match"]["match_type"]["title"] as String,
         ),
-        number: scheduleMatch["number"] as int,
-        isRematch: scheduleMatch["is_rematch"] as bool,
+        number: match["schedule_match"]["match_number"] as int,
+        isRematch: isRematch ?? match["is_rematch"] as bool,
       );
 }
