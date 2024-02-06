@@ -8,6 +8,7 @@ class SpecificSummaryData {
     required this.speakerText,
     required this.defenseText,
   });
+
   final String ampText;
   final String climbText;
   final String drivingText;

@@ -1,27 +1,26 @@
-import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_motor_enum.dart";
-import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_train_enum.dart";
-import "package:scouting_frontend/views/common/fetch_functions/pit_data/drive_wheel_enum.dart";
+import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
+import "package:scouting_frontend/models/enums/drive_train_enum.dart";
+import "package:scouting_frontend/models/enums/drive_wheel_enum.dart";
 
 class PitData {
   PitData({
     required this.driveTrainType,
     required this.driveMotorAmount,
-    required this.driveMotorType,
     required this.driveWheelType,
-    required this.gearboxPurchased,
-    required this.notes,
     required this.hasShifer,
-    required this.url,
-    required this.faultMessages,
+    required this.gearboxPurchased,
+    required this.driveMotorType,
+    required this.notes,
     required this.weight,
-    required this.team,
     required this.height,
     required this.harmony,
-    required this.trap,
     required this.hasBuddyClimb,
+    required this.trap,
+    required this.url,
+    required this.faultMessages,
     required this.otherWheelType,
   });
+
   final DriveTrain driveTrainType;
   final int driveMotorAmount;
   final DriveWheel driveWheelType;
@@ -36,7 +35,6 @@ class PitData {
   final int trap;
   final String url;
   final List<String>? faultMessages;
-  final LightTeam team;
   final String? otherWheelType;
 
   static PitData? parse(final dynamic pit) =>
@@ -57,12 +55,6 @@ class PitData {
                   .map((final dynamic fault) => fault["message"] as String)
                   .toList(),
               weight: (pit["weight"] as num).toDouble(),
-              team: LightTeam(
-                pit["team"]["id"] as int,
-                pit["team"]["number"] as int,
-                pit["team"]["name"] as String,
-                pit["team"]["colors_index"] as int,
-              ),
               height: (pit["height"] as num).toDouble(),
               harmony: pit["harmony"] as bool,
               trap: pit["trap"] as int,

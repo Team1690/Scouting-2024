@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/models/match_model.dart" as m;
+import "package:scouting_frontend/models/enums/match_mode_enum.dart" as m;
 
 class GamePieceCounter extends StatelessWidget {
   const GamePieceCounter({

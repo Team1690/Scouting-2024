@@ -2,13 +2,13 @@ import "dart:collection";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/common/fetch_functions/aggregate_data/aggregate_technical_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/single-multiple_teams/team_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/specific_match_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/specific_summary_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/technical_match_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/pit_data/pit_data.dart";
-import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
+import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
+import "package:scouting_frontend/models/team_data/team_data.dart";
+import "package:scouting_frontend/models/team_data/specific_match_data.dart";
+import "package:scouting_frontend/models/team_data/specific_summary_data.dart";
+import "package:scouting_frontend/models/team_data/technical_match_data.dart";
+import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
 
 const String query = r"""
 query FetchTeams($ids: [Int!]) @cached {
@@ -26,6 +26,7 @@ query FetchTeams($ids: [Int!]) @cached {
           tele_speaker_missed
           trap_amount
           traps_missed
+          harmony_with
         }
         max {
           auto_amp
@@ -38,6 +39,8 @@ query FetchTeams($ids: [Int!]) @cached {
           tele_speaker_missed
           trap_amount
           traps_missed
+          scouter_name
+          harmony_with
         }
         min {
           auto_amp
@@ -50,7 +53,49 @@ query FetchTeams($ids: [Int!]) @cached {
           tele_speaker_missed
           trap_amount
           traps_missed
+          harmony_with
+          scouter_name
         }
+        stddev {
+          auto_amp
+          auto_amp_missed
+          auto_speaker
+          auto_speaker_missed
+          harmony_with
+          tele_amp_missed
+          tele_amp
+          tele_speaker
+          tele_speaker_missed
+          trap_amount
+          traps_missed
+        }
+        sum {
+          auto_amp_missed
+          auto_amp
+          auto_speaker
+          auto_speaker_missed
+          harmony_with
+          tele_amp
+          tele_amp_missed
+          tele_speaker
+          tele_speaker_missed
+          trap_amount
+          traps_missed
+        }
+        variance {
+          auto_speaker
+          auto_amp
+          auto_amp_missed
+          auto_speaker_missed
+          harmony_with
+          tele_amp
+          tele_amp_missed
+          tele_speaker
+          tele_speaker_missed
+          trap_amount
+          traps_missed
+        }
+        count
       }
     }
     specific_matches {
@@ -79,6 +124,33 @@ query FetchTeams($ids: [Int!]) @cached {
         match_number
         id
         match_type_id
+        blue_0 {
+          number
+        }
+        blue_1 {
+          number
+        }
+        blue_2 {
+          number
+        }
+        blue_3 {
+          number
+        }
+        match_type {
+          title
+        }
+        red_0 {
+          number
+        }
+        red_1 {
+          number
+        }
+        red_2 {
+          number
+        }
+        red_3 {
+          number
+        }
       }
       
       is_rematch
@@ -100,6 +172,10 @@ query FetchTeams($ids: [Int!]) @cached {
         title
       }
       harmony_with
+      scouter_name
+      starting_position {
+        title
+      }
     }
     name
     number
@@ -155,6 +231,7 @@ query FetchTeams($ids: [Int!]) @cached {
         id
         colors_index
       }
+      other_wheel_type
     }
     specific_summary {
       amp_text
@@ -167,6 +244,7 @@ query FetchTeams($ids: [Int!]) @cached {
     }
   }
 }
+
 
 
 """;

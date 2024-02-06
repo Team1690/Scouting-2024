@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
-import "package:scouting_frontend/views/common/fetch_functions/aggregate_data/aggregate_technical_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/all_teams/all_team_data.dart";
-import "package:scouting_frontend/views/common/fetch_functions/all_teams/fetch_all_teams.dart";
+import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
+import "package:scouting_frontend/models/team_data/all_team_data.dart";
+import "package:scouting_frontend/models/fetch_functions/fetch_all_teams.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
@@ -253,16 +254,8 @@ void save(
               taken: e.taken,
               team: e.team,
               faultMessages: <String>[],
-              autoGamepieceAvg: 0,
-              teleGamepieceAvg: 0,
-              gamepieceAvg: 0,
-              gamepiecePointAvg: 0,
-              brokenMatches: 0,
-              amountOfMatches: 0,
-              matchesClimbed: 0,
-              workedPercentage: 0,
-              climbedPercentage: 0,
               aggregateData: AggregateData.parse(0),
+              technicalMatches: <TechnicalMatchData>[],
             ),
           )
           .map(
