@@ -100,16 +100,23 @@ class _PicklistCardState extends State<PicklistCard> {
             icon: const Icon(Icons.sort),
           ),
           TextButton(
-            onPressed: () => showDialog<String>(
-              context: context,
-              builder: (final BuildContext context) => AutoPickListPopUp(
-                onReorder: (final List<AllTeamData> list) => setState(() {
-                  data = list;
-                }),
-                teamsToSort: widget.initialData,
-              ),
-            ),
-            child: const Text("Filter"),
+            onPressed: () async {
+              final List<AllTeamData>? newAllTeamData =
+                  await showDialog<List<AllTeamData>>(
+                context: context,
+                builder: (final BuildContext context) => AutoPickListPopUp(
+                  currentPickList: currentPickList,
+                  teamsToSort: widget.initialData,
+                ),
+              );
+              if (newAllTeamData != null) {
+                setState(() {
+                  data = newAllTeamData;
+                  print(data);
+                });
+              }
+            },
+            child: const Text("Sort"),
           ),
         ],
         title: "",
