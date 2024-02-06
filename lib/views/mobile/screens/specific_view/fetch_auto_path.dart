@@ -1,11 +1,13 @@
+import "dart:collection";
 import "dart:ui" as ui;
 
 import "package:collection/collection.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/fetch_functions/fetch_teams.dart";
+import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path_csv.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/specific_vars.dart";
 import "package:http/http.dart" as http;
 
 Future<List<String>> fetchUrls(final int team) async {
@@ -42,8 +44,8 @@ Future<({List<ui.Offset> path, bool isRed})> fetchPath(
   return parseAutoCsv(csv);
 }
 
-Future<List<Sketch>> getPaths(final SpecificVars vars) async {
-  final List<String> urls = (await fetchUrls(vars.team!.id)).toList();
+Future<List<Sketch>> getPaths(final int teamId) async {
+  final List<String> urls = (await fetchUrls(teamId)).toList();
   final List<Future<({List<ui.Offset> path, bool isRed})>> paths =
       urls.map(fetchPath).toList();
 
@@ -60,6 +62,23 @@ Future<List<Sketch>> getPaths(final SpecificVars vars) async {
           isRed: element.isRed,
           url: urls[index],
         ),
+      )
+      .toList();
+}
+
+Future<List<(TeamData, List<Sketch>)>> fetchDataAndPaths(
+  final List<int> teamIds,
+) async {
+  final SplayTreeSet<TeamData> data = await fetchMultipleTeamData(teamIds);
+  final List<List<Sketch>> paths = await Future.wait(
+    data
+        .map((final TeamData element) => getPaths(element.lightTeam.id))
+        .toList(),
+  );
+  return paths
+      .mapIndexed(
+        (final int index, final List<Sketch> element) =>
+            (data.elementAt(index), element),
       )
       .toList();
 }
