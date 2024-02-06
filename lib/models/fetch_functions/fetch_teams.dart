@@ -274,9 +274,6 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
           final dynamic pitTable = teamTable["pit"];
           final List<dynamic> faultTable = teamTable["faults"] as List<dynamic>;
           final dynamic specificSummaryTable = teamTable["specific_summary"];
-          technicalMatches.forEach((e) {
-            print("${e.matchIdentifier.isRematch} ${e.matchIdentifier.number}");
-          });
 
           return TeamData(
             aggregateData: AggregateData.parse(aggregateTable),

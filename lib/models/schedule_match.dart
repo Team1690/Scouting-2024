@@ -21,8 +21,12 @@ class ScheduleMatch {
       ScheduleMatch(
         happened: e["happened"] as bool,
         id: e["id"] as int,
-        matchIdentifier:
-            MatchIdentifier.fromJson({"schedule_match": e}, isRematch),
+        matchIdentifier: MatchIdentifier.fromJson(
+          <String, dynamic>{
+            "schedule_match": e,
+          },
+          isRematch,
+        ),
         redAlliance: <LightTeam>[...alliancefromJson(e, "red")],
         blueAlliance: <LightTeam>[...alliancefromJson(e, "blue")],
       );
