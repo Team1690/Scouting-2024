@@ -1,13 +1,14 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/pc/status/status_screen.dart";
 import "package:collection/collection.dart";
-import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 Stream<List<StatusItem<LightTeam, String>>> fetchPreScoutingStatus(
   final bool isSpecific,
@@ -79,7 +80,9 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
       isSpecific,
       (final dynamic matchTable) => MatchIdentifier(
         number: matchTable["match"]["match_number"] as int,
-        type: matchTable["match"]["match_type"]["title"] as String,
+        type: matchTypeTitleToEnum(
+          matchTable["match"]["match_type"]["title"] as String,
+        ),
         isRematch: matchTable["is_rematch"] as bool,
       ),
       (final dynamic scoutedMatchTable) {
@@ -126,7 +129,7 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
                       element.matchTypeId ==
                           IdProvider.of(context)
                               .matchType
-                              .nameToId[identifier.type],
+                              .nameToId[identifier.type.title],
                 );
 
         return <LightTeam>[

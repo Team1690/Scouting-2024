@@ -12,3 +12,9 @@ enum MatchType {
   const MatchType(this.title);
   final String title;
 }
+
+MatchType matchTypeTitleToEnum(final String title) =>
+    MatchType.values
+        .where((final MatchType element) => element.title == title)
+        .singleOrNull ??
+    (throw Exception("Not A Valid Match Type Title"));
