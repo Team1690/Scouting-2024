@@ -17,6 +17,7 @@ import "package:scouting_frontend/views/mobile/submit_button.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/teams_without_pit.dart";
 
 const double kgToPoundFactor = 2.20462262;
+const double mToFt = 1 / 0.3048;
 
 class PitView extends StatefulWidget {
   const PitView([this.initialVars]);
@@ -285,7 +286,7 @@ class _PitViewState extends State<PitView> {
                       height: 20,
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         Expanded(
                           flex: 3,
                           child: TextFormField(
@@ -352,21 +353,65 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
-                      controller: heightController,
-                      onChanged: (final String height) {
-                        vars = vars.copyWith(
-                          height: () => double.tryParse(height),
-                        );
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: "Height",
-                        prefixIcon: Icon(Icons.swap_vert_rounded),
-                      ),
-                      validator: _numericValidator(
-                        "please enter the robot's height",
-                      ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 3,
+                          child: TextFormField(
+                            controller: heightController,
+                            onChanged: (final String height) {
+                              vars = vars.copyWith(
+                                height: () =>
+                                    double.tryParse(height).mapNullable(
+                                  (final double parsedHeight) =>
+                                      parsedHeight * (vars.m ? 1 : 1 / mToFt),
+                                ),
+                              );
+                            },
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: "Height",
+                              prefixIcon: Icon(Icons.swap_vert_rounded),
+                            ),
+                            validator: _numericValidator(
+                              "please enter the robot's height",
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Switcher(
+                            height: 60,
+                            labels: const <String>["M", "FT"],
+                            colors: const <Color>[
+                              Colors.white,
+                              Colors.white,
+                            ],
+                            onChange: (final int selection) {
+                              final bool newHight =
+                                  <int, bool>{1: false, 0: true}[selection]!;
+                              final String newHeightText = vars.height
+                                      .mapNullable(
+                                        (final double height) =>
+                                            height * (newHight ? 1 : mToFt),
+                                      )
+                                      ?.toString() ??
+                                  "";
+                              setState(() {
+                                vars = vars.copyWith(
+                                  m: () => newHight,
+                                );
+                              });
+                              heightController.text = newHeightText;
+                            },
+                            selected: vars.m.mapNullable(
+                                  (final bool m) => m ? 0 : 1,
+                                ) ??
+                                -1,
+                            borderRadiusGeometry: defaultBorderRadius,
+                          ),
+                        )
+                      ],
                     ),
                     SectionDivider(label: "OnStage"),
                     const SizedBox(
