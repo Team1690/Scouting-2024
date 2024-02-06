@@ -17,9 +17,7 @@ class PitVars implements HasuraVars {
         height = null,
         harmony = null,
         trap = 0,
-        hasBuddyClimb = null,
-        kg = true,
-        m = true;
+        hasBuddyClimb = null;
 
   PitVars.all({
     required this.driveTrainType,
@@ -36,8 +34,6 @@ class PitVars implements HasuraVars {
     required this.trap,
     required this.hasBuddyClimb,
     required this.otherDriveWheelType,
-    required this.kg,
-    required this.m,
   });
 
   PitVars copyWith({
@@ -55,8 +51,6 @@ class PitVars implements HasuraVars {
     final bool? Function()? harmony,
     final int Function()? trap,
     final bool? Function()? hasBuddyClimb,
-    final bool Function()? kg,
-    final bool Function()? m,
   }) =>
       PitVars.all(
         driveTrainType:
@@ -83,15 +77,12 @@ class PitVars implements HasuraVars {
         trap: trap != null ? trap() : this.trap,
         hasBuddyClimb:
             hasBuddyClimb != null ? hasBuddyClimb() : this.hasBuddyClimb,
-        kg: kg != null ? kg() : this.kg,
-        m: m != null ? m() : this.m,
       );
   final int? driveTrainType;
   final int? driveMotorType;
   final int driveMotorAmount;
   final bool? hasShifter;
   final bool? gearboxPurchased;
-  final bool kg;
   final String notes;
   final int? driveWheelType;
   final String? otherDriveWheelType;
@@ -101,7 +92,6 @@ class PitVars implements HasuraVars {
   final bool? harmony;
   final int trap;
   final bool? hasBuddyClimb;
-  final bool m;
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         "drivetrain_id": driveTrainType,
@@ -118,25 +108,22 @@ class PitVars implements HasuraVars {
         "harmony": harmony,
         "trap": trap,
         "has_buddy_climb": hasBuddyClimb,
-        "kg": kg,
-        "meters": m
       };
 
   PitVars reset() => copyWith(
-      driveTrainType: always(null),
-      driveMotorType: always(null),
-      driveMotorAmount: always(2),
-      hasShifter: always(null),
-      gearboxPurchased: always(null),
-      notes: always(""),
-      driveWheelType: always(null),
-      teamId: always(null),
-      weight: always(null),
-      height: always(null),
-      harmony: always(null),
-      trap: always(0),
-      hasBuddyClimb: always(null),
-      otherDriveWheelType: always(null),
-      kg: always(true),
-      m: always(true));
+        driveTrainType: always(null),
+        driveMotorType: always(null),
+        driveMotorAmount: always(2),
+        hasShifter: always(null),
+        gearboxPurchased: always(null),
+        notes: always(""),
+        driveWheelType: always(null),
+        teamId: always(null),
+        weight: always(null),
+        height: always(null),
+        harmony: always(null),
+        trap: always(0),
+        hasBuddyClimb: always(null),
+        otherDriveWheelType: always(null),
+      );
 }

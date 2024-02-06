@@ -8,6 +8,7 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/image_picker_widget.dart";
 import "package:scouting_frontend/views/mobile/firebase_submit_button.dart";
+import "package:scouting_frontend/views/mobile/screens/pit_view/measurement_conversion.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_vars.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
@@ -27,6 +28,9 @@ class PitView extends StatefulWidget {
   State<PitView> createState() => _PitViewState();
 }
 
+FormFieldValidator<String> numericValidator(final String error) =>
+    (final String? text) => double.tryParse(text ?? "").onNull(error);
+
 class _PitViewState extends State<PitView> {
   LightTeam? team;
 
@@ -43,8 +47,8 @@ class _PitViewState extends State<PitView> {
       ValueNotifier<bool>(false);
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
-  FormFieldValidator<String> _numericValidator(final String error) =>
-      (final String? text) => double.tryParse(text ?? "").onNull(error);
+  bool kg = true;
+  bool meters = true;
 
   void resetFrame() {
     setState(() {
@@ -285,134 +289,46 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 3,
-                          child: TextFormField(
-                            controller: weightController,
-                            onChanged: (final String weight) {
-                              vars = vars.copyWith(
-                                weight: () =>
-                                    double.tryParse(weight).mapNullable(
-                                  (final double parsedWeight) =>
-                                      parsedWeight *
-                                      (vars.kg ? 1 : 1 / kgToPoundFactor),
-                                ),
-                              );
-                            },
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: "Weight",
-                              prefixIcon: Icon(Icons.fitness_center),
-                            ),
-                            validator: _numericValidator(
-                              "please enter the robot's weight",
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Switcher(
-                            height: 60,
-                            labels: const <String>["KG", "LBS"],
-                            colors: const <Color>[
-                              Colors.white,
-                              Colors.white,
-                            ],
-                            onChange: (final int selection) {
-                              final bool newKg =
-                                  <int, bool>{1: false, 0: true}[selection]!;
-                              final String newWeightText = vars.weight
-                                      .mapNullable(
-                                        (final double weight) =>
-                                            weight *
-                                            (newKg ? 1 : kgToPoundFactor),
-                                      )
-                                      ?.toString() ??
-                                  "";
-                              weightController.text = newWeightText;
-                              setState(() {
-                                vars = vars.copyWith(
-                                  kg: () => newKg,
-                                );
-                              });
-                            },
-                            selected: vars.kg.mapNullable(
-                                  (final bool kg) => kg ? 0 : 1,
-                                ) ??
-                                -1,
-                            borderRadiusGeometry: defaultBorderRadius,
-                          ),
-                        ),
-                      ],
+                    MeasurementConversion(
+                      controller: weightController,
+                      title: "Weight",
+                      unitTypes: const <String>["KG", "LBS"],
+                      regularUnitsToOtherUnitsFactor: kgToPoundFactor,
+                      onValueChange: (final double? value) {
+                        setState(() {
+                          vars = vars.copyWith(weight: () => value);
+                        });
+                      },
+                      onRegularUnits: kg,
+                      currentValue: vars.weight,
+                      onUnitsChange: (final bool newKg) {
+                        setState(() {
+                          kg = newKg;
+                        });
+                      },
+                      icon: Icons.fitness_center,
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 3,
-                          child: TextFormField(
-                            controller: heightController,
-                            onChanged: (final String height) {
-                              vars = vars.copyWith(
-                                height: () =>
-                                    double.tryParse(height).mapNullable(
-                                  (final double parsedHeight) =>
-                                      parsedHeight * (vars.m ? 1 : 1 / mToFt),
-                                ),
-                              );
-                            },
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: "Height",
-                              prefixIcon: Icon(Icons.swap_vert_rounded),
-                            ),
-                            validator: _numericValidator(
-                              "please enter the robot's height",
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Switcher(
-                            height: 60,
-                            labels: const <String>["M", "FT"],
-                            colors: const <Color>[
-                              Colors.white,
-                              Colors.white,
-                            ],
-                            onChange: (final int selection) {
-                              final bool newHight =
-                                  <int, bool>{1: false, 0: true}[selection]!;
-                              final String newHeightText = vars.height
-                                      .mapNullable(
-                                        (final double height) =>
-                                            height * (newHight ? 1 : mToFt),
-                                      )
-                                      ?.toString() ??
-                                  "";
-                              setState(() {
-                                vars = vars.copyWith(
-                                  m: () => newHight,
-                                );
-                              });
-                              heightController.text = newHeightText;
-                            },
-                            selected: vars.m.mapNullable(
-                                  (final bool m) => m ? 0 : 1,
-                                ) ??
-                                -1,
-                            borderRadiusGeometry: defaultBorderRadius,
-                          ),
-                        )
-                      ],
-                    ),
+                    MeasurementConversion(
+                        controller: heightController,
+                        title: "Height",
+                        unitTypes: const <String>["Meters", "Ft"],
+                        regularUnitsToOtherUnitsFactor: mToFt,
+                        onValueChange: (final double? value) {
+                          setState(() {
+                            vars = vars.copyWith(height: () => value);
+                          });
+                        },
+                        onRegularUnits: meters,
+                        currentValue: vars.height,
+                        onUnitsChange: (final bool newMeters) {
+                          setState(() {
+                            meters = newMeters;
+                          });
+                        },
+                        icon: Icons.swap_vert_rounded),
                     SectionDivider(label: "OnStage"),
                     const SizedBox(
                       height: 20,
