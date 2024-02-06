@@ -1,6 +1,7 @@
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
 import "package:scouting_frontend/models/enums/drive_wheel_enum.dart";
+import "package:scouting_frontend/models/team_model.dart";
 
 class PitData {
   PitData({
@@ -19,6 +20,7 @@ class PitData {
     required this.url,
     required this.faultMessages,
     required this.otherWheelType,
+    required this.team,
   });
 
   final DriveTrain driveTrainType;
@@ -36,6 +38,7 @@ class PitData {
   final String url;
   final List<String>? faultMessages;
   final String? otherWheelType;
+  final LightTeam team;
 
   static PitData? parse(final dynamic pit) =>
       pit != null && pit["drivetrain"] != null
@@ -60,6 +63,7 @@ class PitData {
               trap: pit["trap"] as int,
               hasBuddyClimb: pit["has_buddy_climb"] as bool,
               otherWheelType: pit["other_wheel_type"] as String?,
+              team: LightTeam.fromJson(pit["team"]),
             )
           : null;
 }
