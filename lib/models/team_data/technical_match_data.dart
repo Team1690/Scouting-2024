@@ -11,6 +11,8 @@ class TechnicalMatchData {
     required this.harmonyWith,
     required this.climb,
     required this.scheduleMatchId,
+    required this.isRematch,
+    required this.matchTypeId,
   });
 
   final RobotFieldStatus robotFieldStatus;
@@ -19,6 +21,8 @@ class TechnicalMatchData {
   final int harmonyWith;
   final Climb climb;
   final int scheduleMatchId;
+  final bool isRematch;
+  final int matchTypeId;
 
   static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
         robotFieldStatus: robotFieldStatusTitleToEnum(
@@ -29,5 +33,7 @@ class TechnicalMatchData {
         climb: climbTitleToEnum(match["climb"]["title"] as String),
         scheduleMatchId: match["schedule_match"]["id"] as int,
         data: TechnicalData.parse(match),
+        isRematch: match["is_rematch"] as bool,
+        matchTypeId: match["schedule_match"]["match_type_id"] as int,
       );
 }
