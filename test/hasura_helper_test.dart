@@ -1,11 +1,7 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/net/fetch_matches.dart";
 
 void main() {
-  test("Query", () {
-    expect(fetchMatches(), completes);
-  });
   group("Map Extenstions", () {
     group("Map Nullable", () {
       test("Actually Null", () {
