@@ -2,9 +2,7 @@ import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
-import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
-
-import '../enums/robot_field_status.dart';
+import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class AllTeamData {
   AllTeamData({

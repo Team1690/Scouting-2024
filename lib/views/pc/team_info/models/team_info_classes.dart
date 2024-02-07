@@ -1,10 +1,6 @@
 import "package:scouting_frontend/models/match_identifier.dart";
-import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/models/team_data/specific_match_data.dart";
-import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
-
-import '../../../../models/enums/defense_amount_enum.dart';
-import '../../../../models/enums/robot_field_status.dart';
+import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
+import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class AutoByPosData {
   AutoByPosData({

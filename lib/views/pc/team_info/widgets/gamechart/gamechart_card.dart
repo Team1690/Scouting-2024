@@ -10,9 +10,8 @@ import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.da
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamepiece_line_chart.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/points_linechart.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/titled_line_chart.dart";
-
-import '../../../../../models/enums/defense_amount_enum.dart';
-import '../../../../../models/enums/robot_field_status.dart';
+import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
+import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class Gamechart extends StatelessWidget {
   const Gamechart(this.data);
