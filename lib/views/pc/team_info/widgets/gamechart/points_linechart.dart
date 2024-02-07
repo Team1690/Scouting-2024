@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
@@ -51,10 +52,12 @@ class PointsLineChart extends StatelessWidget {
                     )
                     .toList(),
               ],
-              defenseAmounts: [
+              defenseAmounts: <List<DefenseAmount>>[
                 matches.fullGames
-                    .map((e) => e.specificMatchData!.defenseAmount)
-                    .toList()
+                    .map(
+                      (final MatchData e) => e.specificMatchData!.defenseAmount,
+                    )
+                    .toList(),
               ],
             ),
           ),

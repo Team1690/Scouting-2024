@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
@@ -32,8 +33,8 @@ class TitledLineChart extends StatelessWidget {
               top: 40,
             ),
             child: DashboardTitledLineChart(
-              maxY: 2,
-              minY: -1,
+              maxY: heightToTitles.keys.max.toDouble() + 1,
+              minY: heightToTitles.keys.min.toDouble() - 1,
               showShadow: true,
               defenseAmounts: <List<DefenseAmount>>[
                 matches.fullGames
