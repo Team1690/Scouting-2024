@@ -17,16 +17,16 @@ import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 
 class AutoPlannerScreen extends StatefulWidget {
   const AutoPlannerScreen([
-    this.initialTeams = const <(StartingPosition, LightTeam)>[],
+    this.initialTeams = const <LightTeam>[],
   ]); //TODO add implementation for initialTeams from TeamInfo
-  final List<(StartingPosition, LightTeam)> initialTeams;
+  final List<LightTeam> initialTeams;
 
   @override
   State<AutoPlannerScreen> createState() => _AutoPlannerScreenState();
 }
 
 class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
-  List<(StartingPosition, LightTeam)> teams = <(StartingPosition, LightTeam)>[];
+  List<LightTeam> teams = <LightTeam>[];
 
   @override
   Widget build(final BuildContext context) => Scaffold(
@@ -47,9 +47,7 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
               return FutureBuilder<List<(TeamData, List<Sketch>)>>(
                 future: fetchDataAndPaths(
                   context,
-                  teams
-                      .map((final (StartingPosition, LightTeam) e) => e.$2.id)
-                      .toList(),
+                  teams.map((final LightTeam e) => e.id).toList(),
                 ),
                 builder: (
                   final BuildContext context,
@@ -77,7 +75,6 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
                                         (final StartingPosition e) => Expanded(
                                           child: Column(
                                             children: <Widget>[
-                                              Text("Starting Near ${e.title}"),
                                               TeamSelectionFuture(
                                                 controller:
                                                     TextEditingController(),
@@ -86,21 +83,11 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
                                                   ..removeWhere(teams.contains),
                                                 onChange:
                                                     (final LightTeam team) {
-                                                  if (teams
-                                                      .map(
-                                                        (
-                                                          final (
-                                                            StartingPosition,
-                                                            LightTeam
-                                                          ) e,
-                                                        ) =>
-                                                            e.$2,
-                                                      )
-                                                      .contains(team)) {
+                                                  if (teams.contains(team)) {
                                                     return;
                                                   }
                                                   teams.add(
-                                                    (e, team),
+                                                    team,
                                                   );
                                                 },
                                               ),
@@ -130,35 +117,7 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
                                       ? const Card()
                                       : AutoPlanner(
                                           field: fieldSnapshot.data!,
-                                          data: snapshot.data!
-                                              .mapIndexed(
-                                                (
-                                                  final int index,
-                                                  final (
-                                                    TeamData,
-                                                    List<Sketch>
-                                                  ) element,
-                                                ) =>
-                                                    (
-                                                  teams
-                                                          .firstWhereOrNull(
-                                                            (
-                                                              final (
-                                                                StartingPosition,
-                                                                LightTeam
-                                                              ) e,
-                                                            ) =>
-                                                                e.$2 ==
-                                                                element.$1
-                                                                    .lightTeam,
-                                                          )
-                                                          ?.$1 ??
-                                                      StartingPosition.amp,
-                                                  element
-                                                ),
-                                              )
-                                              .toList(),
-                                        ),
+                                          data: snapshot.data!),
                                 ),
                               ],
                             ),
@@ -181,7 +140,7 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
 class AutoPlanner extends StatefulWidget {
   const AutoPlanner({required this.field, required this.data});
   final ui.Image field;
-  final List<(StartingPosition, (TeamData, List<Sketch>))> data;
+  final List<(TeamData, List<Sketch>)> data;
 
   @override
   State<AutoPlanner> createState() => _AutoPlannerState();
@@ -217,19 +176,8 @@ class _AutoPlannerState extends State<AutoPlanner> {
                                     widget.field,
                                     widget.field
                                   ),
-                                  existingPaths: widget.data
-                                          .firstWhereOrNull(
-                                            (
-                                              final (
-                                                StartingPosition,
-                                                (TeamData, List<Sketch>)?
-                                              ) element,
-                                            ) =>
-                                                element.$1 == e,
-                                          )
-                                          ?.$2
-                                          .$2 ??
-                                      <Sketch>[],
+                                  existingPaths:
+                                      widget.data.firstOrNull?.$2 ?? <Sketch>[],
                                   onNewSketch: (final Sketch sketch) {
                                     Navigator.pop(context, sketch);
                                   },
@@ -251,21 +199,9 @@ class _AutoPlannerState extends State<AutoPlanner> {
                                     e,
                                     (
                                       selectedAuto,
-                                      widget.data
-                                              .firstWhereOrNull(
-                                                (
-                                                  final (
-                                                    StartingPosition,
-                                                    (TeamData, List<Sketch>)?
-                                                  ) element,
-                                                ) =>
-                                                    element.$1 == e,
-                                              )
-                                              ?.$2
-                                              .$1
-                                              .lightTeam
+                                      widget.data.firstOrNull?.$1.lightTeam
                                               .color ??
-                                          Colors.white,
+                                          Colors.white, //TODO
                                     )
                                   ),
                                 );
