@@ -25,7 +25,9 @@ class _SelectPathState extends State<SelectPath> {
         children: <Widget>[
           AlertDialog(
             content: Container(
-              width: MediaQuery.of(context).size.width * 0.75,
+              width: isPC(context)
+                  ? MediaQuery.of(context).size.width * 0.5
+                  : MediaQuery.of(context).size.width * 0.75,
               height: MediaQuery.of(context).size.height * 0.8,
               child: SingleChildScrollView(
                 child: Column(
