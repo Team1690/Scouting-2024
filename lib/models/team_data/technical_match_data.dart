@@ -20,7 +20,6 @@ class TechnicalMatchData {
   final int harmonyWith;
   final Climb climb;
   final int scheduleMatchId;
-  final StartingPosition startingPosition;
 
   static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
         matchIdentifier: MatchIdentifier.fromJson(match),
@@ -31,8 +30,5 @@ class TechnicalMatchData {
         climb: climbTitleToEnum(match["climb"]["title"] as String),
         scheduleMatchId: match["schedule_match"]["id"] as int,
         data: TechnicalData.parse(match),
-        startingPosition: startingPosTitleToEnum(
-          match["starting_position"]["title"] as String,
-        ),
       );
 }
