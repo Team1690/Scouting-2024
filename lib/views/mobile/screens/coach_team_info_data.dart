@@ -5,7 +5,7 @@ import "package:scouting_frontend/models/team_model.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
-import "../../pc/team_info/models/quick_data.dart";
+import '../../../models/team_info_models/quick_data.dart';
 
 class CoachTeamData extends StatelessWidget {
   const CoachTeamData(this.team);
