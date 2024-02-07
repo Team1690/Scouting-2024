@@ -30,8 +30,8 @@ class _ChangeMatchState extends State<ChangeMatch> {
   TextEditingController numberController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     numberController = TextEditingController(
       text: widget.initialVars == null ? null : vars.matchNumber.toString(),
     );
