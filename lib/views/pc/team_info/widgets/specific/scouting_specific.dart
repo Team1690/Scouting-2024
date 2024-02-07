@@ -27,7 +27,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.matchesData.specificMatches
                   .map(
                     (final MatchData match) => (
-                      match.specificMatchData!.drivetrainAndDriving!,
+                      match.specificMatchData!.drivetrainAndDriving ?? 0,
                       match.scheduleMatch.matchIdentifier.number
                     ),
                   )
@@ -40,7 +40,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.matchesData.specificMatches
                   .map(
                     (final MatchData match) => (
-                      match.specificMatchData!.speaker!,
+                      match.specificMatchData!.speaker ?? 0,
                       match.scheduleMatch.matchIdentifier.number
                     ),
                   )
@@ -53,7 +53,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.matchesData.specificMatches
                   .map(
                     (final MatchData match) => (
-                      match.specificMatchData!.amp!,
+                      match.specificMatchData!.amp ?? 0,
                       match.scheduleMatch.matchIdentifier.number
                     ),
                   )
@@ -66,7 +66,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.matchesData.specificMatches
                   .map(
                     (final MatchData match) => (
-                      match.specificMatchData!.intake!,
+                      match.specificMatchData!.intake ?? 0,
                       match.scheduleMatch.matchIdentifier.number
                     ),
                   )
@@ -79,7 +79,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.matchesData.specificMatches
                   .map(
                     (final MatchData match) => (
-                      match.specificMatchData!.climb!,
+                      match.specificMatchData!.climb ?? 0,
                       match.scheduleMatch.matchIdentifier.number
                     ),
                   )
@@ -92,7 +92,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.matchesData.specificMatches
                   .map(
                     (final MatchData match) => (
-                      match.specificMatchData!.general!,
+                      match.specificMatchData!.general ?? 0,
                       match.scheduleMatch.matchIdentifier.number
                     ),
                   )
@@ -105,7 +105,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
               widget.matchesData.specificMatches
                   .map(
                     (final MatchData match) => (
-                      match.specificMatchData!.defense!,
+                      match.specificMatchData!.defense ?? 0,
                       match.scheduleMatch.matchIdentifier.number
                     ),
                   )
