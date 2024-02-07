@@ -2,7 +2,6 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_data/starting_position_enum.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
@@ -16,7 +15,6 @@ import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.d
 import "package:scouting_frontend/views/mobile/screens/specific_view/fetch_auto_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_view.dart";
-import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 
 class AutoPlannerScreen extends StatefulWidget {
   const AutoPlannerScreen([
@@ -55,7 +53,7 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
                           .map((final LightTeam e) => e.id)
                           .toList(),
                     )
-                  : Future(
+                  : Future<List<(TeamData, List<(Sketch, StartingPosition)>)>>(
                       () => <(TeamData, List<(Sketch, StartingPosition)>)>[],
                     ),
               builder: (
@@ -150,9 +148,12 @@ class AutoPlanner extends StatefulWidget {
 class _AutoPlannerState extends State<AutoPlanner> {
   List<(StartingPosition, (Sketch, Color))> selectedAutos =
       <(StartingPosition, (Sketch, Color))>[];
-  Map<StartingPosition, TeamData?> selectedTeams = Map.fromEntries(
-    StartingPosition.values
-        .map((final StartingPosition e) => MapEntry(e, null)),
+  Map<StartingPosition, TeamData?> selectedTeams =
+      Map<StartingPosition, TeamData?>.fromEntries(
+    StartingPosition.values.map(
+      (final StartingPosition e) =>
+          MapEntry<StartingPosition, TeamData?>(e, null),
+    ),
   );
   @override
   Widget build(final BuildContext context) => Row(
@@ -226,10 +227,9 @@ class _AutoPlannerState extends State<AutoPlanner> {
         fieldBackgrounds: (widget.field, widget.field),
         existingPaths: widget.data
                 .firstWhereOrNull(
-                  (final (
-                            TeamData,
-                            List<(Sketch, StartingPosition)>
-                          ) element) =>
+                  (
+                    final (TeamData, List<(Sketch, StartingPosition)>) element,
+                  ) =>
                       element.$1.lightTeam == teamData?.lightTeam,
                 )
                 ?.$2
@@ -240,8 +240,10 @@ class _AutoPlannerState extends State<AutoPlanner> {
                             (final TechnicalMatchData element) =>
                                 element.startingPosition == startingPos,
                           )
-                          .map((final TechnicalMatchData element) =>
-                              element.startingPosition)
+                          .map(
+                            (final TechnicalMatchData element) =>
+                                element.startingPosition,
+                          )
                           .contains(element.$2) ??
                       false,
                 )

@@ -5,7 +5,6 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_teams.dart";
-import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_data/starting_position_enum.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -54,7 +53,7 @@ List<(String, StartingPosition)> parserFn(final Map<String, dynamic> urls) =>
                       .isNotEmpty;
           return (url["schedule_match"]["technical_matches"] as List<dynamic>)
               .map(
-            (e) => validator
+            (final dynamic e) => validator
                 ? (
                     url["url"] as String,
                     startingPosTitleToEnum(
@@ -84,8 +83,9 @@ Future<List<(Sketch, StartingPosition)>> getPaths(
 ) async {
   final List<(String, StartingPosition)> urls =
       (await fetchUrls(teamId, shouldDistinct)).toList();
-  final List<Future<({List<ui.Offset> path, bool isRed})>> paths =
-      urls.map((e) => fetchPath(e.$1)).toList();
+  final List<Future<({List<ui.Offset> path, bool isRed})>> paths = urls
+      .map((final (String, StartingPosition) e) => fetchPath(e.$1))
+      .toList();
 
   final List<({bool isRed, List<ui.Offset> path})> pathResults =
       await Future.wait(paths);
@@ -107,6 +107,7 @@ Future<List<(Sketch, StartingPosition)>> getPaths(
       .toList();
 }
 
+//TODO turn this into a model instead of a tuple within a tuple
 Future<List<(TeamData, List<(Sketch, StartingPosition)>)>> fetchDataAndPaths(
   final BuildContext context,
   final List<int> teamIds,

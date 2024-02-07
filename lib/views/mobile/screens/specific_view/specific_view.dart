@@ -155,7 +155,17 @@ class _SpecificState extends State<Specific> {
                               final Sketch? result =
                                   await showPathSelectionDialog(
                                 context,
-                                snapshot.data?.map((e) => e.$1).toList() ??
+                                snapshot.data
+                                        ?.map(
+                                          (
+                                            final (
+                                              Sketch,
+                                              StartingPosition
+                                            ) autoData,
+                                          ) =>
+                                              autoData.$1,
+                                        )
+                                        .toList() ??
                                     <Sketch>[],
                                 intialIsRed,
                               );
