@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
+import "package:scouting_frontend/models/team_data/starting_position_enum.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
@@ -36,8 +37,9 @@ class _SpecificState extends State<Specific> {
   (ui.Image, ui.Image)? fieldImages;
   late SpecificVars vars = SpecificVars(context);
   bool intialIsRed = false;
-  late Future<List<Sketch>> pathsFuture = Future<List<Sketch>>(
-    () => <Sketch>[],
+  late Future<List<(Sketch, StartingPosition)>> pathsFuture =
+      Future<List<(Sketch, StartingPosition)>>(
+    () => <(Sketch, StartingPosition)>[],
   );
 
   @override
@@ -54,11 +56,12 @@ class _SpecificState extends State<Specific> {
             widgets: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(defaultPadding),
-                child: FutureBuilder<List<Sketch>>(
+                child: FutureBuilder<List<(Sketch, StartingPosition)>>(
                   future: pathsFuture,
                   builder: (
                     final BuildContext context,
-                    final AsyncSnapshot<List<Sketch>> snapshot,
+                    final AsyncSnapshot<List<(Sketch, StartingPosition)>>
+                        snapshot,
                   ) =>
                       SingleChildScrollView(
                     child: Form(
@@ -97,7 +100,7 @@ class _SpecificState extends State<Specific> {
                                   autoPath: always(null),
                                 );
                                 if (vars.team != null) {
-                                  pathsFuture = getPaths(vars.team!.id);
+                                  pathsFuture = getPaths(vars.team!.id, true);
                                 }
                                 final ScheduleMatch? scheduleMatch =
                                     vars.scheduleMatch;
@@ -152,7 +155,8 @@ class _SpecificState extends State<Specific> {
                               final Sketch? result =
                                   await showPathSelectionDialog(
                                 context,
-                                snapshot.data ?? <Sketch>[],
+                                snapshot.data?.map((e) => e.$1).toList() ??
+                                    <Sketch>[],
                                 intialIsRed,
                               );
                               setState(() {
@@ -262,8 +266,9 @@ class _SpecificState extends State<Specific> {
                               "auto_paths/${vars.scheduleMatch?.id}_${vars.team?.id}.txt",
                               () {
                                 setState(() {
-                                  pathsFuture = Future<List<Sketch>>(
-                                    () => <Sketch>[],
+                                  pathsFuture =
+                                      Future<List<(Sketch, StartingPosition)>>(
+                                    () => <(Sketch, StartingPosition)>[],
                                   );
                                   vars = vars.reset(context);
                                   nameController.clear();
