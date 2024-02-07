@@ -1,9 +1,6 @@
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_single_team.dart";
-import "package:scouting_frontend/models/team_data/specific_match_data.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
@@ -112,29 +109,41 @@ QuickData getQuickdata(final TeamData data) => QuickData(
       trapAmount: data.pitData?.trap,
       avgTrapAmount: data.aggregateData.avgData.trapAmount,
       avgGamepiecesNoDefense: data.matches.fullGames
-              .where((final MatchData match) =>
-                  match.specificMatchData!.defenseAmount ==
-                  DefenseAmount.noDefense)
-              .map((final MatchData match) =>
-                  match.technicalMatchData!.data.gamepieces)
+              .where(
+                (final MatchData match) =>
+                    match.specificMatchData!.defenseAmount ==
+                    DefenseAmount.noDefense,
+              )
+              .map(
+                (final MatchData match) =>
+                    match.technicalMatchData!.data.gamepieces,
+              )
               .toList()
               .averageOrNull ??
           double.nan,
       avgGamepiecesFullDefense: data.matches.fullGames
-              .where((final MatchData match) =>
-                  match.specificMatchData!.defenseAmount ==
-                  DefenseAmount.fullDefense)
-              .map((final MatchData match) =>
-                  match.technicalMatchData!.data.gamepieces)
+              .where(
+                (final MatchData match) =>
+                    match.specificMatchData!.defenseAmount ==
+                    DefenseAmount.fullDefense,
+              )
+              .map(
+                (final MatchData match) =>
+                    match.technicalMatchData!.data.gamepieces,
+              )
               .toList()
               .averageOrNull ??
           double.nan,
       avgGamepiecesHalfDefense: data.matches.fullGames
-              .where((final MatchData match) =>
-                  match.specificMatchData!.defenseAmount ==
-                  DefenseAmount.halfDefense)
-              .map((final MatchData match) =>
-                  match.technicalMatchData!.data.gamepieces)
+              .where(
+                (final MatchData match) =>
+                    match.specificMatchData!.defenseAmount ==
+                    DefenseAmount.halfDefense,
+              )
+              .map(
+                (final MatchData match) =>
+                    match.technicalMatchData!.data.gamepieces,
+              )
               .toList()
               .averageOrNull ??
           double.nan,
