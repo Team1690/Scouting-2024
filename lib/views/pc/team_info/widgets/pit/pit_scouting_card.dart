@@ -7,6 +7,8 @@ import "package:scouting_frontend/views/pc/team_info/widgets/pit/edit_pit.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
 
+import 'robot_has_something.dart';
+
 class PitScoutingCard extends StatelessWidget {
   PitScoutingCard(
     this.data,
@@ -58,6 +60,7 @@ class PitScoutingCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.center,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: data.faultMessages!
                         .map(
                           (final String a) => Text(
@@ -65,27 +68,20 @@ class PitScoutingCard extends StatelessWidget {
                             textDirection: TextDirection.rtl,
                           ),
                         )
-                        .expand(
-                          (final Text element) => <Widget>[
-                            element,
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        )
                         .toList(),
                   ),
                 ),
                 const Divider(),
               ],
-              HasSomething(
+              RobotHasSomething(
                 title: "Trap: ",
                 value: data.trap != 0,
                 numeralValue: data.trap,
               ),
-              HasSomething(title: "Harmony: ", value: data.harmony),
+              RobotHasSomething(title: "Harmony: ", value: data.harmony),
               if (data.hasBuddyClimb)
-                HasSomething(title: "Buddy Climb: ", value: data.hasBuddyClimb),
+                RobotHasSomething(
+                    title: "Buddy Climb: ", value: data.hasBuddyClimb),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
@@ -106,7 +102,7 @@ class PitScoutingCard extends StatelessWidget {
                     Text(
                       "Drive wheel: ${data.driveWheelType == DriveWheel.other ? data.otherWheelType : data.driveWheelType}",
                     ),
-                    HasSomething(
+                    RobotHasSomething(
                       title: "Has shifter:",
                       value: data.hasShifer,
                     ),
@@ -114,7 +110,7 @@ class PitScoutingCard extends StatelessWidget {
                       "Gearbox: ${data.gearboxPurchased.mapNullable((final bool p0) => p0 ? "purchased" : "custom") ?? "Not answered"}",
                     ),
                     Text(
-                      "Weight: ${data.weight}Kg",
+                      "Weight: ${data.weight} Kg",
                     ),
                   ],
                 ),
@@ -211,36 +207,5 @@ class PitScoutingCard extends StatelessWidget {
             ],
           ),
         ),
-      );
-}
-
-class HasSomething extends StatelessWidget {
-  const HasSomething({
-    required this.title,
-    required this.value,
-    this.numeralValue,
-  });
-  final bool? value;
-  final String title;
-  final int? numeralValue;
-  @override
-  Widget build(final BuildContext context) => Row(
-        children: <Widget>[
-          Text(textAlign: TextAlign.center, title),
-          value.mapNullable(
-                (final bool hasSomething) => hasSomething
-                    ? numeralValue == null
-                        ? const Icon(
-                            Icons.done,
-                            color: Colors.lightGreen,
-                          )
-                        : Text("$numeralValue")
-                    : const Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ),
-              ) ??
-              const Text(" Not answered"),
-        ],
       );
 }
