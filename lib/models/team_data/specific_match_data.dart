@@ -2,6 +2,8 @@ import "package:scouting_frontend/models/helpers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
+import '../enums/defense_amount_enum.dart';
+
 class SpecificMatchData {
   const SpecificMatchData({
     required this.scouterNames,

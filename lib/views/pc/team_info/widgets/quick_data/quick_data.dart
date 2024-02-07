@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
+import "../../models/quick_data.dart";
+
 class QuickDataCard extends StatelessWidget {
   const QuickDataCard(this.data);
   final QuickData data;

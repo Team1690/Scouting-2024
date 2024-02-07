@@ -7,6 +7,9 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart"
     show DefenseAmount, RobotFieldStatus;
 
+import '../../models/enums/defense_amount_enum.dart';
+import '../../models/enums/robot_field_status.dart';
+
 class _BaseLineChart extends StatelessWidget {
   const _BaseLineChart({
     required this.defenseAmounts,
