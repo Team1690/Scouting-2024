@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
 
@@ -11,7 +11,7 @@ class PointsLineChart extends StatelessWidget {
   });
 
   final int Function(MatchData) data;
-  final List<List<MatchData>> matches;
+  final List<MatchData> matches;
   final String title;
 
   @override
@@ -33,35 +33,29 @@ class PointsLineChart extends StatelessWidget {
             child: DashboardLineChart(
               sideTitlesInterval: 10,
               showShadow: true,
-              gameNumbers: matches
+              gameNumbers: matches.fullGames
                   .map(
-                    (final List<MatchData> e) => e.fullGames.map(
-                        (final MatchData e) => e.scheduleMatch.matchIdentifier),
+                    (final MatchData e) => e.scheduleMatch.matchIdentifier,
                   )
-                  .expand(identity)
                   .toList(),
               inputedColors: const <Color>[
                 Colors.green,
               ],
               distanceFromHighest: 20,
-              dataSet: matches
-                  .map(
-                      (final List<MatchData> match) => match.map(data).toList())
-                  .toList(),
-              robotMatchStatuses: matches
-                  .map((final List<MatchData> teamMatches) => teamMatches
-                      .fullGames
-                      .map((final MatchData match) =>
-                          match.technicalMatchData!.robotFieldStatus)
-                      .toList())
-                  .toList(),
-              defenseAmounts: matches
-                  .map((final List<MatchData> teamMatches) => teamMatches
-                      .fullGames
-                      .map((final MatchData match) =>
-                          match.specificMatchData!.defenseAmount)
-                      .toList())
-                  .toList(),
+              dataSet: <List<int>>[matches.fullGames.map(data).toList()],
+              robotMatchStatuses: <List<RobotFieldStatus>>[
+                matches.fullGames
+                    .map(
+                      (final MatchData e) =>
+                          e.technicalMatchData!.robotFieldStatus,
+                    )
+                    .toList(),
+              ],
+              defenseAmounts: [
+                matches.fullGames
+                    .map((e) => e.specificMatchData!.defenseAmount)
+                    .toList()
+              ],
             ),
           ),
         ],

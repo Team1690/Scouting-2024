@@ -1,10 +1,18 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
 import "package:scouting_frontend/views/constants.dart";
 
 class GamepiecesLineChart extends StatelessWidget {
-  const GamepiecesLineChart(this.data);
-  final LineChartData data;
+  const GamepiecesLineChart({
+    required this.title,
+    required this.matches,
+    required this.data,
+  });
+
+  final String title;
+  final List<MatchData> matches;
+  final int Function(MatchData) data;
   @override
   Widget build(final BuildContext context) => Stack(
         children: <Widget>[
@@ -62,7 +70,7 @@ class GamepiecesLineChart extends StatelessWidget {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              data.title,
+              title,
             ),
           ),
           Padding(
@@ -74,15 +82,25 @@ class GamepiecesLineChart extends StatelessWidget {
             ),
             child: DashboardLineChart(
               showShadow: false,
-              gameNumbers: data.gameNumbers,
+              gameNumbers: matches.fullGames
+                  .map((e) => e.scheduleMatch.matchIdentifier)
+                  .toList(),
               inputedColors: const <Color>[
                 Colors.green,
                 Colors.red,
               ],
               distanceFromHighest: 4,
-              dataSet: data.points,
-              robotMatchStatuses: data.robotMatchStatuses,
-              defenseAmounts: data.defenseAmounts,
+              dataSet: [matches.fullGames.map(data).toList()],
+              robotMatchStatuses: [
+                matches.fullGames
+                    .map((e) => e.technicalMatchData!.robotFieldStatus)
+                    .toList()
+              ],
+              defenseAmounts: [
+                matches.fullGames
+                    .map((e) => e.specificMatchData!.defenseAmount)
+                    .toList()
+              ],
             ),
           ),
         ],
