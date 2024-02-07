@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
-import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 class TitledLineChart extends StatelessWidget {
   const TitledLineChart({

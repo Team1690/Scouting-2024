@@ -13,7 +13,7 @@ import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting.da
 import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
 import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
-import 'package:scouting_frontend/models/team_info_models/quick_data.dart';
+import "package:scouting_frontend/models/team_info_models/quick_data.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class TeamInfoData extends StatelessWidget {
