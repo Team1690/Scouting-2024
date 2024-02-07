@@ -117,7 +117,8 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
                                       ? const Card()
                                       : AutoPlanner(
                                           field: fieldSnapshot.data!,
-                                          data: snapshot.data!),
+                                          data: snapshot.data!,
+                                        ),
                                 ),
                               ],
                             ),
