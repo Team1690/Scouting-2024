@@ -29,27 +29,14 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
   List<(StartingPosition, LightTeam)> teams = <(StartingPosition, LightTeam)>[];
 
   @override
-  Widget build(final BuildContext context) => FutureBuilder<ui.Image>(
-        future: getField(false),
-        builder: (
-          final BuildContext context,
-          final AsyncSnapshot<ui.Image> fieldSnapshot,
-        ) {
-          if (fieldSnapshot.hasError) {
-            return Text(fieldSnapshot.error!.toString());
-          }
-          if (fieldSnapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return FutureBuilder<List<(TeamData, List<Sketch>)>>(
-            future: fetchDataAndPaths(
-              teams
-                  .map((final (StartingPosition, LightTeam) e) => e.$2.id)
-                  .toList(),
-            ),
+  Widget build(final BuildContext context) => Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(defaultPadding),
+          child: FutureBuilder<ui.Image>(
+            future: getField(false),
             builder: (
               final BuildContext context,
-              final AsyncSnapshot<List<(TeamData, List<Sketch>)>> snapshot,
+              final AsyncSnapshot<ui.Image> fieldSnapshot,
             ) {
               if (fieldSnapshot.hasError) {
                 return Text(fieldSnapshot.error!.toString());
@@ -57,118 +44,137 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
               if (fieldSnapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return isPC(context)
-                  ? DashboardScaffold(
-                      body: Padding(
-                        padding: const EdgeInsets.all(defaultPadding),
-                        child: Column(
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  ...StartingPosition.values.map(
-                                    (final StartingPosition e) => Expanded(
-                                      child: Column(
-                                        children: <Widget>[
-                                          Text("Starting Near ${e.title}"),
-                                          TeamSelectionFuture(
-                                            controller: TextEditingController(),
-                                            teams:
-                                                TeamProvider.of(context).teams
+              return FutureBuilder<List<(TeamData, List<Sketch>)>>(
+                future: fetchDataAndPaths(
+                  context,
+                  teams
+                      .map((final (StartingPosition, LightTeam) e) => e.$2.id)
+                      .toList(),
+                ),
+                builder: (
+                  final BuildContext context,
+                  final AsyncSnapshot<List<(TeamData, List<Sketch>)>> snapshot,
+                ) {
+                  if (fieldSnapshot.hasError) {
+                    return Text(fieldSnapshot.error!.toString());
+                  }
+                  if (fieldSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return isPC(context)
+                      ? DashboardScaffold(
+                          body: Padding(
+                            padding: const EdgeInsets.all(defaultPadding),
+                            child: Column(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      ...StartingPosition.values.map(
+                                        (final StartingPosition e) => Expanded(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text("Starting Near ${e.title}"),
+                                              TeamSelectionFuture(
+                                                controller:
+                                                    TextEditingController(),
+                                                teams: TeamProvider.of(context)
+                                                    .teams
                                                   ..removeWhere(teams.contains),
-                                            onChange: (final LightTeam team) {
-                                              if (teams
-                                                  .map(
-                                                    (
-                                                      final (
-                                                        StartingPosition,
-                                                        LightTeam
-                                                      ) e,
-                                                    ) =>
-                                                        e.$2,
-                                                  )
-                                                  .contains(team)) {
-                                                return;
-                                              }
-                                              teams.add(
-                                                (e, team),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {});
-                                    },
-                                    icon: const Icon(Icons.route),
-                                  ),
-                                ]
-                                    .expand(
-                                      (final Widget element) => <Widget>[
-                                        element,
-                                        const SizedBox(width: 10),
-                                      ],
-                                    )
-                                    .toList(),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 5,
-                              child: teams.isEmpty || snapshot.data == null
-                                  ? const Card()
-                                  : AutoPlanner(
-                                      field: fieldSnapshot.data!,
-                                      data: snapshot.data!
-                                          .mapIndexed(
-                                            (
-                                              final int index,
-                                              final (
-                                                TeamData,
-                                                List<Sketch>
-                                              ) element,
-                                            ) =>
-                                                (
-                                              teams
-                                                      .firstWhereOrNull(
+                                                onChange:
+                                                    (final LightTeam team) {
+                                                  if (teams
+                                                      .map(
                                                         (
                                                           final (
                                                             StartingPosition,
                                                             LightTeam
                                                           ) e,
                                                         ) =>
-                                                            e.$2 ==
-                                                            element
-                                                                .$1.lightTeam,
+                                                            e.$2,
                                                       )
-                                                      ?.$1 ??
-                                                  StartingPosition.amp,
-                                              element
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
+                                                      .contains(team)) {
+                                                    return;
+                                                  }
+                                                  teams.add(
+                                                    (e, team),
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {});
+                                        },
+                                        icon: const Icon(Icons.route),
+                                      ),
+                                    ]
+                                        .expand(
+                                          (final Widget element) => <Widget>[
+                                            element,
+                                            const SizedBox(width: 10),
+                                          ],
+                                        )
+                                        .toList(),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 5,
+                                  child: teams.isEmpty || snapshot.data == null
+                                      ? const Card()
+                                      : AutoPlanner(
+                                          field: fieldSnapshot.data!,
+                                          data: snapshot.data!
+                                              .mapIndexed(
+                                                (
+                                                  final int index,
+                                                  final (
+                                                    TeamData,
+                                                    List<Sketch>
+                                                  ) element,
+                                                ) =>
+                                                    (
+                                                  teams
+                                                          .firstWhereOrNull(
+                                                            (
+                                                              final (
+                                                                StartingPosition,
+                                                                LightTeam
+                                                              ) e,
+                                                            ) =>
+                                                                e.$2 ==
+                                                                element.$1
+                                                                    .lightTeam,
+                                                          )
+                                                          ?.$1 ??
+                                                      StartingPosition.amp,
+                                                  element
+                                                ),
+                                              )
+                                              .toList(),
+                                        ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    )
-                  : Scaffold(
-                      resizeToAvoidBottomInset: false,
-                      appBar: AppBar(
-                        title: const Text("Alliance Auto"),
-                        centerTitle: true,
-                      ),
-                      drawer: SideNavBar(),
-                      body: Container(), //TODO
-                    );
+                          ),
+                        )
+                      : Scaffold(
+                          resizeToAvoidBottomInset: false,
+
+                          drawer: SideNavBar(),
+                          body: Container(), //TODO
+                        );
+                },
+              );
             },
-          );
-        },
+          ),
+        ),
       );
 }
 
