@@ -6,8 +6,7 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/edit_pit.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
-
-import 'robot_has_something.dart';
+import "package:scouting_frontend/views/pc/team_info/widgets/pit/robot_has_something.dart";
 
 class PitScoutingCard extends StatelessWidget {
   PitScoutingCard(
@@ -81,7 +80,9 @@ class PitScoutingCard extends StatelessWidget {
               RobotHasSomething(title: "Harmony: ", value: data.harmony),
               if (data.hasBuddyClimb)
                 RobotHasSomething(
-                    title: "Buddy Climb: ", value: data.hasBuddyClimb),
+                  title: "Buddy Climb: ",
+                  value: data.hasBuddyClimb,
+                ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
