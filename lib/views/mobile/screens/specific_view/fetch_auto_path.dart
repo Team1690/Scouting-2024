@@ -2,6 +2,7 @@ import "dart:collection";
 import "dart:ui" as ui;
 
 import "package:collection/collection.dart";
+import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_teams.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
@@ -67,9 +68,11 @@ Future<List<Sketch>> getPaths(final int teamId) async {
 }
 
 Future<List<(TeamData, List<Sketch>)>> fetchDataAndPaths(
+  final BuildContext context,
   final List<int> teamIds,
 ) async {
-  final SplayTreeSet<TeamData> data = await fetchMultipleTeamData(teamIds);
+  final SplayTreeSet<TeamData> data =
+      await fetchMultipleTeamData(teamIds, context);
   final List<List<Sketch>> paths = await Future.wait(
     data
         .map((final TeamData element) => getPaths(element.lightTeam.id))
