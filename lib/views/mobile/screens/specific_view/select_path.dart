@@ -3,17 +3,15 @@ import "dart:ui" as ui;
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/path_canvas.dart";
+import "package:scouting_frontend/views/common/auto_path/path_canvas.dart";
 
 class SelectPath extends StatefulWidget {
   const SelectPath({
-    required this.drawnPath,
     required this.existingPaths,
     required this.fieldBackgrounds,
     required this.onNewSketch,
   });
   final List<Sketch> existingPaths;
-  final Sketch drawnPath;
   final (ui.Image, ui.Image) fieldBackgrounds;
   final void Function(Sketch) onNewSketch;
 
@@ -62,12 +60,6 @@ class _SelectPathState extends State<SelectPath> {
                             ),
                           ],
                         ),
-                    ElevatedButton(
-                      onPressed: () {
-                        widget.onNewSketch(widget.drawnPath);
-                      },
-                      child: const Text("Select Sketched Path"),
-                    ),
                   ],
                 ),
               ),

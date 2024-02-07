@@ -1,6 +1,7 @@
 import "dart:ui" as ui;
 
 import "package:flutter/material.dart";
+import "package:scouting_frontend/views/common/auto_path/multiple_path_canvas.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 
@@ -22,23 +23,9 @@ class PathCanvas extends StatelessWidget {
             final BuildContext context,
             final BoxConstraints constraints,
           ) =>
-              CustomPaint(
-            painter: DrawingCanvas(
-              width: 3,
-              fieldBackground: sketch.isRed ? fieldImages.$1 : fieldImages.$2,
-              sketch: Sketch(
-                isRed: sketch.isRed,
-                url: sketch.url,
-                points: sketch.points
-                    .map(
-                      (final ui.Offset e) => e.scale(
-                        constraints.maxWidth / autoFieldWidth,
-                        constraints.maxWidth / autoFieldWidth,
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
+              MultiplePathCanvas(
+            sketches: <(Sketch, ui.Color)>[(sketch, Colors.white)],
+            fieldImage: sketch.isRed ? fieldImages.$1 : fieldImages.$2,
           ),
         ),
       );

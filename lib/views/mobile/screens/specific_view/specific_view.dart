@@ -12,7 +12,7 @@ import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path_csv.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/fetch_auto_path.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/path_canvas.dart";
+import "package:scouting_frontend/views/common/auto_path/path_canvas.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_ratings.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_summary_card.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
@@ -97,7 +97,7 @@ class _SpecificState extends State<Specific> {
                                   autoPath: always(null),
                                 );
                                 if (vars.team != null) {
-                                  pathsFuture = getPaths(vars);
+                                  pathsFuture = getPaths(vars.team!.id);
                                 }
                                 final ScheduleMatch? scheduleMatch =
                                     vars.scheduleMatch;
