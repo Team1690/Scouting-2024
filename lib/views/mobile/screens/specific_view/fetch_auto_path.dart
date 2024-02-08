@@ -5,6 +5,7 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_teams.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_data/starting_position_enum.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -12,7 +13,7 @@ import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.d
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path_csv.dart";
 import "package:http/http.dart" as http;
 
-Future<List<(String, StartingPosition)>> fetchUrls(
+Future<List<(String, StartingPosition, MatchIdentifier)>> fetchUrls(
   final int team,
   final bool shouldDistinct,
 ) async {
@@ -22,20 +23,27 @@ query MyQuery(\$team: Int) {
   specific_match(where: {team_id: {_eq: \$team}}${shouldDistinct ? ", distinct_on: url" : ""}) {
     url
     schedule_match {
-      
-      technical_matches {
+      match_number
+      match_type {
+        title
+      }
+      id
+      technical_matches(where: {team_id: {_eq: \$team}}) {
         starting_position {
           title
         }
       }
     }
+    is_rematch
+      
+    }
   }
-}
+
 
   """;
-  final QueryResult<List<(String, StartingPosition)>> result =
+  final QueryResult<List<(String, StartingPosition, MatchIdentifier)>> result =
       await client.query(
-    QueryOptions<List<(String, StartingPosition)>>(
+    QueryOptions<List<(String, StartingPosition, MatchIdentifier)>>(
       document: gql(query),
       variables: <String, int>{"team": team},
       parserFn: parserFn,
@@ -44,7 +52,8 @@ query MyQuery(\$team: Int) {
   return result.mapQueryResult();
 }
 
-List<(String, StartingPosition)> parserFn(final Map<String, dynamic> urls) =>
+List<(String, StartingPosition, MatchIdentifier)> parserFn(
+        final Map<String, dynamic> urls) =>
     (urls["specific_match"] as List<dynamic>)
         .map((final dynamic url) {
           final bool validator =
@@ -58,12 +67,13 @@ List<(String, StartingPosition)> parserFn(final Map<String, dynamic> urls) =>
                     url["url"] as String,
                     startingPosTitleToEnum(
                       e["starting_position"]["title"] as String,
-                    )
+                    ),
+                    MatchIdentifier.fromJson(url, null)
                   )
                 : null,
           );
         })
-        .expand((final Iterable<(String, StartingPosition)?> i) => i)
+        .flattened
         .whereNotNull()
         .toList();
 
@@ -77,14 +87,15 @@ Future<({List<ui.Offset> path, bool isRed})> fetchPath(
   return parseAutoCsv(csv);
 }
 
-Future<List<(Sketch, StartingPosition)>> getPaths(
+Future<List<(Sketch, StartingPosition, MatchIdentifier)>> getPaths(
   final int teamId,
   final bool shouldDistinct,
 ) async {
-  final List<(String, StartingPosition)> urls =
+  final List<(String, StartingPosition, MatchIdentifier)> urls =
       (await fetchUrls(teamId, shouldDistinct)).toList();
   final List<Future<({List<ui.Offset> path, bool isRed})>> paths = urls
-      .map((final (String, StartingPosition) e) => fetchPath(e.$1))
+      .map((final (String, StartingPosition, MatchIdentifier) e) =>
+          fetchPath(e.$1))
       .toList();
 
   final List<({bool isRed, List<ui.Offset> path})> pathResults =
@@ -101,27 +112,32 @@ Future<List<(Sketch, StartingPosition)>> getPaths(
             isRed: element.isRed,
             url: urls[index].$1,
           ),
-          urls[index].$2
+          urls[index].$2,
+          urls[index].$3
         ),
       )
       .toList();
 }
 
 //TODO turn this into a model instead of a tuple within a tuple
-Future<List<(TeamData, List<(Sketch, StartingPosition)>)>> fetchDataAndPaths(
+Future<List<(TeamData, List<(Sketch, StartingPosition, MatchIdentifier)>)>>
+    fetchDataAndPaths(
   final BuildContext context,
   final List<int> teamIds,
 ) async {
   final SplayTreeSet<TeamData> data =
       await fetchMultipleTeamData(teamIds, context);
-  final List<List<(Sketch, StartingPosition)>> paths = await Future.wait(
+  final List<List<(Sketch, StartingPosition, MatchIdentifier)>> paths =
+      await Future.wait(
     data
         .map((final TeamData element) => getPaths(element.lightTeam.id, false))
         .toList(),
   );
   return paths
       .mapIndexed(
-        (final int index, final List<(Sketch, StartingPosition)> element) =>
+        (final int index,
+                final List<(Sketch, StartingPosition, MatchIdentifier)>
+                    element) =>
             (data.elementAt(index), element),
       )
       .toList();
