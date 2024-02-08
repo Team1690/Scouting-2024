@@ -288,11 +288,11 @@ class Sketch {
   final String? url;
 }
 
-List<Sketch> distinct(List<Sketch> sketches) =>
-    sketches.fold(<Sketch>[], (previousValue, element) {
+List<Sketch> distinct(final List<Sketch> sketches) => sketches.fold(<Sketch>[],
+        (final List<Sketch> previousValue, final Sketch element) {
       if (!previousValue
           .map(
-            (e) => e.url,
+            (final Sketch e) => e.url,
           )
           .contains(element.url)) previousValue.add(element);
       return previousValue;

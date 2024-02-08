@@ -19,118 +19,125 @@ import "package:scouting_frontend/views/mobile/screens/specific_view/specific_vi
 
 class AutoPlannerScreen extends StatefulWidget {
   const AutoPlannerScreen([
-    this.initialTeams = const <LightTeam>[],
+    this.initialTeams,
   ]); //TODO add implementation for initialTeams from TeamInfo
-  final List<LightTeam> initialTeams;
+  final List<LightTeam>? initialTeams;
 
   @override
   State<AutoPlannerScreen> createState() => _AutoPlannerScreenState();
 }
 
 class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
-  List<LightTeam?> teams = List.filled(StartingPosition.values.length, null);
+  late List<LightTeam?> teams = widget.initialTeams ??
+      List<LightTeam?>.filled(StartingPosition.values.length, null);
 
-  List<TextEditingController> controllers = List.generate(
-      StartingPosition.values.length, (i) => TextEditingController());
+  List<TextEditingController> controllers =
+      List<TextEditingController>.generate(
+    StartingPosition.values.length,
+    (final int i) => TextEditingController(),
+  );
   ui.Image? field;
 
   @override
   Widget build(final BuildContext context) => DashboardScaffold(
-          body: FutureBuilder<
-              List<
-                  (
-                    TeamData,
-                    List<(Sketch, StartingPosition, MatchIdentifier)>
-                  )>>(
-        future: teams.whereNotNull().isNotEmpty
-            ? fetchDataAndPaths(
-                context,
-                teams.whereNotNull().map((final LightTeam e) => e.id).toList(),
-              )
-            : Future<
-                List<
-                    (
-                      TeamData,
-                      List<(Sketch, StartingPosition, MatchIdentifier)>
-                    )>>(
-                () => <(
-                  TeamData,
-                  List<(Sketch, StartingPosition, MatchIdentifier)>
-                )>[],
-              ),
-        builder: (
-          final BuildContext context,
-          final AsyncSnapshot<
+        body: FutureBuilder<
+            List<
+                (TeamData, List<(Sketch, StartingPosition, MatchIdentifier)>)>>(
+          future: teams.whereNotNull().isNotEmpty
+              ? fetchDataAndPaths(
+                  context,
+                  teams
+                      .whereNotNull()
+                      .map((final LightTeam e) => e.id)
+                      .toList(),
+                )
+              : Future<
                   List<
                       (
                         TeamData,
                         List<(Sketch, StartingPosition, MatchIdentifier)>
-                      )>>
-              snapshot,
-        ) {
-          if (snapshot.hasError) {
-            return Text(snapshot.error!.toString());
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return Padding(
-            padding: const EdgeInsets.all(defaultPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ...StartingPosition.values.map(
-                        (final StartingPosition e) => Expanded(
-                          child: TeamSelectionFuture(
-                            controller:
-                                controllers[StartingPosition.values.indexOf(e)],
-                            teams: TeamProvider.of(context).teams,
-                            onChange: (final LightTeam team) {
-                              if (teams.contains(team)) {
-                                return;
-                              }
-                              teams[StartingPosition.values.indexOf(e)] = team;
-                            },
+                      )>>(
+                  () => <(
+                    TeamData,
+                    List<(Sketch, StartingPosition, MatchIdentifier)>
+                  )>[],
+                ),
+          builder: (
+            final BuildContext context,
+            final AsyncSnapshot<
+                    List<
+                        (
+                          TeamData,
+                          List<(Sketch, StartingPosition, MatchIdentifier)>
+                        )>>
+                snapshot,
+          ) {
+            if (snapshot.hasError) {
+              return Text(snapshot.error!.toString());
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ...StartingPosition.values.map(
+                          (final StartingPosition e) => Expanded(
+                            child: TeamSelectionFuture(
+                              controller: controllers[
+                                  StartingPosition.values.indexOf(e)],
+                              teams: TeamProvider.of(context).teams,
+                              onChange: (final LightTeam team) {
+                                if (teams.contains(team)) {
+                                  return;
+                                }
+                                teams[StartingPosition.values.indexOf(e)] =
+                                    team;
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          field = await getField(false);
-                          setState(() {});
-                        },
-                        icon: const Icon(Icons.route),
-                      ),
-                    ]
-                        .expand(
-                          (final Widget element) => <Widget>[
-                            element,
-                            const SizedBox(width: 10),
-                          ],
-                        )
-                        .toList(),
-                  ),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: teams.isEmpty || snapshot.data == null || field == null
-                      ? const Card()
-                      : AutoPlanner(
-                          field: field!,
-                          data: snapshot.data!,
+                        IconButton(
+                          onPressed: () async {
+                            field = await getField(false);
+                            setState(() {});
+                          },
+                          icon: const Icon(Icons.route),
                         ),
-                ),
-              ],
-            ),
-          );
-        },
-      ));
+                      ]
+                          .expand(
+                            (final Widget element) => <Widget>[
+                              element,
+                              const SizedBox(width: 10),
+                            ],
+                          )
+                          .toList(),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child:
+                        teams.isEmpty || snapshot.data == null || field == null
+                            ? const Card()
+                            : AutoPlanner(
+                                field: field!,
+                                data: snapshot.data!,
+                              ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      );
 }
 
 class AutoPlanner extends StatefulWidget {
@@ -182,7 +189,7 @@ class _AutoPlannerState extends State<AutoPlanner> {
                             children: <Widget>[
                               Text(
                                 "Starting Near ${e.title}",
-                                style: TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 20),
                               ),
                               Selector<TeamData>(
                                 options: widget.data
@@ -270,11 +277,11 @@ class _AutoPlannerState extends State<AutoPlanner> {
       children: <Widget>[
         if (avgAmp > 0) ...<Widget>[
           Text("Avg Amp: $avgAmp"),
-          Text("Best Amp: $bestAmp")
+          Text("Best Amp: $bestAmp"),
         ],
         if (avgSpeaker > 0) ...<Widget>[
           Text("Avg Speaker: $avgSpeaker"),
-          Text("Best Speaker: $bestSpeaker")
+          Text("Best Speaker: $bestSpeaker"),
         ],
         Text("Matches Used: $matchesUsed"),
       ],
@@ -286,31 +293,44 @@ class _AutoPlannerState extends State<AutoPlanner> {
   ) {
     final List<(Sketch, StartingPosition, MatchIdentifier)> matchesAtPos =
         widget.data
-            .where((final (
-                      TeamData,
-                      List<(Sketch, StartingPosition, MatchIdentifier)>
-                    ) e) =>
-                e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam)
-            .map((final (
-                      TeamData,
-                      List<(Sketch, StartingPosition, MatchIdentifier)>
-                    ) e) =>
-                e.$2.where((final (
-                          Sketch,
-                          StartingPosition,
-                          MatchIdentifier
-                        ) element) =>
-                    element.$2 == startingPos))
+            .where(
+              (
+                final (
+                  TeamData,
+                  List<(Sketch, StartingPosition, MatchIdentifier)>
+                ) e,
+              ) =>
+                  e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam,
+            )
+            .map(
+              (
+                final (
+                  TeamData,
+                  List<(Sketch, StartingPosition, MatchIdentifier)>
+                ) e,
+              ) =>
+                  e.$2.where(
+                (
+                  final (Sketch, StartingPosition, MatchIdentifier) element,
+                ) =>
+                    element.$2 == startingPos,
+              ),
+            )
             .flattened
             .toList();
     final List<MatchIdentifier> matchesUsingAuto = matchesAtPos
-        .where((final (Sketch, StartingPosition, MatchIdentifier) match) =>
-            match.$1.url == selectedAutos[startingPos]?.$1.url)
-        .map((e) => e.$3)
+        .where(
+          (final (Sketch, StartingPosition, MatchIdentifier) match) =>
+              match.$1.url == selectedAutos[startingPos]?.$1.url,
+        )
+        .map((final (Sketch, StartingPosition, MatchIdentifier) e) => e.$3)
         .toList();
     return selectedTeams[startingPos]!
         .technicalMatches
-        .where((match) => matchesUsingAuto.contains(match.matchIdentifier))
+        .where(
+          (final TechnicalMatchData match) =>
+              matchesUsingAuto.contains(match.matchIdentifier),
+        )
         .toList();
   }
 
@@ -322,38 +342,55 @@ class _AutoPlannerState extends State<AutoPlanner> {
       builder: (final BuildContext dialogContext) {
         final List<(Sketch, StartingPosition, MatchIdentifier)> matchesAtPos =
             widget.data
-                .where((final (
-                          TeamData,
-                          List<(Sketch, StartingPosition, MatchIdentifier)>
-                        ) e) =>
-                    e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam)
-                .map((final (
-                          TeamData,
-                          List<(Sketch, StartingPosition, MatchIdentifier)>
-                        ) e) =>
-                    e.$2.where((final (
-                              Sketch,
-                              StartingPosition,
-                              MatchIdentifier
-                            ) element) =>
-                        element.$2 == startingPos))
+                .where(
+                  (
+                    final (
+                      TeamData,
+                      List<(Sketch, StartingPosition, MatchIdentifier)>
+                    ) e,
+                  ) =>
+                      e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam,
+                )
+                .map(
+                  (
+                    final (
+                      TeamData,
+                      List<(Sketch, StartingPosition, MatchIdentifier)>
+                    ) e,
+                  ) =>
+                      e.$2.where(
+                    (
+                      final (Sketch, StartingPosition, MatchIdentifier) element,
+                    ) =>
+                        element.$2 == startingPos,
+                  ),
+                )
                 .flattened
                 .toList();
 
-        final List<Sketch> uniqueAuto = distinct(matchesAtPos
-            .map((final (Sketch, StartingPosition, MatchIdentifier) match) =>
-                match.$1)
-            .toList());
+        final List<Sketch> uniqueAuto = distinct(
+          matchesAtPos
+              .map(
+                (final (Sketch, StartingPosition, MatchIdentifier) match) =>
+                    match.$1,
+              )
+              .toList(),
+        );
 
         final List<Sketch> autosAllBlue = uniqueAuto
-            .map((auto) => Sketch(
-                points: auto.points.map((point) {
-                  return auto.isRed
-                      ? Offset((point.dx - autoFieldWidth).abs(), point.dy)
-                      : point;
-                }).toList(),
+            .map(
+              (final Sketch auto) => Sketch(
+                points: auto.points
+                    .map(
+                      (final Offset point) => auto.isRed
+                          ? Offset((point.dx - autoFieldWidth).abs(), point.dy)
+                          : point,
+                    )
+                    .toList(),
                 isRed: false,
-                url: auto.url))
+                url: auto.url,
+              ),
+            )
             .toList();
 
         return SelectPath(

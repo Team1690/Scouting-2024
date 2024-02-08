@@ -53,7 +53,8 @@ query MyQuery(\$team: Int) {
 }
 
 List<(String, StartingPosition, MatchIdentifier)> parserFn(
-        final Map<String, dynamic> urls) =>
+  final Map<String, dynamic> urls,
+) =>
     (urls["specific_match"] as List<dynamic>)
         .map((final dynamic url) {
           final bool validator =
@@ -94,8 +95,10 @@ Future<List<(Sketch, StartingPosition, MatchIdentifier)>> getPaths(
   final List<(String, StartingPosition, MatchIdentifier)> urls =
       (await fetchUrls(teamId, shouldDistinct)).toList();
   final List<Future<({List<ui.Offset> path, bool isRed})>> paths = urls
-      .map((final (String, StartingPosition, MatchIdentifier) e) =>
-          fetchPath(e.$1))
+      .map(
+        (final (String, StartingPosition, MatchIdentifier) e) =>
+            fetchPath(e.$1),
+      )
       .toList();
 
   final List<({bool isRed, List<ui.Offset> path})> pathResults =
@@ -135,9 +138,10 @@ Future<List<(TeamData, List<(Sketch, StartingPosition, MatchIdentifier)>)>>
   );
   return paths
       .mapIndexed(
-        (final int index,
-                final List<(Sketch, StartingPosition, MatchIdentifier)>
-                    element) =>
+        (
+          final int index,
+          final List<(Sketch, StartingPosition, MatchIdentifier)> element,
+        ) =>
             (data.elementAt(index), element),
       )
       .toList();
