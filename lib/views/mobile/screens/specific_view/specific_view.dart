@@ -3,6 +3,7 @@ import "dart:ui" as ui;
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_data/starting_position_enum.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -37,9 +38,9 @@ class _SpecificState extends State<Specific> {
   (ui.Image, ui.Image)? fieldImages;
   late SpecificVars vars = SpecificVars(context);
   bool intialIsRed = false;
-  late Future<List<(Sketch, StartingPosition)>> pathsFuture =
-      Future<List<(Sketch, StartingPosition)>>(
-    () => <(Sketch, StartingPosition)>[],
+  late Future<List<(Sketch, StartingPosition, MatchIdentifier)>> pathsFuture =
+      Future<List<(Sketch, StartingPosition, MatchIdentifier)>>(
+    () => <(Sketch, StartingPosition, MatchIdentifier)>[],
   );
 
   @override
@@ -56,11 +57,13 @@ class _SpecificState extends State<Specific> {
             widgets: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(defaultPadding),
-                child: FutureBuilder<List<(Sketch, StartingPosition)>>(
+                child: FutureBuilder<
+                    List<(Sketch, StartingPosition, MatchIdentifier)>>(
                   future: pathsFuture,
                   builder: (
                     final BuildContext context,
-                    final AsyncSnapshot<List<(Sketch, StartingPosition)>>
+                    final AsyncSnapshot<
+                            List<(Sketch, StartingPosition, MatchIdentifier)>>
                         snapshot,
                   ) =>
                       SingleChildScrollView(
@@ -160,7 +163,8 @@ class _SpecificState extends State<Specific> {
                                           (
                                             final (
                                               Sketch,
-                                              StartingPosition
+                                              StartingPosition,
+                                              MatchIdentifier
                                             ) autoData,
                                           ) =>
                                               autoData.$1,
@@ -276,9 +280,18 @@ class _SpecificState extends State<Specific> {
                               "auto_paths/${vars.scheduleMatch?.id}_${vars.team?.id}.txt",
                               () {
                                 setState(() {
-                                  pathsFuture =
-                                      Future<List<(Sketch, StartingPosition)>>(
-                                    () => <(Sketch, StartingPosition)>[],
+                                  pathsFuture = Future<
+                                      List<
+                                          (
+                                            Sketch,
+                                            StartingPosition,
+                                            MatchIdentifier
+                                          )>>(
+                                    () => <(
+                                      Sketch,
+                                      StartingPosition,
+                                      MatchIdentifier
+                                    )>[],
                                   );
                                   vars = vars.reset(context);
                                   nameController.clear();

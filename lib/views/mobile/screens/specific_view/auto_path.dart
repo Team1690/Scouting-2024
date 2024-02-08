@@ -286,4 +286,10 @@ class Sketch {
   final List<Offset> points;
   final bool isRed;
   final String? url;
+
+  @override
+  bool operator ==(final Object other) => other is Sketch && other.url == url;
+
+  @override
+  int get hashCode => Object.hashAll(<Object?>[points, isRed, url]);
 }
