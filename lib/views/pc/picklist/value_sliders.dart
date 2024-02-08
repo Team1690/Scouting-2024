@@ -81,16 +81,16 @@ class _ValueSlidersState extends State<ValueSliders> {
           RoundedIconButton(
             color: Colors.green,
             onPress: () => widget.onButtonPress(
-              ampFactor,
               climbFactor,
+              ampFactor,
               speakerFactor,
               trapFactor,
               filter1,
             ),
             icon: Icons.calculate_outlined,
             onLongPress: () => widget.onButtonPress(
-              ampFactor,
               climbFactor,
+              ampFactor,
               speakerFactor,
               trapFactor,
               filter1,

@@ -1,4 +1,3 @@
-import "dart:math";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/team_data/all_team_data.dart";
@@ -18,7 +17,6 @@ class AutoPickListPopUp extends StatefulWidget {
 }
 
 class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
-  bool hasValues = false;
   double speakerFactor = 0.5;
   double ampFactor = 0.5;
   double climbFactor = 0.5;
@@ -27,36 +25,24 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
 
   double calculateValue(final AllTeamData val) {
     final List<AllTeamData> teamsList = widget.teamsToSort;
-    return (val.climbPercentage * climbFactor / 100 +
-        (val.aggregateData.avgData.autoAmp +
-                val.aggregateData.avgData.teleAmp) *
-            ampFactor /
-            teamsList.fold(
-              0,
-              (
-                final num previousValue,
-                final AllTeamData element,
-              ) =>
-                  max(
-                previousValue,
-                element.aggregateData.maxData.autoAmp,
-              ),
-            ) +
-        (val.aggregateData.avgData.autoSpeaker +
-                val.aggregateData.avgData.teleSpeaker) *
+    final double result = (val.climbPercentage * climbFactor / 100 +
+            (val.aggregateData.avgData.ampGamepieces) *
+                ampFactor /
+                teamsList
+                    .map((final AllTeamData e) =>
+                        e.aggregateData.avgData.ampGamepieces)
+                    .max) +
+        (val.aggregateData.avgData.speakerGamepieces) *
             speakerFactor /
-            teamsList.fold(
-              0,
-              (
-                final num previousValue,
-                final AllTeamData element,
-              ) =>
-                  max(
-                previousValue,
-                element.aggregateData.maxData.autoSpeaker,
-              ),
-            ) +
-        val.aggregateData.avgData.trapAmount * trapFactor / 2);
+            teamsList
+                .map(
+                  (final AllTeamData e) =>
+                      e.aggregateData.avgData.speakerGamepieces,
+                )
+                .max +
+        val.aggregateData.avgData.trapAmount * trapFactor / 2;
+
+    return result.isFinite ? result : double.negativeInfinity;
   }
 
   @override
@@ -72,11 +58,10 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
                 final bool feeder,
               ) =>
                   setState(() {
-                hasValues = true;
-                climbFactor = 1 - climbSlider;
-                ampFactor = 1 - ampSlider;
-                speakerFactor = 1 - speakerSlider;
-                trapFactor = 1 - trapSlider;
+                climbFactor = climbSlider;
+                ampFactor = ampSlider;
+                speakerFactor = speakerSlider;
+                trapFactor = trapSlider;
                 filter = feeder;
                 final List<AllTeamData> newSortedTeamList =
                     widget.teamsToSort.sorted(
@@ -88,6 +73,9 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
                     calculateValue(b),
                   ),
                 );
+                newSortedTeamList.forEach((e) {
+                  print("${e} ${calculateValue(e)}");
+                });
 
                 newSortedTeamList
                     .forEachIndexed((final int index, final AllTeamData team) {
