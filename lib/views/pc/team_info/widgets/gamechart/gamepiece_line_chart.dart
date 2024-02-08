@@ -93,7 +93,7 @@ class GamepiecesLineChart extends StatelessWidget {
               ],
               distanceFromHighest: 4,
               dataSet: <List<int>>[
-                matches.technicalMatchExists.map(data).toList()
+                matches.technicalMatchExists.map(data).toList(),
               ],
               robotMatchStatuses: <List<RobotFieldStatus>>[
                 matches.technicalMatchExists
