@@ -84,7 +84,7 @@ class GamepiecesLineChart extends StatelessWidget {
             ),
             child: DashboardLineChart(
               showShadow: false,
-              gameNumbers: matches.fullGames
+              gameNumbers: matches.technicalMatchExists
                   .map((final MatchData e) => e.scheduleMatch.matchIdentifier)
                   .toList(),
               inputedColors: const <Color>[
@@ -92,9 +92,11 @@ class GamepiecesLineChart extends StatelessWidget {
                 Colors.red,
               ],
               distanceFromHighest: 4,
-              dataSet: <List<int>>[matches.fullGames.map(data).toList()],
+              dataSet: <List<int>>[
+                matches.technicalMatchExists.map(data).toList()
+              ],
               robotMatchStatuses: <List<RobotFieldStatus>>[
-                matches.fullGames
+                matches.technicalMatchExists
                     .map(
                       (final MatchData e) =>
                           e.technicalMatchData!.robotFieldStatus,
@@ -102,9 +104,11 @@ class GamepiecesLineChart extends StatelessWidget {
                     .toList(),
               ],
               defenseAmounts: <List<DefenseAmount>>[
-                matches.fullGames
+                matches.technicalMatchExists
                     .map(
-                      (final MatchData e) => e.specificMatchData!.defenseAmount,
+                      (final MatchData e) =>
+                          e.specificMatchData?.defenseAmount ??
+                          DefenseAmount.noDefense,
                     )
                     .toList(),
               ],
