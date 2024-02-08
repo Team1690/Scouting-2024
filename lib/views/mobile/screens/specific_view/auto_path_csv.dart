@@ -8,8 +8,8 @@ Future<Uint8List> createCsv(final Sketch sketch) async => Uint8List.fromList(
       sketch.points
           .mapIndexed(
             (final int index, final ui.Offset element) => index == 0
-                ? "${element.dx}, ${element.dy}, ${sketch.isRed}"
-                : "${element.dx}, ${element.dy}",
+                ? "${element.dx},${element.dy},${sketch.isRed}"
+                : "${element.dx},${element.dy}",
           )
           .join("\n")
           .codeUnits,
@@ -26,5 +26,7 @@ Future<Uint8List> createCsv(final Sketch sketch) async => Uint8List.fromList(
             ),
           )
           .toList(),
-      isRed: bool.tryParse(csv.split("\n")[0].split(",")[2]) ?? false
+      isRed:
+          bool.tryParse(csv.split("\n")[0].split(",")[2].replaceAll(" ", "")) ??
+              false
     );
