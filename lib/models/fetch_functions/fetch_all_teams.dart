@@ -1,4 +1,5 @@
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -70,6 +71,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                     .map(TechnicalMatchData.parse)
                     .toList();
             final List<dynamic> faultTable = (team["faults"] as List<dynamic>);
+            final dynamic pitTable = team["pit"];
 
             return AllTeamData(
               team: LightTeam.fromJson(team),
@@ -86,6 +88,7 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
                     .toList(),
               ),
               technicalMatches: technicalMatches,
+              pitData: PitData.parse(pitTable),
             );
           }).toList();
         },
