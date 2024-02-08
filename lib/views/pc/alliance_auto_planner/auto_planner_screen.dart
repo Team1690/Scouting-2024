@@ -28,7 +28,10 @@ class AutoPlannerScreen extends StatefulWidget {
 }
 
 class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
-  List<LightTeam> teams = <LightTeam>[];
+  List<LightTeam?> teams = List.filled(StartingPosition.values.length, null);
+
+  List<TextEditingController> controllers = List.generate(
+      StartingPosition.values.length, (i) => TextEditingController());
 
   @override
   Widget build(final BuildContext context) => DashboardScaffold(
@@ -50,7 +53,7 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
                       TeamData,
                       List<(Sketch, StartingPosition, MatchIdentifier)>
                     )>>(
-              future: teams.isNotEmpty
+              future: teams.whereNotNull().isNotEmpty
                   ? fetchDataAndPaths(
                       context,
                       teams
@@ -88,29 +91,27 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
                 return Padding(
                   padding: const EdgeInsets.all(defaultPadding),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Expanded(
                         flex: 1,
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             ...StartingPosition.values.map(
                               (final StartingPosition e) => Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    TeamSelectionFuture(
-                                      controller: TextEditingController(),
-                                      teams: TeamProvider.of(context).teams,
-                                      onChange: (final LightTeam team) {
-                                        if (teams.contains(team)) {
-                                          return;
-                                        }
-                                        teams.add(
-                                          team,
-                                        );
-                                      },
-                                    ),
-                                  ],
+                                child: TeamSelectionFuture(
+                                  controller: controllers[
+                                      StartingPosition.values.indexOf(e)],
+                                  teams: TeamProvider.of(context).teams,
+                                  onChange: (final LightTeam team) {
+                                    if (teams.contains(team)) {
+                                      return;
+                                    }
+                                    teams[StartingPosition.values.indexOf(e)] =
+                                        team;
+                                  },
                                 ),
                               ),
                             ),
@@ -297,7 +298,6 @@ class _AutoPlannerState extends State<AutoPlanner> {
     );
   }
 
-  //TODO turn the tuples to named tuples and make this look better in general
   List<TechnicalMatchData> getAutoData(
     final StartingPosition startingPos,
   ) {
@@ -337,7 +337,6 @@ class _AutoPlannerState extends State<AutoPlanner> {
     final Sketch? selectedAuto = await showDialog<Sketch?>(
       context: context,
       builder: (final BuildContext dialogContext) {
-        //TODO turn the tuples to named tuples and make this look better in general
         final List<(Sketch, StartingPosition, MatchIdentifier)> matchesAtPos =
             widget.data
                 .where((final (
