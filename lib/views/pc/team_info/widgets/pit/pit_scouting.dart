@@ -31,23 +31,15 @@ class PitScouting extends StatelessWidget {
           ],
         ),
       ) ??
-      Column(
+      const Column(
         children: <Widget>[
           Expanded(
             flex: 3,
             child: DashboardCard(
-              title: "Robot Image",
-              body: Container(),
-            ),
-          ),
-          const SizedBox(
-            height: defaultPadding,
-          ),
-          Expanded(
-            flex: 6,
-            child: DashboardCard(
-              title: "Pit Scouting",
-              body: Container(),
+              title: "",
+              body: Center(
+                child: Text("No Pit Data :("),
+              ),
             ),
           ),
         ],

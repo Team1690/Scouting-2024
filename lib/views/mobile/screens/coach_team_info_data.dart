@@ -4,6 +4,7 @@ import "package:scouting_frontend/models/team_data/team_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
+import "package:scouting_frontend/models/team_info_models/quick_data.dart";
 
 class CoachTeamData extends StatelessWidget {
   const CoachTeamData(this.team);
@@ -98,7 +99,7 @@ class CoachTeamData extends StatelessWidget {
 
 class CoachTeamInfoLineCharts extends StatelessWidget {
   CoachTeamInfoLineCharts(this.data);
-  final Team data;
+  final TeamData data;
   @override
   Widget build(final BuildContext context) => CarouselWithIndicator(
         direction: Axis.vertical,

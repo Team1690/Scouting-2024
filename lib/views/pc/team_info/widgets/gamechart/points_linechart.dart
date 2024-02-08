@@ -1,10 +1,19 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
+import "package:scouting_frontend/models/enums/robot_field_status.dart";
+import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
-import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart";
 
 class PointsLineChart extends StatelessWidget {
-  const PointsLineChart(this.data);
-  final LineChartData data;
+  const PointsLineChart({
+    required this.title,
+    required this.data,
+    required this.matches,
+  });
+
+  final int Function(MatchData) data;
+  final List<MatchData> matches;
+  final String title;
 
   @override
   Widget build(final BuildContext context) => Stack(
@@ -12,7 +21,7 @@ class PointsLineChart extends StatelessWidget {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              data.title,
+              title,
             ),
           ),
           Padding(
@@ -25,14 +34,35 @@ class PointsLineChart extends StatelessWidget {
             child: DashboardLineChart(
               sideTitlesInterval: 10,
               showShadow: true,
-              gameNumbers: data.gameNumbers,
+              gameNumbers: matches.technicalMatchExists
+                  .map(
+                    (final MatchData e) => e.scheduleMatch.matchIdentifier,
+                  )
+                  .toList(),
               inputedColors: const <Color>[
                 Colors.green,
               ],
               distanceFromHighest: 20,
-              dataSet: data.points,
-              robotMatchStatuses: data.robotMatchStatuses,
-              defenseAmounts: data.defenseAmounts,
+              dataSet: <List<int>>[
+                matches.technicalMatchExists.map(data).toList(),
+              ],
+              robotMatchStatuses: <List<RobotFieldStatus>>[
+                matches.technicalMatchExists
+                    .map(
+                      (final MatchData e) =>
+                          e.technicalMatchData!.robotFieldStatus,
+                    )
+                    .toList(),
+              ],
+              defenseAmounts: <List<DefenseAmount>>[
+                matches.technicalMatchExists
+                    .map(
+                      (final MatchData e) =>
+                          e.specificMatchData?.defenseAmount ??
+                          DefenseAmount.noDefense,
+                    )
+                    .toList(),
+              ],
             ),
           ),
         ],

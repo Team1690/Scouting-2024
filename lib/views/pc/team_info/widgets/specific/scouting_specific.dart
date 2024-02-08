@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_data/specific_summary_data.dart";
 import "package:scouting_frontend/models/team_data/team_match_data.dart";
-import "package:scouting_frontend/views/mobile/section_divider.dart";
+import "package:scouting_frontend/views/pc/team_info/widgets/specific/view_rating_dropdown_line.dart";
 
 class ScoutingSpecific extends StatefulWidget {
   const ScoutingSpecific({required this.msgs, required this.matchesData});
@@ -24,14 +24,11 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
             getSummaryText(
               "Driving",
               widget.msgs.drivingText,
-              widget.matchesData
+              widget.matchesData.specificMatches
                   .map(
-                    (final MatchData e) =>
-                        e.specificMatchData?.drivetrainAndDriving.mapNullable(
-                      (final int a) => (
-                        e.specificMatchData!.drivetrainAndDriving!,
-                        e.scheduleMatch.matchIdentifier.number
-                      ),
+                    (final MatchData match) => (
+                      match.specificMatchData!.drivetrainAndDriving ?? 0,
+                      match.scheduleMatch.matchIdentifier.number
                     ),
                   )
                   .whereNotNull()
@@ -40,14 +37,11 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
             getSummaryText(
               "Speaker",
               widget.msgs.speakerText,
-              widget.matchesData
+              widget.matchesData.specificMatches
                   .map(
-                    (final MatchData e) =>
-                        e.specificMatchData?.speaker.mapNullable(
-                      (final int a) => (
-                        e.specificMatchData!.speaker!,
-                        e.scheduleMatch.matchIdentifier.number
-                      ),
+                    (final MatchData match) => (
+                      match.specificMatchData!.speaker ?? 0,
+                      match.scheduleMatch.matchIdentifier.number
                     ),
                   )
                   .whereNotNull()
@@ -56,13 +50,11 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
             getSummaryText(
               "Amp",
               widget.msgs.ampText,
-              widget.matchesData
+              widget.matchesData.specificMatches
                   .map(
-                    (final MatchData e) => e.specificMatchData?.amp.mapNullable(
-                      (final int a) => (
-                        e.specificMatchData!.amp!,
-                        e.scheduleMatch.matchIdentifier.number
-                      ),
+                    (final MatchData match) => (
+                      match.specificMatchData!.amp ?? 0,
+                      match.scheduleMatch.matchIdentifier.number
                     ),
                   )
                   .whereNotNull()
@@ -71,14 +63,11 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
             getSummaryText(
               "Intake",
               widget.msgs.intakeText,
-              widget.matchesData
+              widget.matchesData.specificMatches
                   .map(
-                    (final MatchData e) =>
-                        e.specificMatchData?.intake.mapNullable(
-                      (final int a) => (
-                        e.specificMatchData!.intake!,
-                        e.scheduleMatch.matchIdentifier.number
-                      ),
+                    (final MatchData match) => (
+                      match.specificMatchData!.intake ?? 0,
+                      match.scheduleMatch.matchIdentifier.number
                     ),
                   )
                   .whereNotNull()
@@ -87,14 +76,11 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
             getSummaryText(
               "Climb",
               widget.msgs.climbText,
-              widget.matchesData
+              widget.matchesData.specificMatches
                   .map(
-                    (final MatchData e) =>
-                        e.specificMatchData?.climb.mapNullable(
-                      (final int a) => (
-                        e.specificMatchData!.climb!,
-                        e.scheduleMatch.matchIdentifier.number
-                      ),
+                    (final MatchData match) => (
+                      match.specificMatchData!.climb ?? 0,
+                      match.scheduleMatch.matchIdentifier.number
                     ),
                   )
                   .whereNotNull()
@@ -103,14 +89,11 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
             getSummaryText(
               "General",
               widget.msgs.generalText,
-              widget.matchesData
+              widget.matchesData.specificMatches
                   .map(
-                    (final MatchData e) =>
-                        e.specificMatchData?.general.mapNullable(
-                      (final int a) => (
-                        e.specificMatchData!.general!,
-                        e.scheduleMatch.matchIdentifier.number
-                      ),
+                    (final MatchData match) => (
+                      match.specificMatchData!.general ?? 0,
+                      match.scheduleMatch.matchIdentifier.number
                     ),
                   )
                   .whereNotNull()
@@ -119,14 +102,11 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
             getSummaryText(
               "Defense",
               widget.msgs.defenseText,
-              widget.matchesData
+              widget.matchesData.specificMatches
                   .map(
-                    (final MatchData e) =>
-                        e.specificMatchData?.defense.mapNullable(
-                      (final int a) => (
-                        e.specificMatchData!.defense!,
-                        e.scheduleMatch.matchIdentifier.number
-                      ),
+                    (final MatchData match) => (
+                      match.specificMatchData!.defense ?? 0,
+                      match.scheduleMatch.matchIdentifier.number
                     ),
                   )
                   .whereNotNull()
@@ -136,11 +116,11 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
           ],
         ),
       );
-
+//TODO: you know...
   Widget getSummaryText(
     final String title,
     final String text,
-    final List<(int, int)> ratingsToMatches,
+    final List<(int rating, int matchNumber)> ratingsToMatches,
   ) {
     final (String, Color) rating = getRating(
       ratingsToMatches
@@ -203,60 +183,4 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
     default:
       return ("No Data", Colors.white);
   }
-}
-
-class ViewRatingDropdownLine extends StatefulWidget {
-  ViewRatingDropdownLine({
-    required this.color,
-    required this.label,
-    required this.ratingToMatch,
-  });
-  final String label;
-  final Color color;
-  final List<(int, int)> ratingToMatch;
-
-  @override
-  State<ViewRatingDropdownLine> createState() => _ViewRatingDropdownLineState();
-}
-
-class _ViewRatingDropdownLineState extends State<ViewRatingDropdownLine> {
-  bool isPressed = false;
-
-  @override
-  Widget build(final BuildContext context) => Column(
-        children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                isPressed = !isPressed;
-              });
-            },
-            child: SectionDivider(
-              label: widget.label,
-              color: widget.color,
-            ),
-          ),
-          AnimatedCrossFade(
-            duration: const Duration(milliseconds: 300),
-            crossFadeState: !isPressed
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
-            firstChild: Container(),
-            secondChild: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ...widget.ratingToMatch.map(
-                  (final (int, int) e) => Tooltip(
-                    message: "match number: ${e.$2}",
-                    child: Text(
-                      "${getRating(e.$1.toDouble()).$1}, ",
-                      style: TextStyle(color: getRating(e.$1.toDouble()).$2),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
 }

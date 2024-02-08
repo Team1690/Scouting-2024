@@ -13,3 +13,17 @@ class MatchData {
   final SpecificMatchData? specificMatchData;
   final ScheduleMatch scheduleMatch;
 }
+
+extension MatchDataList on List<MatchData> {
+  List<MatchData> get fullGames => where(
+        (final MatchData element) =>
+            element.technicalMatchData != null &&
+            element.specificMatchData != null,
+      ).toList();
+  List<MatchData> get technicalMatchExists =>
+      where((final MatchData element) => element.technicalMatchData != null)
+          .toList();
+  List<MatchData> get specificMatches =>
+      where((final MatchData element) => element.specificMatchData != null)
+          .toList();
+}

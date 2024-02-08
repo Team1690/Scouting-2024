@@ -1,11 +1,10 @@
 import "dart:math";
-
 import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/pc/team_info/models/team_info_classes.dart"
-    show DefenseAmount, RobotFieldStatus;
+import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
+import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class _BaseLineChart extends StatelessWidget {
   const _BaseLineChart({
