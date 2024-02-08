@@ -32,122 +32,104 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
 
   List<TextEditingController> controllers = List.generate(
       StartingPosition.values.length, (i) => TextEditingController());
+  ui.Image? field;
 
   @override
   Widget build(final BuildContext context) => DashboardScaffold(
-        body: FutureBuilder<ui.Image>(
-          future: getField(false),
-          builder: (
-            final BuildContext context,
-            final AsyncSnapshot<ui.Image> fieldSnapshot,
-          ) {
-            if (fieldSnapshot.hasError) {
-              return Text(fieldSnapshot.error!.toString());
-            }
-            if (fieldSnapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return FutureBuilder<
+          body: FutureBuilder<
+              List<
+                  (
+                    TeamData,
+                    List<(Sketch, StartingPosition, MatchIdentifier)>
+                  )>>(
+        future: teams.whereNotNull().isNotEmpty
+            ? fetchDataAndPaths(
+                context,
+                teams.whereNotNull().map((final LightTeam e) => e.id).toList(),
+              )
+            : Future<
                 List<
                     (
                       TeamData,
                       List<(Sketch, StartingPosition, MatchIdentifier)>
                     )>>(
-              future: teams.whereNotNull().isNotEmpty
-                  ? fetchDataAndPaths(
-                      context,
-                      teams
-                          .whereNotNull()
-                          .map((final LightTeam e) => e.id)
-                          .toList(),
-                    )
-                  : Future<
-                      List<
-                          (
-                            TeamData,
-                            List<(Sketch, StartingPosition, MatchIdentifier)>
-                          )>>(
-                      () => <(
+                () => <(
+                  TeamData,
+                  List<(Sketch, StartingPosition, MatchIdentifier)>
+                )>[],
+              ),
+        builder: (
+          final BuildContext context,
+          final AsyncSnapshot<
+                  List<
+                      (
                         TeamData,
                         List<(Sketch, StartingPosition, MatchIdentifier)>
-                      )>[],
-                    ),
-              builder: (
-                final BuildContext context,
-                final AsyncSnapshot<
-                        List<
-                            (
-                              TeamData,
-                              List<(Sketch, StartingPosition, MatchIdentifier)>
-                            )>>
-                    snapshot,
-              ) {
-                if (snapshot.hasError) {
-                  return Text(snapshot.error!.toString());
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return Padding(
-                  padding: const EdgeInsets.all(defaultPadding),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                      )>>
+              snapshot,
+        ) {
+          if (snapshot.hasError) {
+            return Text(snapshot.error!.toString());
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return Padding(
+            padding: const EdgeInsets.all(defaultPadding),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ...StartingPosition.values.map(
-                              (final StartingPosition e) => Expanded(
-                                child: TeamSelectionFuture(
-                                  controller: controllers[
-                                      StartingPosition.values.indexOf(e)],
-                                  teams: TeamProvider.of(context).teams,
-                                  onChange: (final LightTeam team) {
-                                    if (teams.contains(team)) {
-                                      return;
-                                    }
-                                    teams[StartingPosition.values.indexOf(e)] =
-                                        team;
-                                  },
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                setState(() {});
-                              },
-                              icon: const Icon(Icons.route),
-                            ),
-                          ]
-                              .expand(
-                                (final Widget element) => <Widget>[
-                                  element,
-                                  const SizedBox(width: 10),
-                                ],
-                              )
-                              .toList(),
+                      ...StartingPosition.values.map(
+                        (final StartingPosition e) => Expanded(
+                          child: TeamSelectionFuture(
+                            controller:
+                                controllers[StartingPosition.values.indexOf(e)],
+                            teams: TeamProvider.of(context).teams,
+                            onChange: (final LightTeam team) {
+                              if (teams.contains(team)) {
+                                return;
+                              }
+                              teams[StartingPosition.values.indexOf(e)] = team;
+                            },
+                          ),
                         ),
                       ),
-                      Expanded(
-                        flex: 5,
-                        child: teams.isEmpty || snapshot.data == null
-                            ? const Card()
-                            : AutoPlanner(
-                                field: fieldSnapshot.data!,
-                                data: snapshot.data!,
-                              ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.route),
                       ),
-                    ],
+                    ]
+                        .expand(
+                          (final Widget element) => <Widget>[
+                            element,
+                            const SizedBox(width: 10),
+                          ],
+                        )
+                        .toList(),
                   ),
-                );
-              },
-            );
-          },
-        ),
-      );
+                ),
+                Expanded(
+                  flex: 5,
+                  child: teams.isEmpty || snapshot.data == null || field == null
+                      ? const Card()
+                      : AutoPlanner(
+                          field: field!,
+                          data: snapshot.data!,
+                        ),
+                ),
+              ],
+            ),
+          );
+        },
+      ));
 }
 
 class AutoPlanner extends StatefulWidget {
@@ -363,6 +345,9 @@ class _AutoPlannerState extends State<AutoPlanner> {
           if (!previousValue.contains(element)) previousValue.add(element);
           return previousValue;
         }).toList();
+
+        final List<Sketch> autosAllBlue =
+            uniqueAuto.map((auto) => Sketch(points:  , isRed: false, url: auto.url)).toList();
 
         return SelectPath(
           fieldBackgrounds: (widget.field, widget.field),
