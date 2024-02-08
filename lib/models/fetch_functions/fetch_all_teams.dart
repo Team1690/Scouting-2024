@@ -9,6 +9,37 @@ import "package:scouting_frontend/models/team_data/all_team_data.dart";
 const String subscription = r"""
 subscription FetchAllTeams {
   team {
+    pit {
+      drivetrain {
+        title
+      }
+      drive_motor_amount
+      drivemotor {
+        title
+      }
+      wheel_type {
+        title
+      }
+      gearbox_purchased
+      notes
+      has_shifter
+      url
+      team {
+        faults {
+          message
+        }
+        id
+        number
+        colors_index
+        name
+      }
+      height
+      weight
+      harmony
+      trap
+      has_buddy_climb
+      other_wheel_type
+    }
     id
     name
     number

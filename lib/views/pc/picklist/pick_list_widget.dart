@@ -177,21 +177,33 @@ class _PickListState extends State<PickList> {
                                   "Matches: ${pickListTeam.aggregateData.gamesPlayed}",
                                 ),
                               ),
-                              Icon(
-                                pickListTeam.harmony
-                                    ? Icons.done_all_rounded
-                                    : (pickListTeam.pitData != null
-                                            ? pickListTeam.pitData!.harmony
-                                            : false)
-                                        ? Icons.check_circle_rounded
-                                        : Icons.priority_high_rounded,
-                                color: pickListTeam.harmony
-                                    ? Colors.blue
-                                    : (pickListTeam.pitData != null
-                                            ? pickListTeam.pitData!.harmony
-                                            : false)
-                                        ? Colors.grey
-                                        : Colors.amber,
+                              Tooltip(
+                                message: pickListTeam.harmony
+                                    ? "Verified Harmony"
+                                    : pickListTeam.pitData?.harmony ?? false
+                                        ? "Can do Harmony"
+                                        : "Unable to do Harmony",
+                                child: Icon(
+                                  pickListTeam.harmony
+                                      ? Icons.verified_rounded
+                                      : (pickListTeam.pitData != null
+                                              ? pickListTeam.pitData!.harmony
+                                              : false)
+                                          ? Icons.check_circle_outline_rounded
+                                          : Icons.unpublished_outlined,
+                                  color: pickListTeam.harmony
+                                      ? const Color.fromARGB(255, 61, 135, 238)
+                                      : (pickListTeam.pitData != null
+                                              ? pickListTeam.pitData!.harmony
+                                              : false)
+                                          ? const Color.fromARGB(
+                                              255,
+                                              161,
+                                              255,
+                                              135,
+                                            )
+                                          : Colors.amber,
+                                ),
                               ),
                             ]
                                 .expand(
