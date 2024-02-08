@@ -47,6 +47,9 @@ class MatchesScreen extends StatelessWidget {
                 ),
                 onSuccess: (final List<ScheduleMatch> data) => ListView(
                   children: data
+                      .where(
+                        (final ScheduleMatch e) => !e.matchIdentifier.isRematch,
+                      )
                       .map(
                         (final ScheduleMatch e) => Card(
                           color: bgColor,
