@@ -286,10 +286,14 @@ class Sketch {
   final List<Offset> points;
   final bool isRed;
   final String? url;
-
-  @override
-  bool operator ==(final Object other) => other is Sketch && other.url == url;
-
-  @override
-  int get hashCode => Object.hashAll(<Object?>[points, isRed, url]);
 }
+
+List<Sketch> distinct(List<Sketch> sketches) =>
+    sketches.fold(<Sketch>[], (previousValue, element) {
+      if (!previousValue
+          .map(
+            (e) => e.url,
+          )
+          .contains(element.url)) previousValue.add(element);
+      return previousValue;
+    }).toList();

@@ -101,7 +101,8 @@ class _AutoPlannerScreenState extends State<AutoPlannerScreen> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          field = await getField(false);
                           setState(() {});
                         },
                         icon: const Icon(Icons.route),
@@ -304,7 +305,7 @@ class _AutoPlannerState extends State<AutoPlanner> {
             .toList();
     final List<MatchIdentifier> matchesUsingAuto = matchesAtPos
         .where((final (Sketch, StartingPosition, MatchIdentifier) match) =>
-            match.$1 == selectedAutos[startingPos]?.$1)
+            match.$1.url == selectedAutos[startingPos]?.$1.url)
         .map((e) => e.$3)
         .toList();
     return selectedTeams[startingPos]!
@@ -338,20 +339,26 @@ class _AutoPlannerState extends State<AutoPlanner> {
                         element.$2 == startingPos))
                 .flattened
                 .toList();
-        final List<Sketch> uniqueAuto = matchesAtPos
+
+        final List<Sketch> uniqueAuto = distinct(matchesAtPos
             .map((final (Sketch, StartingPosition, MatchIdentifier) match) =>
                 match.$1)
-            .fold(<Sketch>[], (previousValue, element) {
-          if (!previousValue.contains(element)) previousValue.add(element);
-          return previousValue;
-        }).toList();
+            .toList());
 
-        final List<Sketch> autosAllBlue =
-            uniqueAuto.map((auto) => Sketch(points:  , isRed: false, url: auto.url)).toList();
+        final List<Sketch> autosAllBlue = uniqueAuto
+            .map((auto) => Sketch(
+                points: auto.points.map((point) {
+                  return auto.isRed
+                      ? Offset((point.dx - autoFieldWidth).abs(), point.dy)
+                      : point;
+                }).toList(),
+                isRed: false,
+                url: auto.url))
+            .toList();
 
         return SelectPath(
           fieldBackgrounds: (widget.field, widget.field),
-          existingPaths: uniqueAuto,
+          existingPaths: autosAllBlue,
           onNewSketch: (final Sketch sketch) {
             Navigator.pop(context, sketch);
           },
