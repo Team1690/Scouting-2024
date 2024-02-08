@@ -8,6 +8,7 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/image_picker_widget.dart";
 import "package:scouting_frontend/views/mobile/firebase_submit_button.dart";
+import "package:scouting_frontend/views/mobile/screens/pit_view/measurement_conversion.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_vars.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
@@ -16,6 +17,9 @@ import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/submit_button.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/teams_without_pit.dart";
 
+const double kgToPoundFactor = 2.20462262;
+const double mToFt = 1 / 0.3048;
+
 class PitView extends StatefulWidget {
   const PitView([this.initialVars]);
   final PitVars? initialVars;
@@ -23,6 +27,9 @@ class PitView extends StatefulWidget {
   @override
   State<PitView> createState() => _PitViewState();
 }
+
+FormFieldValidator<String> numericValidator(final String error) =>
+    (final String? text) => double.tryParse(text ?? "").onNull(error);
 
 class _PitViewState extends State<PitView> {
   LightTeam? team;
@@ -40,8 +47,8 @@ class _PitViewState extends State<PitView> {
       ValueNotifier<bool>(false);
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
-  FormFieldValidator<String> _numericValidator(final String error) =>
-      (final String? text) => double.tryParse(text ?? "").onNull(error);
+  bool kg = true;
+  bool meters = true;
 
   void resetFrame() {
     setState(() {
@@ -282,40 +289,46 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
+                    MeasurementConversion(
                       controller: weightController,
-                      onChanged: (final String weight) {
-                        vars = vars.copyWith(
-                          weight: () => double.tryParse(weight),
-                        );
+                      title: "Weight",
+                      unitTypes: const <String>["KG", "LBS"],
+                      regularUnitsToOtherUnitsFactor: kgToPoundFactor,
+                      onValueChange: (final double? value) {
+                        setState(() {
+                          vars = vars.copyWith(weight: () => value);
+                        });
                       },
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: "Weight",
-                        prefixIcon: Icon(Icons.fitness_center),
-                      ),
-                      validator: _numericValidator(
-                        "please enter the robot's weight",
-                      ),
+                      onRegularUnits: kg,
+                      currentValue: vars.weight,
+                      onUnitsChange: (final bool newKg) {
+                        setState(() {
+                          kg = newKg;
+                        });
+                      },
+                      icon: Icons.fitness_center,
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
+                    MeasurementConversion(
                       controller: heightController,
-                      onChanged: (final String height) {
-                        vars = vars.copyWith(
-                          height: () => double.tryParse(height),
-                        );
+                      title: "Height",
+                      unitTypes: const <String>["Meters", "Ft"],
+                      regularUnitsToOtherUnitsFactor: mToFt,
+                      onValueChange: (final double? value) {
+                        setState(() {
+                          vars = vars.copyWith(height: () => value);
+                        });
                       },
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: "Height",
-                        prefixIcon: Icon(Icons.swap_vert_rounded),
-                      ),
-                      validator: _numericValidator(
-                        "please enter the robot's height",
-                      ),
+                      onRegularUnits: meters,
+                      currentValue: vars.height,
+                      onUnitsChange: (final bool newMeters) {
+                        setState(() {
+                          meters = newMeters;
+                        });
+                      },
+                      icon: Icons.swap_vert_rounded,
                     ),
                     SectionDivider(label: "OnStage"),
                     const SizedBox(
