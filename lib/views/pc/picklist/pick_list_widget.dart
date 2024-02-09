@@ -7,6 +7,8 @@ import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 import "package:flutter_switch/flutter_switch.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 
+import "harmony_icon.dart";
+
 class PickList extends StatefulWidget {
   PickList({
     required this.uiList,
@@ -183,26 +185,8 @@ class _PickListState extends State<PickList> {
                                     : pickListTeam.pitData?.harmony ?? false
                                         ? "Can do Harmony"
                                         : "Unable to do Harmony",
-                                child: Icon(
-                                  pickListTeam.harmony
-                                      ? Icons.verified_rounded
-                                      : (pickListTeam.pitData != null
-                                              ? pickListTeam.pitData!.harmony
-                                              : false)
-                                          ? Icons.check_circle_outline_rounded
-                                          : Icons.unpublished_outlined,
-                                  color: pickListTeam.harmony
-                                      ? const Color.fromARGB(255, 61, 135, 238)
-                                      : (pickListTeam.pitData != null
-                                              ? pickListTeam.pitData!.harmony
-                                              : false)
-                                          ? const Color.fromARGB(
-                                              255,
-                                              161,
-                                              255,
-                                              135,
-                                            )
-                                          : Colors.amber,
+                                child: HarmonyIcon(
+                                  pickListTeam: pickListTeam,
                                 ),
                               ),
                             ]
