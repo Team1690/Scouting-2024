@@ -18,91 +18,6 @@ import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
 const String query = r"""
 query FetchTeams($ids: [Int!]) @cached {
   team(where: {id: {_in: $ids}}) {
-    technical_matches_aggregate(where: {ignored: {_eq: false}}) {
-      aggregate {
-        avg {
-          auto_amp
-          auto_amp_missed
-          auto_speaker
-          auto_speaker_missed
-          tele_amp
-          tele_amp_missed
-          tele_speaker
-          tele_speaker_missed
-          trap_amount
-          traps_missed
-          harmony_with
-        }
-        max {
-          auto_amp
-          auto_amp_missed
-          auto_speaker
-          auto_speaker_missed
-          tele_amp
-          tele_amp_missed
-          tele_speaker
-          tele_speaker_missed
-          trap_amount
-          traps_missed
-          scouter_name
-          harmony_with
-        }
-        min {
-          auto_amp
-          auto_amp_missed
-          auto_speaker
-          auto_speaker_missed
-          tele_amp
-          tele_amp_missed
-          tele_speaker
-          tele_speaker_missed
-          trap_amount
-          traps_missed
-          harmony_with
-          scouter_name
-        }
-        stddev {
-          auto_amp
-          auto_amp_missed
-          auto_speaker
-          auto_speaker_missed
-          harmony_with
-          tele_amp_missed
-          tele_amp
-          tele_speaker
-          tele_speaker_missed
-          trap_amount
-          traps_missed
-        }
-        sum {
-          auto_amp_missed
-          auto_amp
-          auto_speaker
-          auto_speaker_missed
-          harmony_with
-          tele_amp
-          tele_amp_missed
-          tele_speaker
-          tele_speaker_missed
-          trap_amount
-          traps_missed
-        }
-        variance {
-          auto_speaker
-          auto_amp
-          auto_amp_missed
-          auto_speaker_missed
-          harmony_with
-          tele_amp
-          tele_amp_missed
-          tele_speaker
-          tele_speaker_missed
-          trap_amount
-          traps_missed
-        }
-        count
-      }
-    }
     specific_matches {
       schedule_match {
         id
@@ -268,15 +183,16 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
               (teamTable["specific_matches"] as List<dynamic>)
                   .map(SpecificMatchData.parse)
                   .toList();
-
-          final dynamic aggregateTable =
-              teamTable["technical_matches_aggregate"]["aggregate"];
           final dynamic pitTable = teamTable["pit"];
           final List<dynamic> faultTable = teamTable["faults"] as List<dynamic>;
           final dynamic specificSummaryTable = teamTable["specific_summary"];
 
           return TeamData(
-            aggregateData: AggregateData.parse(aggregateTable),
+            aggregateData: AggregateData.fromTechnicalData(
+              technicalMatches
+                  .map((final TechnicalMatchData e) => e.data)
+                  .toList(),
+            ),
             pitData: PitData.parse(pitTable),
             faultEntrys: faultTable.map(FaultEntry.parse).toList(),
             summaryData: SpecificSummaryData.parse(specificSummaryTable),
