@@ -40,30 +40,29 @@ class PitData {
   final String? otherWheelType;
   final LightTeam team;
 
-  static PitData? parse(final dynamic pit) =>
-      pit != null && pit["drivetrain"] != null
-          ? PitData(
-              driveTrainType:
-                  driveTrainTitleToEnum(pit["drivetrain"]["title"] as String),
-              driveMotorAmount: pit["drive_motor_amount"] as int,
-              driveMotorType:
-                  driveMotorTitleToEnum(pit["drivemotor"]["title"] as String),
-              driveWheelType:
-                  driveWheelTitleToEnum(pit["wheel_type"]["title"] as String),
-              gearboxPurchased: pit["gearbox_purchased"] as bool?,
-              notes: pit["notes"] as String,
-              hasShifer: pit["has_shifter"] as bool?,
-              url: pit["url"] as String,
-              faultMessages: (pit["team"]["faults"] as List<dynamic>)
-                  .map((final dynamic fault) => fault["message"] as String)
-                  .toList(),
-              weight: (pit["weight"] as num).toDouble(),
-              height: (pit["height"] as num).toDouble(),
-              harmony: pit["harmony"] as bool,
-              trap: pit["trap"] as int,
-              hasBuddyClimb: pit["has_buddy_climb"] as bool,
-              otherWheelType: pit["other_wheel_type"] as String?,
-              team: LightTeam.fromJson(pit["team"]),
-            )
-          : null;
+  static PitData? parse(final dynamic pit) => pit != null
+      ? PitData(
+          driveTrainType:
+              driveTrainTitleToEnum(pit["drivetrain"]["title"] as String),
+          driveMotorAmount: pit["drive_motor_amount"] as int,
+          driveMotorType:
+              driveMotorTitleToEnum(pit["drivemotor"]["title"] as String),
+          driveWheelType:
+              driveWheelTitleToEnum(pit["wheel_type"]["title"] as String),
+          gearboxPurchased: pit["gearbox_purchased"] as bool?,
+          notes: pit["notes"] as String,
+          hasShifer: pit["has_shifter"] as bool?,
+          url: pit["url"] as String,
+          faultMessages: (pit["team"]["faults"] as List<dynamic>)
+              .map((final dynamic fault) => fault["message"] as String)
+              .toList(),
+          weight: (pit["weight"] as num).toDouble(),
+          team: LightTeam.fromJson(pit["team"]),
+          height: (pit["height"] as num).toDouble(),
+          harmony: pit["harmony"] as bool,
+          trap: pit["trap"] as int,
+          hasBuddyClimb: pit["has_buddy_climb"] as bool,
+          otherWheelType: pit["other_wheel_type"] as String?,
+        )
+      : null;
 }

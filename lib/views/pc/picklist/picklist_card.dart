@@ -2,11 +2,12 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/models/team_data/all_team_data.dart";
 import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/views/pc/picklist/auto_picklist_popup.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
 
 class PicklistCard extends StatefulWidget {
-  PicklistCard({
+  const PicklistCard({
     required this.initialData,
   });
   final List<AllTeamData> initialData;
@@ -17,7 +18,6 @@ class PicklistCard extends StatefulWidget {
 
 class _PicklistCardState extends State<PicklistCard> {
   late List<AllTeamData> data = widget.initialData;
-
   CurrentPickList currentPickList = CurrentPickList.first;
   @override
   void didUpdateWidget(final PicklistCard oldWidget) {
@@ -97,6 +97,24 @@ class _PicklistCardState extends State<PicklistCard> {
               });
             },
             icon: const Icon(Icons.sort),
+          ),
+          TextButton(
+            onPressed: () async {
+              final List<AllTeamData>? newAllTeamData =
+                  await showDialog<List<AllTeamData>>(
+                context: context,
+                builder: (final BuildContext context) => AutoPickListPopUp(
+                  currentPickList: currentPickList,
+                  teamsToSort: widget.initialData,
+                ),
+              );
+              if (newAllTeamData != null) {
+                setState(() {
+                  data = newAllTeamData;
+                });
+              }
+            },
+            child: const Text("Sort By"),
           ),
         ],
         title: "",

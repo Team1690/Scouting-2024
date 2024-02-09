@@ -6,6 +6,7 @@ import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 import "package:flutter_switch/flutter_switch.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/views/pc/picklist/harmony_icon.dart";
 
 class PickList extends StatefulWidget {
   PickList({
@@ -159,12 +160,32 @@ class _PickListState extends State<PickList> {
                               ),
                               Expanded(
                                 child: Text(
-                                  "Climbed: ${pickListTeam.climbPercentage.toStringAsFixed(2)}%",
+                                  "Aim: ${pickListTeam.aim == double.negativeInfinity ? "No Data" : ("${pickListTeam.aim.toStringAsFixed(2)}%")}",
                                 ),
                               ),
                               Expanded(
                                 child: Text(
-                                  "Worked: ${pickListTeam.workedPercentage.toStringAsFixed(2)}%",
+                                  "Climbed: ${pickListTeam.climbPercentage == double.negativeInfinity ? "No Data" : ("${pickListTeam.climbPercentage.toStringAsFixed(2)}%")}",
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "Worked: ${pickListTeam.workedPercentage == double.negativeInfinity ? "No Data" : ("${pickListTeam.workedPercentage.toStringAsFixed(2)}%")}",
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "Matches: ${pickListTeam.aggregateData.gamesPlayed}",
+                                ),
+                              ),
+                              Tooltip(
+                                message: pickListTeam.harmony
+                                    ? "Verified Harmony"
+                                    : pickListTeam.pitData?.harmony ?? false
+                                        ? "Can do Harmony"
+                                        : "Unable to do Harmony",
+                                child: HarmonyIcon(
+                                  pickListTeam: pickListTeam,
                                 ),
                               ),
                             ]
