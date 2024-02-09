@@ -159,17 +159,17 @@ class _PickListState extends State<PickList> {
                               ),
                               Expanded(
                                 child: Text(
-                                  "Aim: ${pickListTeam.aim.toStringAsFixed(2)}%",
+                                  "Aim: ${pickListTeam.aim == double.negativeInfinity ? "No Data" : ("${pickListTeam.aim.toStringAsFixed(2)}%")}",
                                 ),
                               ),
                               Expanded(
                                 child: Text(
-                                  "Climbed: ${pickListTeam.climbPercentage.toStringAsFixed(2)}%",
+                                  "Climbed: ${pickListTeam.climbPercentage == double.negativeInfinity ? "No Data" : ("${pickListTeam.climbPercentage.toStringAsFixed(2)}%")}",
                                 ),
                               ),
                               Expanded(
                                 child: Text(
-                                  "Worked: ${pickListTeam.workedPercentage.toStringAsFixed(2)}%",
+                                  "Worked: ${pickListTeam.workedPercentage == double.negativeInfinity ? "No Data" : ("${pickListTeam.workedPercentage.toStringAsFixed(2)}%")}",
                                 ),
                               ),
                               Expanded(

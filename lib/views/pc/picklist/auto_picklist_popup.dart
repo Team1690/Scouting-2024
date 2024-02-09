@@ -45,14 +45,6 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
                 .whereNot((final double element) => element.isNaN)
                 .max +
         val.aggregateData.avgData.trapAmount * trapFactor / 2;
-    print("climb");
-    print(val.climbPercentage);
-    print("amp");
-    print(val.aggregateData.avgData.ampGamepieces);
-    print("speaker");
-    print(val.aggregateData.avgData.speakerGamepieces);
-    print("trap");
-    print(val.aggregateData.avgData.trapAmount);
     return result.isFinite ? result : double.negativeInfinity;
   }
 
@@ -84,10 +76,6 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
                     calculateValue(b),
                   ),
                 );
-                newSortedTeamList.forEach((final AllTeamData e) {
-                  print("${e} ${calculateValue(e)}");
-                });
-
                 newSortedTeamList
                     .forEachIndexed((final int index, final AllTeamData team) {
                   widget.currentPickList.setIndex(team, index);
