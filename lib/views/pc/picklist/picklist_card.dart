@@ -18,8 +18,6 @@ class PicklistCard extends StatefulWidget {
 
 class _PicklistCardState extends State<PicklistCard> {
   late List<AllTeamData> data = widget.initialData;
-  bool usedAutoPicklist = false;
-  late List<AllTeamData> dataFromHasura = data;
   CurrentPickList currentPickList = CurrentPickList.first;
   @override
   void didUpdateWidget(final PicklistCard oldWidget) {

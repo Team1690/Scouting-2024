@@ -29,8 +29,10 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
             (val.aggregateData.avgData.ampGamepieces) *
                 ampFactor /
                 teamsList
-                    .map((final AllTeamData e) =>
-                        e.aggregateData.avgData.ampGamepieces)
+                    .map(
+                      (final AllTeamData e) =>
+                          e.aggregateData.avgData.ampGamepieces,
+                    )
                     .whereNot((final double element) => element.isNaN)
                     .max) +
         (val.aggregateData.avgData.speakerGamepieces) *
