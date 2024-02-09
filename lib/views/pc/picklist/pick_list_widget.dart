@@ -6,8 +6,7 @@ import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 import "package:flutter_switch/flutter_switch.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-
-import "harmony_icon.dart";
+import "package:scouting_frontend/views/pc/picklist/harmony_icon.dart";
 
 class PickList extends StatefulWidget {
   PickList({

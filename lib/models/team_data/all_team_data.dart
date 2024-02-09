@@ -64,7 +64,7 @@ class AllTeamData {
           (aggregateData.avgData.gamepieces /
                   (aggregateData.avgData.gamepieces +
                       aggregateData.avgData.totalMissed))
-              .clamp(double.minPositive, double.maxFinite);
+              .clamp(0, 1);
   bool get harmony => technicalMatches
       .where((final TechnicalMatchData element) => element.harmonyWith != 0)
       .isNotEmpty;
