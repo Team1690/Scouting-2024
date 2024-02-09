@@ -15,109 +15,40 @@ subscription FetchAllTeams {
     second_picklist_index
     third_picklist_index
     colors_index
-    technical_matches_aggregate {
-      aggregate {
-        avg {
-          auto_amp
-          auto_amp_missed
-          auto_speaker
-          auto_speaker_missed
-          trap_amount
-          traps_missed
-          tele_speaker_missed
-          tele_speaker
-          tele_amp_missed
-          tele_amp
-        }
-        max {
-          auto_amp
-          auto_amp_missed
-          auto_speaker
-          auto_speaker_missed
-          trap_amount
-          traps_missed
-          tele_speaker_missed
-          tele_speaker
-          tele_amp_missed
-          tele_amp
-        }
-        min {
-          auto_amp
-          auto_amp_missed
-          auto_speaker
-          auto_speaker_missed
-          trap_amount
-          traps_missed
-          tele_speaker_missed
-          tele_speaker
-          tele_amp_missed
-          tele_amp
-        }
-        count
-        stddev {
-          auto_amp
-          auto_amp_missed
-          auto_speaker
-          auto_speaker_missed
-          tele_amp
-          tele_amp_missed
-          tele_speaker
-          tele_speaker_missed
-          trap_amount
-          traps_missed
-        }
-        sum {
-          traps_missed
-          auto_amp
-          auto_amp_missed
-          auto_speaker
-          auto_speaker_missed
-          tele_amp
-          tele_amp_missed
-          tele_speaker
-          tele_speaker_missed
-          trap_amount
-        }
-        variance {
-          auto_amp
-          auto_amp_missed
-          auto_speaker
-          auto_speaker_missed
-          tele_amp
-          tele_amp_missed
-          tele_speaker
-          tele_speaker_missed
-          trap_amount
-          traps_missed
-        }
-      }
-      nodes {
-        climb {
-          title
-        }
-        robot_field_status {
-          title
-        }
-        auto_amp
-        auto_amp_missed
-        auto_speaker
-        auto_speaker_missed
-        harmony_with
-        tele_amp
-        tele_amp_missed
-        tele_speaker
-        tele_speaker_missed
-        trap_amount
-        traps_missed
-        schedule_match {
-          id
-          match_number
-        }
-      }
-    }
     taken
     faults {
       message
+    }
+    technical_matches {
+      auto_amp
+      auto_amp_missed
+      auto_speaker
+      auto_speaker_missed
+      cilmb_id
+      harmony_with
+      is_rematch
+      schedule_match {
+        match_type {
+          title
+        }
+        match_number
+        id
+      }
+      climb {
+        title
+      }
+      tele_amp
+      tele_amp_missed
+      tele_speaker
+      tele_speaker_missed
+      trap_amount
+      traps_missed
+      starting_position {
+        title
+      }
+      robot_field_status {
+        title
+      }
     }
   }
 }
@@ -134,10 +65,10 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
         parserFn: (final Map<String, dynamic> data) {
           final List<dynamic> teams = data["team"] as List<dynamic>;
           return teams.map<AllTeamData>((final dynamic team) {
-            final List<dynamic> technicalMatchesTable =
-                team["technical_matches_aggregate"]["nodes"] as List<dynamic>;
-            final dynamic aggregateTable =
-                team["technical_matches_aggregate"]["aggregate"];
+            final List<TechnicalMatchData> technicalMatches =
+                (team["technical_matches"] as List<dynamic>)
+                    .map(TechnicalMatchData.parse)
+                    .toList();
             final List<dynamic> faultTable = (team["faults"] as List<dynamic>);
 
             return AllTeamData(
@@ -149,9 +80,12 @@ Stream<List<AllTeamData>> fetchAllTeams() => getClient()
               faultMessages: faultTable
                   .map((final dynamic fault) => fault["message"] as String)
                   .toList(),
-              aggregateData: AggregateData.parse(aggregateTable),
-              technicalMatches:
-                  technicalMatchesTable.map(TechnicalMatchData.parse).toList(),
+              aggregateData: AggregateData.fromTechnicalData(
+                technicalMatches
+                    .map((final TechnicalMatchData e) => e.data)
+                    .toList(),
+              ),
+              technicalMatches: technicalMatches,
             );
           }).toList();
         },

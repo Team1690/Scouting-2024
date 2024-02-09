@@ -3,7 +3,6 @@ import "package:graphql/client.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
-import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
 import "package:scouting_frontend/models/team_data/all_team_data.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_all_teams.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -254,7 +253,7 @@ void save(
               taken: e.taken,
               team: e.team,
               faultMessages: <String>[],
-              aggregateData: AggregateData.parse(0),
+              aggregateData: e.aggregateData,
               technicalMatches: <TechnicalMatchData>[],
             ),
           )
