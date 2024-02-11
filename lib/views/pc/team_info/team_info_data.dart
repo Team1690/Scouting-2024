@@ -73,20 +73,13 @@ class TeamInfoData extends StatelessWidget {
 }
 
 QuickData getQuickdata(final TeamData data) => QuickData(
+      medianData: data.aggregateData.medianData,
+      maxData: data.aggregateData.maxData,
+      minData: data.aggregateData.minData,
       amoutOfMatches: data.technicalMatches.length,
       firstPicklistIndex: data.firstPicklistIndex,
       secondPicklistIndex: data.secondPicklistIndex,
       thirdPicklistIndex: data.thirdPicklistIndex,
-      autoAmpAvg: data.aggregateData.avgData.autoAmp,
-      teleAmpAvg: data.aggregateData.avgData.teleAmp,
-      bestAmpGamepiecesSum:
-          //TODO: proper max in aggregate data
-          data.aggregateData.maxData.autoAmp +
-              data.aggregateData.maxData.teleAmp,
-      autoSpeakerAvg: data.aggregateData.avgData.autoSpeaker,
-      teleSpeakerAvg: data.aggregateData.avgData.teleSpeaker,
-      bestSpeakerGamepiecesSum: data.aggregateData.maxData.autoSpeaker +
-          data.aggregateData.maxData.teleSpeaker,
       canHarmony: data.pitData?.harmony,
       climbPercentage: data.climbPercentage,
       matchesClimbedSingle: data.technicalMatches
@@ -104,10 +97,8 @@ QuickData getQuickdata(final TeamData data) => QuickData(
           .length,
       gamepiecePoints: data.aggregateData.avgData.gamePiecesPoints,
       gamepiecesScored: data.aggregateData.avgData.gamepieces,
-      avgAutoSpeakerMissed: data.aggregateData.avgData.autoSpeakerMissed,
-      avgTeleSpeakerMissed: data.aggregateData.avgData.teleSpeakerMissed,
       trapAmount: data.pitData?.trap,
-      avgTrapAmount: data.aggregateData.avgData.trapAmount,
+      avgData: data.aggregateData.avgData,
       avgGamepiecesNoDefense: data.matches.fullGames
               .where(
                 (final MatchData match) =>

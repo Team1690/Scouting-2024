@@ -25,16 +25,37 @@ class QuickDataCard extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                            "Avg Auto Amp: ${data.autoAmpAvg.toStringAsFixed(1)}",
+                            "Median Auto Amp: ${data.medianData.autoAmp.toStringAsFixed(2)}",
                           ),
                           Text(
-                            "Avg Tele Amp: ${data.teleAmpAvg.toStringAsFixed(1)}",
+                            "Median Tele Amp: ${data.medianData.teleAmp.toStringAsFixed(2)}",
                           ),
                           Text(
-                            "Avg Total Amp: ${(data.teleAmpAvg + data.autoAmpAvg).toStringAsFixed(1)}",
+                            "Avg Auto Amp: ${data.avgData.autoAmp.toStringAsFixed(2)}",
                           ),
                           Text(
-                            "Max Total Amp: ${(data.bestAmpGamepiecesSum).toStringAsFixed(1)}",
+                            "Avg Tele Amp: ${data.avgData.autoSpeaker.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Avg Total Amp: ${(data.avgData.ampGamepieces).toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Max Total Amp: ${(data.maxData.ampGamepieces).toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Min Total Amp: ${data.minData.ampGamepieces.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Avg Auto Amp Missed: ${data.avgData.autoAmpMissed.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Avg Tele Amp Missed ${data.avgData.teleAmpMissed.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Median auto Amp Missed: ${data.medianData.autoAmpMissed.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Median Tele Amp Missed: ${data.medianData.teleAmpMissed.toStringAsFixed(2)}",
                           ),
                         ],
                       ),
@@ -45,16 +66,37 @@ class QuickDataCard extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                            "Avg Auto Speaker: ${data.autoSpeakerAvg.toStringAsFixed(1)}",
+                            "Median Auto Speaker: ${data.medianData.autoSpeaker.toStringAsFixed(2)}",
                           ),
                           Text(
-                            "Avg Tele Speaker: ${data.teleSpeakerAvg.toStringAsFixed(1)}",
+                            "Median Tele Speaker: ${data.medianData.teleSpeaker.toStringAsFixed(2)}",
                           ),
                           Text(
-                            "Avg Total Speaker: ${(data.teleSpeakerAvg + data.autoSpeakerAvg).toStringAsFixed(1)}",
+                            "Avg Auto Speaker: ${data.avgData.autoSpeaker.toStringAsFixed(2)}",
                           ),
                           Text(
-                            "Max Total Speaker: ${(data.bestSpeakerGamepiecesSum).toStringAsFixed(1)}",
+                            "Avg Tele Speaker: ${data.avgData.teleSpeaker.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Avg Total Speaker: ${data.avgData.speakerGamepieces.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Max Total Speaker: ${(data.maxData.speakerGamepieces).toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Min Total Speaker: ${data.minData.speakerGamepieces.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Avg Auto Speaker Missed: ${data.avgData.autoSpeakerMissed.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Avg Tele Speaker Missed ${data.avgData.teleSpeakerMissed.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Median auto Speaker Missed: ${data.medianData.autoSpeakerMissed.toStringAsFixed(2)}",
+                          ),
+                          Text(
+                            "Median Tele Speaker Missed: ${data.medianData.teleSpeakerMissed.toStringAsFixed(2)}",
                           ),
                         ],
                       ),
@@ -63,6 +105,12 @@ class QuickDataCard extends StatelessWidget {
                           const Text(
                             "Misc",
                             style: TextStyle(fontSize: 18),
+                          ),
+                          Text(
+                            "Median Gamepiece Points: ${data.medianData.gamePiecesPoints.toStringAsFixed(1)}",
+                          ),
+                          Text(
+                            "Median Gamepiece: ${data.medianData.gamepieces.toStringAsFixed(1)}",
                           ),
                           Text(
                             "Avg Gamepiece Points: ${data.gamepiecePoints.toStringAsFixed(1)}",
@@ -74,10 +122,13 @@ class QuickDataCard extends StatelessWidget {
                             "Possible Traps: ${data.trapAmount ?? "No Data"}",
                           ),
                           Text(
-                            "Avg Trap Amount: ${data.avgTrapAmount.toStringAsFixed(1)}",
+                            "Avg Trap Amount: ${data.avgData.trapAmount.toStringAsFixed(1)}",
                           ),
                           Text(
                             "Trap Success Rate: ${data.trapSuccessRate.isNaN ? "No Data" : "${data.trapSuccessRate.toStringAsFixed(1)}%"}",
+                          ),
+                          Text(
+                            "Median Trap Amount: ${data.medianData.trapAmount}",
                           ),
                         ],
                       ),
