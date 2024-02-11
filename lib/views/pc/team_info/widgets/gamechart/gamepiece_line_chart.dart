@@ -9,11 +9,13 @@ class GamepiecesLineChart extends StatelessWidget {
     required this.title,
     required this.matches,
     required this.data,
+    this.missedData,
   });
 
   final String title;
   final List<MatchData> matches;
   final int Function(MatchData) data;
+  final int Function(MatchData)? missedData;
   @override
   Widget build(final BuildContext context) => Stack(
         children: <Widget>[
@@ -85,6 +87,8 @@ class GamepiecesLineChart extends StatelessWidget {
               distanceFromHighest: 4,
               dataSet: <List<int>>[
                 matches.technicalMatchExists.map(data).toList(),
+                if (missedData != null)
+                  matches.technicalMatchExists.map(missedData!).toList(),
               ],
               robotMatchStatuses: <List<RobotFieldStatus>>[
                 matches.technicalMatchExists

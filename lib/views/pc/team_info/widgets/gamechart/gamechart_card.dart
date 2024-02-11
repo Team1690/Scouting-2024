@@ -25,24 +25,32 @@ class Gamechart extends StatelessWidget {
                     matches: data.matches,
                     data: (final MatchData p0) =>
                         p0.technicalMatchData!.data.gamepieces,
+                    missedData: (final MatchData p0) =>
+                        p0.technicalMatchData!.data.totalMissed,
                   ),
                   GamepiecesLineChart(
                     title: "Auto Gamepieces",
                     matches: data.matches,
                     data: (final MatchData p0) =>
                         p0.technicalMatchData!.data.autoGamepieces,
+                    missedData: (final MatchData p0) =>
+                        p0.technicalMatchData!.data.missedAuto,
                   ),
                   GamepiecesLineChart(
                     title: "Speaker Gamepieces",
                     matches: data.matches,
                     data: (final MatchData p0) =>
                         p0.technicalMatchData!.data.speakerGamepieces,
+                    missedData: (final MatchData p0) =>
+                        p0.technicalMatchData!.data.missedSpeaker,
                   ),
                   GamepiecesLineChart(
                     title: "Amp Gamepieces",
                     matches: data.matches,
                     data: (final MatchData p0) =>
                         p0.technicalMatchData!.data.ampGamepieces,
+                    missedData: (final MatchData p0) =>
+                        p0.technicalMatchData!.data.missedAmp,
                   ),
                   PointsLineChart(
                     title: "Gamepiece Points",
@@ -55,6 +63,8 @@ class Gamechart extends StatelessWidget {
                     matches: data.matches,
                     data: (final MatchData p0) =>
                         p0.technicalMatchData!.data.trapAmount,
+                    missedData: (final MatchData p0) =>
+                        p0.technicalMatchData!.data.trapsMissed,
                   ),
                   TitledLineChart(
                     title: "Climbed",

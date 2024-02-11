@@ -166,6 +166,30 @@ class CalculatedTechnicalData<T extends num> implements TechnicalData<T> {
         (final TechnicalData<int> techdata) => techdata.trapsMissed,
       );
 
+  @override
+  T get missedAmp => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techdata) => techdata.missedAmp,
+      );
+
+  @override
+  T get missedAuto => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techdata) => techdata.missedAuto,
+      );
+
+  @override
+  T get missedSpeaker => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techdata) => techdata.missedSpeaker,
+      );
+
+  @override
+  T get missedTele => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techdata) => techdata.missedTele,
+      );
+
   T caclulateOnListOfField(
     final int Function(int, int) combine,
     final List<int> Function(TechnicalData<int>) getFields,
