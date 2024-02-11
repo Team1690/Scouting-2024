@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
-import "package:scouting_frontend/views/mobile/screens/coach_team_info_data.dart";
+import "package:scouting_frontend/views/mobile/screens/coach_team_info/coach_team_info_data.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_view.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
