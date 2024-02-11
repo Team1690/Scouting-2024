@@ -7,6 +7,8 @@ import "package:scouting_frontend/models/matches_provider.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
+import "package:scouting_frontend/views/pc/status/status_light_team.dart";
+import "package:scouting_frontend/views/pc/status/status_match.dart";
 import "package:scouting_frontend/views/pc/status/status_screen.dart";
 import "package:collection/collection.dart";
 

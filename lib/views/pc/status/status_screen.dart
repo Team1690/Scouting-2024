@@ -9,6 +9,9 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/pc/status/edit_technical_match.dart";
 import "package:scouting_frontend/views/pc/status/fetch_status.dart";
+import "package:scouting_frontend/views/pc/status/status_box.dart";
+import "package:scouting_frontend/views/pc/status/status_match.dart";
+import "package:scouting_frontend/views/pc/status/text_by_team.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 
 class StatusScreen extends StatefulWidget {
@@ -345,57 +348,4 @@ class StatusList<T, V> extends StatelessWidget {
               .toList(),
         ),
       );
-}
-
-class TextByTeam extends StatelessWidget {
-  const TextByTeam({required this.match, required this.text});
-  final StatusMatch match;
-  final String text;
-  @override
-  Widget build(final BuildContext context) => Text(
-        style: TextStyle(color: match.scoutedTeam.allianceColor),
-        text,
-      );
-}
-
-class StatusBox extends StatelessWidget {
-  const StatusBox({required this.child, this.backgroundColor});
-  final Widget child;
-  final Color? backgroundColor;
-  @override
-  Widget build(final BuildContext context) => Container(
-        width: 80,
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(
-          defaultPadding / 3,
-        ),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          border: Border.all(
-            color: primaryWhite,
-            width: 1,
-          ),
-          borderRadius: defaultBorderRadius / 2,
-        ),
-        child: child,
-      );
-}
-
-class StatusLightTeam {
-  const StatusLightTeam(
-    this.points,
-    this.allianceColor,
-    this.team,
-    this.alliancePos,
-  );
-  final LightTeam team;
-  final int points;
-  final Color allianceColor;
-  final int alliancePos;
-}
-
-class StatusMatch {
-  const StatusMatch({required this.scouter, required this.scoutedTeam});
-  final StatusLightTeam scoutedTeam;
-  final String scouter;
 }
