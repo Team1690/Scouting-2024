@@ -52,7 +52,7 @@ class SideNavBar extends StatelessWidget {
             ),
             const NavbarTile(
               icon: Icons.error_outline,
-              title: "Match",
+              title: "Technical",
               widget: UserInput.new,
             ),
             const NavbarTile(
