@@ -161,7 +161,7 @@ class RegularStatus extends StatelessWidget {
                     Column(
               children: <Widget>[
                 Text(
-                  "${statusItem.identifier.isRematch ? "Re " : ""}${statusItem.identifier.type} ${statusItem.identifier.number}",
+                  "${statusItem.identifier.isRematch ? "Re " : ""}${statusItem.identifier.type.title} ${statusItem.identifier.number}",
                 ),
                 if (!isSpecific)
                   Row(

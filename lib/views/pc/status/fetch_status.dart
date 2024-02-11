@@ -35,8 +35,8 @@ Stream<List<StatusItem<I, V>>> fetchBase<I, V>(
             document: gql(subscription),
             parserFn: (final Map<String, dynamic> data) {
               final List<dynamic> matches = data[isSpecific
-                      ? "_2023_specific"
-                      : "_2023_technical_match"] //TODO change table name
+                      ? "specific_match"
+                      : "technical_match"] //TODO change table name
                   as List<dynamic>;
               final Map<I, List<dynamic>> identifierToMatch =
                   matches.groupListsBy(
@@ -78,9 +78,9 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
       getSubscription(isSpecific, false),
       isSpecific,
       (final dynamic matchTable) => MatchIdentifier(
-        number: matchTable["match"]["match_number"] as int,
+        number: matchTable["schedule_match"]["match_number"] as int,
         type: matchTypeTitleToEnum(
-          matchTable["match"]["match_type"]["title"] as String,
+          matchTable["schedule_match"]["match_type"]["title"] as String,
         ),
         isRematch: matchTable["is_rematch"] as bool,
       ),
@@ -91,7 +91,15 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
             .where(
               (final ScheduleMatch match) =>
                   match.matchIdentifier.number ==
-                  scoutedMatchTable["match"]["match_number"] as int,
+                      scoutedMatchTable["schedule_match"]["match_number"]
+                          as int &&
+                  match.matchIdentifier.type ==
+                      matchTypeTitleToEnum(
+                        scoutedMatchTable["schedule_match"]["match_type"]
+                            ["title"] as String,
+                      ) &&
+                  match.matchIdentifier.isRematch ==
+                      scoutedMatchTable["is_rematch"] as bool,
             )
             .toList()
             .single);
@@ -124,8 +132,7 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
         final ScheduleMatch match =
             MatchesProvider.of(context).matches.firstWhere(
                   (final ScheduleMatch element) =>
-                      element.matchIdentifier.number == identifier.number &&
-                      element.matchIdentifier.type == identifier.type,
+                      element.matchIdentifier == identifier,
                 );
 
         return <LightTeam>[
@@ -160,9 +167,9 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
 //TODO replace the table (_2023_) with the newer one, and add season specific vars (add the technical_match ones within the !isSpecific condition).
 String getSubscription(final bool isSpecific, final bool isPreScouting) => """
 subscription Status {
-   _2023_${isSpecific ? "specific" : "technical_match"}
-  (order_by: {match: {match_type: {order: asc}, match_number: asc}, is_rematch: asc},
-   where: {match: {match_type: {title: {${isPreScouting ? "_eq" : "_neq"}: "Pre scouting"}}}}) {
+
+   ${isSpecific ? "specific_match" : "technical_match"}  (order_by: {schedule_match: {match_type: {order: asc}, match_number: asc}, is_rematch: asc},
+   where: {schedule_match: {match_type: {title: {${isPreScouting ? "_eq" : "_neq"}: "Pre scouting"}}}}) {
     team {
       colors_index
       id
@@ -171,8 +178,7 @@ subscription Status {
     }
     scouter_name
     is_rematch
-     ${!isSpecific ? """ """ : ""}
-    match {
+    schedule_match {
       match_number
       match_type {
         title
@@ -180,4 +186,5 @@ subscription Status {
     }
   }
 }
+
 """;
