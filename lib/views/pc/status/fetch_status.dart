@@ -4,6 +4,7 @@ import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
+import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/pc/status/status_screen.dart";
@@ -34,10 +35,9 @@ Stream<List<StatusItem<I, V>>> fetchBase<I, V>(
           SubscriptionOptions<List<StatusItem<I, V>>>(
             document: gql(subscription),
             parserFn: (final Map<String, dynamic> data) {
-              final List<dynamic> matches = data[isSpecific
-                      ? "specific_match"
-                      : "technical_match"] //TODO change table name
-                  as List<dynamic>;
+              final List<dynamic> matches =
+                  data[isSpecific ? "specific_match" : "technical_match"]
+                      as List<dynamic>;
               final Map<I, List<dynamic>> identifierToMatch =
                   matches.groupListsBy(
                 parseI,
@@ -90,22 +90,16 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
             .matches
             .where(
               (final ScheduleMatch match) =>
-                  match.matchIdentifier.number ==
-                      scoutedMatchTable["schedule_match"]["match_number"]
-                          as int &&
-                  match.matchIdentifier.type ==
-                      matchTypeTitleToEnum(
-                        scoutedMatchTable["schedule_match"]["match_type"]
-                            ["title"] as String,
-                      ) &&
-                  match.matchIdentifier.isRematch ==
-                      scoutedMatchTable["is_rematch"] as bool,
+                  match.matchIdentifier ==
+                  MatchIdentifier.fromJson(scoutedMatchTable),
             )
             .toList()
             .single);
+        final TechnicalMatchData technicalMatch =
+            TechnicalMatchData.parse(scoutedMatchTable);
         return StatusMatch(
           scoutedTeam: StatusLightTeam(
-            isSpecific ? 0 : 100, //TODO calculate points using the query data
+            isSpecific ? 0 : technicalMatch.data.gamePiecesPoints,
             scheduleMatch.redAlliance.contains(
               team,
             )
@@ -164,7 +158,6 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
       },
     );
 
-//TODO replace the table (_2023_) with the newer one, and add season specific vars (add the technical_match ones within the !isSpecific condition).
 String getSubscription(final bool isSpecific, final bool isPreScouting) => """
 subscription Status {
 
@@ -176,14 +169,36 @@ subscription Status {
       number
       name
     }
-    scouter_name
-    is_rematch
-    schedule_match {
-      match_number
-      match_type {
+    auto_amp
+      auto_amp_missed
+      auto_speaker
+      auto_speaker_missed
+      cilmb_id
+      harmony_with
+      is_rematch
+      schedule_match {
+        match_type {
+          title
+        }
+        match_number
+        id
+      }
+      climb {
         title
       }
-    }
+      tele_amp
+      tele_amp_missed
+      tele_speaker
+      tele_speaker_missed
+      trap_amount
+      traps_missed
+      scouter_name
+      starting_position {
+        title
+      }
+      robot_field_status {
+        title
+      }
   }
 }
 
