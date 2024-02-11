@@ -64,8 +64,12 @@ class _BaseLineChart extends StatelessWidget {
                       : robotMatchStatuses[index][spot.x.toInt()] ==
                               RobotFieldStatus.didntComeToField
                           ? Colors.purple
-                          : Colors.blue,
+                          : const Color.fromARGB(0, 255, 193, 7),
                 ),
+                checkToShowDot:
+                    (final FlSpot spot, final LineChartBarData barData) =>
+                        robotMatchStatuses[index][spot.x.toInt()] !=
+                        RobotFieldStatus.worked,
               ),
               belowBarData: BarAreaData(
                 show: true,
