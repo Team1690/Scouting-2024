@@ -71,9 +71,10 @@ class _ScatterState extends State<Scatter> {
                 } else {
                   return snapshot.data
                           .mapNullable((final List<AllTeamData> rawReport) {
-                        final report = rawReport
+                        final List<AllTeamData> report = rawReport
                             .where(
-                              (element) => element.technicalMatches.isNotEmpty,
+                              (final AllTeamData element) =>
+                                  element.technicalMatches.isNotEmpty,
                             )
                             .toList();
                         if (report.isEmpty) {
