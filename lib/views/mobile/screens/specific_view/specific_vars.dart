@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
@@ -19,7 +18,6 @@ class SpecificVars implements HasuraVars {
         scheduleMatch = null,
         name = "",
         isRematch = false,
-        defenseAmount = 1,
         faultMessage = null,
         autoPath = null;
 
@@ -35,7 +33,6 @@ class SpecificVars implements HasuraVars {
     required this.scheduleMatch,
     required this.name,
     required this.isRematch,
-    required this.defenseAmount,
     required this.faultMessage,
     required this.autoPath,
   });
@@ -52,7 +49,6 @@ class SpecificVars implements HasuraVars {
     final ScheduleMatch? Function()? scheduleMatch,
     final String Function()? name,
     final bool Function()? isRematch,
-    final int Function()? defenseAmount,
     final String? Function()? faultMessage,
     final Sketch? Function()? autoPath,
   }) =>
@@ -72,8 +68,6 @@ class SpecificVars implements HasuraVars {
             scheduleMatch != null ? scheduleMatch() : this.scheduleMatch,
         name: name != null ? name() : this.name,
         isRematch: isRematch != null ? isRematch() : this.isRematch,
-        defenseAmount:
-            defenseAmount != null ? defenseAmount() : this.defenseAmount,
         faultMessage: faultMessage != null ? faultMessage() : this.faultMessage,
         autoPath: autoPath != null ? autoPath() : this.autoPath,
       );
@@ -89,7 +83,6 @@ class SpecificVars implements HasuraVars {
   final ScheduleMatch? scheduleMatch;
   final String name;
   final bool isRematch;
-  final int defenseAmount;
   final String? faultMessage;
   final Sketch? autoPath;
   @override
@@ -106,7 +99,6 @@ class SpecificVars implements HasuraVars {
         "is_rematch": isRematch,
         "schedule_match_id": scheduleMatch?.id,
         "scouter_name": name,
-        "defense_amount_id": defenseAmount,
         if (faultMessage != null) "schedule_match_id": scheduleMatch?.id,
       };
 
@@ -123,7 +115,5 @@ class SpecificVars implements HasuraVars {
         defenseRating: always(null),
         generalRating: always(null),
         autoPath: always(null),
-        defenseAmount:
-            always(IdProvider.of(context).defense.nameToId["No Defense"]!),
       );
 }

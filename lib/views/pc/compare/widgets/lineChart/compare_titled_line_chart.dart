@@ -4,7 +4,6 @@ import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
-import "package:scouting_frontend/models/team_data/specific_match_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
 
@@ -50,13 +49,6 @@ class CompareClimbLineChart extends StatelessWidget {
                 for (final Climb climb in Climb.values)
                   climb.chartHeight.toInt(): climb.title,
               },
-              defenseAmounts: teamDatas
-                  .map(
-                    (final TeamData teamData) => teamData.specificMatches
-                        .map((final SpecificMatchData e) => e.defenseAmount)
-                        .toList(),
-                  )
-                  .toList(),
               robotMatchStatuses: teamDatas
                   .map(
                     (final TeamData teamData) => teamData.technicalMatches
