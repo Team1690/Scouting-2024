@@ -21,7 +21,6 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
   double ampFactor = 0.5;
   double climbFactor = 0.5;
   double trapFactor = 0.5;
-  bool filter = false;
 
   double calculateValue(final AllTeamData val) {
     final List<AllTeamData> teamsList = widget.teamsToSort;
@@ -58,14 +57,12 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
                 final double ampSlider,
                 final double speakerSlider,
                 final double trapSlider,
-                final bool feeder,
               ) =>
                   setState(() {
                 climbFactor = climbSlider;
                 ampFactor = ampSlider;
                 speakerFactor = speakerSlider;
                 trapFactor = trapSlider;
-                filter = feeder;
                 final List<AllTeamData> newSortedTeamList =
                     widget.teamsToSort.sorted(
                   (
