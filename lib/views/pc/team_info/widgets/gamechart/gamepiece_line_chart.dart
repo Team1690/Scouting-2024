@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
@@ -29,14 +28,6 @@ class GamepiecesLineChart extends StatelessWidget {
                       RichText(
                         text: const TextSpan(
                           children: <TextSpan>[
-                            TextSpan(
-                              text: " Full Defense ",
-                              style: TextStyle(color: Colors.green),
-                            ),
-                            TextSpan(
-                              text: " Half Defense ",
-                              style: TextStyle(color: Colors.blue),
-                            ),
                             TextSpan(
                               text: " Didnt Come ",
                               style: TextStyle(color: Colors.purple),
@@ -100,15 +91,6 @@ class GamepiecesLineChart extends StatelessWidget {
                     .map(
                       (final MatchData e) =>
                           e.technicalMatchData!.robotFieldStatus,
-                    )
-                    .toList(),
-              ],
-              defenseAmounts: <List<DefenseAmount>>[
-                matches.technicalMatchExists
-                    .map(
-                      (final MatchData e) =>
-                          e.specificMatchData?.defenseAmount ??
-                          DefenseAmount.noDefense,
                     )
                     .toList(),
               ],

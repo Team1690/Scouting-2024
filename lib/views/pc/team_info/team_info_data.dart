@@ -1,8 +1,6 @@
 import "package:flutter/material.dart";
-import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_single_team.dart";
 import "package:scouting_frontend/models/team_data/team_data.dart";
-import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/models/team_data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -11,7 +9,6 @@ import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
-import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
 import "package:scouting_frontend/models/team_info_models/quick_data.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
@@ -99,45 +96,6 @@ QuickData getQuickdata(final TeamData data) => QuickData(
       gamepiecesScored: data.aggregateData.avgData.gamepieces,
       trapAmount: data.pitData?.trap,
       avgData: data.aggregateData.avgData,
-      avgGamepiecesNoDefense: data.matches.fullGames
-              .where(
-                (final MatchData match) =>
-                    match.specificMatchData!.defenseAmount ==
-                    DefenseAmount.noDefense,
-              )
-              .map(
-                (final MatchData match) =>
-                    match.technicalMatchData!.data.gamepieces,
-              )
-              .toList()
-              .averageOrNull ??
-          double.nan,
-      avgGamepiecesFullDefense: data.matches.fullGames
-              .where(
-                (final MatchData match) =>
-                    match.specificMatchData!.defenseAmount ==
-                    DefenseAmount.fullDefense,
-              )
-              .map(
-                (final MatchData match) =>
-                    match.technicalMatchData!.data.gamepieces,
-              )
-              .toList()
-              .averageOrNull ??
-          double.nan,
-      avgGamepiecesHalfDefense: data.matches.fullGames
-              .where(
-                (final MatchData match) =>
-                    match.specificMatchData!.defenseAmount ==
-                    DefenseAmount.halfDefense,
-              )
-              .map(
-                (final MatchData match) =>
-                    match.technicalMatchData!.data.gamepieces,
-              )
-              .toList()
-              .averageOrNull ??
-          double.nan,
       //TODO: add to getters
       trapSuccessRate: 0,
     );

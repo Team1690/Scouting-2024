@@ -18,9 +18,6 @@ class QuickData {
     required this.gamepiecePoints,
     required this.gamepiecesScored,
     required this.trapAmount,
-    required this.avgGamepiecesNoDefense,
-    required this.avgGamepiecesHalfDefense,
-    required this.avgGamepiecesFullDefense,
     required this.trapSuccessRate,
   });
   final int amoutOfMatches;
@@ -39,8 +36,5 @@ class QuickData {
   final double gamepiecePoints;
   final double gamepiecesScored;
   final int? trapAmount;
-  final double avgGamepiecesNoDefense;
-  final double avgGamepiecesHalfDefense;
-  final double avgGamepiecesFullDefense;
   final double trapSuccessRate;
 }

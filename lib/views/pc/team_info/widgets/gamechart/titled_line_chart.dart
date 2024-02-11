@@ -1,6 +1,5 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/team_data/team_match_data.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -36,15 +35,6 @@ class TitledLineChart extends StatelessWidget {
               maxY: heightToTitles.keys.max.toDouble() + 1,
               minY: heightToTitles.keys.min.toDouble() - 1,
               showShadow: true,
-              defenseAmounts: <List<DefenseAmount>>[
-                matches.technicalMatchExists
-                    .map(
-                      (final MatchData e) =>
-                          e.specificMatchData?.defenseAmount ??
-                          DefenseAmount.noDefense,
-                    )
-                    .toList(),
-              ],
               inputedColors: const <Color>[primaryColor],
               gameNumbers: matches.technicalMatchExists
                   .map((final MatchData e) => e.scheduleMatch.matchIdentifier)
