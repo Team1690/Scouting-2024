@@ -3,12 +3,10 @@ import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class _BaseLineChart extends StatelessWidget {
   const _BaseLineChart({
-    required this.defenseAmounts,
     required this.showShadow,
     required this.inputedColors,
     required this.dataSet,
@@ -30,7 +28,6 @@ class _BaseLineChart extends StatelessWidget {
   final List<MatchIdentifier> gameNumbers;
   final SideTitles rightTitles;
   final List<List<RobotFieldStatus>> robotMatchStatuses;
-  final List<List<DefenseAmount>> defenseAmounts;
   @override
   Widget build(final BuildContext context) => LineChart(
         LineChartData(
@@ -67,26 +64,12 @@ class _BaseLineChart extends StatelessWidget {
                       : robotMatchStatuses[index][spot.x.toInt()] ==
                               RobotFieldStatus.didntComeToField
                           ? Colors.purple
-                          : defenseAmounts[index][spot.x.toInt()] ==
-                                  DefenseAmount.fullDefense
-                              ? Colors.green
-                              : Colors.blue,
+                          : const Color.fromARGB(0, 255, 193, 7),
                 ),
                 checkToShowDot:
-                    // print(defenseAmounts[index].length);
-                    // if (robotMatchStatuses[index][spot.x.toInt()] ==
-                    //         RobotFieldStatus.didntComeToField ||
-                    //     robotMatchStatuses[index][spot.x.toInt()] ==
-                    //         RobotFieldStatus.didntWorkOnField) {
-                    //   return true;
-                    // } else if (defenseAmounts[index][spot.x.toInt()] ==
-                    //         DefenseAmount.halfDefense ||
-                    //     defenseAmounts[index][spot.x.toInt()] ==
-                    //         DefenseAmount.fullDefense) {
-                    //   return true;
-                    // }
-                    //TODO: fix defense amount so that technical and specific match datas are joined
-                    (final FlSpot spot, final LineChartBarData data) => false,
+                    (final FlSpot spot, final LineChartBarData barData) =>
+                        robotMatchStatuses[index][spot.x.toInt()] !=
+                        RobotFieldStatus.worked,
               ),
               belowBarData: BarAreaData(
                 show: true,
@@ -149,7 +132,6 @@ class _BaseLineChart extends StatelessWidget {
 
 class DashboardTitledLineChart extends StatelessWidget {
   const DashboardTitledLineChart({
-    required this.defenseAmounts,
     required this.dataSet,
     required this.inputedColors,
     required this.gameNumbers,
@@ -159,7 +141,6 @@ class DashboardTitledLineChart extends StatelessWidget {
     required this.maxY,
     required this.minY,
   });
-  final List<List<DefenseAmount>> defenseAmounts;
   final List<Color> inputedColors;
   final List<MatchIdentifier> gameNumbers;
   final List<List<RobotFieldStatus>> robotMatchStatuses;
@@ -171,7 +152,6 @@ class DashboardTitledLineChart extends StatelessWidget {
   final bool showShadow;
   @override
   Widget build(final BuildContext context) => _BaseLineChart(
-        defenseAmounts: defenseAmounts,
         robotMatchStatuses: robotMatchStatuses,
         showShadow: showShadow,
         inputedColors: inputedColors,
@@ -214,7 +194,6 @@ class DashboardLineChart extends StatelessWidget {
     required this.showShadow,
     required this.robotMatchStatuses,
     this.sideTitlesInterval = 5,
-    required this.defenseAmounts,
   });
   final bool showShadow;
   final List<Color> inputedColors;
@@ -222,14 +201,12 @@ class DashboardLineChart extends StatelessWidget {
   final List<List<int>> dataSet;
   final List<MatchIdentifier> gameNumbers;
   final List<List<RobotFieldStatus>> robotMatchStatuses;
-  final List<List<DefenseAmount>> defenseAmounts;
   final double sideTitlesInterval;
   int get highestValue =>
       dataSet.map((final List<int> points) => points.reduce(max)).reduce(max);
 
   @override
   Widget build(final BuildContext context) => _BaseLineChart(
-        defenseAmounts: defenseAmounts,
         robotMatchStatuses: robotMatchStatuses,
         showShadow: showShadow,
         inputedColors: inputedColors,

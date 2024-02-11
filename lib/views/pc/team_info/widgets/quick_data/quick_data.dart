@@ -158,23 +158,6 @@ class QuickDataCard extends StatelessWidget {
                       Column(
                         children: <Widget>[
                           const Text(
-                            "Defense Stats",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(
-                            "Avg GP Not Defending: ${data.avgGamepiecesNoDefense.isNaN ? "No Data" : data.avgGamepiecesNoDefense.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Avg GP Half Defending: ${data.avgGamepiecesHalfDefense.isNaN ? "No Data" : data.avgGamepiecesHalfDefense.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Avg GP Full Defending: ${data.avgGamepiecesFullDefense.isNaN ? "No Data" : data.avgGamepiecesFullDefense.toStringAsFixed(1)}",
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          const Text(
                             "Picklist",
                             style: TextStyle(fontSize: 18),
                           ),

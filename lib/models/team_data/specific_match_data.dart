@@ -1,5 +1,4 @@
 import "package:scouting_frontend/models/match_identifier.dart";
-import "package:scouting_frontend/models/enums/defense_amount_enum.dart";
 
 class SpecificMatchData {
   const SpecificMatchData({
@@ -11,7 +10,6 @@ class SpecificMatchData {
     required this.climb,
     required this.defense,
     required this.general,
-    required this.defenseAmount,
     required this.url,
     required this.matchIdentifier,
     required this.scheduleMatchId,
@@ -28,7 +26,6 @@ class SpecificMatchData {
   final int? general;
   final String url;
   final MatchIdentifier matchIdentifier;
-  final DefenseAmount defenseAmount;
 
   static SpecificMatchData parse(final dynamic specificMatchTable) =>
       SpecificMatchData(
@@ -42,9 +39,6 @@ class SpecificMatchData {
         climb: specificMatchTable["climb_rating"] as int?,
         defense: specificMatchTable["defense_rating"] as int?,
         general: specificMatchTable["general_rating"] as int?,
-        defenseAmount: defenseAmountTitleToEnum(
-          specificMatchTable["defense"]["title"] as String,
-        ),
         url: specificMatchTable["url"] as String,
       );
 }

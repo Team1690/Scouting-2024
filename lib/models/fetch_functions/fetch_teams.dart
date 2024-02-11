@@ -27,10 +27,6 @@ query FetchTeams($ids: [Int!]) @cached {
         match_number
       }
       is_rematch
-      defense_amount_id
-      defense {
-        title
-      }
       defense_rating
       driving_rating
       general_rating

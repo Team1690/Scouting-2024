@@ -23,7 +23,6 @@ void main() async {
     "drivemotor",
     "robot_field_status",
     "fault_status",
-    "defense",
     "starting_position",
     "wheel_type",
   ], <String>[
@@ -36,7 +35,6 @@ void main() async {
   final Map<String, int> matchTypes = enums["match_type"]!;
   final Map<String, int> robotFieldStatuses = enums["robot_field_status"]!;
   final Map<String, int> faultStatus = enums["fault_status"]!;
-  final Map<String, int> defense = enums["defense"]!;
   final Map<String, int> startingPosition = enums["starting_position"]!;
   final Map<String, int> driveWheels = enums["wheel_type"]!;
   final List<ScheduleMatch> matches = await fetchMatches();
@@ -52,7 +50,6 @@ void main() async {
       climbIds: climbs,
       driveMotorIds: driveMotors,
       robotFieldStatusIds: robotFieldStatuses,
-      defense: defense,
       startingPosition: startingPosition,
       driveWheelIds: driveWheels,
     ),
