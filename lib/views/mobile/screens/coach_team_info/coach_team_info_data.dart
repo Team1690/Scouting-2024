@@ -7,7 +7,7 @@ import "package:scouting_frontend/models/team_model.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info/coach_quick_data.dart";
-import "package:scouting_frontend/views/mobile/screens/coach_team_info/coach_team_info_line_charts.dart";
+import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
 
@@ -52,7 +52,7 @@ class CoachTeamData extends StatelessWidget {
                                 ? const Center(
                                     child: Text("No data :("),
                                   )
-                                : CoachTeamInfoLineCharts(data),
+                                : Gamechart(data, Axis.vertical),
                           ),
                         ),
                         Padding(

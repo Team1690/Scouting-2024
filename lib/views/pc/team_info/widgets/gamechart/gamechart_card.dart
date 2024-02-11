@@ -9,14 +9,16 @@ import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/points_li
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/titled_line_chart.dart";
 
 class Gamechart extends StatelessWidget {
-  const Gamechart(this.data);
+  const Gamechart(this.data, [this.direction]);
   final TeamData data;
+  final Axis? direction;
   @override
   Widget build(final BuildContext context) => DashboardCard(
         title: "Game Chart",
         body: data.technicalMatches.length < 2
             ? const Text("Not enough data for line chart")
             : CarouselWithIndicator(
+                direction: direction ?? Axis.horizontal,
                 widgets: <Widget>[
                   GamepiecesLineChart(
                     title: "Gamepieces",
