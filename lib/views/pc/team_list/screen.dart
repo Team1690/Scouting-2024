@@ -42,6 +42,34 @@ class TeamList extends StatelessWidget {
                         ) =>
                             condition ? x : -x;
 
+                        DataColumn boolColumn(
+                          final String title,
+                          final bool Function(AllTeamData) f, [
+                          final String? toolTip,
+                        ]) =>
+                            DataColumn(
+                              tooltip: toolTip,
+                              label: Text(title),
+                              numeric: true,
+                              onSort: (final int index, final __) {
+                                setState(() {
+                                  isAscending =
+                                      sortedColumn == index && !isAscending;
+                                  sortedColumn = index;
+                                  data.sort(
+                                    (
+                                      final AllTeamData a,
+                                      final AllTeamData b,
+                                    ) =>
+                                        reverseUnless<int>(
+                                      isAscending,
+                                      f(b) ? 1 : -1,
+                                    ).toInt(),
+                                  );
+                                });
+                              },
+                            );
+
                         DataColumn column(
                           final String title,
                           final num Function(AllTeamData) f, [
@@ -63,7 +91,22 @@ class TeamList extends StatelessWidget {
                                     ) =>
                                         reverseUnless(
                                       isAscending,
-                                      f(a).compareTo(f(b)),
+                                      f(a).isNaN && f(b).isNaN
+                                          ? 0
+                                          : f(a).isNaN
+                                              ? 0
+                                              : f(b).isNaN
+                                                  ? 0
+                                                  : f(a).isInfinite &&
+                                                          f(b).isInfinite
+                                                      ? 0
+                                                      : f(a).isInfinite
+                                                          ? 0
+                                                          : f(b).isInfinite
+                                                              ? 0
+                                                              : f(a).compareTo(
+                                                                  f(b),
+                                                                ),
                                     ).toInt(),
                                   );
                                 });
@@ -88,37 +131,52 @@ class TeamList extends StatelessWidget {
                                     "Auto Gamepieces",
                                     (final AllTeamData team) => team
                                         .aggregateData.avgData.autoGamepieces,
+                                    "Median",
                                   ),
                                   column(
                                     "Tele Gamepieces",
                                     (final AllTeamData team) => team
-                                        .aggregateData.avgData.teleGamepieces,
+                                        .aggregateData
+                                        .medianData
+                                        .teleGamepieces,
+                                    "Median",
                                   ),
                                   column(
                                     "Gamepieces Scored",
-                                    (final AllTeamData team) =>
-                                        team.aggregateData.avgData.gamepieces,
+                                    (final AllTeamData team) => team
+                                        .aggregateData.medianData.gamepieces,
+                                    "Median",
                                   ),
                                   column(
                                     "Gamepieces Missed",
-                                    (final AllTeamData team) =>
-                                        team.aggregateData.avgData.totalMissed,
+                                    (final AllTeamData team) => team
+                                        .aggregateData.medianData.totalMissed,
+                                    "Median",
                                   ),
                                   column(
                                     "Gamepiece points",
                                     (final AllTeamData team) => team
-                                        .aggregateData.avgData.gamePiecesPoints,
+                                        .aggregateData
+                                        .medianData
+                                        .gamePiecesPoints,
+                                    "Median",
                                   ),
                                   column(
                                     "Climbing Points",
                                     (final AllTeamData team) => team
-                                        .aggregateData.avgData.climbingPoints,
+                                        .aggregateData
+                                        .medianData
+                                        .climbingPoints,
                                     "Without Harmony",
                                   ),
                                   column(
                                     "Climbing Percentage",
                                     (final AllTeamData team) =>
                                         team.climbPercentage,
+                                  ),
+                                  boolColumn(
+                                    "Harmony",
+                                    (final AllTeamData team) => team.harmony,
                                   ),
                                   column(
                                     "Broken matches",
@@ -158,24 +216,28 @@ class TeamList extends StatelessWidget {
                                           ),
                                         ),
                                         ...<double>[
-                                          team.aggregateData.avgData
+                                          team.aggregateData.medianData
                                               .autoGamepieces,
-                                          team.aggregateData.avgData
+                                          team.aggregateData.medianData
                                               .teleGamepieces,
-                                          team.aggregateData.avgData.gamepieces,
-                                          team.aggregateData.avgData
+                                          team.aggregateData.medianData
+                                              .gamepieces,
+                                          team.aggregateData.medianData
                                               .totalMissed,
-                                          team.aggregateData.avgData
+                                          team.aggregateData.medianData
                                               .gamePiecesPoints,
                                         ].map(show),
                                         DataCell(
                                           Text(
-                                            team.aggregateData.avgData
+                                            team.aggregateData.medianData
                                                 .climbingPoints
                                                 .toStringAsFixed(1),
                                           ),
                                         ),
                                         show(team.climbPercentage, true),
+                                        DataCell(
+                                          Text("${team.harmony}"),
+                                        ),
                                         DataCell(
                                           Text(
                                             team.brokenMatches.toString(),
