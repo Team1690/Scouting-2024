@@ -162,7 +162,7 @@ class MatchesScreen extends StatelessWidget {
                                     final QueryResult<void> result =
                                         await client.mutate(
                                       MutationOptions<void>(
-                                        document: gql(mutation),
+                                        document: gql(delete),
                                         variables: <String, dynamic>{
                                           "id": e.id,
                                         },
@@ -219,8 +219,8 @@ class MatchesScreen extends StatelessWidget {
       );
 }
 
-const String mutation = """mutation DeleteMatch(\$id: Int!){
-  delete_matches_by_pk(id: \$id){
+const String delete = """mutation DeleteMatch(\$id: Int!){
+  delete_schedule_matches_by_pk(id: \$id){
   	id
   }
 }""";

@@ -204,7 +204,7 @@ class _ChangeMatchState extends State<ChangeMatch> {
                 ),
                 SubmitButton(
                   getJson: vars.toJson,
-                  mutation: widget.initialVars == null ? mutation : update,
+                  mutation: widget.initialVars == null ? insert : update,
                   resetForm: () {},
                   validate: () => formKey.currentState!.validate(),
                 ),
@@ -215,17 +215,17 @@ class _ChangeMatchState extends State<ChangeMatch> {
       );
 }
 
-const String mutation = r"""
-mutation InsertMatch($match: matches_insert_input!){
-  insert_matches_one(object: $match){
+const String insert = """
+mutation InsertMatch(\$match: schedule_matches_insert_input!){
+  insert_schedule_matches_one(object: \$match){
     id
   }
 }
 """;
 
 const String update = """
-mutation UpdateMatch(\$id: Int!,\$match:matches_set_input!){
-  update_matches_by_pk(_set:\$match, pk_columns:{id:\$id}){
+mutation UpdateMatch(\$id: Int!,\$match: schedule_matches_set_input!){
+  update_schedule_matches_by_pk(_set: \$match, pk_columns: {id: \$id}){
   	id
   }
 }
