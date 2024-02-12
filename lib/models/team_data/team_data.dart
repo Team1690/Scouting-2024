@@ -43,8 +43,8 @@ class TeamData {
       .where(
         (final MatchData element) =>
             element.technicalMatchData != null &&
-            (element.technicalMatchData?.climb == Climb.climbed ||
-                element.technicalMatchData?.climb == Climb.buddyClimbed),
+            (element.technicalMatchData?.climbTitle == Climb.climbed ||
+                element.technicalMatchData?.climbTitle == Climb.buddyClimbed),
       )
       .length;
   double get climbPercentage =>
