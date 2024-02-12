@@ -10,7 +10,6 @@ class ValueSliders extends StatefulWidget {
     double ampSlider,
     double speakerSlider,
     double trapSlider,
-    bool filter1,
   ) onButtonPress;
 
   @override
@@ -23,7 +22,6 @@ class _ValueSlidersState extends State<ValueSliders> {
   double ampFactor = 0.5;
   double speakerFactor = 0.5;
   double trapFactor = 0.5;
-  bool filter1 = false;
   @override
   Widget build(final BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
@@ -61,20 +59,6 @@ class _ValueSlidersState extends State<ValueSliders> {
           const SizedBox(
             height: 10,
           ),
-          SectionDivider(label: "Filters"),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              //TODO add more filters if needed
-              ToggleButtons(
-                children: const <Text>[Text("Filter Feeder")],
-                isSelected: <bool>[filter1],
-                onPressed: (final int unused) => setState(() {
-                  filter1 = !filter1;
-                }),
-              ),
-            ],
-          ),
           const SizedBox(
             height: 10,
           ),
@@ -85,7 +69,6 @@ class _ValueSlidersState extends State<ValueSliders> {
               ampFactor,
               speakerFactor,
               trapFactor,
-              filter1,
             ),
             icon: Icons.calculate_outlined,
             onLongPress: () => widget.onButtonPress(
@@ -93,7 +76,6 @@ class _ValueSlidersState extends State<ValueSliders> {
               ampFactor,
               speakerFactor,
               trapFactor,
-              filter1,
             ),
           ),
         ],
