@@ -58,7 +58,7 @@ class Gamechart extends StatelessWidget {
                     title: "Climbed",
                     matches: data.matches,
                     data: (final MatchData p0) =>
-                        p0.technicalMatchData!.climb.chartHeight.toInt(),
+                        p0.technicalMatchData!.climbTitle.chartHeight.toInt(),
                     heightToTitles: <int, String>{
                       for (final Climb climb in Climb.values)
                         climb.chartHeight.toInt(): climb.title,

@@ -11,7 +11,6 @@ class TechnicalMatchData {
     required this.data,
     required this.harmonyWith,
     required this.climbTitle,
-    required this.climbPoints,
     required this.matchIdentifier,
     required this.startingPosition,
   });
@@ -21,7 +20,6 @@ class TechnicalMatchData {
   final TechnicalData<int> data;
   final int harmonyWith;
   final Climb climbTitle;
-  final Climb climbPoints;
   final int scheduleMatchId;
   final StartingPosition startingPosition;
 
@@ -32,7 +30,6 @@ class TechnicalMatchData {
         ),
         harmonyWith: match["harmony_with"] as int,
         climbTitle: climbTitleToEnum(match["climb"]["title"] as String),
-        climbPoints: climbPointsToEnum(match["climb"]["points"] as int),
         scheduleMatchId: match["schedule_match"]["id"] as int,
         data: TechnicalData.parse(match),
         startingPosition: startingPosTitleToEnum(

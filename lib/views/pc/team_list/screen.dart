@@ -1,14 +1,10 @@
 import "package:flutter/material.dart";
-import "package:graphql/client.dart";
-import "package:scouting_frontend/models/enums/match_mode_enum.dart";
-import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/net/hasura_helper.dart";
+import "package:scouting_frontend/models/fetch_functions/fetch_all_teams.dart";
+import "package:scouting_frontend/models/team_data/all_team_data.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
-import "package:scouting_frontend/models/enums/point_giver_enum.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class TeamList extends StatelessWidget {
   const TeamList();
@@ -17,11 +13,11 @@ class TeamList extends StatelessWidget {
   Widget build(final BuildContext context) => DashboardScaffold(
         body: Padding(
           padding: const EdgeInsets.all(defaultPadding),
-          child: StreamBuilder<List<_Team>>(
-            stream: _fetchTeamList(),
+          child: StreamBuilder<List<AllTeamData>>(
+            stream: fetchAllTeams(),
             builder: (
               final BuildContext context,
-              final AsyncSnapshot<List<_Team>> snapshot,
+              final AsyncSnapshot<List<AllTeamData>> snapshot,
             ) {
               if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
@@ -35,7 +31,7 @@ class TeamList extends StatelessWidget {
               int? sortedColumn;
               bool isAscending = false;
               return snapshot.data.mapNullable(
-                    (final List<_Team> data) => StatefulBuilder(
+                    (final List<AllTeamData> data) => StatefulBuilder(
                       builder: (
                         final BuildContext context,
                         final void Function(void Function()) setState,
@@ -48,7 +44,7 @@ class TeamList extends StatelessWidget {
 
                         DataColumn column(
                           final String title,
-                          final num Function(_Team) f, [
+                          final num Function(AllTeamData) f, [
                           final String? toolTip,
                         ]) =>
                             DataColumn(
@@ -61,7 +57,10 @@ class TeamList extends StatelessWidget {
                                       sortedColumn == index && !isAscending;
                                   sortedColumn = index;
                                   data.sort(
-                                    (final _Team a, final _Team b) =>
+                                    (
+                                      final AllTeamData a,
+                                      final AllTeamData b,
+                                    ) =>
                                         reverseUnless(
                                       isAscending,
                                       f(a).compareTo(f(b)),
@@ -87,50 +86,49 @@ class TeamList extends StatelessWidget {
                                   ),
                                   column(
                                     "Auto Gamepieces",
-                                    (final _Team team) => team.autoGamepieceAvg,
+                                    (final AllTeamData team) => team
+                                        .aggregateData.avgData.autoGamepieces,
                                   ),
                                   column(
                                     "Tele Gamepieces",
-                                    (final _Team team) => team.teleGamepieceAvg,
+                                    (final AllTeamData team) => team
+                                        .aggregateData.avgData.teleGamepieces,
                                   ),
                                   column(
                                     "Gamepieces Scored",
-                                    (final _Team team) => team.gamepieceAvg,
+                                    (final AllTeamData team) =>
+                                        team.aggregateData.avgData.gamepieces,
                                   ),
                                   column(
-                                    "Gamepieces Delivered",
-                                    (final _Team team) => team.deliveredAvg,
+                                    "Gamepieces Missed",
+                                    (final AllTeamData team) =>
+                                        team.aggregateData.avgData.totalMissed,
                                   ),
                                   column(
                                     "Gamepiece points",
-                                    (final _Team team) =>
-                                        team.gamepiecePointAvg,
+                                    (final AllTeamData team) => team
+                                        .aggregateData.avgData.gamePiecesPoints,
                                   ),
                                   column(
-                                    "Auto balance points",
-                                    (final _Team team) =>
-                                        team.autoBalancePointsAvg,
-                                    "Avg points / Matches Balanced / Matches played",
+                                    "Climbing Points",
+                                    (final AllTeamData team) => team
+                                        .aggregateData.avgData.climbingPoints,
+                                    "Without Harmony",
                                   ),
                                   column(
-                                    "Endgame balance points",
-                                    (final _Team team) =>
-                                        team.endgameBalancePointsAvg,
-                                    "Avg points / Matches Balanced / Matches played",
-                                  ),
-                                  column(
-                                    "Auto balance percentage",
-                                    (final _Team team) =>
-                                        team.autoBalancePercentage,
+                                    "Climbing Percentage",
+                                    (final AllTeamData team) =>
+                                        team.climbPercentage,
                                   ),
                                   column(
                                     "Broken matches",
-                                    (final _Team team) => team.brokenMatches,
+                                    (final AllTeamData team) =>
+                                        team.brokenMatches,
                                   ),
                                 ],
                                 rows: <DataRow>[
                                   ...data.map(
-                                    (final _Team team) => DataRow(
+                                    (final AllTeamData team) => DataRow(
                                       cells: <DataCell>[
                                         DataCell(
                                           Row(
@@ -160,23 +158,24 @@ class TeamList extends StatelessWidget {
                                           ),
                                         ),
                                         ...<double>[
-                                          team.autoGamepieceAvg,
-                                          team.teleGamepieceAvg,
-                                          team.gamepieceAvg,
-                                          team.deliveredAvg,
-                                          team.gamepiecePointAvg,
+                                          team.aggregateData.avgData
+                                              .autoGamepieces,
+                                          team.aggregateData.avgData
+                                              .teleGamepieces,
+                                          team.aggregateData.avgData.gamepieces,
+                                          team.aggregateData.avgData
+                                              .totalMissed,
+                                          team.aggregateData.avgData
+                                              .gamePiecesPoints,
                                         ].map(show),
                                         DataCell(
                                           Text(
-                                            "${team.autoBalancePointsAvg.toStringAsFixed(1)} / ${team.matchesBalanced} / ${team.amountOfMatches}",
+                                            team.aggregateData.avgData
+                                                .climbingPoints
+                                                .toStringAsFixed(1),
                                           ),
                                         ),
-                                        DataCell(
-                                          Text(
-                                            "${team.endgameBalancePointsAvg.toStringAsFixed(1)} / ${team.matchesBalanced} / ${team.amountOfMatches}",
-                                          ),
-                                        ),
-                                        show(team.autoBalancePercentage, true),
+                                        show(team.climbPercentage, true),
                                         DataCell(
                                           Text(
                                             team.brokenMatches.toString(),
@@ -207,210 +206,3 @@ DataCell show(final double value, [final bool isPercent = false]) => DataCell(
             : "${value.toStringAsFixed(2)}${isPercent ? "%" : ""}",
       ),
     );
-
-class _Team {
-  const _Team({
-    required this.autoBalancePercentage,
-    required this.autoGamepieceAvg,
-    required this.teleGamepieceAvg,
-    required this.gamepieceAvg,
-    required this.team,
-    required this.autoBalancePointsAvg,
-    required this.endgameBalancePointsAvg,
-    required this.gamepiecePointAvg,
-    required this.brokenMatches,
-    required this.amountOfMatches,
-    required this.matchesBalanced,
-    required this.deliveredAvg,
-  });
-  final double autoGamepieceAvg;
-  final double teleGamepieceAvg;
-  final double gamepieceAvg;
-  final double deliveredAvg;
-  final LightTeam team;
-  final double gamepiecePointAvg;
-  final double autoBalancePointsAvg;
-  final double endgameBalancePointsAvg;
-  final double autoBalancePercentage;
-  final int brokenMatches;
-  final int amountOfMatches;
-  final int matchesBalanced;
-}
-
-Stream<List<_Team>> _fetchTeamList() => getClient()
-    .subscribe(
-      SubscriptionOptions<List<_Team>>(
-        document: gql(query),
-        parserFn: (final Map<String, dynamic> data) {
-          final List<dynamic> teams = data["team"] as List<dynamic>;
-          return teams.map<_Team>((final dynamic team) {
-            final List<int> autoBalancePoints =
-                (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
-                    .where(
-                      (final dynamic node) =>
-                          node["auto_balance"]["title"] != "No attempt",
-                    )
-                    .map(
-                      (final dynamic node) =>
-                          node["auto_balance"]["auto_points"] as int,
-                    )
-                    .toList();
-            final List<int> endgameBalancePoints =
-                (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
-                    .where(
-                      (final dynamic node) =>
-                          node["endgame_balance"]["title"] != "No attempt",
-                    )
-                    .map(
-                      (final dynamic node) =>
-                          node["endgame_balance"]["endgame_points"] as int,
-                    )
-                    .toList();
-            final List<RobotFieldStatus> robotMatchStatuses =
-                (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
-                    .map(
-                      (final dynamic node) => robotFieldStatusTitleToEnum(
-                        node["robot_match_status"]["title"] as String,
-                      ),
-                    )
-                    .toList();
-            final List<String> autoBalance =
-                (team["technical_matches_aggregate"]["nodes"] as List<dynamic>)
-                    .map(
-                      (final dynamic node) =>
-                          node["auto_balance"]["title"] as String,
-                    )
-                    .where((final String title) => title != "No attempt")
-                    .toList();
-            final double autoBalancePercentage = (autoBalance
-                        .where(
-                          (final String title) => title != "Failed",
-                        )
-                        .length /
-                    autoBalance.length) *
-                100;
-            final dynamic avg =
-                team["technical_matches_aggregate"]["aggregate"]["avg"];
-            final double autoGamepieceDelivered = avg["auto_cones_top"] == null
-                ? double.nan
-                : (avg["auto_cones_delivered"] as double) +
-                    (avg["auto_cubes_delivered"] as double);
-            final double teleGamepieceDelivered = avg["auto_cones_top"] == null
-                ? double.nan
-                : (avg["tele_cones_delivered"] as double) +
-                    (avg["tele_cubes_delivered"] as double);
-            final double gamepiecePointsAvg = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPoints(parseMatch(avg));
-            final double autoGamepieceAvg = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPieces(
-                    parseByMode(
-                      MatchMode.auto,
-                      avg,
-                    ),
-                  );
-            final double teleGamepieceAvg = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPieces(
-                    parseByMode(
-                      MatchMode.tele,
-                      avg,
-                    ),
-                  );
-            final double gamepieceSum = avg["auto_cones_top"] == null
-                ? double.nan
-                : getPieces(parseMatch(avg));
-            final double autoBalancePointAvg =
-                autoBalancePoints.averageOrNull ?? double.nan;
-            final double endgameBalancePointAvg =
-                endgameBalancePoints.averageOrNull ?? double.nan;
-            endgameBalancePoints.averageOrNull ?? double.nan;
-            return _Team(
-              amountOfMatches: (team["technical_matches_aggregate"]["nodes"]
-                      as List<dynamic>)
-                  .length,
-              matchesBalanced: (team["technical_matches_aggregate"]["nodes"]
-                      as List<dynamic>)
-                  .map(
-                    (final dynamic node) =>
-                        node["auto_balance"]["title"] as String,
-                  )
-                  .where(
-                    (final String title) =>
-                        title != "No attempt" && title != "Failed",
-                  )
-                  .length,
-              autoBalancePercentage: autoBalancePercentage,
-              brokenMatches: robotMatchStatuses
-                  .where(
-                    (final RobotFieldStatus robotMatchStatus) =>
-                        robotMatchStatus != RobotFieldStatus.worked,
-                  )
-                  .length,
-              autoGamepieceAvg: autoGamepieceAvg - autoGamepieceDelivered,
-              teleGamepieceAvg: teleGamepieceAvg,
-              gamepieceAvg: gamepieceSum -
-                  autoGamepieceDelivered -
-                  teleGamepieceDelivered,
-              deliveredAvg: autoGamepieceDelivered + teleGamepieceDelivered,
-              gamepiecePointAvg: gamepiecePointsAvg,
-              team: LightTeam.fromJson(team),
-              autoBalancePointsAvg: autoBalancePointAvg,
-              endgameBalancePointsAvg: endgameBalancePointAvg,
-            );
-          }).toList();
-        },
-      ),
-    )
-    .map(
-      (final QueryResult<List<_Team>> event) => event.mapQueryResult(),
-    );
-
-const String query = """
-subscription MySubscription {
-  team {
-    id
-    name
-    number
-    colors_index
-    technical_matches_aggregate(where: {ignored: {_eq: false}}) {
-      aggregate {
-        avg {
-          auto_cones_low
-          auto_cones_mid
-          auto_cones_top
-          auto_cubes_low
-          auto_cubes_mid
-          auto_cubes_top
-          tele_cones_low
-          tele_cones_mid
-          tele_cones_top
-          tele_cubes_low
-          tele_cubes_mid
-          tele_cubes_top
-          auto_cones_delivered
-          tele_cones_delivered
-          auto_cubes_delivered
-          tele_cubes_delivered
-        }
-      }
-      nodes {
-        robot_match_status {
-          title
-        }
-        auto_balance {
-          title
-          auto_points
-          order
-        }
-        endgame_balance {
-          title
-          endgame_points
-          order
-        }
-      }
-    }
-  }
-}
-""";
