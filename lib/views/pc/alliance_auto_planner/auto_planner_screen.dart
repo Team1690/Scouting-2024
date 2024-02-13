@@ -238,7 +238,11 @@ class _AutoPlannerState extends State<AutoPlanner> {
                             children: <Widget>[
                               Text(
                                 "Starting Near ${e.title}",
-                                style: const TextStyle(fontSize: 20),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: selectedTeams[e]?.lightTeam.color ??
+                                      Colors.white,
+                                ),
                               ),
                               Selector<TeamData>(
                                 options: widget.data
