@@ -28,9 +28,10 @@ class AutoPlannerScreen extends StatelessWidget {
   Widget build(final BuildContext context) => isPC(context)
       ? DashboardScaffold(
           body: Padding(
-          padding: const EdgeInsets.all(defaultPadding),
-          child: AutoScreenTeamSelection(initialTeams),
-        ))
+            padding: const EdgeInsets.all(defaultPadding),
+            child: AutoScreenTeamSelection(initialTeams),
+          ),
+        )
       : Scaffold(
           appBar: AppBar(
             title: const Text("Alliance Auto"),
@@ -43,7 +44,8 @@ class AutoPlannerScreen extends StatelessWidget {
               child: AutoScreenTeamSelection(initialTeams),
               scrollDirection: isPC(context) ? Axis.horizontal : Axis.vertical,
             ),
-          ));
+          ),
+        );
 }
 
 class AutoScreenTeamSelection extends StatefulWidget {
@@ -126,7 +128,7 @@ class _AutoScreenTeamSelectionState extends State<AutoScreenTeamSelection> {
             return const Center(child: CircularProgressIndicator());
           }
           return Column(
-            children: [
+            children: <Widget>[
               Flex(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
@@ -382,19 +384,25 @@ class _AutoPlannerState extends State<AutoPlanner> {
             .toList();
     final List<MatchIdentifier> matchesUsingAuto = matchesAtPos
         .where(
-          (final ({
-                    Sketch sketch,
-                    StartingPosition startingPos,
-                    MatchIdentifier matchIdentifier
-                  }) match) =>
+          (
+            final ({
+              Sketch sketch,
+              StartingPosition startingPos,
+              MatchIdentifier matchIdentifier
+            }) match,
+          ) =>
               match.sketch.url == selectedAutos[startingPos]?.$1.url,
         )
-        .map((final ({
-                  Sketch sketch,
-                  StartingPosition startingPos,
-                  MatchIdentifier matchIdentifier
-                }) e) =>
-            e.matchIdentifier)
+        .map(
+          (
+            final ({
+              Sketch sketch,
+              StartingPosition startingPos,
+              MatchIdentifier matchIdentifier
+            }) e,
+          ) =>
+              e.matchIdentifier,
+        )
         .toList();
     return selectedTeams[startingPos]!
         .technicalMatches
@@ -457,11 +465,13 @@ class _AutoPlannerState extends State<AutoPlanner> {
         final List<Sketch> uniqueAuto = distinct(
           matchesAtPos
               .map(
-                (final ({
-                          Sketch sketch,
-                          StartingPosition startingPos,
-                          MatchIdentifier matchIdentifier
-                        }) match) =>
+                (
+                  final ({
+                    Sketch sketch,
+                    StartingPosition startingPos,
+                    MatchIdentifier matchIdentifier
+                  }) match,
+                ) =>
                     match.sketch,
               )
               .toList(),
@@ -502,8 +512,10 @@ class _AutoPlannerState extends State<AutoPlanner> {
   }
 }
 
-Widget shouldScroll(
-        {required final Widget child, required final bool shouldScroll}) =>
+Widget shouldScroll({
+  required final Widget child,
+  required final bool shouldScroll,
+}) =>
     shouldScroll
         ? SingleChildScrollView(
             child: SingleChildScrollView(child: child),
