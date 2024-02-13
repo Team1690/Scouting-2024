@@ -143,7 +143,9 @@ subscription MyQuery {
       id
     }
     message
-    match_type_id
+    match_type {
+      title
+    }
     match_number
   }
 }

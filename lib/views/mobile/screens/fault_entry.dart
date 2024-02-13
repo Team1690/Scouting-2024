@@ -1,3 +1,4 @@
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/team_model.dart";
 
 class FaultEntry {
@@ -9,7 +10,7 @@ class FaultEntry {
     required this.matchNumber,
     required this.matchType,
   });
-  final int? matchType;
+  final MatchType matchType;
   final int? matchNumber;
   final String faultMessage;
   final int id;
@@ -22,6 +23,6 @@ class FaultEntry {
         id: fault["id"] as int,
         faultStatus: fault["fault_status"]["title"] as String,
         matchNumber: fault["match_number"] as int?,
-        matchType: fault["fault_status"]["order"] as int?,
+        matchType: matchTypeTitleToEnum(fault["match_type"]["title"] as String),
       );
 }
