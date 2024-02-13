@@ -68,7 +68,16 @@ class _AutoScreenTeamSelectionState extends State<AutoScreenTeamSelection> {
 
   @override
   Widget build(final BuildContext context) => FutureBuilder<
-          List<(TeamData, List<(Sketch, StartingPosition, MatchIdentifier)>)>>(
+          List<
+              (
+                TeamData,
+                List<
+                    ({
+                      Sketch sketch,
+                      StartingPosition startingPos,
+                      MatchIdentifier matchIdentifier
+                    })>
+              )>>(
         future: teams.whereNotNull().isNotEmpty
             ? fetchDataAndPaths(
                 context,
@@ -78,11 +87,21 @@ class _AutoScreenTeamSelectionState extends State<AutoScreenTeamSelection> {
                 List<
                     (
                       TeamData,
-                      List<(Sketch, StartingPosition, MatchIdentifier)>
+                      List<
+                          ({
+                            Sketch sketch,
+                            StartingPosition startingPos,
+                            MatchIdentifier matchIdentifier
+                          })>
                     )>>(
                 () => <(
                   TeamData,
-                  List<(Sketch, StartingPosition, MatchIdentifier)>
+                  List<
+                      ({
+                        Sketch sketch,
+                        StartingPosition startingPos,
+                        MatchIdentifier matchIdentifier
+                      })>
                 )>[],
               ),
         builder: (
@@ -91,7 +110,12 @@ class _AutoScreenTeamSelectionState extends State<AutoScreenTeamSelection> {
                   List<
                       (
                         TeamData,
-                        List<(Sketch, StartingPosition, MatchIdentifier)>
+                        List<
+                            ({
+                              Sketch sketch,
+                              StartingPosition startingPos,
+                              MatchIdentifier matchIdentifier
+                            })>
                       )>>
               snapshot,
         ) {
@@ -161,7 +185,12 @@ class AutoPlanner extends StatefulWidget {
   final List<
       (
         TeamData,
-        List<(Sketch, StartingPosition, MatchIdentifier)>,
+        List<
+            ({
+              Sketch sketch,
+              StartingPosition startingPos,
+              MatchIdentifier matchIdentifier
+            })>,
       )> data;
 
   @override
@@ -216,11 +245,11 @@ class _AutoPlannerState extends State<AutoPlanner> {
                                         final (
                                           TeamData,
                                           List<
-                                              (
-                                                Sketch,
-                                                StartingPosition,
-                                                MatchIdentifier
-                                              )>
+                                              ({
+                                                Sketch sketch,
+                                                StartingPosition startingPos,
+                                                MatchIdentifier matchIdentifier
+                                              })>
                                         ) e,
                                       ) =>
                                           e.$1,
@@ -309,13 +338,19 @@ class _AutoPlannerState extends State<AutoPlanner> {
   List<TechnicalMatchData> getAutoData(
     final StartingPosition startingPos,
   ) {
-    final List<(Sketch, StartingPosition, MatchIdentifier)> matchesAtPos =
-        widget.data
+    final List<
+            ({Sketch sketch, StartingPosition startingPos, MatchIdentifier matchIdentifier})>
+        matchesAtPos = widget.data
             .where(
               (
                 final (
                   TeamData,
-                  List<(Sketch, StartingPosition, MatchIdentifier)>
+                  List<
+                      ({
+                        Sketch sketch,
+                        StartingPosition startingPos,
+                        MatchIdentifier matchIdentifier
+                      })>
                 ) e,
               ) =>
                   e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam,
@@ -324,24 +359,42 @@ class _AutoPlannerState extends State<AutoPlanner> {
               (
                 final (
                   TeamData,
-                  List<(Sketch, StartingPosition, MatchIdentifier)>
+                  List<
+                      ({
+                        Sketch sketch,
+                        StartingPosition startingPos,
+                        MatchIdentifier matchIdentifier
+                      })>
                 ) e,
               ) =>
                   e.$2.where(
                 (
-                  final (Sketch, StartingPosition, MatchIdentifier) element,
+                  final ({
+                    Sketch sketch,
+                    StartingPosition startingPos,
+                    MatchIdentifier matchIdentifier
+                  }) element,
                 ) =>
-                    element.$2 == startingPos,
+                    element.startingPos == startingPos,
               ),
             )
             .flattened
             .toList();
     final List<MatchIdentifier> matchesUsingAuto = matchesAtPos
         .where(
-          (final (Sketch, StartingPosition, MatchIdentifier) match) =>
-              match.$1.url == selectedAutos[startingPos]?.$1.url,
+          (final ({
+                    Sketch sketch,
+                    StartingPosition startingPos,
+                    MatchIdentifier matchIdentifier
+                  }) match) =>
+              match.sketch.url == selectedAutos[startingPos]?.$1.url,
         )
-        .map((final (Sketch, StartingPosition, MatchIdentifier) e) => e.$3)
+        .map((final ({
+                  Sketch sketch,
+                  StartingPosition startingPos,
+                  MatchIdentifier matchIdentifier
+                }) e) =>
+            e.matchIdentifier)
         .toList();
     return selectedTeams[startingPos]!
         .technicalMatches
@@ -358,13 +411,19 @@ class _AutoPlannerState extends State<AutoPlanner> {
     final Sketch? selectedAuto = await showDialog<Sketch?>(
       context: context,
       builder: (final BuildContext dialogContext) {
-        final List<(Sketch, StartingPosition, MatchIdentifier)> matchesAtPos =
-            widget.data
+        final List<
+                ({Sketch sketch, StartingPosition startingPos, MatchIdentifier matchIdentifier})>
+            matchesAtPos = widget.data
                 .where(
                   (
                     final (
                       TeamData,
-                      List<(Sketch, StartingPosition, MatchIdentifier)>
+                      List<
+                          ({
+                            Sketch sketch,
+                            StartingPosition startingPos,
+                            MatchIdentifier matchIdentifier
+                          })>
                     ) e,
                   ) =>
                       e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam,
@@ -373,14 +432,23 @@ class _AutoPlannerState extends State<AutoPlanner> {
                   (
                     final (
                       TeamData,
-                      List<(Sketch, StartingPosition, MatchIdentifier)>
+                      List<
+                          ({
+                            Sketch sketch,
+                            StartingPosition startingPos,
+                            MatchIdentifier matchIdentifier
+                          })>
                     ) e,
                   ) =>
                       e.$2.where(
                     (
-                      final (Sketch, StartingPosition, MatchIdentifier) element,
+                      final ({
+                        Sketch sketch,
+                        StartingPosition startingPos,
+                        MatchIdentifier matchIdentifier
+                      }) element,
                     ) =>
-                        element.$2 == startingPos,
+                        element.startingPos == startingPos,
                   ),
                 )
                 .flattened
@@ -389,8 +457,12 @@ class _AutoPlannerState extends State<AutoPlanner> {
         final List<Sketch> uniqueAuto = distinct(
           matchesAtPos
               .map(
-                (final (Sketch, StartingPosition, MatchIdentifier) match) =>
-                    match.$1,
+                (final ({
+                          Sketch sketch,
+                          StartingPosition startingPos,
+                          MatchIdentifier matchIdentifier
+                        }) match) =>
+                    match.sketch,
               )
               .toList(),
         );

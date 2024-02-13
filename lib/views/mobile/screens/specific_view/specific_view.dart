@@ -38,9 +38,24 @@ class _SpecificState extends State<Specific> {
   (ui.Image, ui.Image)? fieldImages;
   late SpecificVars vars = SpecificVars(context);
   bool intialIsRed = false;
-  late Future<List<(Sketch, StartingPosition, MatchIdentifier)>> pathsFuture =
-      Future<List<(Sketch, StartingPosition, MatchIdentifier)>>(
-    () => <(Sketch, StartingPosition, MatchIdentifier)>[],
+  late Future<
+      List<
+          ({
+            Sketch sketch,
+            StartingPosition startingPos,
+            MatchIdentifier matchIdentifier
+          })>> pathsFuture = Future<
+      List<
+          ({
+            Sketch sketch,
+            StartingPosition startingPos,
+            MatchIdentifier matchIdentifier
+          })>>(
+    () => <({
+      Sketch sketch,
+      StartingPosition startingPos,
+      MatchIdentifier matchIdentifier
+    })>[],
   );
 
   @override
@@ -58,12 +73,22 @@ class _SpecificState extends State<Specific> {
               Padding(
                 padding: const EdgeInsets.all(defaultPadding),
                 child: FutureBuilder<
-                    List<(Sketch, StartingPosition, MatchIdentifier)>>(
+                    List<
+                        ({
+                          Sketch sketch,
+                          StartingPosition startingPos,
+                          MatchIdentifier matchIdentifier
+                        })>>(
                   future: pathsFuture,
                   builder: (
                     final BuildContext context,
                     final AsyncSnapshot<
-                            List<(Sketch, StartingPosition, MatchIdentifier)>>
+                            List<
+                                ({
+                                  Sketch sketch,
+                                  StartingPosition startingPos,
+                                  MatchIdentifier matchIdentifier
+                                })>>
                         snapshot,
                   ) =>
                       SingleChildScrollView(
@@ -161,13 +186,13 @@ class _SpecificState extends State<Specific> {
                                 snapshot.data
                                         ?.map(
                                           (
-                                            final (
-                                              Sketch,
-                                              StartingPosition,
-                                              MatchIdentifier
-                                            ) autoData,
+                                            final ({
+                                              Sketch sketch,
+                                              StartingPosition startingPos,
+                                              MatchIdentifier matchIdentifier
+                                            }) autoData,
                                           ) =>
-                                              autoData.$1,
+                                              autoData.sketch,
                                         )
                                         .toList() ??
                                     <Sketch>[],
@@ -282,16 +307,16 @@ class _SpecificState extends State<Specific> {
                                 setState(() {
                                   pathsFuture = Future<
                                       List<
-                                          (
-                                            Sketch,
-                                            StartingPosition,
-                                            MatchIdentifier
-                                          )>>(
-                                    () => <(
-                                      Sketch,
-                                      StartingPosition,
-                                      MatchIdentifier
-                                    )>[],
+                                          ({
+                                            Sketch sketch,
+                                            StartingPosition startingPos,
+                                            MatchIdentifier matchIdentifier
+                                          })>>(
+                                    () => <({
+                                      Sketch sketch,
+                                      StartingPosition startingPos,
+                                      MatchIdentifier matchIdentifier
+                                    })>[],
                                   );
                                   vars = vars.reset(context);
                                   nameController.clear();

@@ -88,7 +88,13 @@ Future<({List<ui.Offset> path, bool isRed})> fetchPath(
   return parseAutoCsv(csv);
 }
 
-Future<List<(Sketch, StartingPosition, MatchIdentifier)>> getPaths(
+Future<
+    List<
+        ({
+          Sketch sketch,
+          StartingPosition startingPos,
+          MatchIdentifier matchIdentifier
+        })>> getPaths(
   final int teamId,
   final bool shouldDistinct,
 ) async {
@@ -110,28 +116,42 @@ Future<List<(Sketch, StartingPosition, MatchIdentifier)>> getPaths(
           final ({bool isRed, List<ui.Offset> path}) element,
         ) =>
             (
-          Sketch(
+          sketch: Sketch(
             points: element.path,
             isRed: element.isRed,
             url: urls[index].$1,
           ),
-          urls[index].$2,
-          urls[index].$3
+          startingPos: urls[index].$2,
+          matchIdentifier: urls[index].$3
         ),
       )
       .toList();
 }
 
 //TODO turn this into a model instead of a tuple within a tuple
-Future<List<(TeamData, List<(Sketch, StartingPosition, MatchIdentifier)>)>>
-    fetchDataAndPaths(
+Future<
+    List<
+        (
+          TeamData,
+          List<
+              ({
+                Sketch sketch,
+                StartingPosition startingPos,
+                MatchIdentifier matchIdentifier
+              })>
+        )>> fetchDataAndPaths(
   final BuildContext context,
   final List<int> teamIds,
 ) async {
   final SplayTreeSet<TeamData> data =
       await fetchMultipleTeamData(teamIds, context);
-  final List<List<(Sketch, StartingPosition, MatchIdentifier)>> paths =
-      await Future.wait(
+  final List<
+      List<
+          ({
+            Sketch sketch,
+            StartingPosition startingPos,
+            MatchIdentifier matchIdentifier
+          })>> paths = await Future.wait(
     data
         .map((final TeamData element) => getPaths(element.lightTeam.id, false))
         .toList(),
@@ -140,7 +160,13 @@ Future<List<(TeamData, List<(Sketch, StartingPosition, MatchIdentifier)>)>>
       .mapIndexed(
         (
           final int index,
-          final List<(Sketch, StartingPosition, MatchIdentifier)> element,
+          final List<
+                  ({
+                    Sketch sketch,
+                    StartingPosition startingPos,
+                    MatchIdentifier matchIdentifier
+                  })>
+              element,
         ) =>
             (data.elementAt(index), element),
       )
