@@ -37,6 +37,11 @@ class TeamList extends StatelessWidget {
                         final BuildContext context,
                         final void Function(void Function()) setState,
                       ) {
+                        num reverseUnless<T extends num>(
+                          final bool condition,
+                          final T x,
+                        ) =>
+                            condition ? x : -x;
                         DataColumn boolColumn(
                           final String title,
                           final bool Function(AllTeamData) f, [
@@ -66,8 +71,25 @@ class TeamList extends StatelessWidget {
                                       final AllTeamData a,
                                       final AllTeamData b,
                                     ) =>
-                                        (isAscending ? 1 : -1) *
-                                        (f(a).compareTo(f(b))),
+                                        reverseUnless(
+                                      isAscending,
+                                      f(a).isNaN && f(b).isNaN
+                                          ? 0
+                                          : f(a).isNaN
+                                              ? 0
+                                              : f(b).isNaN
+                                                  ? 0
+                                                  : f(a).isInfinite &&
+                                                          f(b).isInfinite
+                                                      ? 0
+                                                      : f(a).isInfinite
+                                                          ? 0
+                                                          : f(b).isInfinite
+                                                              ? 0
+                                                              : f(a).compareTo(
+                                                                  f(b),
+                                                                ),
+                                    ).toInt(),
                                   );
                                 });
                               },
@@ -77,38 +99,38 @@ class TeamList extends StatelessWidget {
                             <DataColumn>[
                               column(
                                 "${type.title} Auto Gamepieces",
-                                (final AllTeamData team) => team
-                                    .aggregateData.medianData.autoGamepieces,
+                                (final AllTeamData team) =>
+                                    type.data(team).autoGamepieces,
                                 type.title,
                               ),
                               column(
                                 "${type.title} Tele Gamepieces",
-                                (final AllTeamData team) => team
-                                    .aggregateData.medianData.teleGamepieces,
+                                (final AllTeamData team) =>
+                                    type.data(team).teleGamepieces,
                                 type.title,
                               ),
                               column(
                                 "${type.title} Gamepieces Scored",
                                 (final AllTeamData team) =>
-                                    team.aggregateData.medianData.gamepieces,
+                                    type.data(team).gamepieces,
                                 type.title,
                               ),
                               column(
                                 "${type.title} Gamepieces Missed",
                                 (final AllTeamData team) =>
-                                    team.aggregateData.medianData.totalMissed,
+                                    type.data(team).totalMissed,
                                 type.title,
                               ),
                               column(
                                 "${type.title} Gamepiece points",
-                                (final AllTeamData team) => team
-                                    .aggregateData.medianData.gamePiecesPoints,
+                                (final AllTeamData team) =>
+                                    type.data(team).gamePiecesPoints,
                                 type.title,
                               ),
                               column(
                                 "${type.title} Climbing Points",
-                                (final AllTeamData team) => team
-                                    .aggregateData.medianData.climbingPoints,
+                                (final AllTeamData team) =>
+                                    type.data(team).climbingPoints,
                                 "${type.title} Without Harmony",
                               ),
                             ];
