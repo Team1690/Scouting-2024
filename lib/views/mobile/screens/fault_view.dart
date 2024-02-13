@@ -97,23 +97,7 @@ Stream<List<FaultEntry>> fetchFaults() {
     SubscriptionOptions<List<FaultEntry>>(
       document: gql(query),
       parserFn: (final Map<String, dynamic> data) =>
-          (data["faults"] as List<dynamic>)
-              .map(
-                (final dynamic fault) => FaultEntry(
-                  faultMessage: fault["message"] as String,
-                  team: LightTeam(
-                    fault["team"]["id"] as int,
-                    fault["team"]["number"] as int,
-                    fault["team"]["name"] as String,
-                    fault["team"]["colors_index"] as int,
-                  ),
-                  id: fault["id"] as int,
-                  faultStatus: fault["fault_status"]["title"] as String,
-                  matchNumber: fault["match_number"] as int?,
-                  matchType: fault["fault_status"]["order"] as int?,
-                ),
-              )
-              .toList(),
+          (data["faults"] as List<dynamic>).map(FaultEntry.parse).toList(),
     ),
   );
   return result.map(queryResultToParsed);
