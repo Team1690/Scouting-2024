@@ -110,7 +110,7 @@ Stream<List<FaultEntry>> fetchFaults() {
                   id: fault["id"] as int,
                   faultStatus: fault["fault_status"]["title"] as String,
                   matchNumber: fault["match_number"] as int?,
-                  matchType: fault["match_type"]["order"] as int?,
+                  matchType: fault["fault_status"]["order"] as int?,
                 ),
               )
               .toList(),
@@ -148,6 +148,7 @@ const String query = """
 subscription MyQuery {
   faults(order_by: {fault_status: {order: asc}, team: {number: asc} }) {
     fault_status{
+      order
       title
     }
     id
