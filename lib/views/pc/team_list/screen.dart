@@ -5,10 +5,11 @@ import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/views/pc/team_list/aggregate_type.dart";
+import "package:scouting_frontend/views/pc/team_list/show.dart";
 
 class TeamList extends StatelessWidget {
   const TeamList();
-
   @override
   Widget build(final BuildContext context) => DashboardScaffold(
         body: Padding(
@@ -36,12 +37,6 @@ class TeamList extends StatelessWidget {
                         final BuildContext context,
                         final void Function(void Function()) setState,
                       ) {
-                        num reverseUnless<T extends num>(
-                          final bool condition,
-                          final T x,
-                        ) =>
-                            condition ? x : -x;
-
                         DataColumn boolColumn(
                           final String title,
                           final bool Function(AllTeamData) f, [
@@ -51,25 +46,7 @@ class TeamList extends StatelessWidget {
                               tooltip: toolTip,
                               label: Text(title),
                               numeric: true,
-                              onSort: (final int index, final __) {
-                                setState(() {
-                                  isAscending =
-                                      sortedColumn == index && !isAscending;
-                                  sortedColumn = index;
-                                  data.sort(
-                                    (
-                                      final AllTeamData a,
-                                      final AllTeamData b,
-                                    ) =>
-                                        reverseUnless<int>(
-                                      isAscending,
-                                      f(b) ? 1 : -1,
-                                    ).toInt(),
-                                  );
-                                });
-                              },
                             );
-
                         DataColumn column(
                           final String title,
                           final num Function(AllTeamData) f, [
@@ -89,29 +66,53 @@ class TeamList extends StatelessWidget {
                                       final AllTeamData a,
                                       final AllTeamData b,
                                     ) =>
-                                        reverseUnless(
-                                      isAscending,
-                                      f(a).isNaN && f(b).isNaN
-                                          ? 0
-                                          : f(a).isNaN
-                                              ? 0
-                                              : f(b).isNaN
-                                                  ? 0
-                                                  : f(a).isInfinite &&
-                                                          f(b).isInfinite
-                                                      ? 0
-                                                      : f(a).isInfinite
-                                                          ? 0
-                                                          : f(b).isInfinite
-                                                              ? 0
-                                                              : f(a).compareTo(
-                                                                  f(b),
-                                                                ),
-                                    ).toInt(),
+                                        (isAscending ? 1 : -1) *
+                                        (f(a).compareTo(f(b))),
                                   );
                                 });
                               },
                             );
+
+                        List<DataColumn> columnList(final AggregateType type) =>
+                            <DataColumn>[
+                              column(
+                                "${type.title} Auto Gamepieces",
+                                (final AllTeamData team) => team
+                                    .aggregateData.medianData.autoGamepieces,
+                                type.title,
+                              ),
+                              column(
+                                "${type.title} Tele Gamepieces",
+                                (final AllTeamData team) => team
+                                    .aggregateData.medianData.teleGamepieces,
+                                type.title,
+                              ),
+                              column(
+                                "${type.title} Gamepieces Scored",
+                                (final AllTeamData team) =>
+                                    team.aggregateData.medianData.gamepieces,
+                                type.title,
+                              ),
+                              column(
+                                "${type.title} Gamepieces Missed",
+                                (final AllTeamData team) =>
+                                    team.aggregateData.medianData.totalMissed,
+                                type.title,
+                              ),
+                              column(
+                                "${type.title} Gamepiece points",
+                                (final AllTeamData team) => team
+                                    .aggregateData.medianData.gamePiecesPoints,
+                                type.title,
+                              ),
+                              column(
+                                "${type.title} Climbing Points",
+                                (final AllTeamData team) => team
+                                    .aggregateData.medianData.climbingPoints,
+                                "${type.title} Without Harmony",
+                              ),
+                            ];
+
                         return DashboardCard(
                           title: "Team list",
                           body: SingleChildScrollView(
@@ -127,48 +128,10 @@ class TeamList extends StatelessWidget {
                                     label: Text("Team number"),
                                     numeric: true,
                                   ),
-                                  column(
-                                    "Auto Gamepieces",
-                                    (final AllTeamData team) => team
-                                        .aggregateData.avgData.autoGamepieces,
-                                    "Median",
-                                  ),
-                                  column(
-                                    "Tele Gamepieces",
-                                    (final AllTeamData team) => team
-                                        .aggregateData
-                                        .medianData
-                                        .teleGamepieces,
-                                    "Median",
-                                  ),
-                                  column(
-                                    "Gamepieces Scored",
-                                    (final AllTeamData team) => team
-                                        .aggregateData.medianData.gamepieces,
-                                    "Median",
-                                  ),
-                                  column(
-                                    "Gamepieces Missed",
-                                    (final AllTeamData team) => team
-                                        .aggregateData.medianData.totalMissed,
-                                    "Median",
-                                  ),
-                                  column(
-                                    "Gamepiece points",
-                                    (final AllTeamData team) => team
-                                        .aggregateData
-                                        .medianData
-                                        .gamePiecesPoints,
-                                    "Median",
-                                  ),
-                                  column(
-                                    "Climbing Points",
-                                    (final AllTeamData team) => team
-                                        .aggregateData
-                                        .medianData
-                                        .climbingPoints,
-                                    "Without Harmony",
-                                  ),
+                                  ...columnList(AggregateType.median),
+                                  ...columnList(AggregateType.max),
+                                  ...columnList(AggregateType.min),
+                                  // Other
                                   column(
                                     "Climbing Percentage",
                                     (final AllTeamData team) =>
@@ -186,8 +149,8 @@ class TeamList extends StatelessWidget {
                                 ],
                                 rows: <DataRow>[
                                   ...data.map(
-                                    (final AllTeamData team) => DataRow(
-                                      cells: <DataCell>[
+                                    (final AllTeamData team) {
+                                      final List<DataCell> cells2 = <DataCell>[
                                         DataCell(
                                           Row(
                                             children: <Widget>[
@@ -226,25 +189,45 @@ class TeamList extends StatelessWidget {
                                               .totalMissed,
                                           team.aggregateData.medianData
                                               .gamePiecesPoints,
+                                          team.aggregateData.medianData
+                                              .climbingPoints,
                                         ].map(show),
-                                        DataCell(
-                                          Text(
-                                            team.aggregateData.medianData
-                                                .climbingPoints
-                                                .toStringAsFixed(1),
-                                          ),
-                                        ),
+                                        ...<int>[
+                                          team.aggregateData.maxData
+                                              .autoGamepieces,
+                                          team.aggregateData.maxData
+                                              .teleGamepieces,
+                                          team.aggregateData.maxData.gamepieces,
+                                          team.aggregateData.maxData
+                                              .totalMissed,
+                                          team.aggregateData.maxData
+                                              .gamePiecesPoints,
+                                          team.aggregateData.maxData
+                                              .climbingPoints,
+                                        ].map(show),
+                                        ...<int>[
+                                          team.aggregateData.minData
+                                              .autoGamepieces,
+                                          team.aggregateData.minData
+                                              .teleGamepieces,
+                                          team.aggregateData.minData.gamepieces,
+                                          team.aggregateData.minData
+                                              .totalMissed,
+                                          team.aggregateData.minData
+                                              .gamePiecesPoints,
+                                          team.aggregateData.minData
+                                              .climbingPoints,
+                                        ].map(show),
                                         show(team.climbPercentage, true),
                                         DataCell(
                                           Text("${team.harmony}"),
                                         ),
-                                        DataCell(
-                                          Text(
-                                            team.brokenMatches.toString(),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                        show(team.brokenMatches),
+                                      ];
+                                      return DataRow(
+                                        cells: cells2,
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
@@ -260,11 +243,3 @@ class TeamList extends StatelessWidget {
         ),
       );
 }
-
-DataCell show(final double value, [final bool isPercent = false]) => DataCell(
-      Text(
-        value.isNaN
-            ? "No data"
-            : "${value.toStringAsFixed(2)}${isPercent ? "%" : ""}",
-      ),
-    );
