@@ -1,6 +1,5 @@
 import "dart:convert";
 import "dart:io";
-
 import "package:args/args.dart";
 import "package:dotenv/dotenv.dart";
 import "package:graphql/client.dart";
@@ -47,7 +46,7 @@ void main(final List<String> args) async {
       abbr: "m",
       help: "The match type to fetch the matches for",
       valueHelp: "qm",
-      allowed: const <String>["qm", "qf", "sf", "f", "rb", "ef"],
+      allowed: const <String>["qm", "sf", "f", "ef"],
     );
 
   final ArgResults results = arg.parse(args);
@@ -66,19 +65,14 @@ void main(final List<String> args) async {
         "You need to add an event code add -h for help",
       ));
   final http.Response response = await fetchTeamMatches(event, env);
-
   int userTypeToId(final String tbaType) {
     switch (tbaType) {
       case "qm":
         return matchTypes["Quals"]!;
-      case "qf":
-        return matchTypes["Quarter finals"]!;
       case "sf":
-        return matchTypes["Semi finals"]!;
+        return matchTypes["Double Elims"]!;
       case "f":
         return matchTypes["Finals"]!;
-      case "rb":
-        return matchTypes["Round robin"]!;
       case "ef":
         return matchTypes["Einstein finals"]!;
     }
@@ -91,12 +85,6 @@ void main(final List<String> args) async {
       ));
   String userTypeToTbaType(final String userType) {
     switch (userType) {
-      case "rb":
-        assert(
-          event.contains("cmptx"),
-          "Cant have round robin when its not a championship",
-        );
-        return "sf";
       case "ef":
         assert(
           event.contains("cmptx"),
@@ -123,9 +111,9 @@ void main(final List<String> args) async {
   );
 }
 
-const String mutation = r"""
-mutation InsertMatches($matches: [matches_insert_input!]!) {
-  insert_matches(objects: $matches, on_conflict: {constraint: matches_match_number_match_type_id_key, update_columns: happened}) {
+const String mutation = """
+mutation InsertMatches(\$matches: [schedule_matches_insert_input!]!) {
+  insert_schedule_matches(objects: \$matches, on_conflict: {constraint: schedule_matches_match_number_match_type_id_key, update_columns: happened}) {
     affected_rows
   }
 }
@@ -173,6 +161,7 @@ Future<QueryResult<void>> sendMatches(
   final List<LightTeam> teams,
   final int matchTypeId,
 ) {
+  print("match type id: $matchTypeId");
   final Iterable<Map<String, dynamic>> vars = matches.map<Map<String, dynamic>>(
     (final Match e) => <String, dynamic>{
       "match_number": e.number,
@@ -194,7 +183,7 @@ Future<QueryResult<void>> sendMatches(
             .id,
     },
   );
-
+  print(vars.toList()[0]);
   return client.mutate(
     MutationOptions<void>(
       document: gql(mutation),
@@ -260,7 +249,7 @@ query FetchTeams {
 
 GraphQLClient getClient(final DotEnv env) {
   final HttpLink link = HttpLink(
-    "https://orbitdb2023.hasura.app/v1/graphql",
+    "https://orbitscouting2024.hasura.app/v1/graphql",
     defaultHeaders: <String, String>{
       "x-hasura-admin-secret": env["HASURA_ADMIN_SECRET"]!,
     },
