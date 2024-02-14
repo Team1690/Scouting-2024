@@ -88,7 +88,6 @@ class TeamsSearchBox extends StatelessWidget {
               ),
             ),
           ),
-          hideSuggestionsOnKeyboardHide: false,
           onSuggestionSelected: (final LightTeam team) {
             typeAheadController.text = buildSuggestion(team);
             onChange(
