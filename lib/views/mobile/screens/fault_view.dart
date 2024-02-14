@@ -95,7 +95,7 @@ Stream<List<FaultEntry>> fetchFaults() {
   final GraphQLClient client = getClient();
   final Stream<QueryResult<List<FaultEntry>>> result = client.subscribe(
     SubscriptionOptions<List<FaultEntry>>(
-      document: gql(query),
+      document: gql(subscription),
       parserFn: (final Map<String, dynamic> data) =>
           (data["faults"] as List<dynamic>).map(FaultEntry.parse).toList(),
     ),
@@ -105,10 +105,12 @@ Stream<List<FaultEntry>> fetchFaults() {
 
 class NewFault {
   const NewFault(
+    this.faultStatusId,
     this.message,
     this.team,
     this.scheduleMatchId,
   );
+  final int? faultStatusId;
   final String message;
   final LightTeam team;
   final int? scheduleMatchId;
@@ -128,10 +130,10 @@ Color faultTitleToColor(final String title) {
   throw Exception("$title not a known title");
 }
 
-const String query = """
+const String subscription = """
 subscription MyQuery {
-  faults(order_by: {fault_status: {order: asc}, team: {number: asc} }) {
-    fault_status{
+  faults(order_by: {fault_status: {order: asc}, team: {number: asc}}) {
+    fault_status {
       order
       title
     }
@@ -143,11 +145,13 @@ subscription MyQuery {
       id
     }
     message
-    match_type {
-      title
+    schedule_match {
+      match_type {
+        title
+      }
+      match_number
     }
-    match_number
+    is_rematch
   }
 }
-
 """;

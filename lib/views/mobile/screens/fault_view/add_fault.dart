@@ -17,6 +17,7 @@ class AddFault extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => IconButton(
         onPressed: () async {
+          const int faultStatusId = 1;
           LightTeam? team;
           String? newMessage;
           int? scheduleMatchId;
@@ -63,6 +64,7 @@ class AddFault extends StatelessWidget {
                     if (team == null || newMessage == null) return;
                     Navigator.of(context).pop(
                       NewFault(
+                        faultStatusId,
                         newMessage!,
                         team!,
                         scheduleMatchId,
@@ -84,6 +86,7 @@ class AddFault extends StatelessWidget {
               .mapNullable((final NewFault p0) async {
             showLoadingSnackBar(context);
             final QueryResult<void> result = await _addFault(
+              p0.faultStatusId,
               p0.team.id,
               p0.message,
               p0.scheduleMatchId,
@@ -96,6 +99,7 @@ class AddFault extends StatelessWidget {
 }
 
 Future<QueryResult<void>> _addFault(
+  final int? faultStatusid,
   final int teamId,
   final String message,
   final int? scheduleMatchId,
@@ -104,6 +108,7 @@ Future<QueryResult<void>> _addFault(
       MutationOptions<void>(
         document: gql(_addFaultMutation),
         variables: <String, dynamic>{
+          "fault_status_id": faultStatusid,
           "team_id": teamId,
           "fault_message": message,
           "schedule_match_id": scheduleMatchId,
@@ -112,8 +117,8 @@ Future<QueryResult<void>> _addFault(
     );
 
 const String _addFaultMutation = """
-mutation AddFault(\$team_id:Int,\$fault_message:String \$schedule_match_id:Int){
-  insert_faults(objects: {team_id: \$team_id, message: \$fault_message, schedule_match_id: \$schedule_match_id}) {
+mutation AddFault(\$team_id:Int,\$fault_message:String \$schedule_match_id:Int  \$fault_status_id: Int){
+  insert_faults(objects: {team_id: \$team_id, message: \$fault_message, schedule_match_id: \$schedule_match_id fault_status_id: \$fault_status_id}) {
     affected_rows
   }
 }
