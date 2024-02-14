@@ -161,7 +161,6 @@ Future<QueryResult<void>> sendMatches(
   final List<LightTeam> teams,
   final int matchTypeId,
 ) {
-  print("match type id: $matchTypeId");
   final Iterable<Map<String, dynamic>> vars = matches.map<Map<String, dynamic>>(
     (final Match e) => <String, dynamic>{
       "match_number": e.number,
@@ -183,7 +182,6 @@ Future<QueryResult<void>> sendMatches(
             .id,
     },
   );
-  print(vars.toList()[0]);
   return client.mutate(
     MutationOptions<void>(
       document: gql(mutation),
