@@ -6,6 +6,7 @@ import "package:scouting_frontend/views/mobile/screens/coach_team_info_data.dart
 import "package:scouting_frontend/views/mobile/screens/coach_view.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
+import "package:scouting_frontend/views/mobile/screens/michal_view/michal_screen.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_view.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_view.dart";
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
@@ -69,6 +70,11 @@ class SideNavBar extends StatelessWidget {
               icon: Icons.build,
               title: "Pit",
               widget: PitView.new,
+            ),
+            const NavbarTile(
+              icon: Icons.female_rounded,
+              title: "Michal",
+              widget: MichalScreen.new,
             ),
             const NavbarTile(
               icon: Icons.construction,
