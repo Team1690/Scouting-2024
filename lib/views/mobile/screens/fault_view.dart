@@ -104,8 +104,13 @@ Stream<List<FaultEntry>> fetchFaults() {
 }
 
 class NewFault {
-  const NewFault(this.faultStatusEnum, this.message, this.teamId,
-      this.scheduleMatchId, this.isRematch);
+  const NewFault(
+    this.faultStatusEnum,
+    this.message,
+    this.teamId,
+    this.scheduleMatchId,
+    this.isRematch,
+  );
   final FaultStatus faultStatusEnum;
   final String message;
   final int teamId;

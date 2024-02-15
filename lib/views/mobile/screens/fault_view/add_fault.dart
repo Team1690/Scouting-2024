@@ -27,7 +27,8 @@ class AddFault extends StatelessWidget {
           await (await showDialog<NewFault>(
             context: context,
             builder: (final BuildContext innerContext) => StatefulBuilder(
-              builder: (final BuildContext context, final setState) =>
+              builder: (final BuildContext context,
+                      final void Function(void Function()) setState) =>
                   AlertDialog(
                 title: const Text("Add team"),
                 content: Column(
