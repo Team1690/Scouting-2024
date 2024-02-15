@@ -1,4 +1,5 @@
-import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/enums/fault_status_enum.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_model.dart";
 
 class FaultEntry {
@@ -7,27 +8,20 @@ class FaultEntry {
     required this.team,
     required this.id,
     required this.faultStatus,
-    required this.matchNumber,
-    required this.matchType,
-    required this.isRematch,
+    required this.matchIdentifier,
   });
-  final MatchType matchType;
-  final int? matchNumber;
+  final MatchIdentifier matchIdentifier;
   final String faultMessage;
   final int id;
   final LightTeam team;
-  final String faultStatus;
-  final bool isRematch;
+  final FaultStatus faultStatus;
 
   static FaultEntry parse(final dynamic fault) => FaultEntry(
-        isRematch: fault["is_rematch"] as bool,
+        matchIdentifier: MatchIdentifier.fromJson(fault),
         faultMessage: fault["message"] as String,
         team: LightTeam.fromJson(fault["team"]),
         id: fault["id"] as int,
-        faultStatus: fault["fault_status"]["title"] as String,
-        matchNumber: fault["schedule_match"]["match_number"] as int?,
-        matchType: matchTypeTitleToEnum(
-          fault["schedule_match"]["match_type"]["title"] as String,
-        ),
+        faultStatus:
+            faultStatusTitleToEnum(fault["fault_status"]["title"] as String),
       );
 }

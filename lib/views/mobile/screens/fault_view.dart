@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/models/enums/fault_status_enum.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/add_fault.dart";
@@ -104,37 +104,19 @@ Stream<List<FaultEntry>> fetchFaults() {
 }
 
 class NewFault {
-  const NewFault(
-    this.faultStatusId,
-    this.message,
-    this.team,
-    this.scheduleMatchId,
-  );
-  final int? faultStatusId;
+  const NewFault(this.faultStatusEnum, this.message, this.teamId,
+      this.scheduleMatchId, this.isRematch);
+  final FaultStatus faultStatusEnum;
   final String message;
-  final LightTeam team;
-  final int? scheduleMatchId;
-}
-
-Color faultTitleToColor(final String title) {
-  switch (title) {
-    case "Fixed":
-      return Colors.green;
-    case "In progress":
-      return Colors.yellow;
-    case "No progress":
-      return Colors.red;
-    case "Unknown":
-      return Colors.orange;
-  }
-  throw Exception("$title not a known title");
+  final int teamId;
+  final int scheduleMatchId;
+  final bool isRematch;
 }
 
 const String subscription = """
 subscription MyQuery {
-  faults(order_by: {fault_status: {order: asc}, team: {number: asc}}) {
+  faults(order_by: {fault_status: {order: asc}}) {
     fault_status {
-      order
       title
     }
     id

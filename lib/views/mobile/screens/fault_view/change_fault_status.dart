@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/enums/fault_status_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -21,13 +22,13 @@ class ChangeFaultStatus extends StatelessWidget {
                 -1: null,
                 0: IdProvider.of(
                   context,
-                ).faultStatus.nameToId["Fixed"],
+                ).faultStatus.nameToId[FaultStatus.noProgress.title],
                 1: IdProvider.of(
                   context,
-                ).faultStatus.nameToId["In progress"],
+                ).faultStatus.nameToId[FaultStatus.inProgress.title],
                 2: IdProvider.of(
                   context,
-                ).faultStatus.nameToId["No progress"],
+                ).faultStatus.nameToId[FaultStatus.fixed.title],
               };
               return StatefulBuilder(
                 builder: (
@@ -77,16 +78,18 @@ class ChangeFaultStatus extends StatelessWidget {
                         statusIdState = indexToId[index];
                       });
                     },
-                    colors: const <Color>[
-                      Colors.green,
-                      Colors.yellow,
-                      Colors.red,
-                    ],
-                    labels: const <String>[
-                      "Fixed",
-                      "In progress",
-                      "No progress",
-                    ],
+                    colors: FaultStatus.values
+                        .where(
+                          (final FaultStatus e) => e != FaultStatus.unknown,
+                        )
+                        .map((final FaultStatus e) => e.color)
+                        .toList(),
+                    labels: FaultStatus.values
+                        .where(
+                          (final FaultStatus e) => e != FaultStatus.unknown,
+                        )
+                        .map((final FaultStatus e) => e.title)
+                        .toList(),
                   ),
                 ),
               );
@@ -94,8 +97,13 @@ class ChangeFaultStatus extends StatelessWidget {
           ))
               .mapNullable((final int p0) async {
             showLoadingSnackBar(context);
-            final QueryResult<void> result =
-                await updateFaultStatus(faultId, p0);
+            final QueryResult<void> result = await updateFaultStatus(
+              faultId,
+              faultStatusTitleToEnum(
+                IdProvider.of(context).faultStatus.idToName[statusIdState]!,
+              ),
+              context,
+            );
             onFinished(result);
           });
         },
@@ -105,14 +113,16 @@ class ChangeFaultStatus extends StatelessWidget {
 
 Future<QueryResult<void>> updateFaultStatus(
   final int id,
-  final int faultStatusId,
+  final FaultStatus faultStatus,
+  final BuildContext context,
 ) async =>
     getClient().mutate(
       MutationOptions<void>(
         document: gql(_updateFaultStatusMutation),
         variables: <String, dynamic>{
           "id": id,
-          "fault_status_id": faultStatusId,
+          "fault_status_id":
+              IdProvider.of(context).faultStatus.nameToId[faultStatus.title],
         },
       ),
     );
