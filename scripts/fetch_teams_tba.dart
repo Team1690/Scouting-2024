@@ -58,9 +58,9 @@ Future<http.Response> fetchTeamsFromTba(final String event, final DotEnv env) =>
       headers: <String, String>{"X-TBA-Auth-Key": env["TBA_API_KEY"]!},
     );
 
-const String mutation = r"""
-mutation InsertTeams($teams: [team_insert_input!]!) {
-  insert_team(objects: $teams, on_conflict: {constraint: team_number_key}) {
+const String mutation = """
+mutation InsertTeams(\$teams: [team_insert_input!]!) {
+  insert_team(objects:\$teams, on_conflict: {constraint: team_number_key}) {
     affected_rows
   }
 }
@@ -91,7 +91,7 @@ Future<QueryResult<void>> sendTeams(
 
 GraphQLClient getClient(final DotEnv env) {
   final HttpLink link = HttpLink(
-    "https://orbitdb2023.hasura.app/v1/graphql",
+    "https://orbitscouting2024.hasura.app/v1/graphql",
     defaultHeaders: <String, String>{
       "x-hasura-admin-secret": env["HASURA_ADMIN_SECRET"]!,
     },
