@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/models/enums/fault_status_enum.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/add_fault.dart";
@@ -95,25 +95,9 @@ Stream<List<FaultEntry>> fetchFaults() {
   final GraphQLClient client = getClient();
   final Stream<QueryResult<List<FaultEntry>>> result = client.subscribe(
     SubscriptionOptions<List<FaultEntry>>(
-      document: gql(query),
+      document: gql(subscription),
       parserFn: (final Map<String, dynamic> data) =>
-          (data["faults"] as List<dynamic>)
-              .map(
-                (final dynamic fault) => FaultEntry(
-                  faultMessage: fault["message"] as String,
-                  team: LightTeam(
-                    fault["team"]["id"] as int,
-                    fault["team"]["number"] as int,
-                    fault["team"]["name"] as String,
-                    fault["team"]["colors_index"] as int,
-                  ),
-                  id: fault["id"] as int,
-                  faultStatus: fault["fault_status"]["title"] as String,
-                  matchNumber: fault["match_number"] as int?,
-                  matchType: fault["match_type"]["order"] as int?,
-                ),
-              )
-              .toList(),
+          (data["faults"] as List<dynamic>).map(FaultEntry.parse).toList(),
     ),
   );
   return result.map(queryResultToParsed);
@@ -121,33 +105,23 @@ Stream<List<FaultEntry>> fetchFaults() {
 
 class NewFault {
   const NewFault(
+    this.faultStatusEnum,
     this.message,
-    this.team,
+    this.teamId,
     this.scheduleMatchId,
+    this.isRematch,
   );
+  final FaultStatus faultStatusEnum;
   final String message;
-  final LightTeam team;
-  final int? scheduleMatchId;
+  final int teamId;
+  final int scheduleMatchId;
+  final bool isRematch;
 }
 
-Color faultTitleToColor(final String title) {
-  switch (title) {
-    case "Fixed":
-      return Colors.green;
-    case "In progress":
-      return Colors.yellow;
-    case "No progress":
-      return Colors.red;
-    case "Unknown":
-      return Colors.orange;
-  }
-  throw Exception("$title not a known title");
-}
-
-const String query = """
+const String subscription = """
 subscription MyQuery {
-  faults(order_by: {fault_status: {order: asc}, team: {number: asc} }) {
-    fault_status{
+  faults(order_by: {fault_status: {order: asc}}) {
+    fault_status {
       title
     }
     id
@@ -158,9 +132,13 @@ subscription MyQuery {
       id
     }
     message
-    match_type_id
-    match_number
+    schedule_match {
+      match_type {
+        title
+      }
+      match_number
+    }
+    is_rematch
   }
 }
-
 """;
