@@ -42,10 +42,11 @@ class _PickListState extends State<PickList> {
 
   @override
   Widget build(final BuildContext context) {
-    final List<TextEditingController> controllers = <TextEditingController>[
-      for (int i = 0; i < widget.uiList.length; i++)
-        TextEditingController(text: "${i + 1}"),
-    ];
+    final List<TextEditingController> controllers =
+        List<TextEditingController>.generate(
+      widget.uiList.length,
+      (final int index) => TextEditingController(text: "${index + 1}"),
+    );
     return Container(
       child: ReorderableListView(
         buildDefaultDragHandles: true,
@@ -153,7 +154,6 @@ class _PickListState extends State<PickList> {
                           title: Row(
                             children: <Widget>[
                               Expanded(
-                                flex: 1,
                                 child: Text(
                                   pickListTeam.toString(),
                                 ),
