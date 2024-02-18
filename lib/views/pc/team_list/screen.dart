@@ -70,15 +70,15 @@ class TeamList extends StatelessWidget {
                                     final AllTeamData a,
                                     final AllTeamData b,
                                   ) {
-                                    final bool aHasData = f(a).isNaN;
-                                    final bool bHasData = f(b).isNaN;
+                                    final bool aHasData = f(a).isFinite;
+                                    final bool bHasData = f(b).isFinite;
 
                                     if (!aHasData && !bHasData) {
                                       return 0;
                                     } else if (!aHasData) {
-                                      return -1;
-                                    } else if (!bHasData) {
                                       return 1;
+                                    } else if (!bHasData) {
+                                      return -1;
                                     } else {
                                       return reverseUnless(
                                         isAscending,
