@@ -2,6 +2,7 @@ import "dart:collection";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_data/team_match_data.dart";
@@ -77,13 +78,17 @@ query FetchTeams($ids: [Int!]) @cached {
     second_picklist_index
     third_picklist_index
     faults {
+      is_rematch
       message
       fault_status {
         title
       }
-      match_number
-      match_type {
-        title
+      schedule_match_id
+      schedule_match {
+        match_number
+        match_type {
+          title
+        }
       }
       id
       team {
@@ -159,7 +164,9 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
               .where(
                 (final ScheduleMatch element) =>
                     element.blueAlliance.contains(team) ||
-                    element.redAlliance.contains(team),
+                    element.redAlliance.contains(team) ||
+                    element.matchIdentifier.type == MatchType.practice ||
+                    element.matchIdentifier.type == MatchType.pre,
               )
               .toList();
 
