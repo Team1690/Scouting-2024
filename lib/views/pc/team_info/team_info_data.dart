@@ -7,7 +7,7 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting.dart";
-import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data.dart";
+import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
 import "package:scouting_frontend/models/team_info_models/quick_data.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";

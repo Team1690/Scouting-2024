@@ -39,23 +39,52 @@ class TeamData {
       .map((final MatchData e) => e.specificMatchData)
       .whereNotNull()
       .toList();
-  int get matchesClimbed => matches
+
+  int get matchesClimbedSingle => technicalMatches
       .where(
-        (final MatchData element) =>
-            element.technicalMatchData != null &&
-            (element.technicalMatchData?.climbTitle == Climb.climbed ||
-                element.technicalMatchData?.climbTitle == Climb.buddyClimbed),
+        (final TechnicalMatchData element) =>
+            (element.climb == Climb.climbed ||
+                element.climb == Climb.buddyClimbed) &&
+            element.harmonyWith == 0,
       )
       .length;
+  int get matchesClimbedDouble => technicalMatches
+      .where(
+        (final TechnicalMatchData element) =>
+            (element.climb == Climb.climbed ||
+                element.climb == Climb.buddyClimbed) &&
+            element.harmonyWith == 1,
+      )
+      .length;
+  int get matchesClimbedTriple => technicalMatches
+      .where(
+        (final TechnicalMatchData element) =>
+            (element.climb == Climb.climbed ||
+                element.climb == Climb.buddyClimbed) &&
+            element.harmonyWith == 2,
+      )
+      .length;
+
+  int get matchesClimbed => technicalMatches
+      .where(
+        (final TechnicalMatchData element) => (element.climb == Climb.climbed ||
+            element.climb == Climb.buddyClimbed),
+      )
+      .length;
+
   double get climbPercentage =>
       100 *
       (aggregateData.gamesPlayed == 0
           ? 0
           : matchesClimbed / (aggregateData.gamesPlayed));
+
   double get aim =>
       100 *
       (aggregateData.avgData.gamepieces /
               (aggregateData.avgData.gamepieces +
                   aggregateData.avgData.totalMissed))
           .clamp(double.minPositive, double.maxFinite);
+
+  double get trapSuccessRate =>
+      100 * aggregateData.sumData.trapAmount / aggregateData.gamesPlayed;
 }

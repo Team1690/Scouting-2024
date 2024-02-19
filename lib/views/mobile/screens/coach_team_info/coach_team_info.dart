@@ -9,7 +9,7 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting_card.dart";
-import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data.dart";
+import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
 
 class CoachTeamInfo extends StatelessWidget {
@@ -61,16 +61,16 @@ class CoachTeamInfo extends StatelessWidget {
                       secondPicklistIndex: data.secondPicklistIndex,
                       thirdPicklistIndex: data.thirdPicklistIndex,
                       //TODO: getters...
-                      matchesClimbedSingle: 0,
-                      matchesClimbedDouble: 0,
-                      matchesClimbedTriple: 0,
+                      matchesClimbedSingle: data.matchesClimbedSingle,
+                      matchesClimbedDouble: data.matchesClimbedDouble,
+                      matchesClimbedTriple: data.matchesClimbedTriple,
                       climbPercentage: data.climbPercentage,
                       canHarmony: data.pitData?.harmony,
                       gamepiecePoints:
                           data.aggregateData.avgData.gamePiecesPoints,
                       gamepiecesScored: data.aggregateData.avgData.gamepieces,
                       trapAmount: data.aggregateData.sumData.trapAmount,
-                      trapSuccessRate: 0,
+                      trapSuccessRate: data.trapSuccessRate,
                     ),
                     direction: Axis.vertical,
                   ),
