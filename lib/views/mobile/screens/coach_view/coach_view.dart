@@ -1,90 +1,95 @@
+import "dart:collection";
+
 import "package:carousel_slider/carousel_slider.dart";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:graphql/client.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/data/all_team_data.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
+import "package:scouting_frontend/models/fetch_functions/fetch_all_teams.dart";
+import "package:scouting_frontend/models/fetch_functions/fetch_teams.dart";
+import "package:scouting_frontend/models/matches_provider.dart";
+import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info/coach_team_info.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
-import "package:scouting_frontend/views/pc/picklist/harmony_icon.dart";
-
-import "coach_data.dart";
+import "package:scouting_frontend/views/mobile/screens/coach_view/coach_data.dart";
 
 class CoachView extends StatelessWidget {
   @override
-  Widget build(final BuildContext context) => Scaffold(
-        drawer: SideNavBar(),
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Coach"),
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                innerCoachData.mapNullable(
-                  (final CoachData p0) => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute<CompareScreen>(
-                      builder: (final BuildContext context) =>
-                          CompareScreen(<LightTeam>[
-                        ...p0.blueAlliance,
-                        ...p0.redAlliance,
-                      ]),
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.compare_arrows),
-            ),
-          ],
+  Widget build(final BuildContext context) {
+    final List<ScheduleMatch> matchesWith1690 =
+        MatchesProvider.of(context).matches;
+    final List<LightTeam> teamsThatPlayWith1690 = matchesWith1690
+        .map(
+          (final ScheduleMatch e) =>
+              <LightTeam>[...e.blueAlliance, ...e.redAlliance],
+        )
+        .flattened
+        .toList();
+    return Scaffold(
+      drawer: SideNavBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Coach"),
+      ),
+      body: FutureBuilder<SplayTreeSet<TeamData>>(
+        future: fetchMultipleTeamData(
+          teamsThatPlayWith1690.map((final LightTeam e) => e.id).toList(),
+          context,
         ),
-        body: FutureBuilder<List<CoachData>>(
-          future: fetchMatches(context),
-          builder: (
-            final BuildContext context,
-            final AsyncSnapshot<List<CoachData>> snapshot,
-          ) {
-            if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return snapshot.data.mapNullable((final List<CoachData> data) {
-                  final int initialIndex = data.indexWhere(
-                    (final CoachData element) => !element.happened,
-                  );
-                  coachData = data;
-                  page = initialIndex;
-                  return CarouselSlider(
-                    options: CarouselOptions(
-                      onPageChanged:
-                          (final int index, final CarouselPageChangedReason _) {
-                        page = index;
-                      },
-                      enableInfiniteScroll: false,
-                      height: double.infinity,
-                      aspectRatio: 2.0,
-                      viewportFraction: 1,
-                      initialPage:
-                          initialIndex == -1 ? data.length - 1 : initialIndex,
-                    ),
-                    items: data
-                        .map((final CoachData e) => matchScreen(context, e))
-                        .toList(),
-                  );
-                }) ??
-                (throw Exception("No data"));
-          },
-        ),
-      );
+        builder: (
+          final BuildContext context,
+          final AsyncSnapshot<SplayTreeSet<TeamData>> snapshot,
+        ) {
+          if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return snapshot.data.mapNullable(
+                  (final SplayTreeSet<TeamData> data) => CarouselSlider(
+                        options: CarouselOptions(
+                          enableInfiniteScroll: false,
+                          height: double.infinity,
+                          aspectRatio: 2.0,
+                          viewportFraction: 1,
+                        ),
+                        items: data
+                            .map((final CoachData e) => matchScreen(context, e))
+                            .toList(),
+                      )) ??
+              (throw Exception("No data"));
+        },
+      ),
+    );
+  }
 }
 
 Widget matchScreen(final BuildContext context, final CoachData data) => Column(
       children: <Widget>[
+        IconButton(
+          onPressed: () {
+            data.mapNullable(
+              (final CoachData p0) => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute<CompareScreen>(
+                  builder: (final BuildContext context) => CompareScreen(
+                    <LightTeam>[
+                      ...p0.blueAlliance,
+                      ...p0.redAlliance,
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+          icon: const Icon(Icons.compare_arrows),
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text("${data.matchType}: ${data.matchNumber}"),
