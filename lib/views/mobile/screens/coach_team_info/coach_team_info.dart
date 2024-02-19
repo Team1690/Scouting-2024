@@ -39,7 +39,10 @@ class CoachTeamInfo extends StatelessWidget {
               widgets: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Gamechart(data, Axis.vertical),
+                  child: Gamechart(
+                    data: data,
+                    direction: Axis.vertical,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
