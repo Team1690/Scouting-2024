@@ -49,8 +49,8 @@ class AllTeamData {
   int get matchesClimbed => technicalMatches
       .where(
         (final TechnicalMatchData element) =>
-            element.climb == Climb.climbed ||
-            element.climb == Climb.buddyClimbed,
+            element.climbTitle == Climb.climbed ||
+            element.climbTitle == Climb.buddyClimbed,
       )
       .length;
   double get climbPercentage =>

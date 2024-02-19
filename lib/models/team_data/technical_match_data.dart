@@ -10,7 +10,7 @@ class TechnicalMatchData {
     required this.robotFieldStatus,
     required this.data,
     required this.harmonyWith,
-    required this.climb,
+    required this.climbTitle,
     required this.matchIdentifier,
     required this.startingPosition,
   });
@@ -19,7 +19,7 @@ class TechnicalMatchData {
   final MatchIdentifier matchIdentifier;
   final TechnicalData<int> data;
   final int harmonyWith;
-  final Climb climb;
+  final Climb climbTitle;
   final int scheduleMatchId;
   final StartingPosition startingPosition;
 
@@ -29,7 +29,7 @@ class TechnicalMatchData {
           match["robot_field_status"]["title"] as String,
         ),
         harmonyWith: match["harmony_with"] as int,
-        climb: climbTitleToEnum(match["climb"]["title"] as String),
+        climbTitle: climbTitleToEnum(match["climb"]["title"] as String),
         scheduleMatchId: match["schedule_match"]["id"] as int,
         data: TechnicalData.parse(match),
         startingPosition: startingPosTitleToEnum(

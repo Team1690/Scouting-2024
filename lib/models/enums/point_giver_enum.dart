@@ -1,4 +1,3 @@
-import "package:collection/collection.dart";
 import "package:scouting_frontend/models/enums/match_mode_enum.dart";
 import "package:scouting_frontend/models/enums/place_location_enum.dart";
 
@@ -24,82 +23,28 @@ enum PointGiver {
     points: 1,
   ),
   trap(
-    mode: MatchMode.tele,
+    mode: MatchMode.endGame,
     place: PlaceLocation.trap,
     points: 5,
+  ),
+  climb(
+    mode: MatchMode.endGame,
+    points: 3,
+  ),
+  buddyClimb(
+    mode: MatchMode.endGame,
+    points: 6,
   );
 
   const PointGiver({
     required this.mode,
-    required this.place,
+    this.place,
     required this.points,
   });
 
   final MatchMode mode;
-  final PlaceLocation place;
+  final PlaceLocation? place;
   final int points;
 
   num calcPoints(final num amount) => points * amount;
 }
-
-Map<PointGiver, T> parseByMode<T extends num>(
-  final MatchMode mode,
-  final dynamic match,
-) =>
-    Map<PointGiver, T>.fromEntries(
-      PointGiver.values
-          .where(
-            (final PointGiver pointGiver) =>
-                pointGiver.mode == mode &&
-                pointGiver.place != PlaceLocation.trap,
-          )
-          .map(
-            (final PointGiver pointGiver) => MapEntry<PointGiver, T>(
-              pointGiver,
-              match["${pointGiver.mode.title}_${pointGiver.place.title}"] as T,
-            ),
-          ),
-    );
-
-Map<PointGiver, T> parseByPlace<T extends num>(
-  final PlaceLocation location,
-  final dynamic match,
-) =>
-    Map<PointGiver, T>.fromEntries(
-      PointGiver.values
-          .where(
-            (final PointGiver pointGiver) => pointGiver.place == location,
-          )
-          .map(
-            (final PointGiver pointGiver) => MapEntry<PointGiver, T>(
-              pointGiver,
-              match["${pointGiver.mode.title}_${pointGiver.place.title}"] as T,
-            ),
-          ),
-    );
-
-Map<PointGiver, T> parseMatch<T extends num>(
-  final dynamic match,
-) =>
-    <PointGiver, T>{
-      ...parseByMode<T>(MatchMode.auto, match),
-      ...parseByMode<T>(MatchMode.tele, match),
-    };
-
-T getPoints<T extends num>(final Map<PointGiver, T> parsedMatch) =>
-    PointGiver.values
-        .map(
-          (final PointGiver pointGiver) => parsedMatch.entries
-              .where(
-                (final MapEntry<PointGiver, T> match) =>
-                    match.key == pointGiver,
-              )
-              .map(
-                (final MapEntry<PointGiver, T> e) => e.key.points * e.value,
-              )
-              .sum,
-        )
-        .sum as T;
-
-T getPieces<T extends num>(final Map<PointGiver, T> parsedMatch) =>
-    parsedMatch.values.sum as T;

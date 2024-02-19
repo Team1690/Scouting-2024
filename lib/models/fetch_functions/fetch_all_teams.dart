@@ -68,6 +68,7 @@ subscription FetchAllTeams {
       }
       climb {
         title
+        points
       }
       tele_amp
       tele_amp_missed

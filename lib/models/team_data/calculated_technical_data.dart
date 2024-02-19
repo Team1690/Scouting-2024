@@ -17,6 +17,12 @@ class CalculatedTechnicalData<T extends num> implements TechnicalData<T> {
       );
 
   @override
+  T get climbingPoints => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techdata) => techdata.climbingPoints,
+      );
+
+  @override
   T get ampPoints => calculateFieldAggregateData(
         technicalDatas,
         (final TechnicalData<int> techdata) => techdata.ampPoints,
