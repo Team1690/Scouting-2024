@@ -97,6 +97,12 @@ class GamepiecesLineChart extends StatelessWidget {
                           e.technicalMatchData!.robotFieldStatus,
                     )
                     .toList(),
+                matches.technicalMatchExists
+                    .map(
+                      (final MatchData e) =>
+                          e.technicalMatchData!.robotFieldStatus,
+                    )
+                    .toList(),
               ],
             ),
           ),
