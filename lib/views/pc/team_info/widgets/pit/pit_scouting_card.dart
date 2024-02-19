@@ -5,7 +5,7 @@ import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/edit_pit.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
+import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/robot_has_something.dart";
 
 class PitScoutingCard extends StatelessWidget {

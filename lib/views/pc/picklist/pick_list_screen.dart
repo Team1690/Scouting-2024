@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/models/team_data/all_team_data.dart";
+import "package:scouting_frontend/models/data/all_team_data.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_all_teams.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";

@@ -1,8 +1,8 @@
 import "package:collection/collection.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/math_utils.dart";
-import "package:scouting_frontend/models/team_data/calculated_technical_data.dart";
-import "package:scouting_frontend/models/team_data/technical_data.dart";
+import "package:scouting_frontend/models/data/calculated_technical_data.dart";
+import "package:scouting_frontend/models/data/technical_data.dart";
 
 class AggregateData {
   AggregateData({

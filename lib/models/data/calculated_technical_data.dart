@@ -1,4 +1,4 @@
-import "package:scouting_frontend/models/team_data/technical_data.dart";
+import "package:scouting_frontend/models/data/technical_data.dart";
 
 class CalculatedTechnicalData<T extends num> implements TechnicalData<T> {
   CalculatedTechnicalData({

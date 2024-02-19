@@ -5,15 +5,15 @@ import "package:graphql/client.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
-import "package:scouting_frontend/models/team_data/team_match_data.dart";
+import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
-import "package:scouting_frontend/models/team_data/team_data.dart";
-import "package:scouting_frontend/models/team_data/specific_match_data.dart";
-import "package:scouting_frontend/models/team_data/specific_summary_data.dart";
-import "package:scouting_frontend/models/team_data/technical_match_data.dart";
-import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
+import "package:scouting_frontend/models/data/aggregate_data/aggregate_technical_data.dart";
+import "package:scouting_frontend/models/data/team_data.dart";
+import "package:scouting_frontend/models/data/specific_match_data.dart";
+import "package:scouting_frontend/models/data/specific_summary_data.dart";
+import "package:scouting_frontend/models/data/technical_match_data.dart";
+import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
 
 const String query = r"""

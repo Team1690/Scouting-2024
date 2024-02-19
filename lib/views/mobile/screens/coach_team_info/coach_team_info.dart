@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_single_team.dart";
-import "package:scouting_frontend/models/team_data/team_data.dart";
-import "package:scouting_frontend/models/team_data/team_match_data.dart";
+import "package:scouting_frontend/models/data/team_data.dart";
+import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/team_info_models/quick_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
