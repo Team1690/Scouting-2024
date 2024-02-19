@@ -9,7 +9,7 @@ import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/models/data/aggregate_data/aggregate_technical_data.dart";
-import "package:scouting_frontend/models/data/team_data.dart";
+import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/specific_match_data.dart";
 import "package:scouting_frontend/models/data/specific_summary_data.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";

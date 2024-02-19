@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/data/team_data/card_data_extensions.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_single_team.dart";
-import "package:scouting_frontend/models/data/team_data.dart";
+import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/team_info_models/quick_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -51,27 +52,7 @@ class CoachTeamInfo extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: QuickDataCard(
-                    data: QuickData(
-                      medianData: data.aggregateData.medianData,
-                      avgData: data.aggregateData.avgData,
-                      maxData: data.aggregateData.maxData,
-                      minData: data.aggregateData.minData,
-                      amoutOfMatches: data.aggregateData.gamesPlayed,
-                      firstPicklistIndex: data.firstPicklistIndex,
-                      secondPicklistIndex: data.secondPicklistIndex,
-                      thirdPicklistIndex: data.thirdPicklistIndex,
-                      //TODO: getters...
-                      matchesClimbedSingle: data.matchesClimbedSingle,
-                      matchesClimbedDouble: data.matchesClimbedDouble,
-                      matchesClimbedTriple: data.matchesClimbedTriple,
-                      climbPercentage: data.climbPercentage,
-                      canHarmony: data.pitData?.harmony,
-                      gamepiecePoints:
-                          data.aggregateData.avgData.gamePiecesPoints,
-                      gamepiecesScored: data.aggregateData.avgData.gamepieces,
-                      trapAmount: data.aggregateData.sumData.trapAmount,
-                      trapSuccessRate: data.trapSuccessRate,
-                    ),
+                    data: data.quickData,
                     direction: Axis.vertical,
                   ),
                 ),
