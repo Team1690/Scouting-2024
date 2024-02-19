@@ -1,5 +1,5 @@
-import "package:scouting_frontend/models/team_data/all_team_data.dart";
-import "package:scouting_frontend/models/team_data/technical_data.dart";
+import "package:scouting_frontend/models/data/all_team_data.dart";
+import "package:scouting_frontend/models/data/technical_data.dart";
 
 enum AggregateType {
   median("Median"),
