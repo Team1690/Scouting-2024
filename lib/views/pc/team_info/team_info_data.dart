@@ -32,7 +32,7 @@ class TeamInfoData extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       flex: 5,
-                      child: QuickDataCard(getQuickdata(data)),
+                      child: QuickDataCard(data: getQuickdata(data)),
                     ),
                     const SizedBox(height: defaultPadding),
                     Expanded(
