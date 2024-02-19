@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
-import "package:scouting_frontend/models/team_data/team_match_data.dart";
+import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
 import "package:scouting_frontend/views/constants.dart";
 
@@ -9,11 +9,13 @@ class GamepiecesLineChart extends StatelessWidget {
     required this.title,
     required this.matches,
     required this.data,
+    this.missedData,
   });
 
   final String title;
   final List<MatchData> matches;
   final int Function(MatchData) data;
+  final int Function(MatchData)? missedData;
   @override
   Widget build(final BuildContext context) => Stack(
         children: <Widget>[
@@ -85,8 +87,16 @@ class GamepiecesLineChart extends StatelessWidget {
               distanceFromHighest: 4,
               dataSet: <List<int>>[
                 matches.technicalMatchExists.map(data).toList(),
+                if (missedData != null)
+                  matches.technicalMatchExists.map(missedData!).toList(),
               ],
               robotMatchStatuses: <List<RobotFieldStatus>>[
+                matches.technicalMatchExists
+                    .map(
+                      (final MatchData e) =>
+                          e.technicalMatchData!.robotFieldStatus,
+                    )
+                    .toList(),
                 matches.technicalMatchExists
                     .map(
                       (final MatchData e) =>

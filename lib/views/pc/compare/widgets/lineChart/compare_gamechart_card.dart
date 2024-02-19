@@ -3,8 +3,8 @@ import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/card.dart";
-import "package:scouting_frontend/models/team_data/team_data.dart";
-import "package:scouting_frontend/models/team_data/technical_match_data.dart";
+import "package:scouting_frontend/models/data/team_data/team_data.dart";
+import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/views/common/no_team_selected.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_titled_line_chart.dart";
@@ -171,13 +171,13 @@ class CompareGamechartCard extends StatelessWidget {
                         teamDatas: data.toList(),
                         data: data
                             .map(
-                              (final TeamData element) => element
-                                  .technicalMatches
-                                  .map(
-                                    (final TechnicalMatchData match) =>
-                                        match.climbTitle.chartHeight.toInt(),
-                                  )
-                                  .toList(),
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.climb.chartHeight.toInt(),
+                                      )
+                                      .toList(),
                             )
                             .toList(),
                         colors: colors,

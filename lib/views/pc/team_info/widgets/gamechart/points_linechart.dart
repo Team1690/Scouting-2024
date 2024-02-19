@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
-import "package:scouting_frontend/models/team_data/team_match_data.dart";
+import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
 
 class PointsLineChart extends StatelessWidget {

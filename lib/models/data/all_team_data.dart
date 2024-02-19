@@ -1,8 +1,8 @@
 import "package:scouting_frontend/models/enums/climb_enum.dart";
-import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
-import "package:scouting_frontend/models/team_data/technical_match_data.dart";
+import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
+import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
+import "package:scouting_frontend/models/data/aggregate_data/aggregate_technical_data.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class AllTeamData {
@@ -49,8 +49,8 @@ class AllTeamData {
   int get matchesClimbed => technicalMatches
       .where(
         (final TechnicalMatchData element) =>
-            element.climbTitle == Climb.climbed ||
-            element.climbTitle == Climb.buddyClimbed,
+            element.climb == Climb.climbed ||
+            element.climb == Climb.buddyClimbed,
       )
       .length;
   double get climbPercentage =>

@@ -1,8 +1,8 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/team_data/specific_summary_data.dart";
-import "package:scouting_frontend/models/team_data/team_match_data.dart";
+import "package:scouting_frontend/models/data/specific_summary_data.dart";
+import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/view_rating_dropdown_line.dart";
 
 class ScoutingSpecific extends StatefulWidget {

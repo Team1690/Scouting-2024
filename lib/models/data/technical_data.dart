@@ -32,9 +32,12 @@ class TechnicalData<T extends num> {
   T get autoGamepieces => autoAmp + autoSpeaker as T;
   T get teleGamepieces => teleAmp + teleSpeaker as T;
   T get gamepieces => autoGamepieces + teleGamepieces as T;
-  T get totalMissed =>
-      teleAmpMissed + autoAmpMissed + teleSpeakerMissed + autoSpeakerMissed
-          as T;
+  T get missedAuto => autoAmpMissed + autoSpeakerMissed as T;
+  T get missedTele => teleAmpMissed + teleSpeakerMissed as T;
+  T get missedAmp => autoAmpMissed + teleAmpMissed as T;
+  T get missedSpeaker => autoSpeakerMissed + autoSpeakerMissed as T;
+  T get totalMissed => missedAuto + missedTele as T;
+
   T get autoSpeakerPoints => PointGiver.autoSpeaker.points * autoSpeaker as T;
   T get autoAmpPoints => PointGiver.autoAmp.points * autoAmp as T;
   T get teleSpeakerPoints => PointGiver.teleSpeaker.points * teleSpeaker as T;

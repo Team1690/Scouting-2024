@@ -1,6 +1,6 @@
 import "package:scouting_frontend/models/schedule_match.dart";
-import "package:scouting_frontend/models/team_data/specific_match_data.dart";
-import "package:scouting_frontend/models/team_data/technical_match_data.dart";
+import "package:scouting_frontend/models/data/specific_match_data.dart";
+import "package:scouting_frontend/models/data/technical_match_data.dart";
 
 class MatchData {
   MatchData({

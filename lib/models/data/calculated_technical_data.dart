@@ -1,4 +1,4 @@
-import "package:scouting_frontend/models/team_data/technical_data.dart";
+import "package:scouting_frontend/models/data/technical_data.dart";
 
 class CalculatedTechnicalData<T extends num> implements TechnicalData<T> {
   CalculatedTechnicalData({
@@ -164,6 +164,30 @@ class CalculatedTechnicalData<T extends num> implements TechnicalData<T> {
   T get trapsMissed => calculateFieldAggregateData(
         technicalDatas,
         (final TechnicalData<int> techdata) => techdata.trapsMissed,
+      );
+
+  @override
+  T get missedAmp => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techdata) => techdata.missedAmp,
+      );
+
+  @override
+  T get missedAuto => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techdata) => techdata.missedAuto,
+      );
+
+  @override
+  T get missedSpeaker => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techdata) => techdata.missedSpeaker,
+      );
+
+  @override
+  T get missedTele => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techdata) => techdata.missedTele,
       );
 
   T caclulateOnListOfField(
