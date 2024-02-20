@@ -136,6 +136,8 @@ Stream<List<(FaultEntry, int?)>> fetchFaults() {
                     },
                   ))
               .flattened
+              .sortedBy((element) => element.$1.faultStatus.title)
+              .reversed
               .toList(),
     ),
   );
