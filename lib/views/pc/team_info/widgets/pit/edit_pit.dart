@@ -40,6 +40,7 @@ class _EditPitState extends State<EditPit> {
       harmony: () => pit.harmony,
       trap: () => pit.trap,
       hasBuddyClimb: () => pit.hasBuddyClimb,
+      url: () => pit.url,
     );
 
     return vars;
