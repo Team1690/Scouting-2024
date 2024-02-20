@@ -1,22 +1,15 @@
-import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/models/schedule_match.dart";
 
 class CoachData {
-  const CoachData({
-    required this.happened,
-    required this.blueAlliance,
-    required this.redAlliance,
-    required this.matchNumber,
-    required this.matchType,
-    required this.avgBlue,
-    required this.avgRed,
+  CoachData({
+    required this.match,
     required this.avgBlueWithFourth,
     required this.avgRedWithFourth,
+    required this.avgBlue,
+    required this.avgRed,
   });
-  final int matchNumber;
-  final bool happened;
-  final List<LightTeam> blueAlliance;
-  final List<LightTeam> redAlliance;
-  final String matchType;
+
+  final ScheduleMatch match;
   final double avgBlueWithFourth;
   final double avgRedWithFourth;
   final double avgBlue;
