@@ -78,7 +78,7 @@ class _AutoPathState extends State<AutoPath> {
                 ) =>
                     Listener(
                   onPointerDown: (final PointerDownEvent pointerEvent) {
-                    pathDone = false;
+                    if(!pathDone){
                     final RenderBox box =
                         context.findRenderObject() as RenderBox;
                     final Offset offset =
@@ -87,7 +87,7 @@ class _AutoPathState extends State<AutoPath> {
                       points: <Offset>[offset],
                       isRed: path.value.isRed,
                       url: path.value.url,
-                    );
+                    );};
                   },
                   onPointerMove: (final PointerMoveEvent pointerEvent) {
                     if (!pathDone &&
@@ -146,7 +146,7 @@ class _AutoPathState extends State<AutoPath> {
                       isRed: path.value.isRed,
                       url: null,
                     );
-                    pathDone = true;
+                    pathDone = false;
                   },
                   icon: const Icon(Icons.delete_outline_rounded),
                   style: ButtonStyle(
