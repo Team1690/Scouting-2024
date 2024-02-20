@@ -9,7 +9,7 @@ class MatchIdentifier {
 
   final MatchType type;
   final int number;
-  final bool isRematch;
+  late final bool isRematch;
 
   @override
   bool operator ==(final Object other) =>

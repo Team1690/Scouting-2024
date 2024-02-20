@@ -159,7 +159,6 @@ class MatchSearchBox extends StatelessWidget {
               ),
             ),
           ),
-          hideSuggestionsOnKeyboardHide: false,
           onSuggestionSelected: (final ScheduleMatch suggestion) {
             typeAheadController.text =
                 "${suggestion.matchIdentifier.type.title} ${suggestion.matchIdentifier.number}";

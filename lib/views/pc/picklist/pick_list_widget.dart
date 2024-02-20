@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/team_data/all_team_data.dart";
+import "package:scouting_frontend/models/data/all_team_data.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/mobile/screens/coach_team_info_data.dart";
+import "package:scouting_frontend/views/mobile/screens/coach_team_info/coach_team_info.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 import "package:flutter_switch/flutter_switch.dart";
@@ -42,10 +42,11 @@ class _PickListState extends State<PickList> {
 
   @override
   Widget build(final BuildContext context) {
-    final List<TextEditingController> controllers = <TextEditingController>[
-      for (int i = 0; i < widget.uiList.length; i++)
-        TextEditingController(text: "${i + 1}"),
-    ];
+    final List<TextEditingController> controllers =
+        List<TextEditingController>.generate(
+      widget.uiList.length,
+      (final int index) => TextEditingController(text: "${index + 1}"),
+    );
     return Container(
       child: ReorderableListView(
         buildDefaultDragHandles: true,
@@ -153,7 +154,6 @@ class _PickListState extends State<PickList> {
                           title: Row(
                             children: <Widget>[
                               Expanded(
-                                flex: 1,
                                 child: Text(
                                   pickListTeam.toString(),
                                 ),
@@ -250,9 +250,9 @@ class _PickListState extends State<PickList> {
                       : GestureDetector(
                           onDoubleTap: () {
                             Navigator.of(context).push(
-                              MaterialPageRoute<CoachTeamData>(
+                              MaterialPageRoute<CoachTeamInfo>(
                                 builder: (final BuildContext context) =>
-                                    CoachTeamData(pickListTeam.team),
+                                    CoachTeamInfo(pickListTeam.team),
                               ),
                             );
                           },

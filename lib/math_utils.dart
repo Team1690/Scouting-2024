@@ -1,7 +1,7 @@
 import "dart:math";
 
 import "package:collection/collection.dart";
-import "package:scouting_frontend/models/team_data/technical_data.dart";
+import "package:scouting_frontend/models/data/technical_data.dart";
 
 extension ListStatisticsExtensions<T extends num> on Iterable<T> {
   double get median {

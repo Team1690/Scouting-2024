@@ -1,6 +1,6 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/team_data/all_team_data.dart";
+import "package:scouting_frontend/models/data/all_team_data.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/value_sliders.dart";
 

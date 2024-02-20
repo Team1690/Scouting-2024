@@ -1,16 +1,14 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/data/team_data/card_data_extensions.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_single_team.dart";
-import "package:scouting_frontend/models/team_data/team_data.dart";
-import "package:scouting_frontend/models/team_data/technical_match_data.dart";
+import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting.dart";
-import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data.dart";
+import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/specific_card.dart";
-import "package:scouting_frontend/models/team_info_models/quick_data.dart";
-import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class TeamInfoData extends StatelessWidget {
   TeamInfoData(this.team);
@@ -32,12 +30,12 @@ class TeamInfoData extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       flex: 5,
-                      child: QuickDataCard(getQuickdata(data)),
+                      child: QuickDataCard(data: data.quickData),
                     ),
                     const SizedBox(height: defaultPadding),
                     Expanded(
                       flex: 6,
-                      child: Gamechart(data),
+                      child: Gamechart(data: data),
                     ),
                   ],
                 ),
@@ -68,34 +66,3 @@ class TeamInfoData extends StatelessWidget {
         ),
       );
 }
-
-QuickData getQuickdata(final TeamData data) => QuickData(
-      medianData: data.aggregateData.medianData,
-      maxData: data.aggregateData.maxData,
-      minData: data.aggregateData.minData,
-      amoutOfMatches: data.technicalMatches.length,
-      firstPicklistIndex: data.firstPicklistIndex,
-      secondPicklistIndex: data.secondPicklistIndex,
-      thirdPicklistIndex: data.thirdPicklistIndex,
-      canHarmony: data.pitData?.harmony,
-      climbPercentage: data.climbPercentage,
-      matchesClimbedSingle: data.technicalMatches
-          .where(
-            (final TechnicalMatchData element) =>
-                element.robotFieldStatus == RobotFieldStatus.worked &&
-                element.harmonyWith == 0,
-          )
-          .length,
-      matchesClimbedDouble: data.technicalMatches
-          .where((final TechnicalMatchData element) => element.harmonyWith == 1)
-          .length,
-      matchesClimbedTriple: data.technicalMatches
-          .where((final TechnicalMatchData element) => element.harmonyWith == 2)
-          .length,
-      gamepiecePoints: data.aggregateData.avgData.gamePiecesPoints,
-      gamepiecesScored: data.aggregateData.avgData.gamepieces,
-      trapAmount: data.pitData?.trap,
-      avgData: data.aggregateData.avgData,
-      //TODO: add to getters
-      trapSuccessRate: 0,
-    );

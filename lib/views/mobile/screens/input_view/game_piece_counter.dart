@@ -109,6 +109,7 @@ class MatchModeGamePieceCounter extends StatelessWidget {
       switch (matchMode) {
         m.MatchMode.auto => autoValue,
         m.MatchMode.tele => teleValue,
+        m.MatchMode.endGame => 0,
       };
 
   @override

@@ -2,8 +2,8 @@ import "dart:collection";
 import "dart:math";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/point_giver_enum.dart";
-import "package:scouting_frontend/models/team_data/team_data.dart";
-import "package:scouting_frontend/models/team_data/technical_match_data.dart";
+import "package:scouting_frontend/models/data/team_data/team_data.dart";
+import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/spiderChart/radar_chart.dart";
 
 class CompareSpiderChart extends StatelessWidget {

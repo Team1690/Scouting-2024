@@ -1,10 +1,10 @@
 import "package:graphql/client.dart";
-import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
-import "package:scouting_frontend/models/team_data/technical_match_data.dart";
+import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
+import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/models/team_data/aggregate_data/aggregate_technical_data.dart";
-import "package:scouting_frontend/models/team_data/all_team_data.dart";
+import "package:scouting_frontend/models/data/aggregate_data/aggregate_technical_data.dart";
+import "package:scouting_frontend/models/data/all_team_data.dart";
 
 const String subscription = r"""
 subscription FetchAllTeams {
@@ -68,6 +68,7 @@ subscription FetchAllTeams {
       }
       climb {
         title
+        points
       }
       tele_amp
       tele_amp_missed

@@ -15,48 +15,48 @@ class DashboardScaffold extends StatelessWidget {
   final Widget body;
 
   @override
-  Widget build(final BuildContext context) => RawKeyboardListener(
+  Widget build(final BuildContext context) => KeyboardListener(
         autofocus: true,
         focusNode: FocusNode(),
-        onKey: (final RawKeyEvent event) {
+        onKeyEvent: (final KeyEvent event) {
           keyboardShortcut<TeamInfoScreen>(
             context,
             event,
             TeamInfoScreen(),
-            (final RawKeyEvent event) =>
-                event.isControlPressed &&
+            (final KeyEvent event) =>
+                event.logicalKey == LogicalKeyboardKey.controlLeft &&
                 event.physicalKey == PhysicalKeyboardKey.keyM &&
-                event.runtimeType == RawKeyDownEvent,
+                event.runtimeType == KeyDownEvent,
           );
 
           keyboardShortcut<PickListScreen>(
             context,
             event,
             PickListScreen(),
-            (final RawKeyEvent event) =>
-                event.isControlPressed &&
+            (final KeyEvent event) =>
+                event.logicalKey == LogicalKeyboardKey.controlLeft &&
                 event.physicalKey == PhysicalKeyboardKey.comma &&
-                event.runtimeType == RawKeyDownEvent,
+                event.runtimeType == KeyDownEvent,
           );
 
           keyboardShortcut<CompareScreen>(
             context,
             event,
             CompareScreen(),
-            (final RawKeyEvent event) =>
-                event.isControlPressed &&
+            (final KeyEvent event) =>
+                event.logicalKey == LogicalKeyboardKey.controlLeft &&
                 event.physicalKey == PhysicalKeyboardKey.period &&
-                event.runtimeType == RawKeyDownEvent,
+                event.runtimeType == KeyDownEvent,
           );
 
           keyboardShortcut<ScattersScreen>(
             context,
             event,
             ScattersScreen(),
-            (final RawKeyEvent event) =>
-                event.isControlPressed &&
+            (final KeyEvent event) =>
+                event.logicalKey == LogicalKeyboardKey.controlLeft &&
                 event.physicalKey == PhysicalKeyboardKey.slash &&
-                event.runtimeType == RawKeyDownEvent,
+                event.runtimeType == KeyDownEvent,
           );
         },
         child: Scaffold(
@@ -78,9 +78,9 @@ class DashboardScaffold extends StatelessWidget {
 
 void keyboardShortcut<E extends Widget>(
   final BuildContext context,
-  final RawKeyEvent event,
+  final KeyEvent event,
   final E widget,
-  final bool Function(RawKeyEvent) predicate,
+  final bool Function(KeyEvent) predicate,
 ) {
   if (predicate(event)) {
     Navigator.pushReplacement(

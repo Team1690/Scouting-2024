@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/enums/fault_status_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -13,21 +14,16 @@ class ChangeFaultStatus extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => IconButton(
         onPressed: () async {
-          int? statusIdState;
-          await (await showDialog<int>(
+          FaultStatus? statusState;
+          final FaultStatus? faultStatus = (await showDialog<FaultStatus>(
             context: context,
             builder: (final BuildContext context) {
-              final Map<int, int?> indexToId = <int, int?>{
+              final Map<int, FaultStatus?> indexToFaultStatus =
+                  <int, FaultStatus?>{
                 -1: null,
-                0: IdProvider.of(
-                  context,
-                ).faultStatus.nameToId["Fixed"],
-                1: IdProvider.of(
-                  context,
-                ).faultStatus.nameToId["In progress"],
-                2: IdProvider.of(
-                  context,
-                ).faultStatus.nameToId["No progress"],
+                0: FaultStatus.noProgress,
+                1: FaultStatus.inProgress,
+                2: FaultStatus.fixed,
               };
               return StatefulBuilder(
                 builder: (
@@ -40,9 +36,9 @@ class ChangeFaultStatus extends StatelessWidget {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
-                        statusIdState.mapNullable(
-                          Navigator.of(context).pop,
-                        );
+                        if (statusState != null) {
+                          Navigator.of(context).pop(statusState);
+                        }
                       },
                       child: const Text(
                         "Submit",
@@ -68,36 +64,43 @@ class ChangeFaultStatus extends StatelessWidget {
                   ),
                   content: Switcher(
                     borderRadiusGeometry: defaultBorderRadius,
-                    selected: <int?, int>{
-                      for (final MapEntry<int, int?> entry in indexToId.entries)
+                    selected: <FaultStatus?, int>{
+                      for (final MapEntry<int, FaultStatus?> entry
+                          in indexToFaultStatus.entries)
                         entry.value: entry.key,
-                    }[statusIdState]!,
+                    }[statusState]!,
                     onChange: (final int index) {
                       alertDialogSetState(() {
-                        statusIdState = indexToId[index];
+                        statusState = indexToFaultStatus[index];
                       });
                     },
-                    colors: const <Color>[
-                      Colors.green,
-                      Colors.yellow,
-                      Colors.red,
-                    ],
-                    labels: const <String>[
-                      "Fixed",
-                      "In progress",
-                      "No progress",
-                    ],
+                    colors: FaultStatus.values
+                        .where(
+                          (final FaultStatus e) => e != FaultStatus.unknown,
+                        )
+                        .map((final FaultStatus e) => e.color)
+                        .toList(),
+                    labels: FaultStatus.values
+                        .where(
+                          (final FaultStatus e) => e != FaultStatus.unknown,
+                        )
+                        .map((final FaultStatus e) => e.title)
+                        .toList(),
                   ),
                 ),
               );
             },
-          ))
-              .mapNullable((final int p0) async {
+          ));
+
+          if (faultStatus != null) {
             showLoadingSnackBar(context);
-            final QueryResult<void> result =
-                await updateFaultStatus(faultId, p0);
+            final QueryResult<void> result = await updateFaultStatus(
+              faultId,
+              faultStatusTitleToEnum(faultStatus.title),
+              context,
+            );
             onFinished(result);
-          });
+          }
         },
         icon: const Icon(Icons.build),
       );
@@ -105,14 +108,16 @@ class ChangeFaultStatus extends StatelessWidget {
 
 Future<QueryResult<void>> updateFaultStatus(
   final int id,
-  final int faultStatusId,
+  final FaultStatus faultStatus,
+  final BuildContext context,
 ) async =>
     getClient().mutate(
       MutationOptions<void>(
         document: gql(_updateFaultStatusMutation),
         variables: <String, dynamic>{
           "id": id,
-          "fault_status_id": faultStatusId,
+          "fault_status_id":
+              IdProvider.of(context).faultStatus.nameToId[faultStatus.title],
         },
       ),
     );

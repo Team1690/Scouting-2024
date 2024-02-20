@@ -7,7 +7,7 @@ import "package:graphql/client.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_teams.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_data/starting_position_enum.dart";
-import "package:scouting_frontend/models/team_data/team_data.dart";
+import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path_csv.dart";

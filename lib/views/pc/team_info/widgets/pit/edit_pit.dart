@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_vars.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_view.dart";
-import "package:scouting_frontend/models/team_data/pit_data/pit_data.dart";
+import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
 
 class EditPit extends StatefulWidget {
   const EditPit(

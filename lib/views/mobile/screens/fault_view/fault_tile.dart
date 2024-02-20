@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/change_fault_status.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/delete_fault.dart";
@@ -41,34 +40,24 @@ class FaultTile extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                "Status: ${e.faultStatus}",
-                style: TextStyle(
-                  color: faultTitleToColor(
-                    e.faultStatus,
-                  ),
-                ),
+                "Status: ${e.faultStatus.title}",
+                style: TextStyle(color: e.faultStatus.color),
               ),
             ),
           ],
         ),
         children: <Widget>[
-          e.matchNumber != null
-              ? ListTile(
-                  title: Text(
-                    "match: ${IdProvider.of(context).matchType.idToName[e.matchType]} ${e.matchNumber}",
-                  ),
-                  subtitle: Text(
-                    e.faultMessage,
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              : ListTile(
-                  title: Text(
-                    e.faultMessage,
-                  ),
-                ),
+          ListTile(
+            title: Text(
+              "match: ${e.matchIdentifier.type.title} ${e.matchIdentifier.number} ${e.matchIdentifier.isRematch ? "R" : ""}",
+            ),
+            subtitle: Text(
+              e.faultMessage,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
         ],
       );
 }

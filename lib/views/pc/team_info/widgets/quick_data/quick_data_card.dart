@@ -3,8 +3,13 @@ import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/models/team_info_models/quick_data.dart";
 
 class QuickDataCard extends StatelessWidget {
-  const QuickDataCard(this.data);
+  const QuickDataCard({
+    super.key,
+    required this.data,
+    this.direction = Axis.horizontal,
+  });
   final QuickData data;
+  final Axis direction;
   @override
   Widget build(final BuildContext context) => DashboardCard(
         title: "Quick data",
@@ -13,10 +18,11 @@ class QuickDataCard extends StatelessWidget {
                 child: const Text("Not Enough Data :("),
               )
             : SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: direction,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: Row(
+                  child: Flex(
+                    direction: direction,
                     children: <Widget>[
                       Column(
                         children: <Widget>[

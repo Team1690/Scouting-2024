@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/team_data/all_team_data.dart";
+import "package:scouting_frontend/models/data/all_team_data.dart";
 
 class HarmonyIcon extends StatelessWidget {
   const HarmonyIcon({

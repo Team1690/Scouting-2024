@@ -1,8 +1,8 @@
 enum MatchMode {
-  auto(1, "auto"),
-  tele(0, "tele");
+  auto("auto"),
+  tele("tele"),
+  endGame("endgame");
 
-  const MatchMode(this.pointAddition, this.title);
-  final int pointAddition;
+  const MatchMode(this.title);
   final String title;
 }
