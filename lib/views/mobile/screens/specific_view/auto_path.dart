@@ -87,7 +87,7 @@ class _AutoPathState extends State<AutoPath> {
                       points: <Offset>[offset],
                       isRed: path.value.isRed,
                       url: path.value.url,
-                    );};
+                    );}
                   },
                   onPointerMove: (final PointerMoveEvent pointerEvent) {
                     if (!pathDone &&

@@ -125,6 +125,6 @@ class SpecificRating extends StatelessWidget {
             },
             label: "General",
           ),
-        ].expand((element) =><Widget>[element, const SizedBox(height: 15,),], ).toList(),
+        ].expand((final Widget element) =><Widget>[element, const SizedBox(height: 15,),], ).toList(),
       );
 }
