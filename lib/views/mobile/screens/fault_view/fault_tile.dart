@@ -34,7 +34,7 @@ class FaultTile extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Text(
-                "${e.$1.team.number} ${e.$1.team.name}",
+                "${e.$1.team.number} ${e.$1.team.name} ${e.$2 == null ? "" : (e.$2)}",
               ),
             ),
             Expanded(
