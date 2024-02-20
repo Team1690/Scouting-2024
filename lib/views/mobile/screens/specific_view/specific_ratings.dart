@@ -29,7 +29,6 @@ class SpecificRating extends StatelessWidget {
             },
             label: "Driving & Drivetrain",
           ),
-          const SizedBox(height: 15.0),
           RatingDropdownLine<String>(
             onTap: () {
               onChanged(
@@ -44,7 +43,6 @@ class SpecificRating extends StatelessWidget {
             },
             label: "Intake",
           ),
-          const SizedBox(height: 15.0),
           RatingDropdownLine<String>(
             onTap: () {
               onChanged(
@@ -59,7 +57,6 @@ class SpecificRating extends StatelessWidget {
             },
             label: "Amp",
           ),
-          const SizedBox(height: 15.0),
           RatingDropdownLine<String>(
             onTap: () {
               onChanged(
@@ -78,7 +75,6 @@ class SpecificRating extends StatelessWidget {
             },
             label: "Speaker",
           ),
-          const SizedBox(height: 15.0),
           RatingDropdownLine<String>(
             onTap: () {
               onChanged(
@@ -111,11 +107,6 @@ class SpecificRating extends StatelessWidget {
             },
             label: "Defense",
           ),
-          if (vars.defenseRating != null) ...<Widget>[
-            const SizedBox(
-              height: 10,
-            ),
-          ],
           RatingDropdownLine<String>(
             onTap: () {
               onChanged(
@@ -134,6 +125,6 @@ class SpecificRating extends StatelessWidget {
             },
             label: "General",
           ),
-        ],
+        ].expand((element) =><Widget>[element, const SizedBox(height: 15,),], ).toList(),
       );
 }
