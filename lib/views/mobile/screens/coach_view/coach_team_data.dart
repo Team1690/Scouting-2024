@@ -47,7 +47,7 @@ class CoachTeam extends StatelessWidget {
                       color: team.faultEntrys.isEmpty
                           ? Colors.white
                           : Colors.amber,
-                      fontSize: 20,
+                      fontSize: 25,
                       fontWeight: team.lightTeam.number == 1690
                           ? FontWeight.w900
                           : FontWeight.normal,

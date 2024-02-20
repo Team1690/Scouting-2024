@@ -10,9 +10,7 @@ import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
-import "package:scouting_frontend/views/mobile/screens/coach_view/coach_team_data.dart";
-
-import "coach_match_screen.dart";
+import "package:scouting_frontend/views/mobile/screens/coach_view/coach_match_screen.dart";
 
 class CoachView extends StatelessWidget {
   @override
