@@ -60,11 +60,23 @@ class CoachView extends StatelessWidget {
                 .map(
                   (final ScheduleMatch e) => CoachMatchScreen(
                     match: e,
-                    teams: teams
+                    blueAllianceTeams: teams
                         .where(
-                          (final TeamData element) => element.matches.any(
-                            (final MatchData element) =>
-                                element.scheduleMatch == e,
+                          (final TeamData teamData) => teamData.matches.any(
+                            (final MatchData matchData) =>
+                                matchData.scheduleMatch == e &&
+                                matchData.scheduleMatch.blueAlliance
+                                    .contains(teamData.lightTeam),
+                          ),
+                        )
+                        .toList(),
+                    redAllianceTeams: teams
+                        .where(
+                          (final TeamData teamData) => teamData.matches.any(
+                            (final MatchData matchData) =>
+                                matchData.scheduleMatch == e &&
+                                matchData.scheduleMatch.redAlliance
+                                    .contains(teamData.lightTeam),
                           ),
                         )
                         .toList(),
