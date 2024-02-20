@@ -46,7 +46,7 @@ class CoachMatchScreen extends StatelessWidget {
             ),
           ),
           Text(
-            "${blueAllianceTeams.map((final TeamData e) => e.aggregateData.avgData.gamePiecesPoints).average} vs ${redAllianceTeams.map((final TeamData e) => e.aggregateData.avgData.gamePiecesPoints).average}",
+            "${blueAllianceTeams.map((final TeamData e) => e.aggregateData.medianData.gamePiecesPoints).average.toStringAsFixed(2)} vs ${redAllianceTeams.map((final TeamData e) => e.aggregateData.medianData.gamePiecesPoints).average.toStringAsFixed(2)}",
           ),
           Expanded(
             child: Row(
