@@ -101,44 +101,48 @@ Stream<List<(FaultEntry, int?)>> fetchFaults() {
   final Stream<QueryResult<List<(FaultEntry, int?)>>> result = client.subscribe(
     SubscriptionOptions<List<(FaultEntry, int?)>>(
       document: gql(subscription),
-      parserFn: (final Map<String, dynamic> data) =>
-          (data["schedule_matches"] as List<dynamic>)
-              .map((e) => (e["faults"] as List<dynamic>).map(
-                    (fault) {
-                      final int lastMatch =
-                          (data["schedule_matches"] as List<dynamic>)
-                              .lastIndexWhere(
-                        (element) => element["happened"] as bool,
-                      );
-                      final dynamic nextMatch =
-                          (data["schedule_matches"] as List<dynamic>)
-                              .where(
-                                (final dynamic element) => teamValues.any(
-                                    (final String team) =>
-                                        element[team]?["number"] == 1690),
-                              )
-                              .firstWhereOrNull(
-                                (final dynamic element) => teamValues.any(
-                                    (final String team) =>
-                                        element[team]?["number"] ==
-                                        LightTeam.fromJson(fault["team"])
-                                            .number),
-                              );
-                      return (
-                        FaultEntry.parse(fault),
-                        nextMatch == null
-                            ? null
-                            : lastMatch -
-                                ScheduleMatch.fromJson(nextMatch, false)
-                                    .matchIdentifier
-                                    .number
-                      );
-                    },
-                  ))
-              .flattened
-              .sortedBy((element) => element.$1.faultStatus.title)
-              .reversed
-              .toList(),
+      parserFn: (final Map<String, dynamic> data) => (data["schedule_matches"]
+              as List<dynamic>)
+          .map(
+            (final dynamic e) => (e["faults"] as List<dynamic>).map(
+              (final dynamic fault) {
+                final int lastMatch =
+                    (data["schedule_matches"] as List<dynamic>).lastIndexWhere(
+                  (final dynamic element) => element["happened"] as bool,
+                );
+                final dynamic nextMatch =
+                    (data["schedule_matches"] as List<dynamic>)
+                        .where(
+                          (final dynamic element) => teamValues.any(
+                            (final String team) =>
+                                element[team]?["number"] == 1690,
+                          ),
+                        )
+                        .firstWhereOrNull(
+                          (final dynamic element) => teamValues.any(
+                            (final String team) =>
+                                element[team]?["number"] ==
+                                LightTeam.fromJson(fault["team"]).number,
+                          ),
+                        );
+                return (
+                  FaultEntry.parse(fault),
+                  nextMatch == null
+                      ? null
+                      : lastMatch -
+                          ScheduleMatch.fromJson(nextMatch, false)
+                              .matchIdentifier
+                              .number
+                );
+              },
+            ),
+          )
+          .flattened
+          .sortedBy(
+            (final (FaultEntry, int?) element) => element.$1.faultStatus.title,
+          )
+          .reversed
+          .toList(),
     ),
   );
   return result.map(queryResultToParsed);
