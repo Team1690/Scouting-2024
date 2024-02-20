@@ -13,7 +13,7 @@ import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.d
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path_csv.dart";
 import "package:http/http.dart" as http;
 
-Future<List<(String, StartingPosition, MatchIdentifier)>> fetchUrls(
+Future<List<AutoPathByUrl>> fetchUrls(
   final int team,
   final bool shouldDistinct,
 ) async {
@@ -41,9 +41,9 @@ query MyQuery(\$team: Int) {
 
 
   """;
-  final QueryResult<List<(String, StartingPosition, MatchIdentifier)>> result =
+  final QueryResult<List<AutoPathByUrl>> result =
       await client.query(
-    QueryOptions<List<(String, StartingPosition, MatchIdentifier)>>(
+    QueryOptions<List<AutoPathByUrl>>(
       document: gql(query),
       variables: <String, int>{"team": team},
       parserFn: parserFn,
@@ -52,7 +52,7 @@ query MyQuery(\$team: Int) {
   return result.mapQueryResult();
 }
 
-List<(String, StartingPosition, MatchIdentifier)> parserFn(
+List<AutoPathByUrl> parserFn(
   final Map<String, dynamic> urls,
 ) =>
     (urls["specific_match"] as List<dynamic>)
@@ -65,11 +65,11 @@ List<(String, StartingPosition, MatchIdentifier)> parserFn(
               .map(
             (final dynamic e) => validator
                 ? (
-                    url["url"] as String,
-                    startingPosTitleToEnum(
+                    url: url["url"] as String,
+                    startingPos: startingPosTitleToEnum(
                       e["starting_position"]["title"] as String,
                     ),
-                    MatchIdentifier.fromJson(url, null)
+                    matchIdentifier: MatchIdentifier.fromJson(url, null)
                   )
                 : null,
           );
@@ -90,20 +90,16 @@ Future<({List<ui.Offset> path, bool isRed})> fetchPath(
 
 Future<
     List<
-        ({
-          Sketch sketch,
-          StartingPosition startingPos,
-          MatchIdentifier matchIdentifier
-        })>> getPaths(
+        AutoPathData>> getPaths(
   final int teamId,
   final bool shouldDistinct,
 ) async {
-  final List<(String, StartingPosition, MatchIdentifier)> urls =
+  final List<AutoPathByUrl> urls =
       (await fetchUrls(teamId, shouldDistinct)).toList();
   final List<Future<({List<ui.Offset> path, bool isRed})>> paths = urls
       .map(
-        (final (String, StartingPosition, MatchIdentifier) e) =>
-            fetchPath(e.$1),
+        (final AutoPathByUrl e) =>
+            fetchPath(e.url),
       )
       .toList();
 
@@ -114,15 +110,14 @@ Future<
         (
           final int index,
           final ({bool isRed, List<ui.Offset> path}) element,
-        ) =>
-            (
+        ) => (
           sketch: Sketch(
             points: element.path,
             isRed: element.isRed,
-            url: urls[index].$1,
+            url: urls[index].url,
           ),
-          startingPos: urls[index].$2,
-          matchIdentifier: urls[index].$3
+          startingPos: urls[index].startingPos,
+          matchIdentifier: urls[index].matchIdentifier,
         ),
       )
       .toList();
@@ -147,11 +142,7 @@ Future<
       await fetchMultipleTeamData(teamIds, context);
   final List<
       List<
-          ({
-            Sketch sketch,
-            StartingPosition startingPos,
-            MatchIdentifier matchIdentifier
-          })>> paths = await Future.wait(
+          AutoPathData>> paths = await Future.wait(
     data
         .map((final TeamData element) => getPaths(element.lightTeam.id, false))
         .toList(),
@@ -161,14 +152,22 @@ Future<
         (
           final int index,
           final List<
-                  ({
-                    Sketch sketch,
-                    StartingPosition startingPos,
-                    MatchIdentifier matchIdentifier
-                  })>
+                  AutoPathData>
               element,
         ) =>
             (data.elementAt(index), element),
       )
       .toList();
 }
+
+typedef AutoPathByUrl = ({
+                String url,
+                StartingPosition startingPos,
+                MatchIdentifier matchIdentifier
+              });
+
+typedef AutoPathData = ({
+                Sketch sketch,
+                StartingPosition startingPos,
+                MatchIdentifier matchIdentifier
+              });

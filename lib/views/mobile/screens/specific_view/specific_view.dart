@@ -74,21 +74,13 @@ class _SpecificState extends State<Specific> {
                 padding: const EdgeInsets.all(defaultPadding),
                 child: FutureBuilder<
                     List<
-                        ({
-                          Sketch sketch,
-                          StartingPosition startingPos,
-                          MatchIdentifier matchIdentifier
-                        })>>(
+                        AutoPathData>>(
                   future: pathsFuture,
                   builder: (
                     final BuildContext context,
                     final AsyncSnapshot<
                             List<
-                                ({
-                                  Sketch sketch,
-                                  StartingPosition startingPos,
-                                  MatchIdentifier matchIdentifier
-                                })>>
+                                AutoPathData>>
                         snapshot,
                   ) =>
                       SingleChildScrollView(
