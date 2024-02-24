@@ -21,6 +21,7 @@ class PitData {
     required this.faultMessages,
     required this.otherWheelType,
     required this.team,
+    required this.canEject,
   });
 
   final DriveTrain driveTrainType;
@@ -35,6 +36,7 @@ class PitData {
   final bool harmony;
   final bool hasBuddyClimb;
   final int trap;
+  final bool canEject;
   final String url;
   final List<String>? faultMessages;
   final String? otherWheelType;
@@ -63,6 +65,7 @@ class PitData {
           trap: pit["trap"] as int,
           hasBuddyClimb: pit["has_buddy_climb"] as bool,
           otherWheelType: pit["other_wheel_type"] as String?,
+          canEject: pit["can_eject"] as bool,
         )
       : null;
 }

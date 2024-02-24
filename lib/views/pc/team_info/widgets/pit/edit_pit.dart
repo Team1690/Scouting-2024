@@ -41,6 +41,7 @@ class _EditPitState extends State<EditPit> {
       trap: () => pit.trap,
       hasBuddyClimb: () => pit.hasBuddyClimb,
       url: () => pit.url,
+      canEject: () => pit.canEject,
     );
 
     return vars;

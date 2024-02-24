@@ -18,7 +18,8 @@ class PitVars implements HasuraVars {
         harmony = null,
         trap = 0,
         hasBuddyClimb = null,
-        url = null;
+        url = null,
+        canEject = null;
 
   PitVars.all({
     required this.driveTrainType,
@@ -36,6 +37,7 @@ class PitVars implements HasuraVars {
     required this.hasBuddyClimb,
     required this.otherDriveWheelType,
     required this.url,
+    required this.canEject,
   });
 
   PitVars copyWith({
@@ -54,6 +56,7 @@ class PitVars implements HasuraVars {
     final int Function()? trap,
     final bool? Function()? hasBuddyClimb,
     final String? Function()? url,
+    final bool? Function()? canEject,
   }) =>
       PitVars.all(
         driveTrainType:
@@ -81,6 +84,7 @@ class PitVars implements HasuraVars {
         hasBuddyClimb:
             hasBuddyClimb != null ? hasBuddyClimb() : this.hasBuddyClimb,
         url: url != null ? url() : this.url,
+        canEject: canEject != null ? canEject() : this.canEject,
       );
   final int? driveTrainType;
   final int? driveMotorType;
@@ -97,6 +101,7 @@ class PitVars implements HasuraVars {
   final int trap;
   final bool? hasBuddyClimb;
   final String? url;
+  final bool? canEject;
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         "drivetrain_id": driveTrainType,
@@ -110,10 +115,11 @@ class PitVars implements HasuraVars {
         "team_id": teamId,
         "weight": weight,
         "height": height,
-        "harmony": harmony,
+        "harmony": harmony ?? false,
         "trap": trap,
         "has_buddy_climb": hasBuddyClimb,
         "url": url,
+        "can_eject": canEject ?? false,
       };
 
   PitVars reset() => copyWith(
@@ -132,5 +138,6 @@ class PitVars implements HasuraVars {
         hasBuddyClimb: always(null),
         otherDriveWheelType: always(null),
         url: always(null),
+        canEject: always(null),
       );
 }

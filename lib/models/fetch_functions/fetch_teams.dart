@@ -119,6 +119,7 @@ query FetchTeams($ids: [Int!]) @cached {
       trap
       weight
       url
+      can_eject
       team {
         faults {
           message

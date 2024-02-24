@@ -78,6 +78,7 @@ class PitScoutingCard extends StatelessWidget {
                 numeralValue: data.trap,
               ),
               RobotHasSomething(title: "Harmony: ", value: data.harmony),
+              RobotHasSomething(title: "Can Eject: ", value: data.canEject),
               if (data.hasBuddyClimb)
                 RobotHasSomething(
                   title: "Buddy Climb: ",
