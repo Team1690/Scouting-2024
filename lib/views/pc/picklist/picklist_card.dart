@@ -39,9 +39,9 @@ class _PicklistCardState extends State<PicklistCard> {
   Widget build(final BuildContext context) => DashboardCard(
         titleWidgets: <Widget>[
           Column(
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   ToggleButtons(
                     children: <Widget>[
                       const Text("First"),
@@ -92,10 +92,12 @@ class _PicklistCardState extends State<PicklistCard> {
                       setState(() {
                         final List<AllTeamData> teamsUntaken = data
                             .where(
-                                (final AllTeamData element) => !element.taken)
+                              (final AllTeamData element) => !element.taken,
+                            )
                             .toList();
                         final Iterable<AllTeamData> teamsTaken = data.where(
-                            (final AllTeamData element) => element.taken);
+                          (final AllTeamData element) => element.taken,
+                        );
                         data = (teamsUntaken..addAll(teamsTaken));
                         for (int i = 0; i < data.length; i++) {
                           currentPickList.setIndex(data[i], i);
