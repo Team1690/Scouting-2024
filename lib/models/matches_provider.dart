@@ -21,20 +21,28 @@ class MatchesProvider extends InheritedWidget {
     return result!;
   }
 
-  static List<ScheduleMatch> matchesWith1690(final BuildContext context) =>
+  static List<ScheduleMatch> matchesWith(
+    final int teamNumber,
+    final BuildContext context,
+  ) =>
       MatchesProvider.of(context)
           .matches
           .where(
             (final ScheduleMatch match) =>
-                (match.redAlliance
-                        .any((final LightTeam team) => team.number == 1690) ||
-                    match.blueAlliance
-                        .any((final LightTeam team) => team.number == 1690)) &&
+                (match.redAlliance.any(
+                      (final LightTeam team) => team.number == teamNumber,
+                    ) ||
+                    match.blueAlliance.any(
+                      (final LightTeam team) => team.number == teamNumber,
+                    )) &&
                 match.matchIdentifier.isRematch != false,
           )
           .toList();
-  static List<LightTeam> teamsWith1690(final BuildContext context) =>
-      matchesWith1690(context)
+  static List<LightTeam> teamsWith(
+    final int teamNumber,
+    final BuildContext context,
+  ) =>
+      matchesWith(teamNumber, context)
           .map(
             (final ScheduleMatch e) =>
                 <LightTeam>[...e.blueAlliance, ...e.redAlliance],

@@ -21,7 +21,7 @@ class CoachView extends StatelessWidget {
         ),
         body: FutureBuilder<SplayTreeSet<TeamData>>(
           future: fetchMultipleTeamData(
-            MatchesProvider.teamsWith1690(context)
+            MatchesProvider.teamsWith(1690, context)
                 .map((final LightTeam e) => e.id)
                 .toList(),
             context,
@@ -38,7 +38,7 @@ class CoachView extends StatelessWidget {
                 aspectRatio: 2.0,
                 viewportFraction: 1,
               ),
-              items: MatchesProvider.matchesWith1690(context)
+              items: MatchesProvider.matchesWith(1690, context)
                   .map(
                     (final ScheduleMatch match) => CoachMatchScreen(
                       match: match,
