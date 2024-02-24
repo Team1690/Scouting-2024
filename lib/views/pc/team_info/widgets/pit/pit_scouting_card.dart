@@ -99,9 +99,6 @@ class PitScoutingCard extends StatelessWidget {
                       "Drive motor: ${data.driveMotorType.title}",
                     ),
                     Text(
-                      "Drive motor amount: ${data.driveMotorAmount}",
-                    ),
-                    Text(
                       "Drive wheel: ${data.driveWheelType == DriveWheel.other ? data.otherWheelType : data.driveWheelType.title}",
                     ),
                     RobotHasSomething(

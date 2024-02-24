@@ -12,7 +12,6 @@ import "package:scouting_frontend/views/mobile/screens/pit_view/widgets/measurem
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_vars.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
-import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/submit_button.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/widgets/teams_without_pit.dart";
@@ -193,7 +192,7 @@ class _PitViewState extends State<PitView> {
                           : null,
                     ),
                     const SizedBox(
-                      height: 5,
+                      height: 20,
                     ),
                     Visibility(
                       visible: otherWheelTypeSelected,
@@ -216,25 +215,6 @@ class _PitViewState extends State<PitView> {
                           labelText: "\"Other\" drive wheel type",
                         ),
                       ),
-                    ),
-                    Counter(
-                      count: vars.driveMotorAmount,
-                      label: "Drive Motors",
-                      icon: Icons.speed,
-                      upperLimit: 10,
-                      lowerLimit: 2,
-                      stepValue: 2,
-                      longPressedValue: 4,
-                      onChange: (final int newValue) {
-                        setState(() {
-                          vars = vars.copyWith(
-                            driveMotorAmount: () => newValue,
-                          );
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
                     ),
                     Switcher(
                       borderRadiusGeometry: defaultBorderRadius,
@@ -506,16 +486,16 @@ class _PitViewState extends State<PitView> {
 }
 
 const String insertMutation = r"""
-mutation InsertPit($drive_motor_amount: Int, $drivemotor_id: Int, $drivetrain_id: Int, $wheel_type_id: Int, $other_wheel_type: String, $gearbox_purchased: Boolean!, $notes: String, $has_shifter: Boolean, $team_id: Int, $weight: float8!, $height: float8!, $harmony: Boolean!, $trap: Int!, $has_buddy_climb: Boolean!, $url: String!, $can_eject: Boolean!) {
-  insert_pit(objects: [{drive_motor_amount: $drive_motor_amount, drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, wheel_type_id: $wheel_type_id, other_wheel_type: $other_wheel_type, gearbox_purchased: $gearbox_purchased, notes: $notes, has_shifter: $has_shifter, team_id: $team_id, weight: $weight, height: $height, harmony: $harmony, trap: $trap, has_buddy_climb: $has_buddy_climb, url: $url, can_eject: $can_eject}]) {
+mutation InsertPit( $drivemotor_id: Int, $drivetrain_id: Int, $wheel_type_id: Int, $other_wheel_type: String, $gearbox_purchased: Boolean!, $notes: String, $has_shifter: Boolean, $team_id: Int, $weight: float8!, $height: float8!, $harmony: Boolean!, $trap: Int!, $has_buddy_climb: Boolean!, $url: String!, $can_eject: Boolean!) {
+  insert_pit(objects: [{ drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, wheel_type_id: $wheel_type_id, other_wheel_type: $other_wheel_type, gearbox_purchased: $gearbox_purchased, notes: $notes, has_shifter: $has_shifter, team_id: $team_id, weight: $weight, height: $height, harmony: $harmony, trap: $trap, has_buddy_climb: $has_buddy_climb, url: $url, can_eject: $can_eject}]) {
     affected_rows
   }
 }
 """;
 
 const String updateMutation = r"""
-mutation UpdatePit($drive_motor_amount: Int, $drivemotor_id: Int, $drivetrain_id: Int, $wheel_type_id: Int, $other_wheel_type: String, $gearbox_purchased: Boolean!, $notes: String, $has_shifter: Boolean, $team_id: Int, $weight: float8!, $height: float8!, $harmony: Boolean!, $trap: Int!, $has_buddy_climb: Boolean!, $url: String!, $can_eject: Boolean!) {
-  update_pit(where: {team_id: {_eq: $team_id}}, _set: {drive_motor_amount: $drive_motor_amount, drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, wheel_type_id: $wheel_type_id, other_wheel_type: $other_wheel_type, gearbox_purchased: $gearbox_purchased, notes: $notes, has_shifter: $has_shifter, team_id: $team_id, weight: $weight, height: $height, harmony: $harmony, trap: $trap, has_buddy_climb: $has_buddy_climb, url: $url, can_eject: $can_eject}) {
+mutation UpdatePit( $drivemotor_id: Int, $drivetrain_id: Int, $wheel_type_id: Int, $other_wheel_type: String, $gearbox_purchased: Boolean!, $notes: String, $has_shifter: Boolean, $team_id: Int, $weight: float8!, $height: float8!, $harmony: Boolean!, $trap: Int!, $has_buddy_climb: Boolean!, $url: String!, $can_eject: Boolean!) {
+  update_pit(where: {team_id: {_eq: $team_id}}, _set: { drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, wheel_type_id: $wheel_type_id, other_wheel_type: $other_wheel_type, gearbox_purchased: $gearbox_purchased, notes: $notes, has_shifter: $has_shifter, team_id: $team_id, weight: $weight, height: $height, harmony: $harmony, trap: $trap, has_buddy_climb: $has_buddy_climb, url: $url, can_eject: $can_eject}) {
     affected_rows
   }
 }""";

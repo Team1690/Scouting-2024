@@ -6,7 +6,6 @@ import "package:scouting_frontend/models/team_model.dart";
 class PitData {
   PitData({
     required this.driveTrainType,
-    required this.driveMotorAmount,
     required this.driveWheelType,
     required this.hasShifer,
     required this.gearboxPurchased,
@@ -25,7 +24,6 @@ class PitData {
   });
 
   final DriveTrain driveTrainType;
-  final int driveMotorAmount;
   final DriveWheel driveWheelType;
   final bool? hasShifer;
   final bool? gearboxPurchased;
@@ -46,7 +44,6 @@ class PitData {
       ? PitData(
           driveTrainType:
               driveTrainTitleToEnum(pit["drivetrain"]["title"] as String),
-          driveMotorAmount: pit["drive_motor_amount"] as int,
           driveMotorType:
               driveMotorTitleToEnum(pit["drivemotor"]["title"] as String),
           driveWheelType:

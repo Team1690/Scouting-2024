@@ -99,7 +99,6 @@ query FetchTeams($ids: [Int!]) @cached {
       }
     }
     pit {
-      drive_motor_amount
       wheel_type {
         title
       }

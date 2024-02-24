@@ -13,7 +13,6 @@ subscription FetchAllTeams {
       drivetrain {
         title
       }
-      drive_motor_amount
       drivemotor {
         title
       }

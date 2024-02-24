@@ -6,7 +6,6 @@ class PitVars implements HasuraVars {
   PitVars(final BuildContext context)
       : driveTrainType = null,
         driveMotorType = null,
-        driveMotorAmount = 2,
         hasShifter = null,
         gearboxPurchased = null,
         notes = "",
@@ -24,7 +23,6 @@ class PitVars implements HasuraVars {
   PitVars.all({
     required this.driveTrainType,
     required this.driveMotorType,
-    required this.driveMotorAmount,
     required this.hasShifter,
     required this.gearboxPurchased,
     required this.notes,
@@ -43,7 +41,6 @@ class PitVars implements HasuraVars {
   PitVars copyWith({
     final int? Function()? driveTrainType,
     final int? Function()? driveMotorType,
-    final int Function()? driveMotorAmount,
     final bool? Function()? hasShifter,
     final bool? Function()? gearboxPurchased,
     final String Function()? notes,
@@ -63,9 +60,6 @@ class PitVars implements HasuraVars {
             driveTrainType != null ? driveTrainType() : this.driveTrainType,
         driveMotorType:
             driveMotorType != null ? driveMotorType() : this.driveMotorType,
-        driveMotorAmount: driveMotorAmount != null
-            ? driveMotorAmount()
-            : this.driveMotorAmount,
         otherDriveWheelType: otherDriveWheelType != null
             ? otherDriveWheelType()
             : this.otherDriveWheelType,
@@ -88,7 +82,6 @@ class PitVars implements HasuraVars {
       );
   final int? driveTrainType;
   final int? driveMotorType;
-  final int driveMotorAmount;
   final bool? hasShifter;
   final bool? gearboxPurchased;
   final String notes;
@@ -106,7 +99,6 @@ class PitVars implements HasuraVars {
   Map<String, dynamic> toJson() => <String, dynamic>{
         "drivetrain_id": driveTrainType,
         "drivemotor_id": driveMotorType,
-        "drive_motor_amount": driveMotorAmount,
         "has_shifter": hasShifter,
         "gearbox_purchased": gearboxPurchased,
         "notes": notes,
@@ -125,7 +117,6 @@ class PitVars implements HasuraVars {
   PitVars reset() => copyWith(
         driveTrainType: always(null),
         driveMotorType: always(null),
-        driveMotorAmount: always(2),
         hasShifter: always(null),
         gearboxPurchased: always(null),
         notes: always(""),
