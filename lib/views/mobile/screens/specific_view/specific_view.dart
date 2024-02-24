@@ -2,7 +2,9 @@ import "dart:async";
 import "dart:ui" as ui;
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:scouting_frontend/models/data/starting_position_enum.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -36,8 +38,24 @@ class _SpecificState extends State<Specific> {
   (ui.Image, ui.Image)? fieldImages;
   late SpecificVars vars = SpecificVars(context);
   bool intialIsRed = false;
-  late Future<List<Sketch>> pathsFuture = Future<List<Sketch>>(
-    () => <Sketch>[],
+  late Future<
+      List<
+          ({
+            Sketch sketch,
+            StartingPosition startingPos,
+            MatchIdentifier matchIdentifier
+          })>> pathsFuture = Future<
+      List<
+          ({
+            Sketch sketch,
+            StartingPosition startingPos,
+            MatchIdentifier matchIdentifier
+          })>>(
+    () => <({
+      Sketch sketch,
+      StartingPosition startingPos,
+      MatchIdentifier matchIdentifier
+    })>[],
   );
 
   @override
@@ -54,11 +72,16 @@ class _SpecificState extends State<Specific> {
             widgets: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(defaultPadding),
-                child: FutureBuilder<List<Sketch>>(
+                child: FutureBuilder<
+                    List<
+                        AutoPathData>>(
                   future: pathsFuture,
                   builder: (
                     final BuildContext context,
-                    final AsyncSnapshot<List<Sketch>> snapshot,
+                    final AsyncSnapshot<
+                            List<
+                                AutoPathData>>
+                        snapshot,
                   ) =>
                       SingleChildScrollView(
                     child: Form(
@@ -97,7 +120,7 @@ class _SpecificState extends State<Specific> {
                                   autoPath: always(null),
                                 );
                                 if (vars.team != null) {
-                                  pathsFuture = getPaths(vars.team!.id);
+                                  pathsFuture = getPaths(vars.team!.id, true);
                                 }
                                 final ScheduleMatch? scheduleMatch =
                                     vars.scheduleMatch;
@@ -152,7 +175,19 @@ class _SpecificState extends State<Specific> {
                               final Sketch? result =
                                   await showPathSelectionDialog(
                                 context,
-                                snapshot.data ?? <Sketch>[],
+                                snapshot.data
+                                        ?.map(
+                                          (
+                                            final ({
+                                              Sketch sketch,
+                                              StartingPosition startingPos,
+                                              MatchIdentifier matchIdentifier
+                                            }) autoData,
+                                          ) =>
+                                              autoData.sketch,
+                                        )
+                                        .toList() ??
+                                    <Sketch>[],
                                 intialIsRed,
                               );
                               setState(() {
@@ -262,8 +297,18 @@ class _SpecificState extends State<Specific> {
                               "auto_paths/${vars.scheduleMatch?.id}_${vars.team?.id}.txt",
                               () {
                                 setState(() {
-                                  pathsFuture = Future<List<Sketch>>(
-                                    () => <Sketch>[],
+                                  pathsFuture = Future<
+                                      List<
+                                          ({
+                                            Sketch sketch,
+                                            StartingPosition startingPos,
+                                            MatchIdentifier matchIdentifier
+                                          })>>(
+                                    () => <({
+                                      Sketch sketch,
+                                      StartingPosition startingPos,
+                                      MatchIdentifier matchIdentifier
+                                    })>[],
                                   );
                                   vars = vars.reset(context);
                                   nameController.clear();
