@@ -38,83 +38,93 @@ class _PicklistCardState extends State<PicklistCard> {
   @override
   Widget build(final BuildContext context) => DashboardCard(
         titleWidgets: <Widget>[
-          ToggleButtons(
-            children: <Widget>[
-              const Text("First"),
-              const Text("Second"),
-              const Text("Third"),
-            ]
-                .map(
-                  (final Widget text) => Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isPC(context) ? 30 : 5,
-                    ),
-                    child: text,
+          Column(
+            children: [
+              Row(
+                children: [
+                  ToggleButtons(
+                    children: <Widget>[
+                      const Text("First"),
+                      const Text("Second"),
+                      const Text("Third"),
+                    ]
+                        .map(
+                          (final Widget text) => Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isPC(context) ? 30 : 5,
+                            ),
+                            child: text,
+                          ),
+                        )
+                        .toList(),
+                    isSelected: <bool>[
+                      currentPickList == CurrentPickList.first,
+                      currentPickList == CurrentPickList.second,
+                      currentPickList == CurrentPickList.third,
+                    ],
+                    onPressed: (final int pressedIndex) {
+                      if (pressedIndex == 0) {
+                        setState(() {
+                          currentPickList = CurrentPickList.first;
+                          CurrentPickList.first;
+                        });
+                      } else if (pressedIndex == 1) {
+                        setState(() {
+                          currentPickList = CurrentPickList.second;
+                          CurrentPickList.second;
+                        });
+                      } else if (pressedIndex == 2) {
+                        setState(() {
+                          currentPickList = CurrentPickList.third;
+                          CurrentPickList.third;
+                        });
+                      }
+                    },
                   ),
-                )
-                .toList(),
-            isSelected: <bool>[
-              currentPickList == CurrentPickList.first,
-              currentPickList == CurrentPickList.second,
-              currentPickList == CurrentPickList.third,
+                  IconButton(
+                    onPressed: () =>
+                        save(List<AllTeamData>.from(data), context),
+                    icon: const Icon(Icons.save),
+                  ),
+                  IconButton(
+                    tooltip: "Sort taken",
+                    onPressed: () {
+                      setState(() {
+                        final List<AllTeamData> teamsUntaken = data
+                            .where(
+                                (final AllTeamData element) => !element.taken)
+                            .toList();
+                        final Iterable<AllTeamData> teamsTaken = data.where(
+                            (final AllTeamData element) => element.taken);
+                        data = (teamsUntaken..addAll(teamsTaken));
+                        for (int i = 0; i < data.length; i++) {
+                          currentPickList.setIndex(data[i], i);
+                        }
+                      });
+                    },
+                    icon: const Icon(Icons.sort),
+                  ),
+                ],
+              ),
+              TextButton(
+                onPressed: () async {
+                  final List<AllTeamData>? newAllTeamData =
+                      await showDialog<List<AllTeamData>>(
+                    context: context,
+                    builder: (final BuildContext context) => AutoPickListPopUp(
+                      currentPickList: currentPickList,
+                      teamsToSort: widget.initialData,
+                    ),
+                  );
+                  if (newAllTeamData != null) {
+                    setState(() {
+                      data = newAllTeamData;
+                    });
+                  }
+                },
+                child: const Text("Sort By"),
+              ),
             ],
-            onPressed: (final int pressedIndex) {
-              if (pressedIndex == 0) {
-                setState(() {
-                  currentPickList = CurrentPickList.first;
-                  CurrentPickList.first;
-                });
-              } else if (pressedIndex == 1) {
-                setState(() {
-                  currentPickList = CurrentPickList.second;
-                  CurrentPickList.second;
-                });
-              } else if (pressedIndex == 2) {
-                setState(() {
-                  currentPickList = CurrentPickList.third;
-                  CurrentPickList.third;
-                });
-              }
-            },
-          ),
-          IconButton(
-            onPressed: () => save(List<AllTeamData>.from(data), context),
-            icon: const Icon(Icons.save),
-          ),
-          IconButton(
-            tooltip: "Sort taken",
-            onPressed: () {
-              setState(() {
-                final List<AllTeamData> teamsUntaken = data
-                    .where((final AllTeamData element) => !element.taken)
-                    .toList();
-                final Iterable<AllTeamData> teamsTaken =
-                    data.where((final AllTeamData element) => element.taken);
-                data = (teamsUntaken..addAll(teamsTaken));
-                for (int i = 0; i < data.length; i++) {
-                  currentPickList.setIndex(data[i], i);
-                }
-              });
-            },
-            icon: const Icon(Icons.sort),
-          ),
-          TextButton(
-            onPressed: () async {
-              final List<AllTeamData>? newAllTeamData =
-                  await showDialog<List<AllTeamData>>(
-                context: context,
-                builder: (final BuildContext context) => AutoPickListPopUp(
-                  currentPickList: currentPickList,
-                  teamsToSort: widget.initialData,
-                ),
-              );
-              if (newAllTeamData != null) {
-                setState(() {
-                  data = newAllTeamData;
-                });
-              }
-            },
-            child: const Text("Sort By"),
           ),
         ],
         title: "",
