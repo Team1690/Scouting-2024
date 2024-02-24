@@ -89,29 +89,29 @@ class PitScoutingCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "Height: ${data.height}cm",
+                      "Height: ${data.height} cm",
                     ),
                     Text(
-                      "Drivetrain: ${data.driveTrainType}",
+                      "Drivetrain: ${data.driveTrainType.title}",
                     ),
                     Text(
-                      "Drive motor: ${data.driveMotorType}",
+                      "Drive motor: ${data.driveMotorType.title}",
                     ),
                     Text(
                       "Drive motor amount: ${data.driveMotorAmount}",
                     ),
                     Text(
-                      "Drive wheel: ${data.driveWheelType == DriveWheel.other ? data.otherWheelType : data.driveWheelType}",
+                      "Drive wheel: ${data.driveWheelType == DriveWheel.other ? data.otherWheelType : data.driveWheelType.title}",
                     ),
                     RobotHasSomething(
                       title: "Has shifter:",
                       value: data.hasShifer,
                     ),
                     Text(
-                      "Gearbox: ${data.gearboxPurchased.mapNullable((final bool p0) => p0 ? "purchased" : "custom") ?? "Not answered"}",
+                      "Gearbox: ${data.gearboxPurchased.mapNullable((final bool p0) => p0 ? "Purchased" : "Custom") ?? "Not answered"}",
                     ),
                     Text(
-                      "Weight: ${data.weight} Kg",
+                      "Weight: ${data.weight} kg",
                     ),
                   ],
                 ),
