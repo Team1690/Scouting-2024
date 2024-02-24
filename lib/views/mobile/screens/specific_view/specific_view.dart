@@ -72,16 +72,11 @@ class _SpecificState extends State<Specific> {
             widgets: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(defaultPadding),
-                child: FutureBuilder<
-                    List<
-                        AutoPathData>>(
+                child: FutureBuilder<List<AutoPathData>>(
                   future: pathsFuture,
                   builder: (
                     final BuildContext context,
-                    final AsyncSnapshot<
-                            List<
-                                AutoPathData>>
-                        snapshot,
+                    final AsyncSnapshot<List<AutoPathData>> snapshot,
                   ) =>
                       SingleChildScrollView(
                     child: Form(
@@ -95,7 +90,9 @@ class _SpecificState extends State<Specific> {
                                     ? null
                                     : "Please enter your name",
                             onChanged: (final String p0) {
-                              vars = vars.copyWith(name: always(p0));
+                              setState(() {
+                                vars = vars.copyWith(name: always(p0));
+                              });
                             },
                             decoration: const InputDecoration(
                               prefixIcon: Icon(Icons.person),
@@ -280,8 +277,11 @@ class _SpecificState extends State<Specific> {
                               controller: faultsController,
                               textDirection: TextDirection.rtl,
                               onChanged: (final String value) {
-                                vars =
-                                    vars.copyWith(faultMessage: always(value));
+                                setState(() {
+                                  vars = vars.copyWith(
+                                    faultMessage: always(value),
+                                  );
+                                });
                               },
                               decoration: const InputDecoration(
                                 hintText: "Robot fault",
@@ -390,7 +390,7 @@ String getMutation(final String? faultMessage) => """
                     affected_rows
                   }
                   ${faultMessage == null ? "" : """
-                  insert_faults(objects: {team_id: \$team_id, message: \$fault_message, match_type_id: \$schedule_match_id,}) {
+                  insert_faults(objects: {team_id: \$team_id, message: \$fault_message, schedule_match_id: \$schedule_match_id, }) {
                     affected_rows
                   }"""}
                       }
