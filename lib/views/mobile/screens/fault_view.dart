@@ -117,32 +117,44 @@ Stream<List<(FaultEntry, int?)>> fetchFaults() {
             (final dynamic e) => (e["faults"] as List<dynamic>).map(
               (final dynamic fault) {
                 final int lastMatch =
-                    (data["schedule_matches"] as List<dynamic>).lastIndexWhere(
-                  (final dynamic element) => element["happened"] as bool,
-                );
+                    (data["schedule_matches"] as List<dynamic>).isNotEmpty
+                        ? ScheduleMatch.fromJson(
+                            (data["schedule_matches"] as List<dynamic>)
+                                .lastWhereOrNull(
+                              (final dynamic element) =>
+                                  element["happened"] as bool,
+                            ),
+                            false,
+                          ).matchIdentifier.number
+                        : 0;
                 final dynamic nextMatch =
                     (data["schedule_matches"] as List<dynamic>)
                         .where(
                           (final dynamic element) => teamValues.any(
                             (final String team) =>
-                                element[team]?["number"] == 1690,
+                                element[team]?["number"] == 1690 &&
+                                element["match_type"]?["title"] != "Practice" &&
+                                element["match_type"]?["title"] !=
+                                    "Pre Scouting",
                           ),
                         )
                         .firstWhereOrNull(
                           (final dynamic element) => teamValues.any(
                             (final String team) =>
                                 element[team]?["number"] ==
-                                LightTeam.fromJson(fault["team"]).number,
+                                    LightTeam.fromJson(fault["team"]).number &&
+                                !(element["happened"] as bool),
                           ),
                         );
+
                 return (
                   FaultEntry.parse(fault),
                   nextMatch == null
                       ? null
-                      : lastMatch -
-                          ScheduleMatch.fromJson(nextMatch, false)
+                      : ScheduleMatch.fromJson(nextMatch, false)
                               .matchIdentifier
-                              .number
+                              .number -
+                          lastMatch
                 );
               },
             ),
