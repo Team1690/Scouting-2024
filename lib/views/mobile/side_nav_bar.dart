@@ -3,7 +3,7 @@ import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info/coach_team_info.dart";
-import "package:scouting_frontend/views/mobile/screens/coach_view.dart";
+import "package:scouting_frontend/views/mobile/screens/coach_view/coach_view.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_view.dart";
@@ -51,19 +51,14 @@ class SideNavBar extends StatelessWidget {
               ),
             ),
             const NavbarTile(
-              icon: Icons.error_outline,
+              icon: Icons.precision_manufacturing_sharp,
               title: "Technical",
               widget: UserInput.new,
             ),
             const NavbarTile(
-              icon: Icons.search,
+              icon: Icons.person_search_sharp,
               title: "Specific",
               widget: Specific.new,
-            ),
-            const NavbarTile(
-              icon: Icons.feed_outlined,
-              title: "Coach",
-              widget: CoachView.new,
             ),
             const NavbarTile(
               icon: Icons.build,
@@ -74,6 +69,11 @@ class SideNavBar extends StatelessWidget {
               icon: Icons.construction,
               title: "Faults",
               widget: FaultView.new,
+            ),
+            const NavbarTile(
+              icon: Icons.feed_outlined,
+              title: "Coach",
+              widget: CoachView.new,
             ),
             const NavbarTile(
               icon: Icons.list,
