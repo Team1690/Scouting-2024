@@ -51,19 +51,14 @@ class SideNavBar extends StatelessWidget {
               ),
             ),
             const NavbarTile(
-              icon: Icons.error_outline,
+              icon: Icons.precision_manufacturing_sharp,
               title: "Technical",
               widget: UserInput.new,
             ),
             const NavbarTile(
-              icon: Icons.search,
+              icon: Icons.person_search_sharp,
               title: "Specific",
               widget: Specific.new,
-            ),
-            const NavbarTile(
-              icon: Icons.feed_outlined,
-              title: "Coach",
-              widget: CoachView.new,
             ),
             const NavbarTile(
               icon: Icons.build,
@@ -74,6 +69,11 @@ class SideNavBar extends StatelessWidget {
               icon: Icons.construction,
               title: "Faults",
               widget: FaultView.new,
+            ),
+            const NavbarTile(
+              icon: Icons.feed_outlined,
+              title: "Coach",
+              widget: CoachView.new,
             ),
             const NavbarTile(
               icon: Icons.list,
