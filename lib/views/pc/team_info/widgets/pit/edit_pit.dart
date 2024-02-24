@@ -24,7 +24,6 @@ class _EditPitState extends State<EditPit> {
       return vars;
     }
     vars = vars.copyWith(
-      driveMotorAmount: () => pit.driveMotorAmount,
       driveMotorType: () =>
           IdProvider.of(context).drivemotor.nameToId[pit.driveMotorType.title],
       driveTrainType: () =>
@@ -41,6 +40,7 @@ class _EditPitState extends State<EditPit> {
       trap: () => pit.trap,
       hasBuddyClimb: () => pit.hasBuddyClimb,
       url: () => pit.url,
+      canEject: () => pit.canEject,
     );
 
     return vars;

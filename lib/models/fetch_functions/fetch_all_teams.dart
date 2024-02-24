@@ -13,7 +13,6 @@ subscription FetchAllTeams {
       drivetrain {
         title
       }
-      drive_motor_amount
       drivemotor {
         title
       }
@@ -39,6 +38,7 @@ subscription FetchAllTeams {
       trap
       has_buddy_climb
       other_wheel_type
+      can_eject
     }
     id
     name

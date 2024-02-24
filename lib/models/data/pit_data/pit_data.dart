@@ -6,7 +6,6 @@ import "package:scouting_frontend/models/team_model.dart";
 class PitData {
   PitData({
     required this.driveTrainType,
-    required this.driveMotorAmount,
     required this.driveWheelType,
     required this.hasShifer,
     required this.gearboxPurchased,
@@ -21,10 +20,10 @@ class PitData {
     required this.faultMessages,
     required this.otherWheelType,
     required this.team,
+    required this.canEject,
   });
 
   final DriveTrain driveTrainType;
-  final int driveMotorAmount;
   final DriveWheel driveWheelType;
   final bool? hasShifer;
   final bool? gearboxPurchased;
@@ -35,6 +34,7 @@ class PitData {
   final bool harmony;
   final bool hasBuddyClimb;
   final int trap;
+  final bool canEject;
   final String url;
   final List<String>? faultMessages;
   final String? otherWheelType;
@@ -44,7 +44,6 @@ class PitData {
       ? PitData(
           driveTrainType:
               driveTrainTitleToEnum(pit["drivetrain"]["title"] as String),
-          driveMotorAmount: pit["drive_motor_amount"] as int,
           driveMotorType:
               driveMotorTitleToEnum(pit["drivemotor"]["title"] as String),
           driveWheelType:
@@ -63,6 +62,7 @@ class PitData {
           trap: pit["trap"] as int,
           hasBuddyClimb: pit["has_buddy_climb"] as bool,
           otherWheelType: pit["other_wheel_type"] as String?,
+          canEject: pit["can_eject"] as bool,
         )
       : null;
 }

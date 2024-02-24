@@ -78,6 +78,7 @@ class PitScoutingCard extends StatelessWidget {
                 numeralValue: data.trap,
               ),
               RobotHasSomething(title: "Harmony: ", value: data.harmony),
+              RobotHasSomething(title: "Can Eject: ", value: data.canEject),
               if (data.hasBuddyClimb)
                 RobotHasSomething(
                   title: "Buddy Climb: ",
@@ -96,9 +97,6 @@ class PitScoutingCard extends StatelessWidget {
                     ),
                     Text(
                       "Drive motor: ${data.driveMotorType.title}",
-                    ),
-                    Text(
-                      "Drive motor amount: ${data.driveMotorAmount}",
                     ),
                     Text(
                       "Drive wheel: ${data.driveWheelType == DriveWheel.other ? data.otherWheelType : data.driveWheelType.title}",
