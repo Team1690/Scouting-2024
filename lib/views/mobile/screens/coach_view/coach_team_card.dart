@@ -3,8 +3,8 @@ import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info/coach_team_info.dart";
 
-class CoachTeam extends StatelessWidget {
-  const CoachTeam({
+class CoachTeamCard extends StatelessWidget {
+  const CoachTeamCard({
     super.key,
     required this.team,
     required this.context,

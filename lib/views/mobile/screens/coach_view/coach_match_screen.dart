@@ -4,7 +4,7 @@ import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/views/mobile/screens/coach_view/coach_team_data.dart";
+import "package:scouting_frontend/views/mobile/screens/coach_view/coach_team_card.dart";
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
 
 class CoachMatchScreen extends StatelessWidget {
@@ -58,7 +58,7 @@ class CoachMatchScreen extends StatelessWidget {
                       children: match.blueAlliance
                           .map(
                             (final LightTeam e) => Expanded(
-                              child: CoachTeam(
+                              child: CoachTeamCard(
                                 team: blueAllianceTeams.firstWhere(
                                   (final TeamData element) =>
                                       element.lightTeam == e,
@@ -79,7 +79,7 @@ class CoachMatchScreen extends StatelessWidget {
                       children: match.redAlliance
                           .map(
                             (final LightTeam e) => Expanded(
-                              child: CoachTeam(
+                              child: CoachTeamCard(
                                 team: redAllianceTeams.firstWhere(
                                   (final TeamData element) =>
                                       element.lightTeam == e,
