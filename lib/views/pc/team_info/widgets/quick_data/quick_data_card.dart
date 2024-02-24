@@ -23,6 +23,9 @@ class QuickDataCard extends StatelessWidget {
                   scrollDirection: Axis.vertical,
                   child: Flex(
                     direction: direction,
+                    crossAxisAlignment: direction == Axis.horizontal
+                        ? CrossAxisAlignment.start
+                        : CrossAxisAlignment.center,
                     children: <Widget>[
                       Column(
                         children: <Widget>[
