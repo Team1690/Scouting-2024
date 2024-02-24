@@ -59,6 +59,8 @@ class _PitViewState extends State<PitView> {
       teamSelectionController.clear();
       userImage = null;
       advancedSwitchController.value = false;
+      kg = true;
+      meters = true;
     });
   }
 
@@ -434,9 +436,11 @@ class _PitViewState extends State<PitView> {
                       textDirection: TextDirection.rtl,
                       controller: notesController,
                       onChanged: (final String notes) {
-                        vars = vars.copyWith(
-                          notes: () => notes,
-                        );
+                        setState(() {
+                          vars = vars.copyWith(
+                            notes: () => notes,
+                          );
+                        });
                       },
                       style: const TextStyle(color: Colors.white),
                       cursorColor: Colors.white,

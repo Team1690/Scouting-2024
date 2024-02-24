@@ -162,7 +162,9 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
     }
     await Future<void>.delayed(const Duration(seconds: 5), () {
       if (_state == ButtonState.success) {
-        widget.resetForm();
+        setState(() {
+          widget.resetForm();
+        });
       }
       setState((() => _state = ButtonState.idle));
     });

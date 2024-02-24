@@ -99,7 +99,7 @@ class SpecificVars implements HasuraVars {
         "is_rematch": isRematch,
         "schedule_match_id": scheduleMatch?.id,
         "scouter_name": name,
-        if (faultMessage != null) "schedule_match_id": scheduleMatch?.id,
+        if (faultMessage != null) "fault_message": faultMessage,
       };
 
   SpecificVars reset(final BuildContext context) => copyWith(
