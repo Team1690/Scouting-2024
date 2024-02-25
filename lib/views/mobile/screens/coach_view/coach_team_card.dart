@@ -59,24 +59,27 @@ class CoachTeamCard extends StatelessWidget {
                 flex: 6,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: Column(
-                    children: <Widget>[
-                      if (team.aggregateData.gamesPlayed == 0)
-                        const Spacer()
-                      else ...<Widget>[
-                        Text(
-                          "Avg gamepieces: ${team.aggregateData.avgData.gamepieces}",
-                        ),
-                        Text(
-                          "Avg Trap Amount: ${team.aggregateData.avgData.trapAmount}",
-                        ),
-                        Text("Aim: ${team.aim}%"),
-                        Text("Climb Percentage: ${team.climbPercentage}%"),
-                        Text(
-                          "Matches Played: ${team.aggregateData.gamesPlayed}",
-                        ),
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Column(
+                      children: <Widget>[
+                        if (team.aggregateData.gamesPlayed == 0)
+                          const Spacer()
+                        else ...<Widget>[
+                          Text(
+                            "Avg gamepieces: ${team.aggregateData.avgData.gamepieces}",
+                          ),
+                          Text(
+                            "Avg Trap Amount: ${team.aggregateData.avgData.trapAmount}",
+                          ),
+                          Text("Aim: ${team.aim}%"),
+                          Text("Climb Percentage: ${team.climbPercentage}%"),
+                          Text(
+                            "Matches Played: ${team.aggregateData.gamesPlayed}",
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ),
               ),
