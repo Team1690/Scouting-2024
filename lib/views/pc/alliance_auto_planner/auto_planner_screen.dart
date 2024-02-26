@@ -119,9 +119,7 @@ class _AutoScreenTeamSelectionState extends State<AutoScreenTeamSelection> {
                   IconButton(
                     onPressed: () async {
                       field = await getField(false);
-                      setState(() {
-                        print(snapshot.data!);
-                      });
+                      setState(() {});
                     },
                     icon: const Icon(Icons.route),
                   ),
