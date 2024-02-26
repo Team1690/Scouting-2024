@@ -311,7 +311,6 @@ class _SpecificState extends State<Specific> {
                                     })>[],
                                   );
                                   vars = vars.reset(context);
-                                  nameController.clear();
                                   teamController.clear();
                                   matchController.clear();
                                   faultsController.clear();
