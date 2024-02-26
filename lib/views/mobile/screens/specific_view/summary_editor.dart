@@ -36,7 +36,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
     generalController.text = widget.summaryEntry?.generalText ?? "";
     climbController.text = widget.summaryEntry?.climbText ?? "";
     drivingController.text = widget.summaryEntry?.drivingText ?? "";
-    defenseController.text = widget.summaryEntry?.drivingText ?? "";
+    defenseController.text = widget.summaryEntry?.defenseText ?? "";
   }
 
   bool isEnabled = false;
@@ -146,7 +146,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
               });
             },
             isEnabled: isEnabled,
-            controller: drivingController,
+            controller: defenseController,
             label: "Defense",
           ),
         ],
