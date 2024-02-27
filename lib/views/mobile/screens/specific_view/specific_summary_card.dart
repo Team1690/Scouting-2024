@@ -8,18 +8,20 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/summary_editor.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 
+// ignore: must_be_immutable
 class SpecificSummaryCard extends StatefulWidget {
-  const SpecificSummaryCard({super.key});
-
+  SpecificSummaryCard({super.key, required this.team});
+  LightTeam? team;
   @override
   State<SpecificSummaryCard> createState() => _SpecificSummaryCardState();
 }
 
 class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
-  final TextEditingController teamSelectionController = TextEditingController();
+  late TextEditingController teamSelectionController = TextEditingController(
+    text: "${widget.team?.number} ${widget.team?.name}",
+  );
 
   bool isEnabled = false;
-  LightTeam? team;
   @override
   Widget build(final BuildContext context) => Scaffold(
         drawer: isPC(context) ? null : SideNavBar(),
@@ -38,14 +40,14 @@ class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
                 teams: TeamProvider.of(context).teams,
                 onChange: (final LightTeam lightTeam) {
                   setState(() {
-                    team = lightTeam;
+                    widget.team = lightTeam;
                   });
                 },
                 controller: teamSelectionController,
               ),
-              if (team != null)
+              if (widget.team != null)
                 StreamBuilder<SummaryEntry?>(
-                  stream: fetchSpecificSummary(team!.id),
+                  stream: fetchSpecificSummary(widget.team!.id),
                   builder: (
                     final BuildContext context,
                     final AsyncSnapshot<SummaryEntry?> snapshot,
@@ -54,11 +56,11 @@ class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
                     onSuccess: (final SummaryEntry? summaryEntry) =>
                         SummaryEditor(
                       summaryEntry: summaryEntry,
-                      team: team!,
+                      team: widget.team!,
                     ),
                     onWaiting: CircularProgressIndicator.new,
                     onNoData: () =>
-                        SummaryEditor(summaryEntry: null, team: team!),
+                        SummaryEditor(summaryEntry: null, team: widget.team!),
                     onError: (final Object error) => Text("$error"),
                   ),
                 ),

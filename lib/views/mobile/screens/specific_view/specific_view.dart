@@ -326,9 +326,11 @@ class _SpecificState extends State<Specific> {
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: SpecificSummaryCard(),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: SpecificSummaryCard(
+                  team: vars.team,
+                ),
               ),
             ],
           ),
