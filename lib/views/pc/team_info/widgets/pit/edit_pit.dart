@@ -31,6 +31,8 @@ class _EditPitState extends State<EditPit> {
       notes: () => pit.notes,
       teamId: () => pit.team.id,
       weight: () => pit.weight,
+      length: () => pit.length,
+      width: () => pit.width,
       harmony: () => pit.harmony,
       trap: () => pit.trap,
       url: () => pit.url,

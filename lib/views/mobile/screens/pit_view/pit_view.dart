@@ -18,6 +18,7 @@ import "package:scouting_frontend/views/mobile/screens/pit_view/widgets/teams_wi
 
 const double kgToPoundFactor = 2.20462262;
 const double mToFt = 1 / 0.3048;
+const double cmToInch = 0.393700787;
 
 class PitView extends StatefulWidget {
   const PitView([this.initialVars]);
@@ -41,20 +42,24 @@ class _PitViewState extends State<PitView> {
   final FocusNode node = FocusNode();
   final ValueNotifier<bool> advancedSwitchController =
       ValueNotifier<bool>(false);
+  final TextEditingController lengthController = TextEditingController();
+  final TextEditingController widthController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   bool kg = true;
-  bool meters = true;
+  bool lengthcm = true;
+  bool widthcm = true;
 
   void resetFrame() {
     setState(() {
       vars = vars.reset();
-      weightController.clear();
+      lengthController.clear();
       notesController.clear();
       teamSelectionController.clear();
       userImage = null;
       advancedSwitchController.value = false;
       kg = true;
-      meters = true;
+      widthcm = true;
+      lengthcm = true;
     });
   }
 
@@ -63,6 +68,8 @@ class _PitViewState extends State<PitView> {
     super.initState();
     vars = widget.initialVars ?? PitVars(context);
     weightController.text = vars.weight != null ? vars.weight.toString() : "";
+    lengthController.text = vars.length != null ? vars.length.toString() : "";
+    widthController.text = vars.width != null ? vars.width.toString() : "";
     notesController.text = vars.notes;
   }
 
@@ -177,6 +184,44 @@ class _PitViewState extends State<PitView> {
                         });
                       },
                       icon: Icons.fitness_center,
+                    ),
+                    MeasurementConversion(
+                      controller: lengthController,
+                      title: "Length",
+                      unitTypes: const <String>["CM", "INCH"],
+                      regularUnitsToOtherUnitsFactor: cmToInch,
+                      onValueChange: (final double? value) {
+                        setState(() {
+                          vars = vars.copyWith(length: () => value);
+                        });
+                      },
+                      onRegularUnits: lengthcm,
+                      currentValue: vars.length,
+                      onUnitsChange: (final bool newKg) {
+                        setState(() {
+                          lengthcm = newKg;
+                        });
+                      },
+                      icon: Icons.legend_toggle,
+                    ),
+                    MeasurementConversion(
+                      controller: widthController,
+                      title: "Width",
+                      unitTypes: const <String>["CM", "INCH"],
+                      regularUnitsToOtherUnitsFactor: cmToInch,
+                      onValueChange: (final double? value) {
+                        setState(() {
+                          vars = vars.copyWith(width: () => value);
+                        });
+                      },
+                      onRegularUnits: widthcm,
+                      currentValue: vars.width,
+                      onUnitsChange: (final bool newKg) {
+                        setState(() {
+                          widthcm = newKg;
+                        });
+                      },
+                      icon: Icons.compare,
                     ),
                     SectionDivider(label: "OnStage"),
                     Switcher(
@@ -354,16 +399,16 @@ class _PitViewState extends State<PitView> {
 }
 
 const String insertMutation = r"""
-mutation InsertPit( $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!) {
-  insert_pit(objects: [{ drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes, team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage}]) {
+mutation InsertPit( $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!) {
+  insert_pit(objects: [{ drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes, team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, length: $length, width: $width}]) {
     affected_rows
   }
 }
 """;
 
 const String updateMutation = r"""
-mutation UpdatePit( $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!) {
-  update_pit(where: {team_id: {_eq: $team_id}}, _set: { drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage}) {
+mutation UpdatePit( $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!) {
+  update_pit(where: {team_id: {_eq: $team_id}}, _set: { drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, length: $length, width: $width}) {
     affected_rows
   }
 }""";

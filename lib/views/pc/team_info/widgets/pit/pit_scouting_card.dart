@@ -95,6 +95,12 @@ class PitScoutingCard extends StatelessWidget {
                     Text(
                       "Weight: ${data.weight} kg",
                     ),
+                    Text(
+                      "Length: ${data.length} cm",
+                    ),
+                    Text(
+                      "Width: ${data.width} cm",
+                    ),
                   ],
                 ),
               ),

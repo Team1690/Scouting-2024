@@ -4,6 +4,8 @@ import "package:scouting_frontend/models/team_model.dart";
 
 class PitData {
   const PitData({
+    required this.length,
+    required this.width,
     required this.driveTrainType,
     required this.driveMotorType,
     required this.notes,
@@ -21,6 +23,8 @@ class PitData {
   final DriveMotor driveMotorType;
   final String notes;
   final double weight;
+  final double length;
+  final double width;
   final bool harmony;
   final int trap;
   final bool canEject;
@@ -41,6 +45,8 @@ class PitData {
               .map((final dynamic fault) => fault["message"] as String)
               .toList(),
           weight: (pit["weight"] as num).toDouble(),
+          length: (pit["length"] as num).toDouble(),
+          width: (pit["width"] as num).toDouble(),
           team: LightTeam.fromJson(pit["team"]),
           harmony: pit["harmony"] as bool,
           trap: pit["trap"] as int,

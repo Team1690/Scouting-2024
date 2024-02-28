@@ -13,7 +13,9 @@ class PitVars implements HasuraVars {
         trap = 0,
         url = null,
         canEject = null,
-        canPassUnderStage = null;
+        canPassUnderStage = null,
+        length = null,
+        width = null;
 
   PitVars.all({
     required this.driveTrainType,
@@ -26,6 +28,8 @@ class PitVars implements HasuraVars {
     required this.canPassUnderStage,
     required this.url,
     required this.canEject,
+    required this.length,
+    required this.width,
   });
 
   PitVars copyWith({
@@ -34,6 +38,8 @@ class PitVars implements HasuraVars {
     final String Function()? notes,
     final int? Function()? teamId,
     final double? Function()? weight,
+    final double? Function()? length,
+    final double? Function()? width,
     final bool? Function()? harmony,
     final int Function()? trap,
     final String? Function()? url,
@@ -48,6 +54,8 @@ class PitVars implements HasuraVars {
         notes: notes != null ? notes() : this.notes,
         teamId: teamId != null ? teamId() : this.teamId,
         weight: weight != null ? weight() : this.weight,
+        length: length != null ? length() : this.length,
+        width: width != null ? width() : this.width,
         harmony: harmony != null ? harmony() : this.harmony,
         trap: trap != null ? trap() : this.trap,
         url: url != null ? url() : this.url,
@@ -61,6 +69,8 @@ class PitVars implements HasuraVars {
   final String notes;
   final int? teamId;
   final double? weight;
+  final double? length;
+  final double? width;
   final bool? canPassUnderStage;
   final bool? harmony;
   final int trap;
@@ -73,6 +83,8 @@ class PitVars implements HasuraVars {
         "notes": notes,
         "team_id": teamId,
         "weight": weight,
+        "length": length,
+        "width": width,
         "harmony": harmony ?? false,
         "trap": trap,
         "can_pass_under_stage": canPassUnderStage,
@@ -86,6 +98,8 @@ class PitVars implements HasuraVars {
         notes: always(""),
         teamId: always(null),
         weight: always(null),
+        length: always(null),
+        width: always(null),
         harmony: always(null),
         trap: always(0),
         canPassUnderStage: always(null),
