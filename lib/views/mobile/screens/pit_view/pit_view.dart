@@ -233,13 +233,14 @@ class _PitViewState extends State<PitView> {
                     ),
                     Switcher(
                       borderRadiusGeometry: defaultBorderRadius,
-                      selected: vars.canEject.mapNullable(
-                            (final bool canEject) => canEject ? 1 : 0,
+                      selected: vars.canPassUnderStage.mapNullable(
+                            (final bool canPassUnderStage) =>
+                                canPassUnderStage ? 1 : 0,
                           ) ??
                           -1,
                       labels: const <String>[
-                        "Can't Eject",
-                        "Can Eject",
+                        "Can't Pass Under Stage",
+                        "Can Pass Under Stage",
                       ],
                       colors: const <Color>[
                         Colors.white,
@@ -248,7 +249,7 @@ class _PitViewState extends State<PitView> {
                       onChange: (final int selection) {
                         setState(() {
                           vars = vars.copyWith(
-                            canEject: () =>
+                            canPassUnderStage: () =>
                                 <int, bool>{1: true, 0: false}[selection],
                           );
                         });
@@ -353,16 +354,16 @@ class _PitViewState extends State<PitView> {
 }
 
 const String insertMutation = r"""
-mutation InsertPit( $drivemotor_id: Int, $drivetrain_id: Int, $wheel_type_id: Int, $other_wheel_type: String, $gearbox_purchased: Boolean!, $notes: String, $has_shifter: Boolean, $team_id: Int, $weight: float8!, $height: float8!, $harmony: Boolean!, $trap: Int!, $has_buddy_climb: Boolean!, $url: String!, $can_eject: Boolean!) {
-  insert_pit(objects: [{ drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, wheel_type_id: $wheel_type_id, other_wheel_type: $other_wheel_type, gearbox_purchased: $gearbox_purchased, notes: $notes, has_shifter: $has_shifter, team_id: $team_id, weight: $weight, height: $height, harmony: $harmony, trap: $trap, has_buddy_climb: $has_buddy_climb, url: $url, can_eject: $can_eject}]) {
+mutation InsertPit( $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!) {
+  insert_pit(objects: [{ drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes, team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage}]) {
     affected_rows
   }
 }
 """;
 
 const String updateMutation = r"""
-mutation UpdatePit( $drivemotor_id: Int, $drivetrain_id: Int, $wheel_type_id: Int, $other_wheel_type: String, $gearbox_purchased: Boolean!, $notes: String, $has_shifter: Boolean, $team_id: Int, $weight: float8!, $height: float8!, $harmony: Boolean!, $trap: Int!, $has_buddy_climb: Boolean!, $url: String!, $can_eject: Boolean!) {
-  update_pit(where: {team_id: {_eq: $team_id}}, _set: { drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, wheel_type_id: $wheel_type_id, other_wheel_type: $other_wheel_type, gearbox_purchased: $gearbox_purchased, notes: $notes, has_shifter: $has_shifter, team_id: $team_id, weight: $weight, height: $height, harmony: $harmony, trap: $trap, has_buddy_climb: $has_buddy_climb, url: $url, can_eject: $can_eject}) {
+mutation UpdatePit( $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!) {
+  update_pit(where: {team_id: {_eq: $team_id}}, _set: { drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage}) {
     affected_rows
   }
 }""";
