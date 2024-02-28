@@ -28,17 +28,11 @@ class _EditPitState extends State<EditPit> {
           IdProvider.of(context).drivemotor.nameToId[pit.driveMotorType.title],
       driveTrainType: () =>
           IdProvider.of(context).driveTrain.nameToId[pit.driveTrainType.title],
-      driveWheelType: () =>
-          IdProvider.of(context).driveWheel.nameToId[pit.driveWheelType.title],
-      gearboxPurchased: () => pit.gearboxPurchased,
-      hasShifter: () => pit.hasShifer,
       notes: () => pit.notes,
       teamId: () => pit.team.id,
       weight: () => pit.weight,
-      height: () => pit.height,
       harmony: () => pit.harmony,
       trap: () => pit.trap,
-      hasBuddyClimb: () => pit.hasBuddyClimb,
       url: () => pit.url,
       canEject: () => pit.canEject,
     );
