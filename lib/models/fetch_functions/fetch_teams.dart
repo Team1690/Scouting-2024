@@ -99,26 +99,21 @@ query FetchTeams($ids: [Int!]) @cached {
       }
     }
     pit {
-      wheel_type {
-        title
-      }
       drivemotor {
         title
       }
       drivetrain {
         title
       }
-      other_wheel_type
-      gearbox_purchased
       harmony
-      has_buddy_climb
-      has_shifter
-      height
       notes
       trap
       weight
+      length
+      width
       url
       can_eject
+      can_pass_under_stage
       team {
         faults {
           message
@@ -128,7 +123,6 @@ query FetchTeams($ids: [Int!]) @cached {
         id
         colors_index
       }
-      other_wheel_type
     }
     specific_summary {
       amp_text

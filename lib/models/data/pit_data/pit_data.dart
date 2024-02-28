@@ -33,6 +33,8 @@ class PitData {
   final List<String>? faultMessages;
   final LightTeam team;
 
+  bool get canTrap => trap > 0;
+
   static PitData? parse(final dynamic pit) => pit != null
       ? PitData(
           driveTrainType:
