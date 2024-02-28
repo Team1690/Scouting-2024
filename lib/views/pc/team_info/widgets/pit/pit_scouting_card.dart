@@ -1,10 +1,8 @@
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/enums/drive_wheel_enum.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/edit_pit.dart";
-import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/robot_has_something.dart";
 
@@ -79,34 +77,20 @@ class PitScoutingCard extends StatelessWidget {
               ),
               RobotHasSomething(title: "Harmony: ", value: data.harmony),
               RobotHasSomething(title: "Can Eject: ", value: data.canEject),
-              if (data.hasBuddyClimb)
-                RobotHasSomething(
-                  title: "Buddy Climb: ",
-                  value: data.hasBuddyClimb,
-                ),
+              RobotHasSomething(
+                title: "Can Pass Under Stage",
+                value: data.canPassUnderStage,
+              ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "Height: ${data.height} cm",
-                    ),
-                    Text(
                       "Drivetrain: ${data.driveTrainType.title}",
                     ),
                     Text(
                       "Drive motor: ${data.driveMotorType.title}",
-                    ),
-                    Text(
-                      "Drive wheel: ${data.driveWheelType == DriveWheel.other ? data.otherWheelType : data.driveWheelType.title}",
-                    ),
-                    RobotHasSomething(
-                      title: "Has shifter:",
-                      value: data.hasShifer,
-                    ),
-                    Text(
-                      "Gearbox: ${data.gearboxPurchased.mapNullable((final bool p0) => p0 ? "Purchased" : "Custom") ?? "Not answered"}",
                     ),
                     Text(
                       "Weight: ${data.weight} kg",
