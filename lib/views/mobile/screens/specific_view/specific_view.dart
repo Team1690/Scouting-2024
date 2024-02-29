@@ -114,7 +114,6 @@ class _SpecificState extends State<Specific> {
                                 vars = vars.copyWith(
                                   scheduleMatch: always(selectedMatch),
                                   team: always(selectedTeam),
-                                  autoPath: always(null),
                                 );
                                 if (vars.team != null) {
                                   pathsFuture = getPaths(vars.team!.id, true);
@@ -217,7 +216,7 @@ class _SpecificState extends State<Specific> {
                                   });
                                 },
                                 child: const Text(
-                                  "Not Moving",
+                                  "Auto Not Moving",
                                   selectionColor: Colors.red,
                                 ),
                               ),
