@@ -78,16 +78,17 @@ class _AutoPathState extends State<AutoPath> {
                 ) =>
                     Listener(
                   onPointerDown: (final PointerDownEvent pointerEvent) {
-                    if(!pathDone){
-                    final RenderBox box =
-                        context.findRenderObject() as RenderBox;
-                    final Offset offset =
-                        box.globalToLocal(pointerEvent.position);
-                    path.value = Sketch(
-                      points: <Offset>[offset],
-                      isRed: path.value.isRed,
-                      url: path.value.url,
-                    );}
+                    if (!pathDone) {
+                      final RenderBox box =
+                          context.findRenderObject() as RenderBox;
+                      final Offset offset =
+                          box.globalToLocal(pointerEvent.position);
+                      path.value = Sketch(
+                        points: <Offset>[offset],
+                        isRed: path.value.isRed,
+                        url: path.value.url,
+                      );
+                    }
                   },
                   onPointerMove: (final PointerMoveEvent pointerEvent) {
                     if (!pathDone &&
