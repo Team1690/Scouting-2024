@@ -1,7 +1,4 @@
-import "dart:math";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/enums/match_type_enum.dart";
-import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
