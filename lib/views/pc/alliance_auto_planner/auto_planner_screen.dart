@@ -15,6 +15,7 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/fetch_auto_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/specific_match_card.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_view.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 
@@ -69,41 +70,19 @@ class _AutoScreenTeamSelectionState extends State<AutoScreenTeamSelection> {
   ui.Image? field;
 
   @override
-  Widget build(final BuildContext context) => FutureBuilder<
-          List<
-              (
-                TeamData,
-                List<
-                    AutoPathData>
-              )>>(
+  Widget build(final BuildContext context) =>
+      FutureBuilder<List<(TeamData, List<AutoPathData>)>>(
         future: teams.whereNotNull().isNotEmpty
             ? fetchDataAndPaths(
                 context,
                 teams.whereNotNull().map((final LightTeam e) => e.id).toList(),
               )
-            : Future<
-                List<
-                    (
-                      TeamData,
-                      List<
-                          AutoPathData>
-                    )>>(
-                () => <(
-                  TeamData,
-                  List<
-                      AutoPathData>
-                )>[],
+            : Future<List<(TeamData, List<AutoPathData>)>>(
+                () => <(TeamData, List<AutoPathData>)>[],
               ),
         builder: (
           final BuildContext context,
-          final AsyncSnapshot<
-                  List<
-                      (
-                        TeamData,
-                        List<
-                            AutoPathData>
-                      )>>
-              snapshot,
+          final AsyncSnapshot<List<(TeamData, List<AutoPathData>)>> snapshot,
         ) {
           if (snapshot.hasError) {
             return Text(snapshot.error!.toString());
@@ -328,36 +307,26 @@ class _AutoPlannerState extends State<AutoPlanner> {
   List<TechnicalMatchData> getAutoData(
     final StartingPosition startingPos,
   ) {
-    final List<
-            AutoPathData>
-        matchesAtPos = widget.data
-            .where(
-              (
-                final (
-                  TeamData,
-                  List<
-                      AutoPathData>
-                ) e,
-              ) =>
-                  e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam,
-            )
-            .map(
-              (
-                final (
-                  TeamData,
-                  List<
-                      AutoPathData>
-                ) e,
-              ) =>
-                  e.$2.where(
-                (
-                  final AutoPathData element,
-                ) =>
-                    element.startingPos == startingPos,
-              ),
-            )
-            .flattened
-            .toList();
+    final List<AutoPathData> matchesAtPos = widget.data
+        .where(
+          (
+            final (TeamData, List<AutoPathData>) e,
+          ) =>
+              e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam,
+        )
+        .map(
+          (
+            final (TeamData, List<AutoPathData>) e,
+          ) =>
+              e.$2.where(
+            (
+              final AutoPathData element,
+            ) =>
+                element.startingPos == startingPos,
+          ),
+        )
+        .flattened
+        .toList();
     final List<MatchIdentifier> matchesUsingAuto = matchesAtPos
         .where(
           (
@@ -387,36 +356,26 @@ class _AutoPlannerState extends State<AutoPlanner> {
     final Sketch? selectedAuto = await showDialog<Sketch?>(
       context: context,
       builder: (final BuildContext dialogContext) {
-        final List<
-                AutoPathData>
-            matchesAtPos = widget.data
-                .where(
-                  (
-                    final (
-                      TeamData,
-                      List<
-                          AutoPathData>
-                    ) e,
-                  ) =>
-                      e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam,
-                )
-                .map(
-                  (
-                    final (
-                      TeamData,
-                      List<
-                          AutoPathData>
-                    ) e,
-                  ) =>
-                      e.$2.where(
-                    (
-                      final AutoPathData element,
-                    ) =>
-                        element.startingPos == startingPos,
-                  ),
-                )
-                .flattened
-                .toList();
+        final List<AutoPathData> matchesAtPos = widget.data
+            .where(
+              (
+                final (TeamData, List<AutoPathData>) e,
+              ) =>
+                  e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam,
+            )
+            .map(
+              (
+                final (TeamData, List<AutoPathData>) e,
+              ) =>
+                  e.$2.where(
+                (
+                  final AutoPathData element,
+                ) =>
+                    element.startingPos == startingPos,
+              ),
+            )
+            .flattened
+            .toList();
 
         final List<Sketch> uniqueAuto = distinct(
           matchesAtPos

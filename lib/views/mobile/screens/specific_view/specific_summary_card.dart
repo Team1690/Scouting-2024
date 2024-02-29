@@ -8,7 +8,11 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/summary_editor.dart";
 
 class SpecificSummaryCard extends StatefulWidget {
-  const SpecificSummaryCard({super.key});
+  const SpecificSummaryCard({
+    super.key,
+    required this.onTeamSelected,
+  });
+  final void Function(LightTeam) onTeamSelected;
 
   @override
   State<SpecificSummaryCard> createState() => _SpecificSummaryCardState();
@@ -29,6 +33,7 @@ class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
                 teams: TeamProvider.of(context).teams,
                 onChange: (final LightTeam lightTeam) {
                   setState(() {
+                    widget.onTeamSelected(lightTeam);
                     team = lightTeam;
                   });
                 },
