@@ -8,6 +8,8 @@ enum MatchType {
 
   const MatchType(this.title);
   final String title;
+
+  String get shortTitle => title.substring(0, 1);
 }
 
 MatchType matchTypeTitleToEnum(final String title) =>

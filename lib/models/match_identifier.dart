@@ -22,7 +22,7 @@ class MatchIdentifier {
   int get hashCode => Object.hashAll(<Object?>[isRematch, number, type]);
 
   @override
-  String toString() => "${isRematch ? "R" : ""}${type.title}$number";
+  String toString() => "${isRematch ? "R" : ""}${type.shortTitle}$number";
 
   static MatchIdentifier fromJson(
     final dynamic match, [
