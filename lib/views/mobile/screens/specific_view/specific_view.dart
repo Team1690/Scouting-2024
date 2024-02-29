@@ -114,7 +114,6 @@ class _SpecificState extends State<Specific> {
                                 vars = vars.copyWith(
                                   scheduleMatch: always(selectedMatch),
                                   team: always(selectedTeam),
-                                  autoPath: always(null),
                                 );
                                 if (vars.team != null) {
                                   pathsFuture = getPaths(vars.team!.id, true);
@@ -157,43 +156,71 @@ class _SpecificState extends State<Specific> {
                             },
                           ),
                           const SizedBox(height: 15.0),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              foregroundColor: snapshot.data != null &&
-                                      snapshot.data!.isNotEmpty
-                                  ? null
-                                  : MaterialStateProperty.all<Color>(
-                                      Colors.grey,
-                                    ),
-                            ),
-                            onPressed: () async {
-                              fieldImages =
-                                  (await getField(true), await getField(false));
-                              final Sketch? result =
-                                  await showPathSelectionDialog(
-                                context,
-                                snapshot.data
-                                        ?.map(
-                                          (
-                                            final ({
-                                              Sketch sketch,
-                                              StartingPosition startingPos,
-                                              MatchIdentifier matchIdentifier
-                                            }) autoData,
-                                          ) =>
-                                              autoData.sketch,
-                                        )
-                                        .toList() ??
-                                    <Sketch>[],
-                                intialIsRed,
-                              );
-                              setState(() {
-                                vars = vars.copyWith(
-                                  autoPath: always(result ?? vars.autoPath),
-                                );
-                              });
-                            },
-                            child: const Text("Create Auto Path"),
+                          Row(
+                            children: <Widget>[
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  foregroundColor: snapshot.data != null &&
+                                          snapshot.data!.isNotEmpty
+                                      ? null
+                                      : MaterialStateProperty.all<Color>(
+                                          Colors.grey,
+                                        ),
+                                ),
+                                onPressed: () async {
+                                  fieldImages = (
+                                    await getField(true),
+                                    await getField(false)
+                                  );
+                                  final Sketch? result =
+                                      await showPathSelectionDialog(
+                                    context,
+                                    snapshot.data
+                                            ?.map(
+                                              (
+                                                final ({
+                                                  Sketch sketch,
+                                                  StartingPosition startingPos,
+                                                  MatchIdentifier matchIdentifier
+                                                }) autoData,
+                                              ) =>
+                                                  autoData.sketch,
+                                            )
+                                            .toList() ??
+                                        <Sketch>[],
+                                    intialIsRed,
+                                  );
+                                  setState(() {
+                                    vars = vars.copyWith(
+                                      autoPath: always(result ?? vars.autoPath),
+                                    );
+                                  });
+                                },
+                                child: const Text("Create Auto Path"),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  fieldImages = (
+                                    await getField(true),
+                                    await getField(false)
+                                  );
+                                  final Sketch result = Sketch(
+                                    points: <ui.Offset>[],
+                                    isRed: intialIsRed,
+                                    url: "",
+                                  );
+                                  setState(() {
+                                    vars = vars.copyWith(
+                                      autoPath: always(result),
+                                    );
+                                  });
+                                },
+                                child: const Text(
+                                  "Auto Not Moving",
+                                  selectionColor: Colors.red,
+                                ),
+                              ),
+                            ],
                           ),
                           if (vars.autoPath != null &&
                               fieldImages != null) ...<Widget>[
