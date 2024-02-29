@@ -18,6 +18,7 @@ import "package:scouting_frontend/views/mobile/screens/pit_view/widgets/teams_wi
 
 const double kgToPoundFactor = 2.20462262;
 const double mToFt = 1 / 0.3048;
+const double cmToInch = 0.393700787;
 
 class PitView extends StatefulWidget {
   const PitView([this.initialVars]);
@@ -36,31 +37,29 @@ class _PitViewState extends State<PitView> {
   XFile? userImage;
   late PitVars vars = PitVars(context);
   final GlobalKey<FormState> formKey = GlobalKey();
-  final TextEditingController wheelTypeOtherController =
-      TextEditingController();
-  bool otherWheelTypeSelected = false;
   final TextEditingController teamSelectionController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
   final FocusNode node = FocusNode();
   final ValueNotifier<bool> advancedSwitchController =
       ValueNotifier<bool>(false);
+  final TextEditingController lengthController = TextEditingController();
+  final TextEditingController widthController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
-  final TextEditingController heightController = TextEditingController();
   bool kg = true;
-  bool meters = true;
+  bool lengthcm = true;
+  bool widthcm = true;
 
   void resetFrame() {
     setState(() {
       vars = vars.reset();
-      weightController.clear();
-      heightController.clear();
+      lengthController.clear();
       notesController.clear();
-      wheelTypeOtherController.clear();
       teamSelectionController.clear();
       userImage = null;
       advancedSwitchController.value = false;
       kg = true;
-      meters = true;
+      widthcm = true;
+      lengthcm = true;
     });
   }
 
@@ -69,9 +68,9 @@ class _PitViewState extends State<PitView> {
     super.initState();
     vars = widget.initialVars ?? PitVars(context);
     weightController.text = vars.weight != null ? vars.weight.toString() : "";
-    heightController.text = vars.height != null ? vars.height.toString() : "";
+    lengthController.text = vars.length != null ? vars.length.toString() : "";
+    widthController.text = vars.width != null ? vars.width.toString() : "";
     notesController.text = vars.notes;
-    wheelTypeOtherController.text = "";
   }
 
   @override
@@ -167,110 +166,6 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Selector<int>(
-                      options: IdProvider.of(context)
-                          .driveWheel
-                          .idToName
-                          .keys
-                          .toList(),
-                      placeholder: "Choose a drive wheel",
-                      value: vars.driveWheelType,
-                      makeItem: (final int wheelType) => IdProvider.of(context)
-                          .driveWheel
-                          .idToName[wheelType]!,
-                      onChange: (final int newValue) {
-                        setState(() {
-                          otherWheelTypeSelected = IdProvider.of(context)
-                                  .driveWheel
-                                  .idToName[newValue] ==
-                              "Other";
-                          vars = vars.copyWith(
-                            driveWheelType: () => newValue,
-                          );
-                        });
-                      },
-                      validate: (final int? wheelType) => wheelType == null
-                          ? "please enter the robot's wheel type"
-                          : null,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Visibility(
-                      visible: otherWheelTypeSelected,
-                      child: TextFormField(
-                        controller: wheelTypeOtherController,
-                        onChanged: (final String specifiedWheel) {
-                          setState(() {
-                            vars = vars.copyWith(
-                              otherDriveWheelType: () => specifiedWheel,
-                            );
-                          });
-                        },
-                        validator: (final String? otherWheelOption) =>
-                            otherWheelTypeSelected &&
-                                    (otherWheelOption == null ||
-                                        otherWheelOption.isEmpty)
-                                ? "Please specify \"Other\" wheel type"
-                                : null,
-                        decoration: const InputDecoration(
-                          labelText: "\"Other\" drive wheel type",
-                        ),
-                      ),
-                    ),
-                    Switcher(
-                      borderRadiusGeometry: defaultBorderRadius,
-                      selected: vars.hasShifter.mapNullable(
-                            (final bool hasShifter) => hasShifter ? 0 : 1,
-                          ) ??
-                          -1,
-                      labels: const <String>[
-                        "Shifter",
-                        "No shifter",
-                      ],
-                      colors: const <Color>[
-                        Colors.white,
-                        Colors.white,
-                      ],
-                      onChange: (final int selection) {
-                        setState(() {
-                          vars = vars.copyWith(
-                            hasShifter: () =>
-                                <int, bool>{1: false, 0: true}[selection],
-                          );
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Switcher(
-                      borderRadiusGeometry: defaultBorderRadius,
-                      selected: vars.gearboxPurchased.mapNullable(
-                            (final bool gearboxPurchased) =>
-                                gearboxPurchased ? 0 : 1,
-                          ) ??
-                          -1,
-                      labels: const <String>[
-                        "Purchased GearBox",
-                        "Custom GearBox",
-                      ],
-                      colors: const <Color>[
-                        Colors.white,
-                        Colors.white,
-                      ],
-                      onChange: (final int selection) {
-                        setState(() {
-                          vars = vars.copyWith(
-                            gearboxPurchased: () =>
-                                <int, bool>{1: false, 0: true}[selection],
-                          );
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
                     MeasurementConversion(
                       controller: weightController,
                       title: "Weight",
@@ -290,32 +185,45 @@ class _PitViewState extends State<PitView> {
                       },
                       icon: Icons.fitness_center,
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
                     MeasurementConversion(
-                      controller: heightController,
-                      title: "Height",
-                      unitTypes: const <String>["Meters", "Ft"],
-                      regularUnitsToOtherUnitsFactor: mToFt,
+                      controller: lengthController,
+                      title: "Length",
+                      unitTypes: const <String>["CM", "INCH"],
+                      regularUnitsToOtherUnitsFactor: cmToInch,
                       onValueChange: (final double? value) {
                         setState(() {
-                          vars = vars.copyWith(height: () => value);
+                          vars = vars.copyWith(length: () => value);
                         });
                       },
-                      onRegularUnits: meters,
-                      currentValue: vars.height,
-                      onUnitsChange: (final bool newMeters) {
+                      onRegularUnits: lengthcm,
+                      currentValue: vars.length,
+                      onUnitsChange: (final bool newKg) {
                         setState(() {
-                          meters = newMeters;
+                          lengthcm = newKg;
                         });
                       },
-                      icon: Icons.swap_vert_rounded,
+                      icon: Icons.legend_toggle,
+                    ),
+                    MeasurementConversion(
+                      controller: widthController,
+                      title: "Width",
+                      unitTypes: const <String>["CM", "INCH"],
+                      regularUnitsToOtherUnitsFactor: cmToInch,
+                      onValueChange: (final double? value) {
+                        setState(() {
+                          vars = vars.copyWith(width: () => value);
+                        });
+                      },
+                      onRegularUnits: widthcm,
+                      currentValue: vars.width,
+                      onUnitsChange: (final bool newKg) {
+                        setState(() {
+                          widthcm = newKg;
+                        });
+                      },
+                      icon: Icons.compare,
                     ),
                     SectionDivider(label: "OnStage"),
-                    const SizedBox(
-                      height: 20,
-                    ),
                     Switcher(
                       borderRadiusGeometry: defaultBorderRadius,
                       selected: vars.harmony.mapNullable(
@@ -370,6 +278,33 @@ class _PitViewState extends State<PitView> {
                     ),
                     Switcher(
                       borderRadiusGeometry: defaultBorderRadius,
+                      selected: vars.canPassUnderStage.mapNullable(
+                            (final bool canPassUnderStage) =>
+                                canPassUnderStage ? 1 : 0,
+                          ) ??
+                          -1,
+                      labels: const <String>[
+                        "Can't Pass Under Stage",
+                        "Can Pass Under Stage",
+                      ],
+                      colors: const <Color>[
+                        Colors.white,
+                        Colors.white,
+                      ],
+                      onChange: (final int selection) {
+                        setState(() {
+                          vars = vars.copyWith(
+                            canPassUnderStage: () =>
+                                <int, bool>{1: true, 0: false}[selection],
+                          );
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Switcher(
+                      borderRadiusGeometry: defaultBorderRadius,
                       selected: vars.trap,
                       labels: const <String>[
                         "Can't Trap",
@@ -385,32 +320,6 @@ class _PitViewState extends State<PitView> {
                         setState(() {
                           vars = vars.copyWith(
                             trap: () => selection,
-                          );
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Switcher(
-                      borderRadiusGeometry: defaultBorderRadius,
-                      selected: vars.hasBuddyClimb.mapNullable(
-                            (final bool canBuddyClimb) => canBuddyClimb ? 1 : 0,
-                          ) ??
-                          -1,
-                      labels: const <String>[
-                        "Can't Buddy Climb",
-                        "Can Buddy Climb",
-                      ],
-                      colors: const <Color>[
-                        Colors.white,
-                        Colors.white,
-                      ],
-                      onChange: (final int selection) {
-                        setState(() {
-                          vars = vars.copyWith(
-                            hasBuddyClimb: () =>
-                                <int, bool>{1: true, 0: false}[selection],
                           );
                         });
                       },
@@ -490,16 +399,16 @@ class _PitViewState extends State<PitView> {
 }
 
 const String insertMutation = r"""
-mutation InsertPit( $drivemotor_id: Int, $drivetrain_id: Int, $wheel_type_id: Int, $other_wheel_type: String, $gearbox_purchased: Boolean!, $notes: String, $has_shifter: Boolean, $team_id: Int, $weight: float8!, $height: float8!, $harmony: Boolean!, $trap: Int!, $has_buddy_climb: Boolean!, $url: String!, $can_eject: Boolean!) {
-  insert_pit(objects: [{ drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, wheel_type_id: $wheel_type_id, other_wheel_type: $other_wheel_type, gearbox_purchased: $gearbox_purchased, notes: $notes, has_shifter: $has_shifter, team_id: $team_id, weight: $weight, height: $height, harmony: $harmony, trap: $trap, has_buddy_climb: $has_buddy_climb, url: $url, can_eject: $can_eject}]) {
+mutation InsertPit( $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!) {
+  insert_pit(objects: [{ drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes, team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, length: $length, width: $width}]) {
     affected_rows
   }
 }
 """;
 
 const String updateMutation = r"""
-mutation UpdatePit( $drivemotor_id: Int, $drivetrain_id: Int, $wheel_type_id: Int, $other_wheel_type: String, $gearbox_purchased: Boolean!, $notes: String, $has_shifter: Boolean, $team_id: Int, $weight: float8!, $height: float8!, $harmony: Boolean!, $trap: Int!, $has_buddy_climb: Boolean!, $url: String!, $can_eject: Boolean!) {
-  update_pit(where: {team_id: {_eq: $team_id}}, _set: { drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, wheel_type_id: $wheel_type_id, other_wheel_type: $other_wheel_type, gearbox_purchased: $gearbox_purchased, notes: $notes, has_shifter: $has_shifter, team_id: $team_id, weight: $weight, height: $height, harmony: $harmony, trap: $trap, has_buddy_climb: $has_buddy_climb, url: $url, can_eject: $can_eject}) {
+mutation UpdatePit( $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!) {
+  update_pit(where: {team_id: {_eq: $team_id}}, _set: { drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, length: $length, width: $width}) {
     affected_rows
   }
 }""";

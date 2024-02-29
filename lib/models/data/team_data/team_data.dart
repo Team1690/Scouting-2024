@@ -43,32 +43,25 @@ class TeamData {
   int get matchesClimbedSingle => technicalMatches
       .where(
         (final TechnicalMatchData element) =>
-            (element.climb == Climb.climbed ||
-                element.climb == Climb.buddyClimbed) &&
-            element.harmonyWith == 0,
+            (element.climb == Climb.climbed) && element.harmonyWith == 0,
       )
       .length;
   int get matchesClimbedDouble => technicalMatches
       .where(
         (final TechnicalMatchData element) =>
-            (element.climb == Climb.climbed ||
-                element.climb == Climb.buddyClimbed) &&
-            element.harmonyWith == 1,
+            (element.climb == Climb.climbed) && element.harmonyWith == 1,
       )
       .length;
   int get matchesClimbedTriple => technicalMatches
       .where(
         (final TechnicalMatchData element) =>
-            (element.climb == Climb.climbed ||
-                element.climb == Climb.buddyClimbed) &&
-            element.harmonyWith == 2,
+            (element.climb == Climb.climbed) && element.harmonyWith == 2,
       )
       .length;
 
   int get matchesClimbed => technicalMatches
       .where(
-        (final TechnicalMatchData element) => (element.climb == Climb.climbed ||
-            element.climb == Climb.buddyClimbed),
+        (final TechnicalMatchData element) => (element.climb == Climb.climbed),
       )
       .length;
 

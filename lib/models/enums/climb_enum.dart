@@ -1,8 +1,7 @@
 enum Climb {
   noAttempt("No Attempt", 0),
   failed("Failed", 1),
-  climbed("Climbed", 2),
-  buddyClimbed("Buddy Climbed", 3);
+  climbed("Climbed", 2);
 
   const Climb(this.title, this.chartHeight);
   final String title;
