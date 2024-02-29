@@ -325,10 +325,7 @@ class _SpecificState extends State<Specific> {
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: SpecificSummaryCard(),
-              ),
+              const SpecificSummaryCard(),
             ],
           ),
         ),

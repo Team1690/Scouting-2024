@@ -6,7 +6,6 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/summary_editor.dart";
-import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 
 class SpecificSummaryCard extends StatefulWidget {
   const SpecificSummaryCard({super.key});
@@ -21,17 +20,9 @@ class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
   bool isEnabled = false;
   LightTeam? team;
   @override
-  Widget build(final BuildContext context) => Scaffold(
-        drawer: isPC(context) ? null : SideNavBar(),
-        appBar: AppBar(
-          actions: const <Widget>[],
-          centerTitle: true,
-          elevation: 5,
-          title: const Text(
-            "Specific Summary",
-          ),
-        ),
-        body: SingleChildScrollView(
+  Widget build(final BuildContext context) => Padding(
+        padding: const EdgeInsets.all(defaultPadding),
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               TeamSelectionFuture(
