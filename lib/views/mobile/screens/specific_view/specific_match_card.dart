@@ -1,4 +1,3 @@
-import "dart:typed_data";
 import "dart:ui" as ui;
 
 import "package:flutter/material.dart";
@@ -58,7 +57,7 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
   );
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(final BuildContext context) => Padding(
         padding: const EdgeInsets.all(defaultPadding),
         child: FutureBuilder<List<AutoPathData>>(
           future: pathsFuture,
