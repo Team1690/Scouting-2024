@@ -16,7 +16,6 @@ import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.d
 import "package:scouting_frontend/views/mobile/screens/specific_view/fetch_auto_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_match_card.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/specific_view.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 
 class AutoPlannerScreen extends StatelessWidget {
