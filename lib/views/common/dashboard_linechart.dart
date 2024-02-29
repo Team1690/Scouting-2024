@@ -10,7 +10,7 @@ class _BaseLineChart extends StatelessWidget {
     required this.showShadow,
     required this.inputedColors,
     required this.dataSet,
-    required this.gameNumbers,
+    this.gameNumbers,
     required this.getToolipItems,
     required this.rightTitles,
     required this.maxY,
@@ -25,7 +25,7 @@ class _BaseLineChart extends StatelessWidget {
   final bool showShadow;
   final List<Color> inputedColors;
   final List<List<int>> dataSet;
-  final List<MatchIdentifier> gameNumbers;
+  final List<MatchIdentifier>? gameNumbers;
   final SideTitles rightTitles;
   final List<List<RobotFieldStatus>> robotMatchStatuses;
   @override
@@ -108,13 +108,13 @@ class _BaseLineChart extends StatelessWidget {
                 reservedSize: 20,
                 getTitlesWidget:
                     (final double value, final TitleMeta titleMeta) => Text(
-                  gameNumbers[value.toInt()].toString(),
+                  gameNumbers![value.toInt()].toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: isPC(context) ? 12 : 8,
                   ),
                 ),
-                showTitles: true,
+                showTitles: gameNumbers != null,
                 interval: 1,
               ),
             ),
@@ -134,7 +134,7 @@ class DashboardTitledLineChart extends StatelessWidget {
   const DashboardTitledLineChart({
     required this.dataSet,
     required this.inputedColors,
-    required this.gameNumbers,
+    this.gameNumbers,
     required this.showShadow,
     required this.robotMatchStatuses,
     required this.heightsToTitles,
@@ -142,7 +142,7 @@ class DashboardTitledLineChart extends StatelessWidget {
     required this.minY,
   });
   final List<Color> inputedColors;
-  final List<MatchIdentifier> gameNumbers;
+  final List<MatchIdentifier>? gameNumbers;
   final List<List<RobotFieldStatus>> robotMatchStatuses;
   final Map<int, String> heightsToTitles;
   final double maxY;
@@ -188,7 +188,7 @@ class DashboardTitledLineChart extends StatelessWidget {
 class DashboardLineChart extends StatelessWidget {
   const DashboardLineChart({
     required this.dataSet,
-    required this.gameNumbers,
+    this.gameNumbers,
     this.distanceFromHighest = 5,
     required this.inputedColors,
     required this.showShadow,
@@ -199,7 +199,7 @@ class DashboardLineChart extends StatelessWidget {
   final List<Color> inputedColors;
   final int distanceFromHighest;
   final List<List<int>> dataSet;
-  final List<MatchIdentifier> gameNumbers;
+  final List<MatchIdentifier>? gameNumbers;
   final List<List<RobotFieldStatus>> robotMatchStatuses;
   final double sideTitlesInterval;
   int get highestValue =>

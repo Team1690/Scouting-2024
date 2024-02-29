@@ -1,8 +1,6 @@
 import "dart:math";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
-import "package:scouting_frontend/models/enums/match_type_enum.dart";
-import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/views/common/dashboard_linechart.dart";
@@ -58,18 +56,6 @@ class CompareClimbLineChart extends StatelessWidget {
                   .toList(),
               showShadow: false,
               inputedColors: colors,
-              gameNumbers: List<MatchIdentifier>.generate(
-                data
-                    .map(
-                      (final List<int> chartData) => chartData.length,
-                    )
-                    .reduce(max),
-                (final int index) => MatchIdentifier(
-                  number: index + 1,
-                  type: MatchType.quals,
-                  isRematch: false,
-                ),
-              ),
               dataSet: data
                   .map(
                     (final List<int> chartData) => chartData,

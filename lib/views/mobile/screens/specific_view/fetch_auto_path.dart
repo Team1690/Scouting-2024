@@ -41,8 +41,7 @@ query MyQuery(\$team: Int) {
 
 
   """;
-  final QueryResult<List<AutoPathByUrl>> result =
-      await client.query(
+  final QueryResult<List<AutoPathByUrl>> result = await client.query(
     QueryOptions<List<AutoPathByUrl>>(
       document: gql(query),
       variables: <String, int>{"team": team},
@@ -88,9 +87,7 @@ Future<({List<ui.Offset> path, bool isRed})> fetchPath(
   return parseAutoCsv(csv);
 }
 
-Future<
-    List<
-        AutoPathData>> getPaths(
+Future<List<AutoPathData>> getPaths(
   final int teamId,
   final bool shouldDistinct,
 ) async {
@@ -98,8 +95,7 @@ Future<
       (await fetchUrls(teamId, shouldDistinct)).toList();
   final List<Future<({List<ui.Offset> path, bool isRed})>> paths = urls
       .map(
-        (final AutoPathByUrl e) =>
-            fetchPath(e.url),
+        (final AutoPathByUrl e) => fetchPath(e.url),
       )
       .toList();
 
@@ -110,7 +106,8 @@ Future<
         (
           final int index,
           final ({bool isRed, List<ui.Offset> path}) element,
-        ) => (
+        ) =>
+            (
           sketch: Sketch(
             points: element.path,
             isRed: element.isRed,
@@ -139,9 +136,7 @@ Future<
 ) async {
   final SplayTreeSet<TeamData> data =
       await fetchMultipleTeamData(teamIds, context);
-  final List<
-      List<
-          AutoPathData>> paths = await Future.wait(
+  final List<List<AutoPathData>> paths = await Future.wait(
     data
         .map((final TeamData element) => getPaths(element.lightTeam.id, false))
         .toList(),
@@ -150,9 +145,7 @@ Future<
       .mapIndexed(
         (
           final int index,
-          final List<
-                  AutoPathData>
-              element,
+          final List<AutoPathData> element,
         ) =>
             (data.elementAt(index), element),
       )
@@ -160,13 +153,13 @@ Future<
 }
 
 typedef AutoPathByUrl = ({
-                String url,
-                StartingPosition startingPos,
-                MatchIdentifier matchIdentifier
-              });
+  String url,
+  StartingPosition startingPos,
+  MatchIdentifier matchIdentifier
+});
 
 typedef AutoPathData = ({
-                Sketch sketch,
-                StartingPosition startingPos,
-                MatchIdentifier matchIdentifier
-              });
+  Sketch sketch,
+  StartingPosition startingPos,
+  MatchIdentifier matchIdentifier
+});
