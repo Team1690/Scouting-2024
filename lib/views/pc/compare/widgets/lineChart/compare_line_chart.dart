@@ -41,14 +41,6 @@ class CompareLineChart extends StatelessWidget {
                   .toList(),
               showShadow: false,
               inputedColors: colors,
-              gameNumbers: List<MatchIdentifier>.generate(
-                data.map((final List<int> e) => e.length).reduce(max),
-                (final int index) => MatchIdentifier(
-                  number: index + 1,
-                  type: MatchType.quals,
-                  isRematch: false,
-                ),
-              ),
               dataSet: data,
             ),
           ),

@@ -58,18 +58,6 @@ class CompareClimbLineChart extends StatelessWidget {
                   .toList(),
               showShadow: false,
               inputedColors: colors,
-              gameNumbers: List<MatchIdentifier>.generate(
-                data
-                    .map(
-                      (final List<int> chartData) => chartData.length,
-                    )
-                    .reduce(max),
-                (final int index) => MatchIdentifier(
-                  number: index + 1,
-                  type: MatchType.quals,
-                  isRematch: false,
-                ),
-              ),
               dataSet: data
                   .map(
                     (final List<int> chartData) => chartData,
