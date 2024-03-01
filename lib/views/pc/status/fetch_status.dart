@@ -12,6 +12,8 @@ import "package:scouting_frontend/views/pc/status/status_match.dart";
 import "package:scouting_frontend/views/pc/status/status_screen.dart";
 import "package:collection/collection.dart";
 
+import "status_item.dart";
+
 Stream<List<StatusItem<LightTeam, String>>> fetchPreScoutingStatus(
   final bool isSpecific,
 ) =>
@@ -179,7 +181,15 @@ subscription Status {
           title
         }
         match_number
+subscription FetchStatus {
+  schedule_matches {
+    specific_matches {
+      scouter_name
+      team {
+        colors_index
         id
+        name
+        number
       }
       scouter_name
       ${isSpecific ? """
@@ -190,20 +200,21 @@ subscription Status {
 """ : r"""
 
 climb {
+    }
+    technical_matches {
+      auto_amp
+      auto_speaker
+      climb {
         title
       }
-      tele_amp
-      tele_amp_missed
-      tele_speaker
-      tele_speaker_missed
-      trap_amount
-      traps_missed
+      harmony_with
+      is_rematch
       scouter_name
-      starting_position {
-        title
-      }
-      robot_field_status {
-        title
+      team {
+        id
+        name
+        number
+        colors_index
       }
       
     auto_amp
@@ -216,6 +227,10 @@ climb {
 
 """}
       
+      trap_amount
+      tele_speaker
+      tele_amp
+    }
   }
 }
 
