@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:collection";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
@@ -17,7 +18,7 @@ import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
 
 const String query = r"""
-query FetchTeams($ids: [Int!]) @cached {
+subscription FetchTeams($ids: [Int!]) {
   team(where: {id: {_in: $ids}}) {
     specific_matches {
       schedule_match {
@@ -140,14 +141,14 @@ query FetchTeams($ids: [Int!]) @cached {
 
 """;
 
-Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
+Stream<SplayTreeSet<TeamData>> fetchMultipleTeamData(
   final List<int> ids,
   final BuildContext context,
-) async {
+) {
   final GraphQLClient client = getClient();
 
-  final QueryResult<SplayTreeSet<TeamData>> result = await client.query(
-    QueryOptions<SplayTreeSet<TeamData>>(
+  final Stream<QueryResult<SplayTreeSet<TeamData>>> result = client.subscribe(
+    SubscriptionOptions<SplayTreeSet<TeamData>>(
       parserFn: (final Map<String, dynamic> teams) =>
           SplayTreeSet<TeamData>.from(
         (teams["team"] as List<dynamic>)
@@ -223,5 +224,5 @@ Future<SplayTreeSet<TeamData>> fetchMultipleTeamData(
       },
     ),
   );
-  return result.mapQueryResult();
+  return result.map((event) => event.mapQueryResult());
 }

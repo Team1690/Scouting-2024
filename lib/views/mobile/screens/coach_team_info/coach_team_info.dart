@@ -23,8 +23,8 @@ class CoachTeamInfo extends StatelessWidget {
             "${team.number} ${team.name}",
           ),
         ),
-        body: FutureBuilder<TeamData>(
-          future: fetchSingleTeamData(
+        body: StreamBuilder<TeamData>(
+          stream: fetchSingleTeamData(
             team.id,
             context,
           ), //fetchTeam(team.id, context),
