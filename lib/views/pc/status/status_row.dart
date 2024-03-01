@@ -22,13 +22,15 @@ class StatusRow extends StatelessWidget {
         margin: const EdgeInsets.all(10),
         child: Container(
           padding: const EdgeInsets.all(defaultPadding),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              if (leading != null) Expanded(child: leading!),
-              ...data.map(statusBoxBuilder),
-              Spacer()
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                if (leading != null) leading!,
+                ...data.map(statusBoxBuilder),
+              ],
+            ),
           ),
         ),
       );

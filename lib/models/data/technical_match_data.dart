@@ -6,6 +6,7 @@ import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class TechnicalMatchData {
   TechnicalMatchData({
+    required this.scouterName,
     required this.scheduleMatchId,
     required this.robotFieldStatus,
     required this.data,
@@ -22,6 +23,7 @@ class TechnicalMatchData {
   final Climb climb;
   final int scheduleMatchId;
   final StartingPosition startingPosition;
+  final String scouterName;
 
   static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
         matchIdentifier: MatchIdentifier.fromJson(match),
@@ -35,5 +37,6 @@ class TechnicalMatchData {
         startingPosition: startingPosTitleToEnum(
           match["starting_position"]["title"] as String,
         ),
+        scouterName: match["scouter_name"] as String,
       );
 }

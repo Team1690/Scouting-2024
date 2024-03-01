@@ -95,18 +95,24 @@ class _StatusState extends State<Status> {
                           .compareTo(p0.scheduleMatch.matchIdentifier.number),
                       leading: (final List<MatchData> row) => Text(
                           row.first.scheduleMatch.matchIdentifier.toString()),
-                      statusBoxBuilder: (final MatchData data) => isSpecific
-                          ? const Text("data")
-                          : StatusBox(
-                              child: Column(
-                                children: <Widget>[
-                                  Text(data.team.number.toString()),
-                                  Text(data
-                                      .technicalMatchData!.data.gamePiecesPoints
-                                      .toString())
-                                ],
-                              ),
-                            ),
+                      statusBoxBuilder: (final MatchData data) => StatusBox(
+                        backgroundColor:
+                            data.scheduleMatch.blueAlliance.contains(data.team)
+                                ? Colors.blue
+                                : Colors.red,
+                        child: Column(
+                          children: <Widget>[
+                            Text(data.team.number.toString()),
+                            Text(isSpecific
+                                ? data.specificMatchData!.scouterName
+                                : data.technicalMatchData!.scouterName),
+                            if (!isSpecific)
+                              Text(data
+                                  .technicalMatchData!.data.gamePiecesPoints
+                                  .toString()),
+                          ],
+                        ),
+                      ),
                     ),
                   )
                 ],
