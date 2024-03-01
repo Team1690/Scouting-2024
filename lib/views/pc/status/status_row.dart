@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
+import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 
 class StatusRow extends StatelessWidget {
@@ -11,8 +12,8 @@ class StatusRow extends StatelessWidget {
   });
 
   final Widget? leading;
-  final Widget Function(TeamData) statusBoxBuilder;
-  final List<TeamData> data;
+  final Widget Function(MatchData) statusBoxBuilder;
+  final List<MatchData> data;
 
   @override
   Widget build(final BuildContext context) => Card(
@@ -22,12 +23,11 @@ class StatusRow extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(defaultPadding),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              if (leading != null) leading!,
-              ListView(
-                scrollDirection: Axis.horizontal,
-                children: data.map(statusBoxBuilder).toList(),
-              ),
+              if (leading != null) Expanded(child: leading!),
+              ...data.map(statusBoxBuilder),
+              Spacer()
             ],
           ),
         ),

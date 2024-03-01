@@ -201,16 +201,16 @@ Stream<SplayTreeSet<TeamData>> fetchMultipleTeamData(
             matches: matches
                 .map(
                   (final ScheduleMatch match) => MatchData(
-                    technicalMatchData: technicalMatches.firstWhereOrNull(
-                      (final TechnicalMatchData element) =>
-                          match.matchIdentifier == element.matchIdentifier,
-                    ),
-                    specificMatchData: specificMatches.firstWhereOrNull(
-                      (final SpecificMatchData element) =>
-                          match.matchIdentifier == element.matchIdentifier,
-                    ),
-                    scheduleMatch: match,
-                  ),
+                      technicalMatchData: technicalMatches.firstWhereOrNull(
+                        (final TechnicalMatchData element) =>
+                            match.matchIdentifier == element.matchIdentifier,
+                      ),
+                      specificMatchData: specificMatches.firstWhereOrNull(
+                        (final SpecificMatchData element) =>
+                            match.matchIdentifier == element.matchIdentifier,
+                      ),
+                      scheduleMatch: match,
+                      team: team),
                 )
                 .toList(),
           );

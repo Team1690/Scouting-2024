@@ -4,6 +4,7 @@ import "package:scouting_frontend/views/pc/alliance_auto_planner/auto_planner_sc
 import "package:scouting_frontend/views/pc/matches/matches_screen.dart";
 import "package:scouting_frontend/views/pc/scatter/scatters_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
+import "package:scouting_frontend/views/pc/status/status.dart";
 import "package:scouting_frontend/views/pc/status/status_screen.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
@@ -92,7 +93,7 @@ class NavigationTab extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute<ScattersScreen>(
-                    builder: (final BuildContext context) => StatusScreen(),
+                    builder: (final BuildContext context) => Status(),
                   ),
                 );
               },
