@@ -1,7 +1,5 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/views/pc/status/status_row.dart";
 
@@ -23,7 +21,7 @@ class StatusList<T> extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final List<List<MatchData>> groupedList = data
-        .sorted(orderBy ?? (a, b) => 1)
+        .sorted(orderBy ?? (final MatchData a, final MatchData b) => 1)
         .groupListsBy(groupBy)
         .values
         .toList();

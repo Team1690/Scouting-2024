@@ -2,9 +2,8 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
-
-import "pre_scouting_status.dart";
-import "regular_status.dart";
+import "package:scouting_frontend/views/pc/status/pre_scouting_status.dart";
+import "package:scouting_frontend/views/pc/status/regular_status.dart";
 
 class StatusScreen extends StatefulWidget {
   @override

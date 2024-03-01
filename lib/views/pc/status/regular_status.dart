@@ -5,12 +5,10 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/pc/status/edit_technical_match.dart";
 import "package:scouting_frontend/views/pc/status/fetch_status.dart";
 import "package:scouting_frontend/views/pc/status/status_match.dart";
-import "package:scouting_frontend/views/pc/status/status_screen.dart";
 import "package:scouting_frontend/views/pc/status/widgets/text_by_team.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
-
-import "status_item.dart";
-import "status_list.dart";
+import "package:scouting_frontend/views/pc/status/status_item.dart";
+import "package:scouting_frontend/views/pc/status/status_list.dart";
 
 class RegularStatus extends StatelessWidget {
   const RegularStatus(this.isSpecific);
