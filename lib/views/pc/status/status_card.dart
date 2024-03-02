@@ -6,6 +6,7 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/status/edit_technical_match.dart";
 import "package:scouting_frontend/views/pc/status/widgets/status_list.dart";
 import "package:scouting_frontend/views/pc/status/widgets/status_box.dart";
+import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 
 class StatusCard extends StatefulWidget {
   const StatusCard({super.key, required this.data});
@@ -73,6 +74,15 @@ class _StatusCardState extends State<StatusCard> {
                   row.first.scheduleMatch.matchIdentifier.toString(),
                 ),
                 statusBoxBuilder: (final MatchData data) => GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            TeamInfoScreen(initialTeam: data.team),
+                      ),
+                    );
+                  },
                   onDoubleTap: () {
                     Navigator.push(
                       context,

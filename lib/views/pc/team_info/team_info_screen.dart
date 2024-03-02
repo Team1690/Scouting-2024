@@ -9,11 +9,11 @@ import "package:scouting_frontend/views/pc/team_info/team_info_data.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 
 class TeamInfoScreen extends StatefulWidget {
-  TeamInfoScreen({this.initalTeam});
+  TeamInfoScreen({this.initialTeam});
   final TextEditingController controller = TextEditingController();
-  final LightTeam? initalTeam;
+  final LightTeam? initialTeam;
   @override
-  State<TeamInfoScreen> createState() => _TeamInfoScreenState(initalTeam);
+  State<TeamInfoScreen> createState() => _TeamInfoScreenState(initialTeam);
 }
 
 class _TeamInfoScreenState extends State<TeamInfoScreen> {

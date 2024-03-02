@@ -138,7 +138,7 @@ class _PickListState extends State<PickList> {
                                           builder:
                                               (final BuildContext context) =>
                                                   TeamInfoScreen(
-                                            initalTeam: pickListTeam.team,
+                                            initialTeam: pickListTeam.team,
                                           ),
                                         ),
                                       ),

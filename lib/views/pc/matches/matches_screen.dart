@@ -77,7 +77,7 @@ class MatchesScreen extends StatelessWidget {
                                             final BuildContext context,
                                           ) =>
                                               TeamInfoScreen(
-                                            initalTeam: currentTeam,
+                                            initialTeam: currentTeam,
                                           ),
                                         ),
                                       ),
@@ -106,7 +106,7 @@ class MatchesScreen extends StatelessWidget {
                                           builder:
                                               (final BuildContext context) =>
                                                   TeamInfoScreen(
-                                            initalTeam: currentTeam,
+                                            initialTeam: currentTeam,
                                           ),
                                         ),
                                       ),
