@@ -3,7 +3,8 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/pc/status/new_status_list.dart";
+import "package:scouting_frontend/views/pc/status/edit_technical_match.dart";
+import "package:scouting_frontend/views/pc/status/widgets/status_list.dart";
 import "package:scouting_frontend/views/pc/status/widgets/status_box.dart";
 
 class StatusCard extends StatefulWidget {
@@ -71,33 +72,50 @@ class _StatusCardState extends State<StatusCard> {
                 leading: (final List<MatchData> row) => Text(
                   row.first.scheduleMatch.matchIdentifier.toString(),
                 ),
-                statusBoxBuilder: (final MatchData data) => StatusBox(
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        data.team.number.toString(),
-                        style: TextStyle(
-                          color: data.isBlueAlliance ? Colors.blue : Colors.red,
+                statusBoxBuilder: (final MatchData data) => GestureDetector(
+                  onDoubleTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (final BuildContext context) =>
+                            EditTechnicalMatch(
+                          match: data.scheduleMatch,
+                          teamForQuery: data.team,
                         ),
                       ),
-                      Text(
-                        isSpecific
-                            ? data.specificMatchData!.scouterName
-                            : data.technicalMatchData!.scouterName,
-                        style: TextStyle(
-                          color: data.isBlueAlliance ? Colors.blue : Colors.red,
-                        ),
-                      ),
-                      if (!isSpecific)
+                    );
+                  },
+                  child: StatusBox(
+                    child: Column(
+                      children: <Widget>[
                         Text(
-                          data.technicalMatchData!.data.gamePiecesPoints
-                              .toString(),
+                          data.team.number.toString(),
                           style: TextStyle(
                             color:
                                 data.isBlueAlliance ? Colors.blue : Colors.red,
                           ),
                         ),
-                    ],
+                        Text(
+                          isSpecific
+                              ? data.specificMatchData!.scouterName
+                              : data.technicalMatchData!.scouterName,
+                          style: TextStyle(
+                            color:
+                                data.isBlueAlliance ? Colors.blue : Colors.red,
+                          ),
+                        ),
+                        if (!isSpecific)
+                          Text(
+                            data.technicalMatchData!.data.gamePiecesPoints
+                                .toString(),
+                            style: TextStyle(
+                              color: data.isBlueAlliance
+                                  ? Colors.blue
+                                  : Colors.red,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 missingStatusBoxBuilder: (final MatchData matchData) =>
