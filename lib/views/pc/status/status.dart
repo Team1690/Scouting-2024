@@ -6,7 +6,7 @@ import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
-import "package:scouting_frontend/views/pc/status/status_card.dart";
+import "package:scouting_frontend/views/pc/status/status_screen.dart";
 
 class Status extends StatelessWidget {
   @override
@@ -25,7 +25,7 @@ class Status extends StatelessWidget {
           ) =>
               snapshot.mapSnapshot(
             onSuccess: (final SplayTreeSet<TeamData> data) =>
-                StatusCard(data: data.toList()),
+                StatusScreen(data: data.toList()),
             onWaiting: () => const Center(
               child: CircularProgressIndicator(),
             ),

@@ -24,7 +24,7 @@ class StatusRow extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => Card(
         color: bgColor,
-        elevation: 2,
+        elevation: 4,
         margin: const EdgeInsets.all(defaultPadding / 2),
         child: Container(
           padding: const EdgeInsets.all(2 * defaultPadding),
