@@ -2,9 +2,6 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
-import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/models/matches_provider.dart";
-import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/status/new_status_list.dart";
 import "package:scouting_frontend/views/pc/status/widgets/status_box.dart";
@@ -114,7 +111,7 @@ class _StatusCardState extends State<StatusCard> {
                 isMissingValidator: (final MatchData matchData) =>
                     (matchData.technicalMatchData == null && !isSpecific) ||
                     (matchData.specificMatchData == null && isSpecific),
-                orderRowByCompare: (p0, p1) =>
+                orderRowByCompare: (final MatchData p0, final MatchData p1) =>
                     p0.isBlueAlliance && !p1.isBlueAlliance ? 1 : -1,
               ),
             ),
