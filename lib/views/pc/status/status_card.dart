@@ -75,34 +75,47 @@ class _StatusCardState extends State<StatusCard> {
                   row.first.scheduleMatch.matchIdentifier.toString(),
                 ),
                 statusBoxBuilder: (final MatchData data) => StatusBox(
-                  backgroundColor:
-                      data.scheduleMatch.blueAlliance.contains(data.team)
-                          ? Colors.blue
-                          : Colors.red,
                   child: Column(
                     children: <Widget>[
                       Text(
                         data.team.number.toString(),
-                        style: TextStyle(color: Colors.amber),
+                        style: TextStyle(
+                          color: data.isBlueAlliance ? Colors.blue : Colors.red,
+                        ),
                       ),
                       Text(
                         isSpecific
                             ? data.specificMatchData!.scouterName
                             : data.technicalMatchData!.scouterName,
+                        style: TextStyle(
+                          color: data.isBlueAlliance ? Colors.blue : Colors.red,
+                        ),
                       ),
                       if (!isSpecific)
                         Text(
                           data.technicalMatchData!.data.gamePiecesPoints
                               .toString(),
+                          style: TextStyle(
+                            color:
+                                data.isBlueAlliance ? Colors.blue : Colors.red,
+                          ),
                         ),
                     ],
                   ),
                 ),
                 missingStatusBoxBuilder: (final MatchData matchData) =>
-                    StatusBox(child: Text(matchData.team.number.toString())),
+                    StatusBox(
+                  backgroundColor:
+                      matchData.isBlueAlliance ? Colors.blue : Colors.red,
+                  child: Text(
+                    matchData.team.number.toString(),
+                  ),
+                ),
                 isMissingValidator: (final MatchData matchData) =>
                     (matchData.technicalMatchData == null && !isSpecific) ||
                     (matchData.specificMatchData == null && isSpecific),
+                orderRowByCompare: (p0, p1) =>
+                    p0.isBlueAlliance && !p1.isBlueAlliance ? 1 : -1,
               ),
             ),
           ],

@@ -14,11 +14,13 @@ class StatusList<T> extends StatelessWidget {
     this.orderByCompare,
     required this.missingStatusBoxBuilder,
     required this.isMissingValidator,
+    this.orderRowByCompare,
   });
 
   final List<MatchData> data;
   final T Function(MatchData) groupBy;
   final int Function(MatchData, MatchData)? orderByCompare;
+  final int Function(MatchData, MatchData)? orderRowByCompare;
   final bool Function(MatchData) isMissingValidator;
   final Widget Function(MatchData) statusBoxBuilder;
   final Widget Function(MatchData) missingStatusBoxBuilder;
@@ -41,6 +43,7 @@ class StatusList<T> extends StatelessWidget {
                 leading: leading?.call(row),
                 missingStatusBoxBuilder: missingStatusBoxBuilder,
                 missingData: row.where(isMissingValidator).toList(),
+                orderRowByCompare: orderRowByCompare,
               ),
             )
             .toList(),

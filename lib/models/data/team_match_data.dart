@@ -15,6 +15,7 @@ class MatchData {
   final SpecificMatchData? specificMatchData;
   final ScheduleMatch scheduleMatch;
   final LightTeam team;
+  bool get isBlueAlliance => scheduleMatch.blueAlliance.contains(team);
 }
 
 extension MatchDataList on List<MatchData> {
