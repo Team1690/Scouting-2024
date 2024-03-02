@@ -2,6 +2,9 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
+import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/matches_provider.dart";
+import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/status/new_status_list.dart";
 import "package:scouting_frontend/views/pc/status/widgets/status_box.dart";
@@ -60,17 +63,12 @@ class _StatusCardState extends State<StatusCard> {
               child: StatusList<Object>(
                 data: widget.data
                     .map((final TeamData element) => element.matches)
-                    .map(
-                      (final List<MatchData> e) => isSpecific
-                          ? e.specificMatches
-                          : e.technicalMatchExists,
-                    )
                     .flattened
                     .toList(),
                 groupBy: (final MatchData matchData) => isPreScouting
                     ? matchData.team
                     : matchData.scheduleMatch.matchIdentifier,
-                orderBy: (final MatchData p0, final MatchData p1) => p1
+                orderByCompare: (final MatchData p0, final MatchData p1) => p1
                     .scheduleMatch.matchIdentifier.number
                     .compareTo(p0.scheduleMatch.matchIdentifier.number),
                 leading: (final List<MatchData> row) => Text(
@@ -83,7 +81,10 @@ class _StatusCardState extends State<StatusCard> {
                           : Colors.red,
                   child: Column(
                     children: <Widget>[
-                      Text(data.team.number.toString()),
+                      Text(
+                        data.team.number.toString(),
+                        style: TextStyle(color: Colors.amber),
+                      ),
                       Text(
                         isSpecific
                             ? data.specificMatchData!.scouterName
@@ -97,6 +98,11 @@ class _StatusCardState extends State<StatusCard> {
                     ],
                   ),
                 ),
+                missingStatusBoxBuilder: (final MatchData matchData) =>
+                    StatusBox(child: Text(matchData.team.number.toString())),
+                isMissingValidator: (final MatchData matchData) =>
+                    (matchData.technicalMatchData == null && !isSpecific) ||
+                    (matchData.specificMatchData == null && isSpecific),
               ),
             ),
           ],

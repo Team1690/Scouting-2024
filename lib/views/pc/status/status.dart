@@ -29,7 +29,9 @@ class Status extends StatelessWidget {
             onWaiting: () => const Center(
               child: CircularProgressIndicator(),
             ),
-            onNoData: () => const Text(":("),
+            onNoData: () => const Center(
+              child: Text("No Data"),
+            ),
             onError: (final Object error) => Text(error.toString()),
           ),
         ),
