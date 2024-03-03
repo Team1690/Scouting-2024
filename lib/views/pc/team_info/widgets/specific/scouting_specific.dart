@@ -125,6 +125,7 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
     final (String, Color) rating = getRating(
       ratingsToMatches
               .map((final (int, int) e) => e.$1)
+              .where((final int element) => !element.isNaN)
               .toList()
               .averageOrNull ??
           0,
