@@ -146,6 +146,7 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
                   ),
                   const SizedBox(height: 15.0),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       ElevatedButton(
                         style: ButtonStyle(
