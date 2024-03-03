@@ -131,6 +131,7 @@ Future<
                 MatchIdentifier matchIdentifier
               })>
         )>> fetchDataAndPaths(
+  //TODO remove starting position
   final BuildContext context,
   final List<int> teamIds,
 ) async {
