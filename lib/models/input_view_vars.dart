@@ -25,7 +25,6 @@ class InputViewVars implements HasuraVars {
         harmonyWith = 0,
         trapAmount = 0,
         trapsMissed = 0,
-        startingPositionID = null,
         scoutedTeam = null;
   InputViewVars.all({
     required this.trapsMissed,
@@ -45,7 +44,6 @@ class InputViewVars implements HasuraVars {
     required this.harmonyWith,
     required this.trapAmount,
     required this.scoutedTeam,
-    required this.startingPositionID,
   });
 
   InputViewVars cleared(final BuildContext context) =>
@@ -68,7 +66,6 @@ class InputViewVars implements HasuraVars {
     final int Function()? harmonyWith,
     final int Function()? trapAmount,
     final int Function()? trapsMissed,
-    final int Function()? startingPositionID,
     final LightTeam? Function()? scoutedTeam,
   }) =>
       InputViewVars.all(
@@ -98,9 +95,6 @@ class InputViewVars implements HasuraVars {
         trapAmount: trapAmount != null ? trapAmount() : this.trapAmount,
         trapsMissed: trapsMissed != null ? trapsMissed() : this.trapsMissed,
         scoutedTeam: scoutedTeam != null ? scoutedTeam() : this.scoutedTeam,
-        startingPositionID: startingPositionID != null
-            ? startingPositionID()
-            : this.startingPositionID,
       );
 
   final bool isRematch;
@@ -119,7 +113,6 @@ class InputViewVars implements HasuraVars {
   final int harmonyWith;
   final int trapAmount;
   final int trapsMissed;
-  final int? startingPositionID;
   final LightTeam? scoutedTeam;
 
   @override
@@ -141,6 +134,5 @@ class InputViewVars implements HasuraVars {
         "harmony_with": harmonyWith,
         "trap_amount": trapAmount,
         "traps_missed": trapsMissed,
-        "starting_position_id": startingPositionID,
       };
 }
