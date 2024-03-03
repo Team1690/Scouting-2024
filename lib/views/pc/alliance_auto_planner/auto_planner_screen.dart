@@ -135,6 +135,7 @@ class _AutoScreenTeamSelectionState extends State<AutoScreenTeamSelection> {
                     : AutoPlanner(
                         field: field!,
                         data: snapshot.data!,
+                        teams: teams,
                       ),
               ),
             ],
@@ -144,8 +145,13 @@ class _AutoScreenTeamSelectionState extends State<AutoScreenTeamSelection> {
 }
 
 class AutoPlanner extends StatefulWidget {
-  const AutoPlanner({required this.field, required this.data});
+  const AutoPlanner({
+    required this.field,
+    required this.data,
+    required this.teams,
+  });
   final ui.Image field;
+  final List<LightTeam?> teams;
   final List<
       (
         TeamData,
@@ -162,20 +168,9 @@ class AutoPlanner extends StatefulWidget {
 }
 
 class _AutoPlannerState extends State<AutoPlanner> {
-  Map<StartingPosition, (Sketch, Color)?> selectedAutos =
-      Map<StartingPosition, (Sketch, Color)?>.fromEntries(
-    StartingPosition.values.map(
-      (final StartingPosition e) =>
-          MapEntry<StartingPosition, (Sketch, Color)?>(e, null),
-    ),
-  );
-  Map<StartingPosition, TeamData?> selectedTeams =
-      Map<StartingPosition, TeamData?>.fromEntries(
-    StartingPosition.values.map(
-      (final StartingPosition e) =>
-          MapEntry<StartingPosition, TeamData?>(e, null),
-    ),
-  );
+  late Map<LightTeam, (Sketch, Color)?> selectedAutos =
+      Map<LightTeam, (Sketch, Color)?>.fromEntries(
+          widget.teams.whereNotNull().map((e) => MapEntry(e, null)));
 
   @override
   Widget build(final BuildContext context) => Flex(
@@ -191,65 +186,38 @@ class _AutoPlannerState extends State<AutoPlanner> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  ...StartingPosition.values.map(
-                    (final StartingPosition e) => Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(defaultPadding),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "Starting Near ${e.title}",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: selectedTeams[e]?.lightTeam.color ??
-                                      Colors.white,
-                                ),
-                              ),
-                              Selector<TeamData>(
-                                options: widget.data
-                                    .map(
-                                      (
-                                        final (
-                                          TeamData,
-                                          List<
-                                              ({
-                                                Sketch sketch,
-                                                StartingPosition startingPos,
-                                                MatchIdentifier matchIdentifier
-                                              })>
-                                        ) e,
-                                      ) =>
-                                          e.$1,
-                                    )
-                                    .toList(),
-                                placeholder: "Team at ${e.title}",
-                                value: selectedTeams[e],
-                                makeItem: (final TeamData element) =>
-                                    "${element.lightTeam.number} ${element.lightTeam.name}",
-                                onChange: (final TeamData selectedTeam) {
-                                  selectedTeams[e] = selectedTeam;
-                                  selectAuto(e);
-                                },
-                                validate: (final TeamData teamData) => null,
-                              ),
-                              selectedAutos[e] != null
-                                  ? Column(
-                                      children: <Widget>[
-                                        ElevatedButton(
+                  ...widget.teams.whereNotNull().map(
+                        (final LightTeam e) => Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(defaultPadding),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: <Widget>[
+                                  Text(
+                                    "${e.number} ${e.name}",
+                                    style:
+                                        TextStyle(fontSize: 20, color: e.color),
+                                  ),
+                                  selectedAutos[e] != null
+                                      ? Column(
+                                          children: <Widget>[
+                                            ElevatedButton(
+                                              onPressed: () => selectAuto(e),
+                                              child: const Text("Select auto"),
+                                            ),
+                                            autoDataText(e),
+                                          ],
+                                        )
+                                      : ElevatedButton(
                                           onPressed: () => selectAuto(e),
                                           child: const Text("Select auto"),
                                         ),
-                                        autoDataText(e),
-                                      ],
-                                    )
-                                  : Container(),
-                            ],
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -264,9 +232,8 @@ class _AutoPlannerState extends State<AutoPlanner> {
         ],
       );
 
-  Column autoDataText(final StartingPosition startingPosition) {
-    final List<TechnicalMatchData> technicalMatches =
-        getAutoData(startingPosition);
+  Column autoDataText(final LightTeam lightTeam) {
+    final List<TechnicalMatchData> technicalMatches = getAutoData(lightTeam);
     final double avgAmp = technicalMatches
             .map((final TechnicalMatchData match) => match.data.autoAmp)
             .toList()
@@ -304,34 +271,27 @@ class _AutoPlannerState extends State<AutoPlanner> {
   }
 
   List<TechnicalMatchData> getAutoData(
-    final StartingPosition startingPos,
+    final LightTeam lightTeam,
   ) {
-    final List<AutoPathData> matchesAtPos = widget.data
+    final List<AutoPathData> matches = widget.data
         .where(
           (
             final (TeamData, List<AutoPathData>) e,
           ) =>
-              e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam,
+              e.$1.lightTeam == lightTeam,
         )
-        .map(
-          (
-            final (TeamData, List<AutoPathData>) e,
-          ) =>
-              e.$2.where(
-            (
-              final AutoPathData element,
-            ) =>
-                element.startingPos == startingPos,
-          ),
-        )
+        .map((
+          final (TeamData, List<AutoPathData>) e,
+        ) =>
+            e.$2)
         .flattened
         .toList();
-    final List<MatchIdentifier> matchesUsingAuto = matchesAtPos
+    final List<MatchIdentifier> matchesUsingAuto = matches
         .where(
           (
             final AutoPathData match,
           ) =>
-              match.sketch.url == selectedAutos[startingPos]?.$1.url,
+              match.sketch.url == selectedAutos[lightTeam]?.$1.url,
         )
         .map(
           (
@@ -340,44 +300,40 @@ class _AutoPlannerState extends State<AutoPlanner> {
               e.matchIdentifier,
         )
         .toList();
-    return selectedTeams[startingPos]!
-        .technicalMatches
-        .where(
-          (final TechnicalMatchData match) =>
-              matchesUsingAuto.contains(match.matchIdentifier),
-        )
+    return widget.data
+        .where((element) => element.$1.lightTeam == lightTeam)
+        .map((e) => e.$1.technicalMatches.where(
+              (final TechnicalMatchData match) =>
+                  matchesUsingAuto.contains(match.matchIdentifier),
+            ))
+        .flattened
         .toList();
   }
 
   void selectAuto(
-    final StartingPosition startingPos,
+    final LightTeam lightTeam,
   ) async {
     final Sketch? selectedAuto = await showDialog<Sketch?>(
       context: context,
       builder: (final BuildContext dialogContext) {
-        final List<AutoPathData> matchesAtPos = widget.data
+        final List<AutoPathData> matches = widget.data
             .where(
               (
                 final (TeamData, List<AutoPathData>) e,
               ) =>
-                  e.$1.lightTeam == selectedTeams[startingPos]?.lightTeam,
+                  e.$1.lightTeam == lightTeam,
             )
             .map(
               (
                 final (TeamData, List<AutoPathData>) e,
               ) =>
-                  e.$2.where(
-                (
-                  final AutoPathData element,
-                ) =>
-                    element.startingPos == startingPos,
-              ),
+                  e.$2,
             )
             .flattened
             .toList();
 
         final List<Sketch> uniqueAuto = distinct(
-          matchesAtPos
+          matches
               .map(
                 (
                   final AutoPathData match,
@@ -414,10 +370,7 @@ class _AutoPlannerState extends State<AutoPlanner> {
     );
     if (selectedAuto == null) return;
     setState(() {
-      selectedAutos[startingPos] = (
-        selectedAuto,
-        selectedTeams[startingPos]?.lightTeam.color ?? Colors.white
-      );
+      selectedAutos[lightTeam] = (selectedAuto, lightTeam.color);
     });
   }
 }
