@@ -31,7 +31,6 @@ class _SpecificState extends State<Specific> {
           ),
           body: CarouselWithIndicator(
             widgets: <Widget>[
-
               SpecificMatchCard(onTeamSelected: setTeam),
               SpecificSummaryCard(onTeamSelected: setTeam),
             ],
