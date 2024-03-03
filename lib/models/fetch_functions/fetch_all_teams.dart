@@ -47,6 +47,7 @@ subscription FetchAllTeams {
       message
     }
     technical_matches {
+      scouter_name
       auto_amp
       auto_amp_missed
       auto_speaker
