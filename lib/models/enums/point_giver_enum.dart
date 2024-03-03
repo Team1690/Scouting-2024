@@ -30,10 +30,6 @@ enum PointGiver {
   climb(
     mode: MatchMode.endGame,
     points: 3,
-  ),
-  buddyClimb(
-    mode: MatchMode.endGame,
-    points: 6,
   );
 
   const PointGiver({

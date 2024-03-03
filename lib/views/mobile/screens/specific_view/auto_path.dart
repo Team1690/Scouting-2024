@@ -1,5 +1,4 @@
 import "dart:ui" as ui;
-
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -30,7 +29,6 @@ class _AutoPathState extends State<AutoPath> {
           url: null,
         ),
   );
-  bool pathDone = false;
   double pixelToMeterRatio = 0;
   @override
   void didChangeDependencies() {
@@ -77,39 +75,22 @@ class _AutoPathState extends State<AutoPath> {
                   final BoxConstraints constraints,
                 ) =>
                     Listener(
-                  onPointerDown: (final PointerDownEvent pointerEvent) {
-                    if(!pathDone){
-                    final RenderBox box =
-                        context.findRenderObject() as RenderBox;
-                    final Offset offset =
-                        box.globalToLocal(pointerEvent.position);
-                    path.value = Sketch(
-                      points: <Offset>[offset],
-                      isRed: path.value.isRed,
-                      url: path.value.url,
-                    );}
-                  },
                   onPointerMove: (final PointerMoveEvent pointerEvent) {
-                    if (!pathDone &&
-                        pointerEvent.position.dy -
-                                AppBar().preferredSize.height <
-                            constraints.maxHeight) {
+                    if (pointerEvent.position.dy -
+                            AppBar().preferredSize.height <
+                        constraints.maxHeight) {
                       final RenderBox box =
                           context.findRenderObject() as RenderBox;
                       final Offset offset =
                           box.globalToLocal(pointerEvent.position);
                       final List<Offset> points =
                           List<Offset>.from(path.value.points)..add(offset);
-
                       path.value = Sketch(
                         points: points,
                         isRed: path.value.isRed,
                         url: path.value.url,
                       );
                     }
-                  },
-                  onPointerUp: (final PointerUpEvent pointerUpEvent) {
-                    pathDone = true;
                   },
                   child: ListenableBuilder(
                     listenable: path,
@@ -146,7 +127,6 @@ class _AutoPathState extends State<AutoPath> {
                       isRed: path.value.isRed,
                       url: null,
                     );
-                    pathDone = false;
                   },
                   icon: const Icon(Icons.delete_outline_rounded),
                   style: ButtonStyle(
@@ -186,7 +166,14 @@ class _AutoPathState extends State<AutoPath> {
                   onPressed: () => setState(() {
                     path.value = Sketch(
                       isRed: !path.value.isRed,
-                      points: path.value.points,
+                      points: path.value.points
+                          .map(
+                            (final ui.Offset e) => Offset(
+                              (MediaQuery.of(context).size.width - e.dx),
+                              e.dy,
+                            ),
+                          )
+                          .toList(),
                       url: path.value.url,
                     );
                   }),

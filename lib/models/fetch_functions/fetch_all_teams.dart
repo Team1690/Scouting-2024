@@ -16,12 +16,7 @@ subscription FetchAllTeams {
       drivemotor {
         title
       }
-      wheel_type {
-        title
-      }
-      gearbox_purchased
       notes
-      has_shifter
       url
       team {
         faults {
@@ -32,12 +27,12 @@ subscription FetchAllTeams {
         colors_index
         name
       }
-      height
       weight
+      length
+      width
       harmony
       trap
-      has_buddy_climb
-      other_wheel_type
+      can_pass_under_stage
       can_eject
     }
     id
