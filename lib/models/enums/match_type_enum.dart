@@ -1,13 +1,14 @@
 enum MatchType {
-  pre("Pre Scouting"),
-  practice("Practice"),
-  quals("Quals"),
-  finals("Finals"),
-  einsteinfinals("Einstein Finals"),
-  doubleElim("Double Elims");
+  pre("Pre Scouting", 0),
+  practice("Practice", 1),
+  quals("Quals", 2),
+  finals("Finals", 4),
+  einsteinfinals("Einstein Finals", 5),
+  doubleElim("Double Elims", 3);
 
-  const MatchType(this.title);
+  const MatchType(this.title, this.order);
   final String title;
+  final int order;
 
   String get shortTitle => title.substring(0, 1);
 }

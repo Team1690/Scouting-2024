@@ -89,12 +89,18 @@ class _StatusScreenState extends State<StatusScreen> {
                   groupBy: (final MatchData matchData) => isPreScouting
                       ? matchData.team
                       : matchData.scheduleMatch.matchIdentifier,
-                  orderByCompare: (final MatchData p0, final MatchData p1) =>
-                      isPreScouting
-                          ? p0.team.number.compareTo(p1.team.number)
-                          : p1.scheduleMatch.matchIdentifier.number.compareTo(
-                              p0.scheduleMatch.matchIdentifier.number,
-                            ),
+                  orderByCompare: (final MatchData p0, final MatchData p1) {
+                    if (!isPreScouting &&
+                        p1.scheduleMatch.matchIdentifier.type.order.compareTo(
+                              p0.scheduleMatch.matchIdentifier.type.order,
+                            ) !=
+                            0) return -1;
+                    return isPreScouting
+                        ? p0.team.number.compareTo(p1.team.number)
+                        : p1.scheduleMatch.matchIdentifier.number.compareTo(
+                            p0.scheduleMatch.matchIdentifier.number,
+                          );
+                  },
                   leading: (final List<MatchData> row) => Text(
                     isPreScouting
                         ? "${row.first.team.number.toString()} ${row.first.team.name}"
