@@ -163,22 +163,8 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
     case 1:
       return ("F", Colors.red);
     case 2:
-      return ("F", Colors.red);
+      return ("C", Colors.yellow);
     case 3:
-      return ("D", Colors.orange);
-    case 4:
-      return ("D", Colors.orange);
-    case 5:
-      return ("C", Colors.yellow);
-    case 6:
-      return ("C", Colors.yellow);
-    case 7:
-      return ("B", Colors.green);
-    case 8:
-      return ("B", Colors.green);
-    case 9:
-      return ("A", const Color.fromARGB(255, 30, 124, 33));
-    case 10:
       return ("A", const Color.fromARGB(255, 30, 124, 33));
     default:
       return ("No Data", Colors.white);
