@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/status/edit_technical_match.dart";
 import "package:scouting_frontend/views/pc/status/widgets/status_list.dart";
@@ -18,6 +19,7 @@ class StatusScreen extends StatefulWidget {
 }
 
 class _StatusScreenState extends State<StatusScreen> {
+  //TODO: add status screen for pit scouting
   bool isSpecific = false;
   bool isPreScouting = false;
   @override
@@ -112,11 +114,13 @@ class _StatusScreenState extends State<StatusScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute<void>(
-                          builder: (final BuildContext context) =>
-                              EditTechnicalMatch(
-                            match: data.scheduleMatch,
-                            teamForQuery: data.team,
-                          ),
+                          builder: (final BuildContext context) => !isSpecific
+                              ? EditTechnicalMatch(
+                                  match: data.scheduleMatch,
+                                  teamForQuery: data.team,
+                                )
+                              //TODO: edit specific
+                              : DashboardScaffold(body: Container()),
                         ),
                       );
                     },
@@ -156,11 +160,20 @@ class _StatusScreenState extends State<StatusScreen> {
                     ),
                   ),
                   missingStatusBoxBuilder: (final MatchData matchData) =>
-                      StatusBox(
-                    backgroundColor:
-                        matchData.isBlueAlliance ? Colors.blue : Colors.red,
-                    child: Text(
-                      matchData.team.number.toString(),
+                      GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (final BuildContext context) =>
+                            TeamInfoScreen(initialTeam: matchData.team),
+                      ),
+                    ),
+                    child: StatusBox(
+                      backgroundColor:
+                          matchData.isBlueAlliance ? Colors.blue : Colors.red,
+                      child: Text(
+                        matchData.team.number.toString(),
+                      ),
                     ),
                   ),
                   isMissingValidator: (final MatchData matchData) =>
