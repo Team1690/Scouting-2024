@@ -106,6 +106,8 @@ class _PickListState extends State<PickList> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Icon(
                                         pickListTeam.faultMessages.isEmpty
@@ -117,20 +119,17 @@ class _PickListState extends State<PickList> {
                                                 : Colors.yellow[700],
                                       ),
                                       Text(
-                                        pickListTeam.faultMessages.mapNullable(
-                                              (
-                                                final List<String> p0,
-                                              ) =>
-                                                  "Faults: ${p0.length}",
-                                            ) ??
-                                            "No faults",
+                                        "Faults: ${pickListTeam.faultMessages.length}",
                                       ),
                                     ],
                                   ),
+                                  Text(
+                                    pickListTeam
+                                            .pitData?.driveTrainType.title ??
+                                        "No pit",
+                                  ),
                                   if (pickListTeam.aggregateData.gamesPlayed !=
                                       0)
-
-                                    //TODO display the rest of your variables
                                     ElevatedButton(
                                       onPressed: () =>
                                           Navigator.pushReplacement(

@@ -1,10 +1,18 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/data/all_team_data.dart";
+import "package:scouting_frontend/models/enums/drive_train_enum.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/value_sliders.dart";
 
-class AutoPickListPopUp extends StatefulWidget {
+typedef AutoPicklistResult = ({
+  double climbFactor,
+  double ampFactor,
+  double speakerFactor,
+  bool filterSwerve,
+});
+
+class AutoPickListPopUp extends StatelessWidget {
   const AutoPickListPopUp({
     super.key,
     required this.teamsToSort,
@@ -12,21 +20,21 @@ class AutoPickListPopUp extends StatefulWidget {
   });
   final List<AllTeamData> teamsToSort;
   final CurrentPickList currentPickList;
-  @override
-  State<AutoPickListPopUp> createState() => _AutoPickListPopUpState();
-}
 
-class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
-  double speakerFactor = 0.5;
-  double ampFactor = 0.5;
-  double climbFactor = 0.5;
-  double trapFactor = 0.5;
+  double calculateValue(
+    final AllTeamData val,
+    final AutoPicklistResult request,
+  ) {
+    final List<AllTeamData> teamsList = teamsToSort;
 
-  double calculateValue(final AllTeamData val) {
-    final List<AllTeamData> teamsList = widget.teamsToSort;
-    final double result = (val.climbPercentage * climbFactor / 100 +
+    if (request.filterSwerve &&
+        val.pitData?.driveTrainType == DriveTrain.swerve) {
+      return double.negativeInfinity;
+    }
+
+    final double result = (val.climbPercentage * request.climbFactor / 100 +
             (val.aggregateData.avgData.ampGamepieces) *
-                ampFactor /
+                request.ampFactor /
                 teamsList
                     .map(
                       (final AllTeamData e) =>
@@ -35,15 +43,15 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
                     .whereNot((final double element) => element.isNaN)
                     .max) +
         (val.aggregateData.avgData.speakerGamepieces) *
-            speakerFactor /
+            request.speakerFactor /
             teamsList
                 .map(
                   (final AllTeamData e) =>
                       e.aggregateData.avgData.speakerGamepieces,
                 )
                 .whereNot((final double element) => element.isNaN)
-                .max +
-        val.aggregateData.avgData.trapAmount * trapFactor / 2;
+                .max;
+
     return result.isFinite ? result : double.negativeInfinity;
   }
 
@@ -52,34 +60,23 @@ class _AutoPickListPopUpState extends State<AutoPickListPopUp> {
         content: Column(
           children: <Widget>[
             ValueSliders(
-              onButtonPress: (
-                final double climbSlider,
-                final double ampSlider,
-                final double speakerSlider,
-                final double trapSlider,
-              ) =>
-                  setState(() {
-                climbFactor = climbSlider;
-                ampFactor = ampSlider;
-                speakerFactor = speakerSlider;
-                trapFactor = trapSlider;
-                final List<AllTeamData> newSortedTeamList =
-                    widget.teamsToSort.sorted(
+              onButtonPress: (final AutoPicklistResult request) {
+                final List<AllTeamData> newSortedTeamList = teamsToSort.sorted(
                   (
                     final AllTeamData b,
                     final AllTeamData a,
                   ) =>
-                      calculateValue(a).compareTo(
-                    calculateValue(b),
+                      calculateValue(a, request).compareTo(
+                    calculateValue(b, request),
                   ),
                 );
                 newSortedTeamList
                     .forEachIndexed((final int index, final AllTeamData team) {
-                  widget.currentPickList.setIndex(team, index);
+                  currentPickList.setIndex(team, index);
                 });
 
                 Navigator.pop(context, newSortedTeamList);
-              }),
+              },
             ),
           ],
         ),
