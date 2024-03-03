@@ -97,11 +97,13 @@ Stream<List<StatusItem<MatchIdentifier, StatusMatch>>> fetchStatus(
             )
             .toList()
             .single);
-        final TechnicalMatchData technicalMatch =
-            TechnicalMatchData.parse(scoutedMatchTable);
         return StatusMatch(
           scoutedTeam: StatusLightTeam(
-            isSpecific ? 0 : technicalMatch.data.gamePiecesPoints,
+            isSpecific
+                ? 0
+                : TechnicalMatchData.parse(scoutedMatchTable)
+                    .data
+                    .gamePiecesPoints,
             scheduleMatch.redAlliance.contains(
               team,
             )
@@ -171,12 +173,6 @@ subscription Status {
       number
       name
     }
-    auto_amp
-      auto_amp_missed
-      auto_speaker
-      auto_speaker_missed
-      cilmb_id
-      harmony_with
       is_rematch
       schedule_match {
         match_type {
@@ -185,7 +181,15 @@ subscription Status {
         match_number
         id
       }
-      climb {
+      scouter_name
+      ${isSpecific ? """
+
+
+
+
+""" : r"""
+
+climb {
         title
       }
       tele_amp
@@ -201,6 +205,17 @@ subscription Status {
       robot_field_status {
         title
       }
+      
+    auto_amp
+      auto_amp_missed
+      auto_speaker
+      auto_speaker_missed
+      cilmb_id
+      harmony_with
+
+
+"""}
+      
   }
 }
 

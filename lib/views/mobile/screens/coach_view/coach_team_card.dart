@@ -67,13 +67,17 @@ class CoachTeamCard extends StatelessWidget {
                           const Spacer()
                         else ...<Widget>[
                           Text(
-                            "Avg gamepieces: ${team.aggregateData.avgData.gamepieces}",
+                            "Avg gamepieces: ${team.aggregateData.avgData.gamepieces.toStringAsFixed(2)}",
                           ),
                           Text(
-                            "Avg Trap Amount: ${team.aggregateData.avgData.trapAmount}",
+                            "Avg Trap Amount: ${team.aggregateData.avgData.trapAmount.toStringAsFixed(2)}",
                           ),
-                          Text("Aim: ${team.aim}%"),
-                          Text("Climb Percentage: ${team.climbPercentage}%"),
+                          Text(
+                            "Aim: ${team.aim.isFinite ? "${team.aim.toStringAsFixed(2)}%" : "No Data"}",
+                          ),
+                          Text(
+                            "Climb Percentage: ${team.climbPercentage.isFinite ? "${team.climbPercentage.toStringAsFixed(2)}%" : "No Data"}",
+                          ),
                           Text(
                             "Matches Played: ${team.aggregateData.gamesPlayed}",
                           ),
