@@ -7,8 +7,11 @@ import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/scouting_specific.dart";
 
 class SpecificCard extends StatefulWidget {
-  const SpecificCard(
-      {required this.matchData, required this.summaryData, required this.team});
+  const SpecificCard({
+    required this.matchData,
+    required this.summaryData,
+    required this.team,
+  });
   final LightTeam team;
   final List<MatchData?> matchData;
   final SpecificSummaryData? summaryData;

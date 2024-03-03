@@ -60,10 +60,13 @@ class AutoScreenTeamSelection extends StatefulWidget {
 class _AutoScreenTeamSelectionState extends State<AutoScreenTeamSelection> {
   late List<LightTeam?> teams =
       List<LightTeam?>.filled(StartingPosition.values.length, null)
-          .mapIndexed((index, e) => widget.initialTeams == null ||
-                  widget.initialTeams!.length <= index
-              ? e
-              : widget.initialTeams![index])
+          .mapIndexed(
+            (final int index, final LightTeam? e) =>
+                widget.initialTeams == null ||
+                        widget.initialTeams!.length <= index
+                    ? e
+                    : widget.initialTeams![index],
+          )
           .toList();
 
   late List<TextEditingController> controllers =
@@ -177,7 +180,10 @@ class AutoPlanner extends StatefulWidget {
 class _AutoPlannerState extends State<AutoPlanner> {
   late Map<LightTeam, (Sketch, Color)?> selectedAutos =
       Map<LightTeam, (Sketch, Color)?>.fromEntries(
-          widget.teams.whereNotNull().map((e) => MapEntry(e, null)));
+    widget.teams.whereNotNull().map(
+          (final LightTeam e) => MapEntry<LightTeam, (Sketch, Color)?>(e, null),
+        ),
+  );
 
   @override
   Widget build(final BuildContext context) => Flex(
@@ -287,10 +293,12 @@ class _AutoPlannerState extends State<AutoPlanner> {
           ) =>
               e.$1.lightTeam == lightTeam,
         )
-        .map((
-          final (TeamData, List<AutoPathData>) e,
-        ) =>
-            e.$2)
+        .map(
+          (
+            final (TeamData, List<AutoPathData>) e,
+          ) =>
+              e.$2,
+        )
         .flattened
         .toList();
     final List<MatchIdentifier> matchesUsingAuto = matches
@@ -308,11 +316,37 @@ class _AutoPlannerState extends State<AutoPlanner> {
         )
         .toList();
     return widget.data
-        .where((element) => element.$1.lightTeam == lightTeam)
-        .map((e) => e.$1.technicalMatches.where(
-              (final TechnicalMatchData match) =>
-                  matchesUsingAuto.contains(match.matchIdentifier),
-            ))
+        .where(
+          (
+            final (
+              TeamData,
+              List<
+                  ({
+                    MatchIdentifier matchIdentifier,
+                    Sketch sketch,
+                    StartingPosition startingPos
+                  })>
+            ) element,
+          ) =>
+              element.$1.lightTeam == lightTeam,
+        )
+        .map(
+          (
+            final (
+              TeamData,
+              List<
+                  ({
+                    MatchIdentifier matchIdentifier,
+                    Sketch sketch,
+                    StartingPosition startingPos
+                  })>
+            ) e,
+          ) =>
+              e.$1.technicalMatches.where(
+            (final TechnicalMatchData match) =>
+                matchesUsingAuto.contains(match.matchIdentifier),
+          ),
+        )
         .flattened
         .toList();
   }

@@ -55,48 +55,52 @@ class CoachMatchScreen extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(0.625),
-                    child: Column(children: [
-                      IconButton(
-                        onPressed: () {
-                          match.mapNullable(
-                            (final ScheduleMatch match) => Navigator.push(
-                              context,
-                              MaterialPageRoute<AutoPlannerScreen>(
-                                  builder: (final BuildContext context) =>
-                                      AutoPlannerScreen(match.blueAlliance)),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.route),
-                      ),
-                      ...match.blueAlliance.map(
-                        (final LightTeam e) => Expanded(
-                          child: CoachTeamCard(
-                            team: blueAllianceTeams.firstWhere(
-                              (final TeamData element) =>
-                                  element.lightTeam == e,
-                            ),
-                            context: context,
-                            isBlue: true,
-                          ),
-                        ),
-                      ),
-                    ]),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(0.625),
                     child: Column(
-                      children: [
+                      children: <Widget>[
                         IconButton(
                           onPressed: () {
                             match.mapNullable(
                               (final ScheduleMatch match) => Navigator.push(
                                 context,
                                 MaterialPageRoute<AutoPlannerScreen>(
-                                    builder: (final BuildContext context) =>
-                                        AutoPlannerScreen(match.redAlliance)),
+                                  builder: (final BuildContext context) =>
+                                      AutoPlannerScreen(match.blueAlliance),
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.route),
+                        ),
+                        ...match.blueAlliance.map(
+                          (final LightTeam e) => Expanded(
+                            child: CoachTeamCard(
+                              team: blueAllianceTeams.firstWhere(
+                                (final TeamData element) =>
+                                    element.lightTeam == e,
+                              ),
+                              context: context,
+                              isBlue: true,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.625),
+                    child: Column(
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () {
+                            match.mapNullable(
+                              (final ScheduleMatch match) => Navigator.push(
+                                context,
+                                MaterialPageRoute<AutoPlannerScreen>(
+                                  builder: (final BuildContext context) =>
+                                      AutoPlannerScreen(match.redAlliance),
+                                ),
                               ),
                             );
                           },
