@@ -1,9 +1,8 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 
-class StatusRow extends StatelessWidget {
+class StatusRow<ItemDataType> extends StatelessWidget {
   const StatusRow({
     super.key,
     this.leading,
@@ -15,11 +14,11 @@ class StatusRow extends StatelessWidget {
   });
 
   final Widget? leading;
-  final Widget Function(MatchData) statusBoxBuilder;
-  final Widget Function(MatchData) missingStatusBoxBuilder;
-  final int Function(MatchData, MatchData)? orderRowByCompare;
-  final List<MatchData> data;
-  final List<MatchData> missingData;
+  final Widget Function(ItemDataType) statusBoxBuilder;
+  final Widget Function(ItemDataType) missingStatusBoxBuilder;
+  final int Function(ItemDataType, ItemDataType)? orderRowByCompare;
+  final List<ItemDataType> data;
+  final List<ItemDataType> missingData;
 
   @override
   Widget build(final BuildContext context) => Card(
@@ -35,13 +34,13 @@ class StatusRow extends StatelessWidget {
               ...data
                   .sorted(
                     orderRowByCompare ??
-                        (final MatchData a, final MatchData b) => 1,
+                        (final ItemDataType a, final ItemDataType b) => 1,
                   )
                   .map(statusBoxBuilder),
               ...missingData
                   .sorted(
                     orderRowByCompare ??
-                        (final MatchData a, final MatchData b) => 1,
+                        (final ItemDataType a, final ItemDataType b) => 1,
                   )
                   .map(missingStatusBoxBuilder),
             ],

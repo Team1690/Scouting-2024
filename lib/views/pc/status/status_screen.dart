@@ -73,12 +73,12 @@ class _StatusScreenState extends State<StatusScreen> {
                 ],
               ),
               Expanded(
-                child: StatusList<Object>(
+                child: StatusList<Object, MatchData>(
                   data: widget.data
-                      .map((e) => e.matches)
+                      .map((final TeamData e) => e.matches)
                       .flattened
                       .where(
-                        (element) =>
+                        (final MatchData element) =>
                             element.scheduleMatch.matchIdentifier.type ==
                                 MatchType.pre ||
                             !isPreScouting,
