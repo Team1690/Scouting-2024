@@ -1,27 +1,21 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
+import "package:scouting_frontend/views/pc/picklist/auto_picklist_popup.dart";
 
 class ValueSliders extends StatefulWidget {
   const ValueSliders({required this.onButtonPress});
-//TODO rename to season specific vars
-  final Function(
-    double climbSlider,
-    double ampSlider,
-    double speakerSlider,
-    double trapSlider,
-  ) onButtonPress;
+  final Function(AutoPicklistResult) onButtonPress;
 
   @override
   State<ValueSliders> createState() => _ValueSlidersState();
 }
 
 class _ValueSlidersState extends State<ValueSliders> {
-  //TODO rename to season specific vars
-  double climbFactor = 0.5;
   double ampFactor = 0.5;
   double speakerFactor = 0.5;
-  double trapFactor = 0.5;
+  double climbFactor = 0.0;
+  bool filterSwerve = true;
   @override
   Widget build(final BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
@@ -48,13 +42,6 @@ class _ValueSlidersState extends State<ValueSliders> {
                 speakerFactor = newValue;
               }),
             ),
-            SectionDivider(label: "Traps"),
-            Slider(
-              value: trapFactor,
-              onChanged: (final double newValue) => setState(() {
-                trapFactor = newValue;
-              }),
-            ),
           ],
           const SizedBox(
             height: 10,
@@ -65,18 +52,22 @@ class _ValueSlidersState extends State<ValueSliders> {
           RoundedIconButton(
             color: Colors.green,
             onPress: () => widget.onButtonPress(
-              climbFactor,
-              ampFactor,
-              speakerFactor,
-              trapFactor,
+              (
+                climbFactor: climbFactor,
+                ampFactor: ampFactor,
+                speakerFactor: speakerFactor,
+                filterSwerve: filterSwerve,
+              ),
+            ),
+            onLongPress: () => widget.onButtonPress(
+              (
+                climbFactor: climbFactor,
+                ampFactor: ampFactor,
+                speakerFactor: speakerFactor,
+                filterSwerve: filterSwerve,
+              ),
             ),
             icon: Icons.calculate_outlined,
-            onLongPress: () => widget.onButtonPress(
-              climbFactor,
-              ampFactor,
-              speakerFactor,
-              trapFactor,
-            ),
           ),
         ],
       );
