@@ -161,9 +161,9 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
 (String, Color) getRating(final double numeralRating) {
   switch (numeralRating.round()) {
     case 1:
-      return ("F", Colors.red);
+      return ("C", Colors.red);
     case 2:
-      return ("C", Colors.yellow);
+      return ("B", Colors.yellow);
     case 3:
       return ("A", const Color.fromARGB(255, 30, 124, 33));
     default:
