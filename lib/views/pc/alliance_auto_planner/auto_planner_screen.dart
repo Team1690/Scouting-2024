@@ -21,7 +21,7 @@ import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 class AutoPlannerScreen extends StatelessWidget {
   const AutoPlannerScreen([
     this.initialTeams,
-  ]); //TODO add implementation for initialTeams from TeamInfo
+  ]);
   final List<LightTeam>? initialTeams;
 
   @override
@@ -58,13 +58,20 @@ class AutoScreenTeamSelection extends StatefulWidget {
 }
 
 class _AutoScreenTeamSelectionState extends State<AutoScreenTeamSelection> {
-  late List<LightTeam?> teams = widget.initialTeams ??
-      List<LightTeam?>.filled(StartingPosition.values.length, null);
+  late List<LightTeam?> teams =
+      List<LightTeam?>.filled(StartingPosition.values.length, null)
+          .mapIndexed((index, e) => widget.initialTeams == null ||
+                  widget.initialTeams!.length <= index
+              ? e
+              : widget.initialTeams![index])
+          .toList();
 
-  List<TextEditingController> controllers =
+  late List<TextEditingController> controllers =
       List<TextEditingController>.generate(
     StartingPosition.values.length,
-    (final int i) => TextEditingController(),
+    (final int i) => TextEditingController(
+      text: teams[i] == null ? null : "${teams[i]?.number} ${teams[i]?.name}",
+    ),
   );
   ui.Image? field;
 
