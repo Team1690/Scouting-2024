@@ -108,7 +108,6 @@ Future<InputViewVars> fetchTechnicalMatch(
           harmonyWith: technicalMatch["harmony_with"] as int,
           trapAmount: technicalMatch["trap_amount"] as int,
           scoutedTeam: teamForQuery,
-          startingPositionID: technicalMatch["starting_position"]["id"] as int,
         );
       },
       document: gql(query),
