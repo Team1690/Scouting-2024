@@ -3,10 +3,14 @@ import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/data/specific_summary_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
+import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/views/pc/alliance_auto_planner/auto_planner_screen.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/view_rating_dropdown_line.dart";
 
 class ScoutingSpecific extends StatefulWidget {
-  const ScoutingSpecific({required this.msgs, required this.matchesData});
+  const ScoutingSpecific(
+      {required this.msgs, required this.matchesData, required this.team});
+  final LightTeam team;
   final SpecificSummaryData msgs;
   final List<MatchData> matchesData;
 
@@ -21,6 +25,13 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            ElevatedButton(
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AutoPlannerScreen([widget.team]),
+                    )),
+                child: Text("View Auto")),
             getSummaryText(
               "Driving",
               widget.msgs.drivingText,
@@ -112,7 +123,6 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
                   .whereNotNull()
                   .toList(),
             ),
-            //TODO add a button to autoScreen when complete
           ],
         ),
       );

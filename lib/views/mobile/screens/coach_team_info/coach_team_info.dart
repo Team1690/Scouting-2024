@@ -47,6 +47,7 @@ class CoachTeamInfo extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: SpecificCard(
+                    team: data.lightTeam,
                     matchData: data.matches.specificMatches,
                     summaryData: data.summaryData,
                   ),

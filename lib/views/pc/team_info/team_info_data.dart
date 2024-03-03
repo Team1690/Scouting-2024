@@ -44,6 +44,7 @@ class TeamInfoData extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: SpecificCard(
+                  team: data.lightTeam,
                   matchData: data.matches,
                   summaryData: data.summaryData,
                 ),
