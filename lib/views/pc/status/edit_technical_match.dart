@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/input_view_vars.dart";
-import "package:scouting_frontend/models/match_identifier.dart";
+import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
@@ -11,10 +11,10 @@ import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dar
 
 class EditTechnicalMatch extends StatelessWidget {
   const EditTechnicalMatch({
-    required this.matchIdentifier,
+    required this.match,
     required this.teamForQuery,
   });
-  final MatchIdentifier matchIdentifier;
+  final ScheduleMatch match;
   final LightTeam teamForQuery;
 
   @override
@@ -23,40 +23,64 @@ class EditTechnicalMatch extends StatelessWidget {
       : Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(
-              "${matchIdentifier.type} ${matchIdentifier.number}, team ${teamForQuery.number}",
-            ),
+            title: Text(match.toString()),
           ),
           body: editTechnicalMatch(context),
         );
   FutureBuilder<InputViewVars> editTechnicalMatch(final BuildContext context) =>
       FutureBuilder<InputViewVars>(
-        future: fetchTechnicalMatch(matchIdentifier, teamForQuery, context),
+        future: fetchTechnicalMatch(match, teamForQuery, context),
         builder: (
           final BuildContext context,
           final AsyncSnapshot<InputViewVars> snapshot,
-        ) {
-          if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return UserInput(snapshot.data);
-          }
-        },
+        ) =>
+            snapshot.mapSnapshot(
+          onSuccess: (final InputViewVars data) => UserInput(snapshot.data),
+          onWaiting: () => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          onNoData: () => const Center(
+            child: Text("No Data"),
+          ),
+          onError: (final Object error) => Center(
+            child: Text(error.toString()),
+          ),
+        ),
       );
 }
 
 //TODO add new query here
-const String query = """
+const String query = r"""
+query FetchTechnicalMatch($team_id: Int!, $match_type_id: Int!, $match_number: Int!, $is_rematch: Boolean!) {
+  technical_match(where: {schedule_match: {match_type: {id: {_eq: $match_type_id}}, match_number: {_eq: $match_number}}, is_rematch: {_eq: $is_rematch}, team_id: {_eq: $team_id}}) {
+    auto_amp
+    auto_amp_missed
+    auto_speaker
+    auto_speaker_missed
+    climb {
+      id
+    }
+    harmony_with
+    robot_field_status {
+      id
+    }
+    scouter_name
+    tele_amp
+    tele_amp_missed
+    tele_speaker
+    tele_speaker_missed
+    trap_amount
+    traps_missed
+    starting_position {
+      id
+    }
+  }
+}
 
 """;
 
 Future<InputViewVars> fetchTechnicalMatch(
-  final MatchIdentifier matchIdentifier,
+  final ScheduleMatch scheduleMatch,
   final LightTeam teamForQuery,
   final BuildContext context,
 ) async {
@@ -64,17 +88,36 @@ Future<InputViewVars> fetchTechnicalMatch(
 
   final QueryResult<InputViewVars> result = await client.query(
     QueryOptions<InputViewVars>(
-      //TODO add json parsing and create a Match containing the data
-      parserFn: (final Map<String, dynamic> technicalMatch) =>
-          InputViewVars(context),
+      parserFn: (final Map<String, dynamic> data) {
+        final dynamic technicalMatch = data["technical_match"][0];
+        return InputViewVars.all(
+          trapsMissed: technicalMatch["traps_missed"] as int,
+          isRematch: scheduleMatch.matchIdentifier.isRematch,
+          scheduleMatch: scheduleMatch,
+          scouterName: technicalMatch["scouter_name"] as String,
+          robotFieldStatusId: technicalMatch["robot_field_status"]["id"] as int,
+          autoAmp: technicalMatch["auto_amp"] as int,
+          autoAmpMissed: technicalMatch["auto_amp_missed"] as int,
+          autoSpeaker: technicalMatch["auto_speaker"] as int,
+          autoSpeakerMissed: technicalMatch["auto_speaker_missed"] as int,
+          teleAmp: technicalMatch["tele_amp"] as int,
+          teleAmpMissed: technicalMatch["tele_amp_missed"] as int,
+          teleSpeaker: technicalMatch["tele_speaker"] as int,
+          teleSpeakerMissed: technicalMatch["tele_speaker_missed"] as int,
+          climbId: technicalMatch["climb"]["id"] as int,
+          harmonyWith: technicalMatch["harmony_with"] as int,
+          trapAmount: technicalMatch["trap_amount"] as int,
+          scoutedTeam: teamForQuery,
+        );
+      },
       document: gql(query),
       variables: <String, dynamic>{
         "team_id": teamForQuery.id,
         "match_type_id": IdProvider.of(context)
             .matchType
-            .nameToId[matchIdentifier.type.title],
-        "match_number": matchIdentifier.number,
-        "is_rematch": matchIdentifier.isRematch,
+            .nameToId[scheduleMatch.matchIdentifier.type.title],
+        "match_number": scheduleMatch.matchIdentifier.number,
+        "is_rematch": scheduleMatch.matchIdentifier.isRematch,
       },
     ),
   );

@@ -15,8 +15,8 @@ class TeamInfoData extends StatelessWidget {
   final LightTeam team;
 
   @override
-  Widget build(final BuildContext context) => FutureBuilder<TeamData>(
-        future: fetchSingleTeamData(team.id, context),
+  Widget build(final BuildContext context) => StreamBuilder<TeamData>(
+        stream: fetchSingleTeamData(team.id, context),
         builder: (
           final BuildContext context,
           final AsyncSnapshot<TeamData> snapShot,

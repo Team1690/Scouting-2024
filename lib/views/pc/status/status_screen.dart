@@ -1,351 +1,196 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/id_providers.dart";
-import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/match_identifier.dart";
-import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/common/card.dart";
-import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/models/data/team_data/team_data.dart";
+import "package:scouting_frontend/models/data/team_match_data.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
+import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/status/edit_technical_match.dart";
-import "package:scouting_frontend/views/pc/status/fetch_status.dart";
-import "package:scouting_frontend/views/pc/status/status_box.dart";
-import "package:scouting_frontend/views/pc/status/status_match.dart";
-import "package:scouting_frontend/views/pc/status/text_by_team.dart";
+import "package:scouting_frontend/views/pc/status/widgets/status_list.dart";
+import "package:scouting_frontend/views/pc/status/widgets/status_box.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 
 class StatusScreen extends StatefulWidget {
+  const StatusScreen({super.key, required this.data});
+
+  final List<TeamData> data;
   @override
   State<StatusScreen> createState() => _StatusScreenState();
 }
 
 class _StatusScreenState extends State<StatusScreen> {
+  //TODO: add status screen for pit scouting
   bool isSpecific = false;
   bool isPreScouting = false;
   @override
-  Widget build(final BuildContext context) => DashboardScaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(defaultPadding),
-          child: DashboardCard(
-            titleWidgets: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: ToggleButtons(
-                  children: <Widget>[
-                    const Text("Technic"),
-                    const Text("Specific"),
-                    const Text("Pre"),
-                  ]
-                      .map(
-                        (final Widget text) => Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: text,
-                        ),
-                      )
-                      .toList(),
-                  isSelected: <bool>[!isSpecific, isSpecific, isPreScouting],
-                  onPressed: (final int pressedIndex) {
-                    if (pressedIndex == 0) {
-                      setState(() {
-                        isSpecific = false;
-                      });
-                    } else if (pressedIndex == 1) {
-                      setState(() {
-                        isSpecific = true;
-                      });
-                    } else if (pressedIndex == 2) {
-                      setState(() {
-                        isPreScouting = !isPreScouting;
-                      });
-                    }
-                  },
-                ),
-              ),
-            ],
-            title: "",
-            body: isPreScouting
-                ? PreScoutingStatus(isSpecific)
-                : RegularStatus(isSpecific),
-          ),
-        ),
-      );
-}
-
-class PreScoutingStatus extends StatelessWidget {
-  const PreScoutingStatus(this.isSpecific);
-  final bool isSpecific;
-  @override
-  Widget build(final BuildContext context) =>
-      StreamBuilder<List<StatusItem<LightTeam, String>>>(
-        stream: fetchPreScoutingStatus(isSpecific),
-        builder: (
-          final BuildContext context,
-          final AsyncSnapshot<List<StatusItem<LightTeam, String>>> snapshot,
-        ) =>
-            snapshot.mapSnapshot<Widget>(
-          onError: (final Object? error) => Text(error.toString()),
-          onNoData: () => throw Exception("No data"),
-          onSuccess: (final List<StatusItem<LightTeam, String>> matches) {
-            final List<StatusItem<LightTeam, String>> teamsNotInData =
-                TeamProvider.of(context)
-                    .teams
-                    .where(
-                      (final LightTeam team) => !matches
-                          .map(
-                            (final StatusItem<LightTeam, String> statusItem) =>
-                                statusItem.identifier,
-                          )
-                          .contains(team),
-                    )
-                    .map(
-                      (final LightTeam e) => StatusItem<LightTeam, String>(
-                        identifier: e,
-                        values: <String>[],
-                        missingValues: <String>[],
-                      ),
-                    )
-                    .toList();
-
-            return StatusList<LightTeam, String>(
-              validateSpecificValue: (final _, final __) => null,
-              pushUnvalidatedToTheTop: true,
-              getTitle: (final StatusItem<LightTeam, String> statusItem) =>
-                  Text(
-                "${statusItem.identifier.number} ${statusItem.identifier.name}",
-              ),
-              getValueBox: (
-                final String scouter,
-                final StatusItem<LightTeam, String> item,
-              ) =>
-                  Text(
-                scouter,
-              ),
-              items: matches..addAll(teamsNotInData),
-              validate: (final StatusItem<LightTeam, String> statusItem) =>
-                  statusItem.values.length == 4,
-            );
-          },
-          onWaiting: () => const Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      );
-}
-
-class RegularStatus extends StatelessWidget {
-  const RegularStatus(this.isSpecific);
-
-  final bool isSpecific;
-
-  @override
-  Widget build(final BuildContext context) =>
-      StreamBuilder<List<StatusItem<MatchIdentifier, StatusMatch>>>(
-        stream: fetchStatus(isSpecific, context),
-        builder: (
-          final BuildContext context,
-          final AsyncSnapshot<List<StatusItem<MatchIdentifier, StatusMatch>>>
-              snapshot,
-        ) =>
-            snapshot.mapSnapshot<Widget>(
-          onError: (final Object? error) => Text(error.toString()),
-          onNoData: () => throw Exception("No data"),
-          onSuccess:
-              (final List<StatusItem<MatchIdentifier, StatusMatch>> matches) =>
-                  StatusList<MatchIdentifier, StatusMatch>(
-            validateSpecificValue: (
-              final StatusMatch scoutedMatch,
-              final StatusItem<MatchIdentifier, StatusMatch> statusItem,
-            ) =>
-                scoutedMatch.scoutedTeam.alliancePos != -1 ? null : Colors.red,
-            missingBuilder: (final StatusMatch scoutedMatch) =>
-                Text(scoutedMatch.scoutedTeam.team.number.toString()),
-            getTitle:
-                (final StatusItem<MatchIdentifier, StatusMatch> statusItem) =>
-                    Column(
-              children: <Widget>[
-                Text(
-                  "${statusItem.identifier.isRematch ? "Re\n " : ""}${statusItem.identifier.type.title} ${statusItem.identifier.number}",
-                ),
-                if (!isSpecific)
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        style: const TextStyle(color: Colors.blue),
-                        "${statusItem.values.where((final StatusMatch scoutedMatch) => scoutedMatch.scoutedTeam.allianceColor == Colors.blue).map((final StatusMatch scoutedMatch) => scoutedMatch.scoutedTeam.points).fold<int>(0, (final int previousValue, final int currentValue) => previousValue + currentValue)}",
-                      ),
-                      const Text(" - "),
-                      Text(
-                        style: const TextStyle(color: Colors.red),
-                        "${statusItem.values.where((final StatusMatch scoutedMatch) => scoutedMatch.scoutedTeam.allianceColor == Colors.red).map((final StatusMatch scoutedMatch) => scoutedMatch.scoutedTeam.points).fold<int>(0, (final int sumUntilNow, final int currentValue) => sumUntilNow + currentValue)}",
-                      ),
-                    ],
-                  ),
-              ],
-            ),
-            getValueBox: (
-              final StatusMatch scoutedMatch,
-              final StatusItem<MatchIdentifier, StatusMatch> item,
-            ) =>
-                GestureDetector(
-              onLongPress: () {
-                if (!isSpecific) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<TeamInfoScreen>(
-                      builder: (final BuildContext context) =>
-                          EditTechnicalMatch(
-                        matchIdentifier: item.identifier,
-                        teamForQuery: scoutedMatch.scoutedTeam.team,
-                      ),
-                    ),
-                  );
-                }
-              },
-              onTap: (() => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute<TeamInfoScreen>(
-                      builder: (final BuildContext context) => TeamInfoScreen(
-                        initalTeam: scoutedMatch.scoutedTeam.team,
-                      ),
-                    ),
-                  )),
-              child: Column(
+  Widget build(final BuildContext context) => Card(
+        color: bgColor,
+        elevation: 2,
+        margin: const EdgeInsets.all(defaultPadding),
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  TextByTeam(
-                    match: scoutedMatch,
-                    text: scoutedMatch.scoutedTeam.team.number.toString(),
-                  ),
-                  TextByTeam(
-                    match: scoutedMatch,
-                    text: scoutedMatch.scouter,
-                  ),
-                  if (!isSpecific)
-                    TextByTeam(
-                      match: scoutedMatch,
-                      text: scoutedMatch.scoutedTeam.points.toString(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: defaultPadding / 2,
                     ),
+                    child: ToggleButtons(
+                      children: const <Widget>[
+                        Text("Technical"),
+                        Text("Specific"),
+                        Text("Pre Scouting"),
+                      ]
+                          .map(
+                            (final Widget e) => Padding(
+                              padding: const EdgeInsets.all(defaultPadding / 2),
+                              child: e,
+                            ),
+                          )
+                          .toList(),
+                      isSelected: <bool>[
+                        !isSpecific,
+                        isSpecific,
+                        isPreScouting,
+                      ],
+                      onPressed: (final int index) {
+                        setState(() {
+                          switch (index) {
+                            case 0:
+                              isSpecific = false;
+                              break;
+                            case 1:
+                              isSpecific = true;
+                              break;
+                            case 2:
+                              isPreScouting = !isPreScouting;
+                              break;
+                          }
+                        });
+                      },
+                    ),
+                  ),
                 ],
               ),
-            ),
-            items: matches.reversed.toList()
-              ..forEach(
-                (final StatusItem<MatchIdentifier, StatusMatch> statusItem) =>
-                    statusItem.values.sort(
-                  (
-                    final StatusMatch scoutedMatchA,
-                    final StatusMatch scoutedMatchB,
-                  ) =>
-                      scoutedMatchA.scoutedTeam.allianceColor ==
-                              scoutedMatchB.scoutedTeam.allianceColor
-                          ? 0
-                          : (scoutedMatchA.scoutedTeam.allianceColor ==
-                                  Colors.red
-                              ? 1
-                              : -1),
-                ),
-              ),
-            validate: always2(true),
-          ),
-          onWaiting: () => const Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      );
-}
-
-class StatusItem<T, V> {
-  const StatusItem({
-    required this.identifier,
-    required this.values,
-    required this.missingValues,
-  });
-  final T identifier;
-  final List<V> missingValues;
-  final List<V> values;
-}
-
-class StatusList<T, V> extends StatelessWidget {
-  StatusList({
-    required this.items,
-    required this.getTitle,
-    required this.validate,
-    required this.getValueBox,
-    required this.validateSpecificValue,
-    this.missingBuilder,
-    this.pushUnvalidatedToTheTop = false,
-  }) {
-    if (pushUnvalidatedToTheTop) {
-      items.sort(
-        (final StatusItem<T, V> statusItemA, final StatusItem<T, V> _) =>
-            validate(statusItemA) ? 1 : -1,
-      );
-    }
-  }
-  final Widget Function(V)? missingBuilder;
-  final List<StatusItem<T, V>> items;
-  final bool Function(StatusItem<T, V>) validate;
-  final Widget Function(StatusItem<T, V>) getTitle;
-  final Widget Function(V, StatusItem<T, V>) getValueBox;
-  final MaterialColor? Function(V, StatusItem<T, V>) validateSpecificValue;
-  final bool pushUnvalidatedToTheTop;
-
-  @override
-  Widget build(final BuildContext context) => SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        primary: false,
-        child: Column(
-          children: items
-              .map(
-                (final StatusItem<T, V> statusItem) => Card(
-                  color: validate(statusItem) ? bgColor : Colors.red,
-                  elevation: 2,
-                  margin: const EdgeInsets.fromLTRB(
-                    5,
-                    0,
-                    5,
-                    defaultPadding,
+              Expanded(
+                child: StatusList<Object, MatchData>(
+                  data: widget.data
+                      .map((final TeamData e) => e.matches)
+                      .flattened
+                      .where(
+                        (final MatchData element) =>
+                            element.scheduleMatch.matchIdentifier.type ==
+                                MatchType.pre ||
+                            !isPreScouting,
+                      )
+                      .toList(),
+                  groupBy: (final MatchData matchData) => isPreScouting
+                      ? matchData.team
+                      : matchData.scheduleMatch.matchIdentifier,
+                  orderByCompare: (final MatchData p0, final MatchData p1) {
+                    if (!isPreScouting &&
+                        p1.scheduleMatch.matchIdentifier.type.order.compareTo(
+                              p0.scheduleMatch.matchIdentifier.type.order,
+                            ) !=
+                            0) return -1;
+                    return isPreScouting
+                        ? p0.team.number.compareTo(p1.team.number)
+                        : p1.scheduleMatch.matchIdentifier.number.compareTo(
+                            p0.scheduleMatch.matchIdentifier.number,
+                          );
+                  },
+                  leading: (final List<MatchData> row) => Text(
+                    isPreScouting
+                        ? "${row.first.team.number.toString()} ${row.first.team.name}"
+                        : row.first.scheduleMatch.matchIdentifier.toString(),
                   ),
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(
-                      defaultPadding,
-                      defaultPadding / 4,
-                      defaultPadding,
-                      defaultPadding / 4,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(
-                        defaultPadding / 2,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  statusBoxBuilder: (final MatchData data) => GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (final BuildContext context) =>
+                              TeamInfoScreen(initialTeam: data.team),
+                        ),
+                      );
+                    },
+                    onDoubleTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (final BuildContext context) => !isSpecific
+                              ? EditTechnicalMatch(
+                                  match: data.scheduleMatch,
+                                  teamForQuery: data.team,
+                                )
+                              //TODO: edit specific
+                              : DashboardScaffold(body: Container()),
+                        ),
+                      );
+                    },
+                    child: StatusBox(
+                      child: Column(
                         children: <Widget>[
-                          getTitle(statusItem),
-                          ...statusItem.values.map(
-                            (
-                              final V identifier,
-                            ) =>
-                                StatusBox(
-                              child: getValueBox(identifier, statusItem),
-                              backgroundColor: validateSpecificValue(
-                                identifier,
-                                statusItem,
-                              ),
+                          Text(
+                            data.team.number.toString(),
+                            style: TextStyle(
+                              color: data.isBlueAlliance
+                                  ? Colors.blue
+                                  : Colors.red,
                             ),
                           ),
-                          if (missingBuilder != null)
-                            ...statusItem.missingValues.map(
-                              (final V match) => StatusBox(
-                                child: missingBuilder!(match),
-                                backgroundColor: Colors.red,
+                          Text(
+                            isSpecific
+                                ? data.specificMatchData!.scouterName
+                                : data.technicalMatchData!.scouterName,
+                            style: TextStyle(
+                              color: data.isBlueAlliance
+                                  ? Colors.blue
+                                  : Colors.red,
+                            ),
+                          ),
+                          if (!isSpecific)
+                            Text(
+                              data.technicalMatchData!.data.gamePiecesPoints
+                                  .toString(),
+                              style: TextStyle(
+                                color: data.isBlueAlliance
+                                    ? Colors.blue
+                                    : Colors.red,
                               ),
                             ),
                         ],
                       ),
                     ),
                   ),
+                  missingStatusBoxBuilder: (final MatchData matchData) =>
+                      GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (final BuildContext context) =>
+                            TeamInfoScreen(initialTeam: matchData.team),
+                      ),
+                    ),
+                    child: StatusBox(
+                      backgroundColor:
+                          matchData.isBlueAlliance ? Colors.blue : Colors.red,
+                      child: Text(
+                        matchData.team.number.toString(),
+                      ),
+                    ),
+                  ),
+                  isMissingValidator: (final MatchData matchData) =>
+                      ((matchData.technicalMatchData == null && !isSpecific) ||
+                          (matchData.specificMatchData == null && isSpecific)),
+                  orderRowByCompare: (final MatchData p0, final MatchData p1) =>
+                      p0.isBlueAlliance && !p1.isBlueAlliance ? 1 : -1,
                 ),
-              )
-              .toList(),
+              ),
+            ],
+          ),
         ),
       );
 }

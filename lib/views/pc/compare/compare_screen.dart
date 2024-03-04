@@ -107,10 +107,12 @@ class _CompareScreenState extends State<CompareScreen> {
             const SizedBox(height: defaultPadding),
             Expanded(
               flex: 5,
-              child: FutureBuilder<SplayTreeSet<TeamData>>(
-                future: teams.isEmpty
-                    ? Future<SplayTreeSet<TeamData>>(
-                        always(SplayTreeSet<TeamData>()),
+              child: StreamBuilder<SplayTreeSet<TeamData>>(
+                stream: teams.isEmpty
+                    ? Stream<SplayTreeSet<TeamData>>.fromFuture(
+                        Future<SplayTreeSet<TeamData>>(
+                          SplayTreeSet.new,
+                        ),
                       )
                     : fetchMultipleTeamData(
                         teams.map((final LightTeam e) => e.id).toList(),

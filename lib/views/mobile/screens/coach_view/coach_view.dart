@@ -19,8 +19,8 @@ class CoachView extends StatelessWidget {
           centerTitle: true,
           title: const Text("Coach"),
         ),
-        body: FutureBuilder<SplayTreeSet<TeamData>>(
-          future: fetchMultipleTeamData(
+        body: StreamBuilder<SplayTreeSet<TeamData>>(
+          stream: fetchMultipleTeamData(
             MatchesProvider.teamsWith(1690, context)
                 .map((final LightTeam e) => e.id)
                 .toList(),

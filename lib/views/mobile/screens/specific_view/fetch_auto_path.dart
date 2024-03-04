@@ -136,7 +136,7 @@ Future<
   final List<int> teamIds,
 ) async {
   final SplayTreeSet<TeamData> data =
-      await fetchMultipleTeamData(teamIds, context);
+      await fetchMultipleTeamData(teamIds, context).first;
   final List<List<AutoPathData>> paths = await Future.wait(
     data
         .map((final TeamData element) => getPaths(element.lightTeam.id, false))
