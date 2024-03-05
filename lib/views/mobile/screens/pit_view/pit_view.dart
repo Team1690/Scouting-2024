@@ -53,6 +53,8 @@ class _PitViewState extends State<PitView> {
     setState(() {
       vars = vars.reset();
       lengthController.clear();
+      widthController.clear();
+      weightController.clear();
       notesController.clear();
       teamSelectionController.clear();
       userImage = null;
