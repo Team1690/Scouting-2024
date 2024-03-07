@@ -42,15 +42,19 @@ class _ViewRatingDropdownLineState extends State<ViewRatingDropdownLine> {
             secondChild: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ...widget.ratingToMatch.map(
-                  (final (int, int) e) => Tooltip(
-                    message: "match number: ${e.$2}",
-                    child: Text(
-                      "${getRating(e.$1.toDouble()).$1}, ",
-                      style: TextStyle(color: getRating(e.$1.toDouble()).$2),
+                ...widget.ratingToMatch
+                    .where((element) =>
+                        !element.$1.isNaN && !element.$1.isInfinite)
+                    .map(
+                      (final (int, int) e) => Tooltip(
+                        message: "match number: ${e.$2}",
+                        child: Text(
+                          "${getRating(e.$1.toDouble()).$1}, ",
+                          style:
+                              TextStyle(color: getRating(e.$1.toDouble()).$2),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ],
             ),
           ),

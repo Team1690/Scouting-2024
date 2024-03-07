@@ -132,7 +132,6 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
           ],
         ),
       );
-//TODO: you know...
   Widget getSummaryText(
     final String title,
     final String text,
@@ -141,7 +140,8 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
     final (String, Color) rating = getRating(
       ratingsToMatches
               .map((final (int, int) e) => e.$1)
-              .where((final int element) => !element.isNaN)
+              .where(
+                  (final int element) => !element.isNaN && !element.isInfinite)
               .toList()
               .averageOrNull ??
           0,
@@ -178,11 +178,15 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
 (String, Color) getRating(final double numeralRating) {
   switch (numeralRating.round()) {
     case 1:
-      return ("C", Colors.red);
+      return ("F", Colors.red);
     case 2:
-      return ("B", Colors.yellow);
+      return ("D", Colors.orange);
     case 3:
-      return ("A", const Color.fromARGB(255, 30, 124, 33));
+      return ("C", Colors.yellow);
+    case 4:
+      return ("B", Colors.lightGreen);
+    case 5:
+      return ("A", Colors.green[800]!);
     default:
       return ("No Data", Colors.white);
   }
