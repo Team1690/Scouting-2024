@@ -9,6 +9,8 @@ import "package:orbit_standard_library/orbit_standard_library.dart";
 class InputViewVars implements HasuraVars {
   InputViewVars(final BuildContext context)
       : isRematch = false,
+        isDeliverd = false,
+        isDefence = false,
         scheduleMatch = null,
         scouterName = "",
         robotFieldStatusId =
@@ -27,6 +29,8 @@ class InputViewVars implements HasuraVars {
         trapsMissed = 0,
         scoutedTeam = null;
   InputViewVars.all({
+    required this.isDefence,
+    required this.isDeliverd,
     required this.trapsMissed,
     required this.isRematch,
     required this.scheduleMatch,
@@ -50,6 +54,8 @@ class InputViewVars implements HasuraVars {
       InputViewVars(context).copyWith(scouterName: always(scouterName));
 
   InputViewVars copyWith({
+    final bool Function()? isDeliverd,
+    final bool Function()? isDefence,
     final bool Function()? isRematch,
     final ScheduleMatch? Function()? scheduleMatch,
     final String? Function()? scouterName,
@@ -95,8 +101,12 @@ class InputViewVars implements HasuraVars {
         trapAmount: trapAmount != null ? trapAmount() : this.trapAmount,
         trapsMissed: trapsMissed != null ? trapsMissed() : this.trapsMissed,
         scoutedTeam: scoutedTeam != null ? scoutedTeam() : this.scoutedTeam,
+        isDefence: isDefence != null ? isDefence() : this.isDefence,
+        isDeliverd: isDeliverd != null ? isDeliverd() : this.isDeliverd,
       );
 
+  final bool isDeliverd;
+  final bool isDefence;
   final bool isRematch;
   final ScheduleMatch? scheduleMatch;
   final String? scouterName;
@@ -117,6 +127,8 @@ class InputViewVars implements HasuraVars {
 
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
+        "is_defence": isDefence,
+        "is_deliverd": isDeliverd,
         "team_id": scoutedTeam?.id,
         "scouter_name": scouterName,
         "schedule_id": scheduleMatch?.id,

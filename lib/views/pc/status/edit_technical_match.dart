@@ -91,6 +91,8 @@ Future<InputViewVars> fetchTechnicalMatch(
       parserFn: (final Map<String, dynamic> data) {
         final dynamic technicalMatch = data["technical_match"][0];
         return InputViewVars.all(
+          isDeliverd: technicalMatch["is_deliverd"] as bool,
+          isDefence: technicalMatch["is_defence"] as bool,
           trapsMissed: technicalMatch["traps_missed"] as int,
           isRematch: scheduleMatch.matchIdentifier.isRematch,
           scheduleMatch: scheduleMatch,

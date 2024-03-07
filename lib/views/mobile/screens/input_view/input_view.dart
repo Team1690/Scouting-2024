@@ -217,6 +217,58 @@ class _UserInputState extends State<UserInput> {
                         },
                         matchMode: MatchMode.tele,
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          ToggleButtons(
+                            fillColor: const Color.fromARGB(10, 244, 67, 54),
+                            selectedColor: Colors.purple,
+                            selectedBorderColor: Colors.purple,
+                            children: const <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Text("Defence"),
+                              ),
+                            ],
+                            isSelected: <bool>[match.isDefence],
+                            onPressed: (final int i) {
+                              setState(() {
+                                match = match.copyWith(
+                                  isDefence: always(!match.isDefence),
+                                );
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ToggleButtons(
+                            fillColor: const Color.fromARGB(10, 244, 67, 54),
+                            selectedColor: Colors.purple,
+                            selectedBorderColor: Colors.purple,
+                            children: const <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Text("Delivery"),
+                              ),
+                            ],
+                            isSelected: <bool>[match.isDeliverd],
+                            onPressed: (final int i) {
+                              setState(() {
+                                match = match.copyWith(
+                                  isDeliverd: always(!match.isDeliverd),
+                                );
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Climbing(
                         match: match,
                         onNewMatch: (final InputViewVars newMatch) {
