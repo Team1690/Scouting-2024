@@ -39,7 +39,6 @@ class _SummaryEditorState extends State<SummaryEditor> {
     defenseController.text = widget.summaryEntry?.defenseText ?? "";
   }
 
-  bool isEnabled = false;
   final TextEditingController ampController = TextEditingController();
   final TextEditingController climbController = TextEditingController();
   final TextEditingController drivingController = TextEditingController();
@@ -50,102 +49,79 @@ class _SummaryEditorState extends State<SummaryEditor> {
   @override
   Widget build(final BuildContext context) => Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    isEnabled = true;
-                  });
-                },
-                child: const Text("Edit"),
-              ),
-              SubmitButton(
-                getJson: () => <String, dynamic>{
-                  "team_id": widget.team.id,
-                  "amp_text": ampController.text,
-                  "speaker_text": speakerController.text,
-                  "climb_text": climbController.text,
-                  "driving_text": drivingController.text,
-                  "general_text": generalController.text,
-                  "intake_text": intakeController.text,
-                  "defense_text": defenseController.text,
-                },
-                mutation: widget.summaryEntry == null
-                    ? _insertMutation
-                    : _updateMutation,
-                resetForm: () {},
-                validate: () => true,
-              ),
-            ],
+          Align(
+            alignment: Alignment.centerLeft,
+            child: SubmitButton(
+              getJson: () => <String, dynamic>{
+                "team_id": widget.team.id,
+                "amp_text": ampController.text,
+                "speaker_text": speakerController.text,
+                "climb_text": climbController.text,
+                "driving_text": drivingController.text,
+                "general_text": generalController.text,
+                "intake_text": intakeController.text,
+                "defense_text": defenseController.text,
+              },
+              mutation: widget.summaryEntry == null
+                  ? _insertMutation
+                  : _updateMutation,
+              resetForm: () {},
+              validate: () => true,
+            ),
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {
-                isEnabled = false;
-              });
+              setState(() {});
             },
-            isEnabled: isEnabled,
+            isEnabled: true,
             controller: ampController,
             label: "Amp",
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {
-                isEnabled = false;
-              });
+              setState(() {});
             },
-            isEnabled: isEnabled,
+            isEnabled: true,
             controller: speakerController,
             label: "Speaker",
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {
-                isEnabled = false;
-              });
+              setState(() {});
             },
-            isEnabled: isEnabled,
+            isEnabled: true,
             controller: intakeController,
             label: "Intake",
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {
-                isEnabled = false;
-              });
+              setState(() {});
             },
-            isEnabled: isEnabled,
+            isEnabled: true,
             controller: climbController,
             label: "Climbing",
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {
-                isEnabled = false;
-              });
+              setState(() {});
             },
-            isEnabled: isEnabled,
+            isEnabled: true,
             controller: generalController,
             label: "General",
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {
-                isEnabled = false;
-              });
+              setState(() {});
             },
-            isEnabled: isEnabled,
+            isEnabled: true,
             controller: drivingController,
             label: "Driving",
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {
-                isEnabled = false;
-              });
+              setState(() {});
             },
-            isEnabled: isEnabled,
+            isEnabled: true,
             controller: defenseController,
             label: "Defense",
           ),
