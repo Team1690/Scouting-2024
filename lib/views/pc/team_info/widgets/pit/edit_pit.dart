@@ -38,6 +38,7 @@ class _EditPitState extends State<EditPit> {
       url: () => pit.url,
       canEject: () => pit.canEject,
       canPassUnderStage: () => pit.canPassUnderStage,
+      allRangeShooting: () => pit.allRangeShooting,
     );
 
     return vars;

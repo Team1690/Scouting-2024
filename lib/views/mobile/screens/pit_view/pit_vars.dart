@@ -15,7 +15,8 @@ class PitVars implements HasuraVars {
         canEject = null,
         canPassUnderStage = null,
         length = null,
-        width = null;
+        width = null,
+        allRangeShooting = null;
 
   PitVars.all({
     required this.driveTrainType,
@@ -30,6 +31,7 @@ class PitVars implements HasuraVars {
     required this.canEject,
     required this.length,
     required this.width,
+    required this.allRangeShooting,
   });
 
   PitVars copyWith({
@@ -45,6 +47,7 @@ class PitVars implements HasuraVars {
     final String? Function()? url,
     final bool? Function()? canEject,
     final bool? Function()? canPassUnderStage,
+    final bool? Function()? allRangeShooting,
   }) =>
       PitVars.all(
         driveTrainType:
@@ -63,6 +66,9 @@ class PitVars implements HasuraVars {
         canPassUnderStage: canPassUnderStage != null
             ? canPassUnderStage()
             : this.canPassUnderStage,
+        allRangeShooting: allRangeShooting != null
+            ? allRangeShooting()
+            : this.allRangeShooting,
       );
   final int? driveTrainType;
   final int? driveMotorType;
@@ -76,6 +82,7 @@ class PitVars implements HasuraVars {
   final int trap;
   final String? url;
   final bool? canEject;
+  final bool? allRangeShooting;
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         "drivetrain_id": driveTrainType,
@@ -90,6 +97,7 @@ class PitVars implements HasuraVars {
         "can_pass_under_stage": canPassUnderStage,
         "url": url,
         "can_eject": canEject ?? false,
+        "all_range_shooting": allRangeShooting ?? false,
       };
 
   PitVars reset() => copyWith(
@@ -105,5 +113,6 @@ class PitVars implements HasuraVars {
         canPassUnderStage: always(null),
         url: always(null),
         canEject: always(null),
+        allRangeShooting: always(null),
       );
 }
