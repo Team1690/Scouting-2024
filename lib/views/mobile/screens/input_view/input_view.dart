@@ -227,7 +227,8 @@ class _UserInputState extends State<UserInput> {
                               onChange: (final int delivery) {
                                 setState(() {
                                   match = match.copyWith(
-                                      delivery: always(delivery));
+                                    delivery: always(delivery),
+                                  );
                                 });
                               },
                               count: match.delivery,
