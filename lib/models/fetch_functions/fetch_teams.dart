@@ -114,6 +114,7 @@ subscription FetchTeams($ids: [Int!]) {
       width
       url
       can_eject
+      all_range_shooting
       can_pass_under_stage
       team {
         faults {

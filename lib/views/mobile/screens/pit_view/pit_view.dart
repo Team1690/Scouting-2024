@@ -227,6 +227,33 @@ class _PitViewState extends State<PitView> {
                     ),
                     SectionDivider(label: "OnStage"),
                     Switcher(
+                      labels: const <String>[
+                        "Close Range Shooting",
+                        "All Range Shooting",
+                      ],
+                      colors: const <Color>[
+                        Colors.white,
+                        Colors.white,
+                      ],
+                      onChange: (final int selection) {
+                        setState(() {
+                          vars = vars.copyWith(
+                            allRangeShooting: () =>
+                                <int, bool>{1: true, 0: false}[selection],
+                          );
+                        });
+                      },
+                      selected: vars.allRangeShooting.mapNullable(
+                            (final bool canAllRangeShoot) =>
+                                canAllRangeShoot ? 1 : 0,
+                          ) ??
+                          -1,
+                      borderRadiusGeometry: defaultBorderRadius,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Switcher(
                       borderRadiusGeometry: defaultBorderRadius,
                       selected: vars.harmony.mapNullable(
                             (final bool canHarmonize) => canHarmonize ? 1 : 0,
@@ -311,10 +338,8 @@ class _PitViewState extends State<PitView> {
                       labels: const <String>[
                         "Can't Trap",
                         "Can Trap",
-                        "Can Trap Twice",
                       ],
                       colors: const <Color>[
-                        Colors.white,
                         Colors.white,
                         Colors.white,
                       ],
@@ -401,19 +426,20 @@ class _PitViewState extends State<PitView> {
 }
 
 const String insertMutation = r"""
-mutation InsertPit( $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!) {
-  insert_pit(objects: [{ drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes, team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, length: $length, width: $width}]) {
+mutation InsertPit($all_range_shooting: Boolean!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $drivetrain_id: Int, $drivemotor_id: Int, $width: float8!, $weight: float8!, $url: String!, $trap: Int!, $team_id: Int, $notes: String, $length: float8!, $harmony: Boolean!) {
+  insert_pit(objects: {all_range_shooting: $all_range_shooting, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, drivetrain_id: $drivetrain_id, drivemotor_id: $drivemotor_id, width: $width, weight: $weight, url: $url, trap: $trap, team_id: $team_id, notes: $notes, length: $length, harmony: $harmony}) {
     affected_rows
   }
 }
 """;
 
 const String updateMutation = r"""
-mutation UpdatePit( $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!) {
-  update_pit(where: {team_id: {_eq: $team_id}}, _set: { drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, length: $length, width: $width}) {
+mutation UpdatePit($drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!, $all_range_shooting: Boolean!) {
+  update_pit(where: {team_id: {_eq: $team_id}}, _set: {drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes, team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, length: $length, width: $width, all_range_shooting: $all_range_shooting,}) {
     affected_rows
   }
-}""";
+}
+""";
 
 Stream<List<LightTeam>> fetchTeamsWithoutPit() => getClient()
     .subscribe(
