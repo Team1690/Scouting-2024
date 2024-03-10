@@ -43,8 +43,10 @@ class _ViewRatingDropdownLineState extends State<ViewRatingDropdownLine> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 ...widget.ratingToMatch
-                    .where((element) =>
-                        !element.$1.isNaN && !element.$1.isInfinite)
+                    .where(
+                      (final (int, int) element) =>
+                          !element.$1.isNaN && !element.$1.isInfinite,
+                    )
                     .map(
                       (final (int, int) e) => Tooltip(
                         message: "match number: ${e.$2}",

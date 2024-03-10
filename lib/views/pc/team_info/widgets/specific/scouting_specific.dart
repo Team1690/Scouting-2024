@@ -141,7 +141,8 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
       ratingsToMatches
               .map((final (int, int) e) => e.$1)
               .where(
-                  (final int element) => !element.isNaN && !element.isInfinite)
+                (final int element) => !element.isNaN && !element.isInfinite,
+              )
               .toList()
               .averageOrNull ??
           0,
