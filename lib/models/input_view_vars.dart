@@ -13,6 +13,7 @@ class InputViewVars implements HasuraVars {
         scouterName = "",
         robotFieldStatusId =
             IdProvider.of(context).robotFieldStatus.nameToId["Worked"]!,
+        delivery = 0,
         autoAmp = 0,
         autoAmpMissed = 0,
         autoSpeaker = 0,
@@ -27,6 +28,7 @@ class InputViewVars implements HasuraVars {
         trapsMissed = 0,
         scoutedTeam = null;
   InputViewVars.all({
+    required this.delivery,
     required this.trapsMissed,
     required this.isRematch,
     required this.scheduleMatch,
@@ -67,6 +69,7 @@ class InputViewVars implements HasuraVars {
     final int Function()? trapAmount,
     final int Function()? trapsMissed,
     final LightTeam? Function()? scoutedTeam,
+    final int Function()? delivery,
   }) =>
       InputViewVars.all(
         isRematch: isRematch != null ? isRematch() : this.isRematch,
@@ -95,8 +98,10 @@ class InputViewVars implements HasuraVars {
         trapAmount: trapAmount != null ? trapAmount() : this.trapAmount,
         trapsMissed: trapsMissed != null ? trapsMissed() : this.trapsMissed,
         scoutedTeam: scoutedTeam != null ? scoutedTeam() : this.scoutedTeam,
+        delivery: delivery != null ? delivery() : this.delivery,
       );
 
+  final int delivery;
   final bool isRematch;
   final ScheduleMatch? scheduleMatch;
   final String? scouterName;
@@ -134,5 +139,6 @@ class InputViewVars implements HasuraVars {
         "harmony_with": harmonyWith,
         "trap_amount": trapAmount,
         "traps_missed": trapsMissed,
+        "delivery": delivery,
       };
 }
