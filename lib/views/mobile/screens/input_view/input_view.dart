@@ -64,6 +64,7 @@ class _UserInputState extends State<UserInput> {
     1: IdProvider.of(context)
         .robotFieldStatus
         .nameToId["Didn't work on field"]!,
+    2: IdProvider.of(context).robotFieldStatus.nameToId["Did Defence"]!,
   };
   String qrCodeJson = "";
 
@@ -316,10 +317,12 @@ class _UserInputState extends State<UserInput> {
                         labels: const <String>[
                           "Not on field",
                           "Didn't work on field",
+                          "Did Defence",
                         ],
                         colors: const <Color>[
                           Colors.red,
                           Color.fromARGB(255, 198, 29, 228),
+                          Colors.blue,
                         ],
                         onChange: (final int i) {
                           setState(() {
