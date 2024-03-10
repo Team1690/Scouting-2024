@@ -86,7 +86,7 @@ class _FaultButtonState extends State<FaultButton> {
   bool isActivated = false;
   @override
   Widget build(final BuildContext context) => Column(
-        children: [
+        children: <Widget>[
           FittedBox(
             fit: BoxFit.fitWidth,
             child: Row(
