@@ -70,6 +70,7 @@ class _UserInputState extends State<UserInput> {
 
   bool initialFlag = false;
   bool hasFault = false;
+  String? faultMessage;
 
   void updateTextFields() {
     matchController.text =
@@ -118,8 +119,8 @@ class _UserInputState extends State<UserInput> {
                   builder: (final BuildContext dialogContext) =>
                       ManagePreferences(
                     mutation: widget.initialVars == null
-                        ? insertMutation(hasFault)
-                        : updateMutation(hasFault),
+                        ? insertMutation(hasFault, faultMessage)
+                        : updateMutation,
                   ),
                 ));
               },
@@ -292,6 +293,9 @@ class _UserInputState extends State<UserInput> {
                         onToggle: (final bool isActivated) {
                           hasFault = isActivated;
                         },
+                        onNewFaultMessage: (final String message) {
+                          faultMessage = message;
+                        },
                       ),
                       const SizedBox(
                         height: 20,
@@ -307,8 +311,8 @@ class _UserInputState extends State<UserInput> {
                         validate: () => formKey.currentState!.validate(),
                         getJson: match.toJson,
                         mutation: widget.initialVars == null
-                            ? insertMutation(hasFault)
-                            : updateMutation(hasFault),
+                            ? insertMutation(hasFault, faultMessage)
+                            : updateMutation,
                       ),
                       const SizedBox(
                         height: 20,
@@ -376,8 +380,11 @@ class _UserInputState extends State<UserInput> {
                                           }
                                         },
                                         mutation: widget.initialVars == null
-                                            ? insertMutation(hasFault)
-                                            : updateMutation(hasFault),
+                                            ? insertMutation(
+                                                hasFault,
+                                                faultMessage,
+                                              )
+                                            : updateMutation,
                                         resetForm: () => qrCodeJson = "",
                                         validate: () => jsonFormKey
                                             .currentState!
@@ -398,8 +405,8 @@ class _UserInputState extends State<UserInput> {
                       LocalSaveButton(
                         vars: match,
                         mutation: widget.initialVars == null
-                            ? insertMutation(hasFault)
-                            : updateMutation(hasFault),
+                            ? insertMutation(hasFault, faultMessage)
+                            : updateMutation,
                         resetForm: () {
                           setState(() {
                             match = match.cleared(context);
@@ -422,13 +429,13 @@ class _UserInputState extends State<UserInput> {
         ),
       );
 
-  String insertMutation(final bool hasFault) => """
+  String insertMutation(final bool hasFault, final String? faultMessage) => """
 mutation MyMutation(\$auto_amp: Int!, \$auto_amp_missed: Int!, \$auto_speaker: Int!, \$auto_speaker_missed: Int!, \$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!) {
   insert_technical_match(objects: {auto_amp: \$auto_amp, auto_amp_missed: \$auto_amp_missed, auto_speaker: \$auto_speaker, auto_speaker_missed: \$auto_speaker_missed, cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name}) {
     affected_rows
   }
   ${hasFault ? "" : """
-insert_faults(objects: {team_id: \$team_id, message: "יש לרובוט בעיה (technical scouting)", schedule_match_id: \$schedule_id fault_status_id: 1 is_rematch: \$is_rematch}) {
+insert_faults(objects: {team_id: \$team_id, message: ${faultMessage ?? "\"יש לרובוט בעיה (technical scouting)\""}, schedule_match_id: \$schedule_id fault_status_id: 1 is_rematch: \$is_rematch}) {
     affected_rows
   }
   """}
@@ -436,7 +443,7 @@ insert_faults(objects: {team_id: \$team_id, message: "יש לרובוט בעיה
 
 """;
 
-  String updateMutation(final bool hasFault) => """
+  String updateMutation = """
 mutation MyMutation(\$auto_amp: Int!, \$auto_amp_missed: Int!, \$auto_speaker: Int!, \$auto_speaker_missed: Int!, \$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!) {
   update_technical_match(where: {team_id: {_eq: \$team_id}, schedule_id: {_eq: \$schedule_id}, is_rematch: {_eq: \$is_rematch}} _set: {auto_amp: \$auto_amp, auto_amp_missed: \$auto_amp_missed, auto_speaker: \$auto_speaker, auto_speaker_missed: \$auto_speaker_missed, cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name}) {
     affected_rows
