@@ -1,5 +1,9 @@
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
+import "package:scouting_frontend/models/enums/drive_train_enum.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 
 class PitVars implements HasuraVars {
@@ -35,8 +39,8 @@ class PitVars implements HasuraVars {
   });
 
   PitVars copyWith({
-    final int? Function()? driveTrainType,
-    final int? Function()? driveMotorType,
+    final DriveTrain? Function()? driveTrainType,
+    final DriveMotor? Function()? driveMotorType,
     final String Function()? notes,
     final int? Function()? teamId,
     final double? Function()? weight,
@@ -70,8 +74,8 @@ class PitVars implements HasuraVars {
             ? allRangeShooting()
             : this.allRangeShooting,
       );
-  final int? driveTrainType;
-  final int? driveMotorType;
+  final DriveTrain? driveTrainType;
+  final DriveMotor? driveMotorType;
   final String notes;
   final int? teamId;
   final double? weight;
@@ -84,9 +88,11 @@ class PitVars implements HasuraVars {
   final bool? canEject;
   final bool? allRangeShooting;
   @override
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        "drivetrain_id": driveTrainType,
-        "drivemotor_id": driveMotorType,
+  Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
+        "drivetrain_id":
+            IdProvider.of(context).driveTrain.enumToId[driveTrainType]!,
+        "drivemotor_id":
+            IdProvider.of(context).drivemotor.enumToId[driveMotorType],
         "notes": notes,
         "team_id": teamId,
         "weight": weight,

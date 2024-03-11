@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -6,7 +7,7 @@ import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 
 class SpecificVars implements HasuraVars {
-  SpecificVars(final BuildContext context)
+  SpecificVars()
       : team = null,
         driveRating = null,
         intakeRating = null,
@@ -81,7 +82,7 @@ class SpecificVars implements HasuraVars {
   final bool isRematch;
   final Sketch? autoPath;
   @override
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
         "team_id": team?.id,
         if (autoPath!.url != null) "url": autoPath!.url!,
         "driving_rating": driveRating,

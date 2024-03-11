@@ -1,6 +1,6 @@
 import "dart:async";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -53,16 +53,14 @@ class _UserInputState extends State<UserInput> {
   final TextEditingController teamNumberController = TextEditingController();
   final TextEditingController scouterNameController = TextEditingController();
   bool toggleLightsState = false;
-  late InputViewVars match = InputViewVars(context);
+  late InputViewVars match = InputViewVars();
   // -1 means nothing
-  late final Map<int, int> robotFieldStatusIndexToId = <int, int>{
-    -1: IdProvider.of(context).robotFieldStatus.nameToId["Worked"]!,
-    0: IdProvider.of(context)
-        .robotFieldStatus
-        .nameToId["Didn't come to field"]!,
-    1: IdProvider.of(context)
-        .robotFieldStatus
-        .nameToId["Didn't work on field"]!,
+  late final Map<int, RobotFieldStatus> robotFieldStatusIndexToEnum =
+      <int, RobotFieldStatus>{
+    -1: RobotFieldStatus.worked,
+    0: RobotFieldStatus.didntComeToField,
+    1: RobotFieldStatus.didntWorkOnField,
+    2: RobotFieldStatus.didDefense,
   };
 
   bool initialFlag = false;
@@ -283,24 +281,27 @@ class _UserInputState extends State<UserInput> {
                         labels: const <String>[
                           "Not on field",
                           "Didn't work on field",
+                          "Did Defense",
                         ],
-                        colors: const <Color>[
-                          Colors.red,
-                          Color.fromARGB(255, 198, 29, 228),
+                        colors: <Color>[
+                          RobotFieldStatus.didntComeToField.color,
+                          RobotFieldStatus.didntWorkOnField.color,
+                          RobotFieldStatus.didDefense.color,
                         ],
                         onChange: (final int i) {
                           setState(() {
                             match = match.copyWith(
-                              robotFieldStatusId:
-                                  always(robotFieldStatusIndexToId[i]!),
+                              robotFieldStatus: always(
+                                robotFieldStatusIndexToEnum[i]!,
+                              ),
                             );
                           });
                         },
-                        selected: <int, int>{
-                          for (final MapEntry<int, int> i
-                              in robotFieldStatusIndexToId.entries)
+                        selected: <RobotFieldStatus, int>{
+                          for (final MapEntry<int, RobotFieldStatus> i
+                              in robotFieldStatusIndexToEnum.entries)
                             i.value: i.key,
-                        }[match.robotFieldStatusId]!,
+                        }[match.robotFieldStatus]!,
                       ),
                       const SizedBox(
                         height: 20,
@@ -319,7 +320,7 @@ class _UserInputState extends State<UserInput> {
                       SubmitButton(
                         resetForm: () {
                           setState(() {
-                            match = match.cleared(context);
+                            match = match.cleared();
                             teamNumberController.clear();
                             matchController.clear();
                           });
@@ -340,7 +341,7 @@ class _UserInputState extends State<UserInput> {
                             : updateMutation,
                         resetForm: () {
                           setState(() {
-                            match = match.cleared(context);
+                            match = match.cleared();
                             teamNumberController.clear();
                             matchController.clear();
                           });
@@ -361,8 +362,8 @@ class _UserInputState extends State<UserInput> {
       );
 
   String insertMutation(final bool hasFault, final String? faultMessage) => """
-mutation MyMutation(\$auto_amp: Int!, \$auto_amp_missed: Int!, \$auto_speaker: Int!, \$auto_speaker_missed: Int!, \$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!) {
-  insert_technical_match(objects: {auto_amp: \$auto_amp, auto_amp_missed: \$auto_amp_missed, auto_speaker: \$auto_speaker, auto_speaker_missed: \$auto_speaker_missed, cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name}) {
+mutation MyMutation(\$auto_amp: Int!, \$auto_amp_missed: Int!, \$auto_speaker: Int!, \$auto_speaker_missed: Int!, \$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!) {
+  insert_technical_match(objects: {auto_amp: \$auto_amp, auto_amp_missed: \$auto_amp_missed, auto_speaker: \$auto_speaker, auto_speaker_missed: \$auto_speaker_missed, cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery}) {
     affected_rows
   }
   ${hasFault ? "" : """
@@ -375,8 +376,8 @@ insert_faults(objects: {team_id: \$team_id, message: ${faultMessage ?? "\"יש �
 """;
 
   String updateMutation = """
-mutation MyMutation(\$auto_amp: Int!, \$auto_amp_missed: Int!, \$auto_speaker: Int!, \$auto_speaker_missed: Int!, \$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!) {
-  update_technical_match(where: {team_id: {_eq: \$team_id}, schedule_id: {_eq: \$schedule_id}, is_rematch: {_eq: \$is_rematch}} _set: {auto_amp: \$auto_amp, auto_amp_missed: \$auto_amp_missed, auto_speaker: \$auto_speaker, auto_speaker_missed: \$auto_speaker_missed, cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name}) {
+mutation MyMutation(\$auto_amp: Int!, \$auto_amp_missed: Int!, \$auto_speaker: Int!, \$auto_speaker_missed: Int!, \$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!) {
+  update_technical_match(where: {team_id: {_eq: \$team_id}, schedule_id: {_eq: \$schedule_id}, is_rematch: {_eq: \$is_rematch}} _set: {auto_amp: \$auto_amp, auto_amp_missed: \$auto_amp_missed, auto_speaker: \$auto_speaker, auto_speaker_missed: \$auto_speaker_missed, cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery}) {
     affected_rows
   }
 """;

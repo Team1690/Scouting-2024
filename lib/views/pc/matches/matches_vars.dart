@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -13,7 +14,7 @@ class MatchesVars implements HasuraVars {
     this.blue2,
     this.blue3,
     this.happened = false,
-    this.matchTypeId,
+    this.matchType,
     this.red0,
     this.red1,
     this.red2,
@@ -30,9 +31,7 @@ class MatchesVars implements HasuraVars {
           blue3: match.blueAlliance.length == 4 ? match.blueAlliance[3] : null,
           happened: match.happened,
           matchNumber: match.matchIdentifier.number,
-          matchTypeId: IdProvider.of(context)
-              .matchType
-              .nameToId[(match.matchIdentifier.type.title)],
+          matchType: match.matchIdentifier.type,
           matchesIdToUpdate: match.id,
           red0: match.redAlliance[0],
           red1: match.redAlliance[1],
@@ -40,7 +39,7 @@ class MatchesVars implements HasuraVars {
           red3: match.redAlliance.length == 4 ? match.redAlliance[3] : null,
         );
   int? matchNumber;
-  int? matchTypeId;
+  MatchType? matchType;
   final int? matchesIdToUpdate;
   LightTeam? blue0;
   LightTeam? blue1;
@@ -52,11 +51,11 @@ class MatchesVars implements HasuraVars {
   LightTeam? red3;
   bool happened;
   @override
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
         if (matchesIdToUpdate != null) "id": matchesIdToUpdate,
         "match": <String, dynamic>{
           "match_number": matchNumber,
-          "match_type_id": matchTypeId,
+          "match_type_id": IdProvider.of(context).matchType.enumToId[matchType],
           "blue_0_id": blue0?.id,
           "blue_1_id": blue1?.id,
           "blue_2_id": blue2?.id,
@@ -71,7 +70,7 @@ class MatchesVars implements HasuraVars {
 
   void reset() {
     matchNumber = null;
-    matchTypeId = null;
+    matchType = null;
     blue0 = null;
     blue1 = null;
     blue2 = null;

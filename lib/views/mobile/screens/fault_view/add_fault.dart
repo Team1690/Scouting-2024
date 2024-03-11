@@ -137,9 +137,8 @@ Future<QueryResult<void>> _addFault(
         document: gql(_addFaultMutation),
         variables: <String, dynamic>{
           "is_rematch": isRematch,
-          "fault_status_id": IdProvider.of(context)
-              .faultStatus
-              .nameToId[faultStatusEnum.title],
+          "fault_status_id":
+              IdProvider.of(context).faultStatus.enumToId[faultStatusEnum],
           "team_id": teamId,
           "fault_message": message,
           "schedule_match_id": scheduleMatchId,

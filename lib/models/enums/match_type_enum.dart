@@ -1,4 +1,6 @@
-enum MatchType {
+import "package:scouting_frontend/models/id_providers.dart";
+
+enum MatchType implements IdEnum {
   pre("Pre Scouting", 0),
   practice("Practice", 1),
   quals("Quals", 2),
@@ -7,14 +9,9 @@ enum MatchType {
   doubleElim("Double Elims", 3);
 
   const MatchType(this.title, this.order);
+  @override
   final String title;
   final int order;
 
   String get shortTitle => title.substring(0, 1);
 }
-
-MatchType matchTypeTitleToEnum(final String title) =>
-    MatchType.values
-        .where((final MatchType element) => element.title == title)
-        .singleOrNull ??
-    (throw Exception("Not A Valid Match Type Title"));

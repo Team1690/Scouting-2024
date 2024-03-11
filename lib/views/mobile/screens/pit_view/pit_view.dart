@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:image_picker/image_picker.dart";
+import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
+import "package:scouting_frontend/models/enums/drive_train_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -120,21 +122,15 @@ class _PitViewState extends State<PitView> {
                       ),
                     ),
                     SectionDivider(label: "Drive Train"),
-                    Selector<int>(
-                      validate: (final int? result) =>
+                    Selector<DriveTrain>(
+                      validate: (final DriveTrain? result) =>
                           result.onNull("Please pick a drivetrain"),
-                      makeItem: (final int drivetrainId) =>
-                          IdProvider.of(context)
-                              .driveTrain
-                              .idToName[drivetrainId]!,
+                      makeItem: (final DriveTrain drivetrain) =>
+                          drivetrain.title,
                       placeholder: "Choose a drivetrain",
                       value: vars.driveTrainType,
-                      options: IdProvider.of(context)
-                          .driveTrain
-                          .idToName
-                          .keys
-                          .toList(),
-                      onChange: (final int newValue) {
+                      options: DriveTrain.values,
+                      onChange: (final DriveTrain newValue) {
                         setState(() {
                           vars = vars.copyWith(
                             driveTrainType: () => newValue,
@@ -145,21 +141,15 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Selector<int>(
-                      validate: (final int? result) =>
+                    Selector<DriveMotor>(
+                      validate: (final DriveMotor? result) =>
                           result.onNull("Please pick a drivemotor"),
                       placeholder: "Choose a drivemotor",
-                      makeItem: (final int drivemotorId) =>
-                          IdProvider.of(context)
-                              .drivemotor
-                              .idToName[drivemotorId]!,
+                      makeItem: (final DriveMotor drivemotor) =>
+                          drivemotor.title,
                       value: vars.driveMotorType,
-                      options: IdProvider.of(context)
-                          .drivemotor
-                          .idToName
-                          .keys
-                          .toList(),
-                      onChange: (final int newValue) {
+                      options: DriveMotor.values,
+                      onChange: (final DriveMotor newValue) {
                         setState(() {
                           vars = vars.copyWith(driveMotorType: () => newValue);
                         });

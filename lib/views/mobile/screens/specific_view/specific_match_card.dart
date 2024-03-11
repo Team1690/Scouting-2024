@@ -33,7 +33,7 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
   final TextEditingController matchController = TextEditingController();
 
   (ui.Image, ui.Image)? fieldImages;
-  late SpecificVars vars = SpecificVars(context);
+  late SpecificVars vars = SpecificVars();
   bool intialIsRed = false;
   late Future<
       List<
@@ -105,7 +105,7 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
                         if (selectedTeam != null) {
                           widget.onTeamSelected(selectedTeam);
 
-                          pathsFuture = getPaths(vars.team!.id, true);
+                          pathsFuture = getPaths(vars.team!.id, true, context);
                         }
                         final ScheduleMatch? scheduleMatch = vars.scheduleMatch;
                         if (scheduleMatch != null &&
@@ -295,7 +295,7 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
                   mutation: mutation,
                 )
               : SubmitButton(
-                  getJson: () => vars.toJson(),
+                  getJson: vars.toJson,
                   validate: () => formKey.currentState!.validate(),
                   resetForm: resetForm,
                   mutation: mutation,

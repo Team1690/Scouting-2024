@@ -1,4 +1,6 @@
-enum DriveTrain {
+import "package:scouting_frontend/models/id_providers.dart";
+
+enum DriveTrain implements IdEnum {
   swerve("Swerve"),
   westCoast("West Coast"),
   kitChassis("Kit Chassis"),
@@ -7,23 +9,6 @@ enum DriveTrain {
   other("Other");
 
   const DriveTrain(this.title);
+  @override
   final String title;
-}
-
-DriveTrain driveTrainTitleToEnum(final String title) {
-  switch (title) {
-    case "Swerve":
-      return DriveTrain.swerve;
-    case "West Coast":
-      return DriveTrain.westCoast;
-    case "Kit Chassis":
-      return DriveTrain.kitChassis;
-    case "Custom Tank":
-      return DriveTrain.customTank;
-    case "Mecanum/H":
-      return DriveTrain.mecanumOrH;
-    case "Other":
-      return DriveTrain.other;
-  }
-  throw Exception("Isn't a valid title");
 }

@@ -13,7 +13,7 @@ class SubmitButton extends StatefulWidget {
     this.onSubmissionSuccess,
   });
   final bool Function() validate;
-  final Map<String, dynamic> Function() getJson;
+  final Map<String, dynamic> Function(BuildContext context) getJson;
   final String mutation;
   final void Function() resetForm;
   final void Function()? onSubmissionSuccess;
@@ -91,7 +91,7 @@ class _SubmitButtonState extends State<SubmitButton> {
           final QueryResult<void> queryResult = await client.mutate(
             MutationOptions<void>(
               document: gql(widget.mutation),
-              variables: widget.getJson(),
+              variables: widget.getJson(context),
             ),
           );
           final OperationException? exception = queryResult.exception;

@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_vars.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_view.dart";
 import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
@@ -24,10 +23,8 @@ class _EditPitState extends State<EditPit> {
       return vars;
     }
     vars = vars.copyWith(
-      driveMotorType: () =>
-          IdProvider.of(context).drivemotor.nameToId[pit.driveMotorType.title],
-      driveTrainType: () =>
-          IdProvider.of(context).driveTrain.nameToId[pit.driveTrainType.title],
+      driveMotorType: () => pit.driveMotorType,
+      driveTrainType: () => pit.driveTrainType,
       notes: () => pit.notes,
       teamId: () => pit.team.id,
       weight: () => pit.weight,

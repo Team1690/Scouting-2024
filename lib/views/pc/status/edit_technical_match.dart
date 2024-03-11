@@ -96,7 +96,9 @@ Future<InputViewVars> fetchTechnicalMatch(
           isRematch: scheduleMatch.matchIdentifier.isRematch,
           scheduleMatch: scheduleMatch,
           scouterName: technicalMatch["scouter_name"] as String,
-          robotFieldStatusId: technicalMatch["robot_field_status"]["id"] as int,
+          robotFieldStatus: IdProvider.of(context)
+              .robotFieldStatus
+              .idToEnum[technicalMatch["robot_field_status"]["id"] as int]!,
           autoAmp: technicalMatch["auto_amp"] as int,
           autoAmpMissed: technicalMatch["auto_amp_missed"] as int,
           autoSpeaker: technicalMatch["auto_speaker"] as int,
@@ -105,7 +107,9 @@ Future<InputViewVars> fetchTechnicalMatch(
           teleAmpMissed: technicalMatch["tele_amp_missed"] as int,
           teleSpeaker: technicalMatch["tele_speaker"] as int,
           teleSpeakerMissed: technicalMatch["tele_speaker_missed"] as int,
-          climbId: technicalMatch["climb"]["id"] as int,
+          climb: IdProvider.of(context)
+              .climb
+              .idToEnum[technicalMatch["climb"]["id"] as int],
           harmonyWith: technicalMatch["harmony_with"] as int,
           trapAmount: technicalMatch["trap_amount"] as int,
           scoutedTeam: teamForQuery,
@@ -116,7 +120,7 @@ Future<InputViewVars> fetchTechnicalMatch(
         "team_id": teamForQuery.id,
         "match_type_id": IdProvider.of(context)
             .matchType
-            .nameToId[scheduleMatch.matchIdentifier.type.title],
+            .enumToId[scheduleMatch.matchIdentifier.type],
         "match_number": scheduleMatch.matchIdentifier.number,
         "is_rematch": scheduleMatch.matchIdentifier.isRematch,
       },

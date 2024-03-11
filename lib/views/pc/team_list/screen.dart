@@ -15,7 +15,7 @@ class TeamList extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(defaultPadding),
           child: StreamBuilder<List<AllTeamData>>(
-            stream: fetchAllTeams(),
+            stream: fetchAllTeams(context),
             builder: (
               final BuildContext context,
               final AsyncSnapshot<List<AllTeamData>> snapshot,
