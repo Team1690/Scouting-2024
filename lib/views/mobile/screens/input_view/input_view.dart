@@ -64,7 +64,6 @@ class _UserInputState extends State<UserInput> {
         .robotFieldStatus
         .nameToId["Didn't work on field"]!,
   };
-  String qrCodeJson = "";
 
   bool initialFlag = false;
   bool hasFault = false;
