@@ -1,5 +1,4 @@
 import "dart:async";
-import "dart:convert";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/input_view_vars.dart";
@@ -8,7 +7,6 @@ import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/local_save_button.dart";
 import "package:scouting_frontend/views/mobile/manage_preferences.dart";
-import "package:scouting_frontend/views/mobile/qr_generator.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/climbing.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/fault_button.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/game_piece_counter.dart";
@@ -332,91 +330,6 @@ class _UserInputState extends State<UserInput> {
                         mutation: widget.initialVars == null
                             ? insertMutation(hasFault, faultMessage)
                             : updateMutation,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      RoundedIconButton(
-                        color: Colors.green,
-                        onPress: () async {
-                          if (formKey.currentState!.validate()) {
-                            (await showDialog(
-                              context: context,
-                              builder: (final BuildContext dialogContext) =>
-                                  QRGenerator(jsonData: jsonEncode(match)),
-                            ));
-                          }
-                        },
-                        onLongPress: () async {
-                          (await showDialog(
-                            context: context,
-                            builder: (final BuildContext dialogContext) =>
-                                SizedBox(
-                              width: 100,
-                              child: AlertDialog(
-                                content: Form(
-                                  key: jsonFormKey,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      TextFormField(
-                                        validator:
-                                            (final String? pastedString) =>
-                                                pastedString == null ||
-                                                        pastedString.isEmpty
-                                                    ? "Please paste a code"
-                                                    : null,
-                                        onChanged:
-                                            (final String pastedString) =>
-                                                setState(() {
-                                          qrCodeJson = pastedString;
-                                        }),
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          hintText: "Enter Match Data",
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
-                                      SubmitButton(
-                                        getJson: () {
-                                          try {
-                                            return jsonDecode(qrCodeJson)
-                                                as Map<String, dynamic>;
-                                          } on Exception {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                content: Center(
-                                                  child: Text(
-                                                    "Invalid Code",
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                            return <String, dynamic>{};
-                                          }
-                                        },
-                                        mutation: widget.initialVars == null
-                                            ? insertMutation(
-                                                hasFault,
-                                                faultMessage,
-                                              )
-                                            : updateMutation,
-                                        resetForm: () => qrCodeJson = "",
-                                        validate: () => jsonFormKey
-                                            .currentState!
-                                            .validate(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ));
-                        },
-                        icon: Icons.qr_code_2,
                       ),
                       const SizedBox(
                         height: 20,
