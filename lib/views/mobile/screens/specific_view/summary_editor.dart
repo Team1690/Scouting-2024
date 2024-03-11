@@ -70,51 +70,37 @@ class _SummaryEditorState extends State<SummaryEditor> {
             ),
           ),
           SpecificSummaryTextField(
-            onTextChanged: () {
-            },
-            isEnabled: true,
+            onTextChanged: () {},
             controller: ampController,
             label: "Amp",
           ),
           SpecificSummaryTextField(
-            onTextChanged: () {
-            },
-            isEnabled: true,
+            onTextChanged: () {},
             controller: speakerController,
             label: "Speaker",
           ),
           SpecificSummaryTextField(
-            onTextChanged: () {
-            },
-            isEnabled: true,
+            onTextChanged: () {},
             controller: intakeController,
             label: "Intake",
           ),
           SpecificSummaryTextField(
-            onTextChanged: () {
-            },
-            isEnabled: true,
+            onTextChanged: () {},
             controller: climbController,
             label: "Climbing",
           ),
           SpecificSummaryTextField(
-            onTextChanged: () {
-            },
-            isEnabled: true,
+            onTextChanged: () {},
             controller: generalController,
             label: "General",
           ),
           SpecificSummaryTextField(
-            onTextChanged: () {
-            },
-            isEnabled: true,
+            onTextChanged: () {},
             controller: drivingController,
             label: "Driving",
           ),
           SpecificSummaryTextField(
-            onTextChanged: () {
-            },
-            isEnabled: true,
+            onTextChanged: () {},
             controller: defenseController,
             label: "Defense",
           ),
