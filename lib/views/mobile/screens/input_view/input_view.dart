@@ -220,6 +220,25 @@ class _UserInputState extends State<UserInput> {
                         },
                         matchMode: MatchMode.tele,
                       ),
+                      Row(
+                        children: <Widget>[
+                          const VerticalDivider(),
+                          Expanded(
+                            child: Counter(
+                              label: "Delivery",
+                              icon: Icons.delivery_dining,
+                              onChange: (final int delivery) {
+                                setState(() {
+                                  match = match.copyWith(
+                                    delivery: always(delivery),
+                                  );
+                                });
+                              },
+                              count: match.delivery,
+                            ),
+                          ),
+                        ],
+                      ),
                       Climbing(
                         match: match,
                         onNewMatch: (final InputViewVars newMatch) {
