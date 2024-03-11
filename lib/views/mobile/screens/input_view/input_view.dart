@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:convert";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
@@ -65,6 +66,7 @@ class _UserInputState extends State<UserInput> {
     1: IdProvider.of(context)
         .robotFieldStatus
         .nameToId["Didn't work on field"]!,
+    2: IdProvider.of(context).robotFieldStatus.nameToId["Did Defense"]!,
   };
   String qrCodeJson = "";
 
@@ -286,10 +288,12 @@ class _UserInputState extends State<UserInput> {
                         labels: const <String>[
                           "Not on field",
                           "Didn't work on field",
+                          "Did Defense",
                         ],
-                        colors: const <Color>[
-                          Colors.red,
-                          Color.fromARGB(255, 198, 29, 228),
+                        colors: <Color>[
+                          RobotFieldStatus.didntComeToField.color,
+                          RobotFieldStatus.didntWorkOnField.color,
+                          RobotFieldStatus.didDefense.color,
                         ],
                         onChange: (final int i) {
                           setState(() {
