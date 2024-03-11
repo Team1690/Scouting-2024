@@ -1,3 +1,10 @@
+import "package:scouting_frontend/models/data/starting_position_enum.dart";
+import "package:scouting_frontend/models/enums/climb_enum.dart";
+import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
+import "package:scouting_frontend/models/enums/drive_train_enum.dart";
+import "package:scouting_frontend/models/enums/fault_status_enum.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
@@ -20,14 +27,14 @@ class App extends StatelessWidget {
     required this.startingPosition,
   });
   final List<ScheduleMatch> matches;
-  final Map<String, int> robotFieldStatusIds;
+  final Map<RobotFieldStatus, int> robotFieldStatusIds;
   final List<LightTeam> teams;
-  final Map<String, int> climbIds;
-  final Map<String, int> drivetrainIds;
-  final Map<String, int> driveMotorIds;
-  final Map<String, int> matchTypeIds;
-  final Map<String, int> faultStatus;
-  final Map<String, int> startingPosition;
+  final Map<Climb, int> climbIds;
+  final Map<DriveTrain, int> drivetrainIds;
+  final Map<DriveMotor, int> driveMotorIds;
+  final Map<MatchType, int> matchTypeIds;
+  final Map<FaultStatus, int> faultStatus;
+  final Map<StartingPosition, int> startingPosition;
   @override
   Widget build(final BuildContext context) => TeamProvider(
         teams: teams,

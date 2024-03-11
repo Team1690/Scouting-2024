@@ -54,7 +54,7 @@ class _ScatterState extends State<Scatter> {
           Expanded(
             flex: 1,
             child: StreamBuilder<List<AllTeamData>>(
-              stream: fetchAllTeams(),
+              stream: fetchAllTeams(context),
               builder: (
                 final BuildContext context,
                 final AsyncSnapshot<List<AllTeamData>> snapshot,

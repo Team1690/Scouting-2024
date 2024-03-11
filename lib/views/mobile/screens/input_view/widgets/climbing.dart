@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/input_view_vars.dart";
 
 class HarmonyWith extends StatelessWidget {
@@ -26,20 +26,16 @@ class ClimbingSelector extends StatelessWidget {
   final InputViewVars match;
   final void Function(InputViewVars) onNewMatch;
   @override
-  Widget build(final BuildContext context) => Selector<int>(
-        options: IdProvider.of(context).climb.idToName.keys.toList(),
+  Widget build(final BuildContext context) => Selector<Climb>(
+        options: Climb.values,
         placeholder: "Select climing status",
-        value: match.climbId,
-        makeItem: (final int id) => IdProvider.of(context).climb.idToName[id]!,
-        onChange: (final int id) {
+        value: match.climb,
+        makeItem: (final Climb climb) => climb.title,
+        onChange: (final Climb id) {
           onNewMatch(
             match.copyWith(
-              climbId: always(id),
-              harmonyWith: always(
-                IdProvider.of(context).climb.idToName[id] == "Buddy Climbed"
-                    ? 1
-                    : 0,
-              ),
+              climb: always(id),
+              harmonyWith: always(0),
             ),
           );
         },
@@ -55,7 +51,7 @@ class Climbing extends StatelessWidget {
   Widget build(final BuildContext context) => Column(
         children: <Widget>[
           ClimbingSelector(match: match, onNewMatch: onNewMatch),
-          if (IdProvider.of(context).climb.idToName[match.climbId] == "Climbed")
+          if (match.climb == Climb.climbed)
             HarmonyWith(match: match, onNewMatch: onNewMatch),
         ],
       );

@@ -1,4 +1,5 @@
 import "package:scouting_frontend/models/enums/climb_enum.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/data/starting_position_enum.dart";
 import "package:scouting_frontend/models/data/technical_data.dart";
@@ -25,18 +26,20 @@ class TechnicalMatchData {
   final StartingPosition startingPosition;
   final String scouterName;
 
-  static TechnicalMatchData parse(final dynamic match) => TechnicalMatchData(
-        matchIdentifier: MatchIdentifier.fromJson(match),
-        robotFieldStatus: robotFieldStatusTitleToEnum(
-          match["robot_field_status"]["title"] as String,
-        ),
+  static TechnicalMatchData parse(
+    final dynamic match,
+    final IdProvider idProvider,
+  ) =>
+      TechnicalMatchData(
+        matchIdentifier: MatchIdentifier.fromJson(match, idProvider.matchType),
+        robotFieldStatus: idProvider.robotFieldStatus
+            .idToEnum[match["robot_field_status"]["id"] as int]!,
         harmonyWith: match["harmony_with"] as int,
         climb: climbTitleToEnum(match["climb"]["title"] as String),
         scheduleMatchId: match["schedule_match"]["id"] as int,
         data: TechnicalData.parse(match),
-        startingPosition: startingPosTitleToEnum(
-          match["starting_position"]["title"] as String,
-        ),
+        startingPosition: idProvider.startingPosition
+            .idToEnum[match["starting_position"]["id"] as int]!,
         scouterName: match["scouter_name"] as String,
       );
 }

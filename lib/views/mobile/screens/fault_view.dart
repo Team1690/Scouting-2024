@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/enums/fault_status_enum.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -26,7 +27,7 @@ class FaultView extends StatelessWidget {
           ],
         ),
         body: StreamBuilder<List<(FaultEntry, int?)>>(
-          stream: fetchFaults(),
+          stream: fetchFaults(context),
           builder: (
             final BuildContext context,
             final AsyncSnapshot<List<(FaultEntry, int?)>> snapshot,
@@ -106,7 +107,7 @@ const List<String> teamValues = <String>[
   "red_3",
 ];
 
-Stream<List<(FaultEntry, int?)>> fetchFaults() {
+Stream<List<(FaultEntry, int?)>> fetchFaults(final BuildContext context) {
   final GraphQLClient client = getClient();
   final Stream<QueryResult<List<(FaultEntry, int?)>>> result = client.subscribe(
     SubscriptionOptions<List<(FaultEntry, int?)>>(
@@ -125,6 +126,7 @@ Stream<List<(FaultEntry, int?)>> fetchFaults() {
                                   element["happened"] as bool,
                             ),
                             false,
+                            IdProvider.of(context).matchType,
                           ).matchIdentifier.number
                         : 0;
                 final dynamic nextMatch =
@@ -148,12 +150,14 @@ Stream<List<(FaultEntry, int?)>> fetchFaults() {
                         );
 
                 return (
-                  FaultEntry.parse(fault),
+                  FaultEntry.parse(fault, IdProvider.of(context)),
                   nextMatch == null
                       ? null
-                      : ScheduleMatch.fromJson(nextMatch, false)
-                              .matchIdentifier
-                              .number -
+                      : ScheduleMatch.fromJson(
+                            nextMatch,
+                            false,
+                            IdProvider.of(context).matchType,
+                          ).matchIdentifier.number -
                           lastMatch
                 );
               },

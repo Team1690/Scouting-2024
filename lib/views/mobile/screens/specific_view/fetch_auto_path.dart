@@ -2,10 +2,13 @@ import "dart:collection";
 import "dart:ui" as ui;
 
 import "package:collection/collection.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/data/starting_position_enum.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_teams.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -16,6 +19,7 @@ import "package:http/http.dart" as http;
 Future<List<AutoPathByUrl>> fetchUrls(
   final int team,
   final bool shouldDistinct,
+  final BuildContext context,
 ) async {
   final GraphQLClient client = getClient();
   final String query = """
@@ -45,37 +49,45 @@ query MyQuery(\$team: Int) {
     QueryOptions<List<AutoPathByUrl>>(
       document: gql(query),
       variables: <String, int>{"team": team},
-      parserFn: parserFn,
+      parserFn: parserFn(IdProvider.of(context)),
     ),
   );
   return result.mapQueryResult();
 }
 
-List<AutoPathByUrl> parserFn(
-  final Map<String, dynamic> urls,
+List<AutoPathByUrl> Function(Map<String, dynamic>) parserFn(
+  final IdProvider idProvider,
 ) =>
-    (urls["specific_match"] as List<dynamic>)
-        .map((final dynamic url) {
-          final bool validator =
-              url["schedule_match"]["technical_matches"] != null &&
+    (
+      final Map<String, dynamic> urls,
+    ) =>
+        (urls["specific_match"] as List<dynamic>)
+            .map((final dynamic url) {
+              final bool validator = url["schedule_match"]
+                          ["technical_matches"] !=
+                      null &&
                   (url["schedule_match"]["technical_matches"] as List<dynamic>)
                       .isNotEmpty;
-          return (url["schedule_match"]["technical_matches"] as List<dynamic>)
-              .map(
-            (final dynamic e) => validator
-                ? (
-                    url: url["url"] as String,
-                    startingPos: startingPosTitleToEnum(
-                      e["starting_position"]["title"] as String,
-                    ),
-                    matchIdentifier: MatchIdentifier.fromJson(url, null)
-                  )
-                : null,
-          );
-        })
-        .flattened
-        .whereNotNull()
-        .toList();
+              return (url["schedule_match"]["technical_matches"]
+                      as List<dynamic>)
+                  .map(
+                (final dynamic e) => validator
+                    ? (
+                        url: url["url"] as String,
+                        startingPos: idProvider.startingPosition
+                            .idToEnum[e["starting_position"]["id"] as int]!,
+                        matchIdentifier: MatchIdentifier.fromJson(
+                          url,
+                          idProvider.matchType,
+                          null,
+                        )
+                      )
+                    : null,
+              );
+            })
+            .flattened
+            .whereNotNull()
+            .toList();
 
 Future<({List<ui.Offset> path, bool isRed})> fetchPath(
   final String? url,
@@ -90,9 +102,10 @@ Future<({List<ui.Offset> path, bool isRed})> fetchPath(
 Future<List<AutoPathData>> getPaths(
   final int teamId,
   final bool shouldDistinct,
+  final BuildContext context,
 ) async {
   final List<AutoPathByUrl> urls =
-      (await fetchUrls(teamId, shouldDistinct)).toList();
+      (await fetchUrls(teamId, shouldDistinct, context)).toList();
   final List<Future<({List<ui.Offset> path, bool isRed})>> paths = urls
       .map(
         (final AutoPathByUrl e) => fetchPath(e.url),
@@ -139,7 +152,10 @@ Future<
       await fetchMultipleTeamData(teamIds, context).first;
   final List<List<AutoPathData>> paths = await Future.wait(
     data
-        .map((final TeamData element) => getPaths(element.lightTeam.id, false))
+        .map(
+          (final TeamData element) =>
+              getPaths(element.lightTeam.id, false, context),
+        )
         .toList(),
   );
   return paths

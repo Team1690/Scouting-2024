@@ -1,9 +1,13 @@
-enum Climb {
+import "package:scouting_frontend/models/id_providers.dart";
+
+enum Climb implements IdEnum {
   noAttempt("No Attempt", 0),
   failed("Failed", 1),
   climbed("Climbed", 2);
 
   const Climb(this.title, this.chartHeight);
+
+  @override
   final String title;
   final double chartHeight;
 }

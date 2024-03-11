@@ -52,7 +52,7 @@ class _SummaryEditorState extends State<SummaryEditor> {
           Align(
             alignment: Alignment.centerLeft,
             child: SubmitButton(
-              getJson: () => <String, dynamic>{
+              getJson: (final _) => <String, dynamic>{
                 "team_id": widget.team.id,
                 "amp_text": ampController.text,
                 "speaker_text": speakerController.text,

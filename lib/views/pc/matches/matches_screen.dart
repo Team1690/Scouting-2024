@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/fetch_matches.dart";
@@ -32,7 +33,8 @@ class MatchesScreen extends StatelessWidget {
               ),
             ],
             body: StreamBuilder<List<ScheduleMatch>>(
-              stream: fetchMatchesSubscription(),
+              stream:
+                  fetchMatchesSubscription(IdProvider.of(context).matchType),
               builder: (
                 final BuildContext context,
                 final AsyncSnapshot<List<ScheduleMatch>> snapshot,
