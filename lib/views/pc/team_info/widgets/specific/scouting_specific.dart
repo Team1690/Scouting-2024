@@ -1,6 +1,7 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/data/specific_match_data.dart";
 import "package:scouting_frontend/models/data/specific_summary_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -40,125 +41,75 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
             ),
             getSummaryText(
               "Driving",
-              widget.msgs.drivingText,
-              widget.matchesData.specificMatches
-                  .map(
-                    (final MatchData match) => (
-                      match.specificMatchData!.drivetrainAndDriving ?? 0,
-                      match.scheduleMatch.matchIdentifier.number
-                    ),
-                  )
-                  .whereNotNull()
-                  .toList(),
+              (msg) => msg.drivingText,
+              (match) => match.drivetrainAndDriving,
             ),
             getSummaryText(
               "Speaker",
-              widget.msgs.speakerText,
-              widget.matchesData.specificMatches
-                  .map(
-                    (final MatchData match) => (
-                      match.specificMatchData!.speaker ?? 0,
-                      match.scheduleMatch.matchIdentifier.number
-                    ),
-                  )
-                  .whereNotNull()
-                  .toList(),
+              (msg) => msg.speakerText,
+              (match) => match.speaker,
             ),
             getSummaryText(
               "Amp",
-              widget.msgs.ampText,
-              widget.matchesData.specificMatches
-                  .map(
-                    (final MatchData match) => (
-                      match.specificMatchData!.amp ?? 0,
-                      match.scheduleMatch.matchIdentifier.number
-                    ),
-                  )
-                  .whereNotNull()
-                  .toList(),
+              (msg) => msg.ampText,
+              (match) => match.amp,
             ),
             getSummaryText(
               "Intake",
-              widget.msgs.intakeText,
-              widget.matchesData.specificMatches
-                  .map(
-                    (final MatchData match) => (
-                      match.specificMatchData!.intake ?? 0,
-                      match.scheduleMatch.matchIdentifier.number
-                    ),
-                  )
-                  .whereNotNull()
-                  .toList(),
+              (msg) => msg.intakeText,
+              (match) => match.intake,
             ),
             getSummaryText(
               "Climb",
-              widget.msgs.climbText,
-              widget.matchesData.specificMatches
-                  .map(
-                    (final MatchData match) => (
-                      match.specificMatchData!.climb ?? 0,
-                      match.scheduleMatch.matchIdentifier.number
-                    ),
-                  )
-                  .whereNotNull()
-                  .toList(),
+              (msg) => msg.climbText,
+              (match) => match.climb,
             ),
             getSummaryText(
               "General",
-              widget.msgs.generalText,
-              widget.matchesData.specificMatches
-                  .map(
-                    (final MatchData match) => (
-                      match.specificMatchData!.general ?? 0,
-                      match.scheduleMatch.matchIdentifier.number
-                    ),
-                  )
-                  .whereNotNull()
-                  .toList(),
+              (msg) => msg.generalText,
+              (match) => match.general,
             ),
             getSummaryText(
               "Defense",
-              widget.msgs.defenseText,
-              widget.matchesData.specificMatches
-                  .map(
-                    (final MatchData match) => (
-                      match.specificMatchData!.defense ?? 0,
-                      match.scheduleMatch.matchIdentifier.number
-                    ),
-                  )
-                  .whereNotNull()
-                  .toList(),
+              (final SpecificSummaryData message) => message.defenseText,
+              (final SpecificMatchData match) => match.defense,
             ),
           ],
         ),
       );
   Widget getSummaryText(
     final String title,
-    final String text,
-    final List<(int rating, int matchNumber)> ratingsToMatches,
+    final String Function(SpecificSummaryData) text,
+    final int? Function(SpecificMatchData) matchRating,
   ) {
-    final (String, Color) rating = getRating(
-      ratingsToMatches
-              .map((final (int, int) e) => e.$1)
-              .where(
-                (final int element) => !element.isNaN && !element.isInfinite,
-              )
-              .toList()
-              .averageOrNull ??
+    final List<(int, int)> matchToRating = widget.matchesData.specificMatches
+        .where(
+          (final MatchData element) =>
+              matchRating(element.specificMatchData!) != null,
+        )
+        .map(
+          (final MatchData match) => (
+            matchRating(match.specificMatchData!)!,
+            match.scheduleMatch.matchIdentifier.number
+          ),
+        )
+        .toList();
+    final Rating rating = getRating(
+      matchToRating.map((final (int, int) e) => e.$1).toList().averageOrNull ??
           0,
     );
-    return text.isNotEmpty
+    return text(widget.msgs).isNotEmpty
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ViewRatingDropdownLine(
-                label: "$title (${rating.$1})",
-                color: rating.$2,
-                ratingToMatch: ratingsToMatches,
+                rating: rating,
+                ratingToMatch: matchToRating,
+                label: title,
               ),
               Text(
-                text,
+                text(widget.msgs),
                 textAlign: TextAlign.right,
               ),
             ]
@@ -176,19 +127,36 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
   }
 }
 
-(String, Color) getRating(final double numeralRating) {
-  switch (numeralRating.round()) {
+Rating getRating(final double numeralRating, [final int matchNumber = 0]) {
+  switch (numeralRating.ceil()) {
     case 1:
-      return ("F", Colors.red);
+      return (letter: "F", color: Colors.red, rating: 1, match: matchNumber);
     case 2:
-      return ("D", Colors.orange);
+      return (letter: "D", color: Colors.orange, rating: 2, match: matchNumber);
     case 3:
-      return ("C", Colors.yellow);
+      return (letter: "C", color: Colors.yellow, rating: 3, match: matchNumber);
     case 4:
-      return ("B", Colors.lightGreen);
+      return (
+        letter: "B",
+        color: Colors.lightGreen,
+        rating: 4,
+        match: matchNumber
+      );
     case 5:
-      return ("A", Colors.green[800]!);
+      return (
+        letter: "A",
+        color: Colors.green[800]!,
+        rating: 5,
+        match: matchNumber
+      );
     default:
-      return ("No Data", Colors.white);
+      return (
+        letter: "No Data",
+        color: Colors.white,
+        rating: 0,
+        match: matchNumber
+      );
   }
 }
+
+typedef Rating = ({int rating, int match, String letter, Color color});
