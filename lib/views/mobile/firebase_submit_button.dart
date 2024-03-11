@@ -117,7 +117,7 @@ class _FireBaseSubmitButtonState extends State<FireBaseSubmitButton> {
         running = false;
       } else if (event.state == TaskState.success) {
         final Map<String, dynamic> vars =
-            Map<String, dynamic>.from(widget.vars.toJson());
+            Map<String, dynamic>.from(widget.vars.toJson(context));
         final String url = await ref.getDownloadURL();
         vars["url"] = url;
         await submitToDb(vars, ref);

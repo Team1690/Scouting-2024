@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
@@ -99,17 +99,15 @@ class _ChangeMatchState extends State<ChangeMatch> {
                 const SizedBox(
                   height: 20,
                 ),
-                Selector<int>(
-                  options:
-                      IdProvider.of(context).matchType.idToName.keys.toList(),
+                Selector<MatchType>(
+                  options: MatchType.values,
                   placeholder: "Enter match type",
-                  value: vars.matchTypeId,
-                  makeItem: (final int p0) =>
-                      IdProvider.of(context).matchType.idToName[p0]!,
-                  onChange: (final int p0) {
-                    vars.matchTypeId = p0;
+                  value: vars.matchType,
+                  makeItem: (final MatchType p0) => p0.title,
+                  onChange: (final MatchType p0) {
+                    vars.matchType = p0;
                   },
-                  validate: (final int p0) => null,
+                  validate: (final MatchType p0) => null,
                 ),
                 const SizedBox(
                   height: 20,

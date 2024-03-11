@@ -1,4 +1,6 @@
 import "package:flutter/cupertino.dart";
+import "package:scouting_frontend/models/enums/climb_enum.dart";
+import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -7,12 +9,11 @@ import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 
 class InputViewVars implements HasuraVars {
-  InputViewVars(final BuildContext context)
+  InputViewVars()
       : isRematch = false,
         scheduleMatch = null,
         scouterName = "",
-        robotFieldStatusId =
-            IdProvider.of(context).robotFieldStatus.nameToId["Worked"]!,
+        robotFieldStatus = RobotFieldStatus.worked,
         delivery = 0,
         autoAmp = 0,
         autoAmpMissed = 0,
@@ -22,7 +23,7 @@ class InputViewVars implements HasuraVars {
         teleAmpMissed = 0,
         teleSpeaker = 0,
         teleSpeakerMissed = 0,
-        climbId = null,
+        climb = null,
         harmonyWith = 0,
         trapAmount = 0,
         trapsMissed = 0,
@@ -33,7 +34,7 @@ class InputViewVars implements HasuraVars {
     required this.isRematch,
     required this.scheduleMatch,
     required this.scouterName,
-    required this.robotFieldStatusId,
+    required this.robotFieldStatus,
     required this.autoAmp,
     required this.autoAmpMissed,
     required this.autoSpeaker,
@@ -42,20 +43,20 @@ class InputViewVars implements HasuraVars {
     required this.teleAmpMissed,
     required this.teleSpeaker,
     required this.teleSpeakerMissed,
-    required this.climbId,
+    required this.climb,
     required this.harmonyWith,
     required this.trapAmount,
     required this.scoutedTeam,
   });
 
-  InputViewVars cleared(final BuildContext context) =>
-      InputViewVars(context).copyWith(scouterName: always(scouterName));
+  InputViewVars cleared() =>
+      InputViewVars().copyWith(scouterName: always(scouterName));
 
   InputViewVars copyWith({
     final bool Function()? isRematch,
     final ScheduleMatch? Function()? scheduleMatch,
     final String? Function()? scouterName,
-    final int Function()? robotFieldStatusId,
+    final RobotFieldStatus Function()? robotFieldStatus,
     final int Function()? autoAmp,
     final int Function()? autoAmpMissed,
     final int Function()? autoSpeaker,
@@ -64,7 +65,7 @@ class InputViewVars implements HasuraVars {
     final int Function()? teleAmpMissed,
     final int Function()? teleSpeaker,
     final int Function()? teleSpeakerMissed,
-    final int Function()? climbId,
+    final Climb Function()? climb,
     final int Function()? harmonyWith,
     final int Function()? trapAmount,
     final int Function()? trapsMissed,
@@ -76,9 +77,9 @@ class InputViewVars implements HasuraVars {
         scheduleMatch:
             scheduleMatch != null ? scheduleMatch() : this.scheduleMatch,
         scouterName: scouterName != null ? scouterName() : this.scouterName,
-        robotFieldStatusId: robotFieldStatusId != null
-            ? robotFieldStatusId()
-            : this.robotFieldStatusId,
+        robotFieldStatus: robotFieldStatus != null
+            ? robotFieldStatus()
+            : this.robotFieldStatus,
         autoAmp: autoAmp != null ? autoAmp() : this.autoAmp,
         autoAmpMissed:
             autoAmpMissed != null ? autoAmpMissed() : this.autoAmpMissed,
@@ -93,7 +94,7 @@ class InputViewVars implements HasuraVars {
         teleSpeakerMissed: teleSpeakerMissed != null
             ? teleSpeakerMissed()
             : this.teleSpeakerMissed,
-        climbId: climbId != null ? climbId() : this.climbId,
+        climb: climb != null ? climb() : this.climb,
         harmonyWith: harmonyWith != null ? harmonyWith() : this.harmonyWith,
         trapAmount: trapAmount != null ? trapAmount() : this.trapAmount,
         trapsMissed: trapsMissed != null ? trapsMissed() : this.trapsMissed,
@@ -105,7 +106,7 @@ class InputViewVars implements HasuraVars {
   final bool isRematch;
   final ScheduleMatch? scheduleMatch;
   final String? scouterName;
-  final int robotFieldStatusId;
+  final RobotFieldStatus robotFieldStatus;
   final int autoAmp;
   final int autoAmpMissed;
   final int autoSpeaker;
@@ -114,18 +115,19 @@ class InputViewVars implements HasuraVars {
   final int teleAmpMissed;
   final int teleSpeaker;
   final int teleSpeakerMissed;
-  final int? climbId;
+  final Climb? climb;
   final int harmonyWith;
   final int trapAmount;
   final int trapsMissed;
   final LightTeam? scoutedTeam;
 
   @override
-  Map<String, dynamic> toJson() => <String, dynamic>{
+  Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
         "team_id": scoutedTeam?.id,
         "scouter_name": scouterName,
         "schedule_id": scheduleMatch?.id,
-        "robot_field_status_id": robotFieldStatusId,
+        "robot_field_status_id":
+            IdProvider.of(context).robotFieldStatus.enumToId[robotFieldStatus]!,
         "is_rematch": isRematch,
         "auto_amp": autoAmp,
         "auto_amp_missed": autoAmpMissed,
@@ -135,7 +137,7 @@ class InputViewVars implements HasuraVars {
         "tele_amp_missed": teleAmpMissed,
         "tele_speaker": teleSpeaker,
         "tele_speaker_missed": teleSpeakerMissed,
-        "climb_id": climbId,
+        "climb_id": IdProvider.of(context).climb.enumToId[climb]!,
         "harmony_with": harmonyWith,
         "trap_amount": trapAmount,
         "traps_missed": trapsMissed,

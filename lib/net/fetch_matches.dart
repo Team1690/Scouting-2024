@@ -1,4 +1,6 @@
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -27,6 +29,7 @@ ${isSubscription ? "subscription" : "query"} FetchMatches{
     id
     match_type {
       title
+      id
     }
     match_number
     happened
@@ -43,23 +46,28 @@ List<LightTeam> alliancefromJson(final dynamic json, final String color) {
   ];
 }
 
-List<ScheduleMatch> parserFn(final Map<String, dynamic> matches) =>
-    (matches["schedule_matches"] as List<dynamic>)
-        .expand(
-          (final dynamic e) => <ScheduleMatch>[
-            ScheduleMatch.fromJson(e, false),
-            ScheduleMatch.fromJson(e, true),
-          ],
-        )
-        .toList();
+List<ScheduleMatch> Function(Map<String, dynamic>) parserFn(
+  final IdTable<MatchType> matchType,
+) =>
+    (final Map<String, dynamic> matches) =>
+        (matches["schedule_matches"] as List<dynamic>)
+            .expand(
+              (final dynamic e) => <ScheduleMatch>[
+                ScheduleMatch.fromJson(e, false, matchType),
+                ScheduleMatch.fromJson(e, true, matchType),
+              ],
+            )
+            .toList();
 
-Stream<List<ScheduleMatch>> fetchMatchesSubscription() {
+Stream<List<ScheduleMatch>> fetchMatchesSubscription(
+  final IdTable<MatchType> matchType,
+) {
   final GraphQLClient client = getClient();
   final String subscription = graphqlSyntax(true);
   final Stream<QueryResult<List<ScheduleMatch>>> result = client.subscribe(
     SubscriptionOptions<List<ScheduleMatch>>(
       document: gql(subscription),
-      parserFn: parserFn,
+      parserFn: parserFn(matchType),
     ),
   );
 
@@ -68,13 +76,15 @@ Stream<List<ScheduleMatch>> fetchMatchesSubscription() {
   );
 }
 
-Future<List<ScheduleMatch>> fetchMatches() async {
+Future<List<ScheduleMatch>> fetchMatches(
+  final IdTable<MatchType> matchType,
+) async {
   final GraphQLClient client = getClient();
   final String query = graphqlSyntax(false);
   final QueryResult<List<ScheduleMatch>> result = await client.query(
     QueryOptions<List<ScheduleMatch>>(
       document: gql(query),
-      parserFn: parserFn,
+      parserFn: parserFn(matchType),
     ),
   );
   return result.mapQueryResult();

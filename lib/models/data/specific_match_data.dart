@@ -1,3 +1,4 @@
+import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 
 class SpecificMatchData {
@@ -27,9 +28,13 @@ class SpecificMatchData {
   final MatchIdentifier matchIdentifier;
   final String scouterName;
 
-  static SpecificMatchData parse(final dynamic specificMatchTable) =>
+  static SpecificMatchData parse(
+    final dynamic specificMatchTable,
+    final IdProvider idProvider,
+  ) =>
       SpecificMatchData(
-        matchIdentifier: MatchIdentifier.fromJson(specificMatchTable),
+        matchIdentifier:
+            MatchIdentifier.fromJson(specificMatchTable, idProvider.matchType),
         scheduleMatchId: specificMatchTable["schedule_match"]["id"] as int,
         drivetrainAndDriving: specificMatchTable["driving_rating"] as int?,
         intake: specificMatchTable["intake_rating"] as int?,

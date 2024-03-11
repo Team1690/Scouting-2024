@@ -2,7 +2,6 @@ import "dart:async";
 import "dart:convert";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
-import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -56,17 +55,14 @@ class _UserInputState extends State<UserInput> {
   final TextEditingController teamNumberController = TextEditingController();
   final TextEditingController scouterNameController = TextEditingController();
   bool toggleLightsState = false;
-  late InputViewVars match = InputViewVars(context);
+  late InputViewVars match = InputViewVars();
   // -1 means nothing
-  late final Map<int, int> robotFieldStatusIndexToId = <int, int>{
-    -1: IdProvider.of(context).robotFieldStatus.nameToId["Worked"]!,
-    0: IdProvider.of(context)
-        .robotFieldStatus
-        .nameToId["Didn't come to field"]!,
-    1: IdProvider.of(context)
-        .robotFieldStatus
-        .nameToId["Didn't work on field"]!,
-    2: IdProvider.of(context).robotFieldStatus.nameToId["Did Defense"]!,
+  late final Map<int, RobotFieldStatus> robotFieldStatusIndexToEnum =
+      <int, RobotFieldStatus>{
+    -1: RobotFieldStatus.worked,
+    0: RobotFieldStatus.didntComeToField,
+    1: RobotFieldStatus.didntWorkOnField,
+    2: RobotFieldStatus.didDefense,
   };
   String qrCodeJson = "";
 
@@ -298,16 +294,17 @@ class _UserInputState extends State<UserInput> {
                         onChange: (final int i) {
                           setState(() {
                             match = match.copyWith(
-                              robotFieldStatusId:
-                                  always(robotFieldStatusIndexToId[i]!),
+                              robotFieldStatus: always(
+                                robotFieldStatusIndexToEnum[i]!,
+                              ),
                             );
                           });
                         },
-                        selected: <int, int>{
-                          for (final MapEntry<int, int> i
-                              in robotFieldStatusIndexToId.entries)
+                        selected: <RobotFieldStatus, int>{
+                          for (final MapEntry<int, RobotFieldStatus> i
+                              in robotFieldStatusIndexToEnum.entries)
                             i.value: i.key,
-                        }[match.robotFieldStatusId]!,
+                        }[match.robotFieldStatus]!,
                       ),
                       const SizedBox(
                         height: 20,
@@ -326,7 +323,7 @@ class _UserInputState extends State<UserInput> {
                       SubmitButton(
                         resetForm: () {
                           setState(() {
-                            match = match.cleared(context);
+                            match = match.cleared();
                             teamNumberController.clear();
                             matchController.clear();
                           });
@@ -384,7 +381,7 @@ class _UserInputState extends State<UserInput> {
                                         height: 15,
                                       ),
                                       SubmitButton(
-                                        getJson: () {
+                                        getJson: (final _) {
                                           try {
                                             return jsonDecode(qrCodeJson)
                                                 as Map<String, dynamic>;
@@ -432,7 +429,7 @@ class _UserInputState extends State<UserInput> {
                             : updateMutation,
                         resetForm: () {
                           setState(() {
-                            match = match.cleared(context);
+                            match = match.cleared();
                             teamNumberController.clear();
                             matchController.clear();
                           });

@@ -1,3 +1,5 @@
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/fetch_matches.dart";
@@ -17,7 +19,11 @@ class ScheduleMatch {
   final List<LightTeam> redAlliance;
   final List<LightTeam> blueAlliance;
 
-  static ScheduleMatch fromJson(final dynamic e, final bool isRematch) =>
+  static ScheduleMatch fromJson(
+    final dynamic e,
+    final bool isRematch,
+    final IdTable<MatchType> matchType,
+  ) =>
       ScheduleMatch(
         happened: e["happened"] as bool,
         id: e["id"] as int,
@@ -25,6 +31,7 @@ class ScheduleMatch {
           <String, dynamic>{
             "schedule_match": e,
           },
+          matchType,
           isRematch,
         ),
         redAlliance: <LightTeam>[...alliancefromJson(e, "red")],

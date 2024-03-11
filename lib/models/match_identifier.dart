@@ -1,4 +1,5 @@
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 
 class MatchIdentifier {
   MatchIdentifier({
@@ -25,13 +26,13 @@ class MatchIdentifier {
   String toString() => "${isRematch ? "R" : ""}${type.shortTitle}$number";
 
   static MatchIdentifier fromJson(
-    final dynamic match, [
+    final dynamic match,
+    final IdTable<MatchType> matchType, [
     final bool? isRematch,
   ]) =>
       MatchIdentifier(
-        type: matchTypeTitleToEnum(
-          match["schedule_match"]["match_type"]["title"] as String,
-        ),
+        type: matchType
+            .idToEnum[match["schedule_match"]["match_type"]["id"] as int]!,
         number: match["schedule_match"]["match_number"] as int,
         isRematch: isRematch ?? match["is_rematch"] as bool,
       );

@@ -96,7 +96,7 @@ class ChangeFaultStatus extends StatelessWidget {
             showLoadingSnackBar(context);
             final QueryResult<void> result = await updateFaultStatus(
               faultId,
-              faultStatusTitleToEnum(faultStatus.title),
+              faultStatus,
               context,
             );
             onFinished(result);
@@ -117,7 +117,7 @@ Future<QueryResult<void>> updateFaultStatus(
         variables: <String, dynamic>{
           "id": id,
           "fault_status_id":
-              IdProvider.of(context).faultStatus.nameToId[faultStatus.title],
+              IdProvider.of(context).faultStatus.enumToId[faultStatus],
         },
       ),
     );

@@ -4,6 +4,7 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
@@ -172,15 +173,24 @@ Stream<SplayTreeSet<TeamData>> fetchMultipleTeamData(
               teamTable["second_picklist_index"] as int;
           final int thirdPicklistIndex =
               teamTable["third_picklist_index"] as int;
+          final IdProvider idProvider = IdProvider.of(context);
 
           final List<TechnicalMatchData> technicalMatches =
               (teamTable["technical_matches"] as List<dynamic>)
-                  .map(TechnicalMatchData.parse)
+                  .map(
+                    (final dynamic match) => TechnicalMatchData.parse(
+                      match,
+                      idProvider,
+                    ),
+                  )
                   .toList();
 
           final List<SpecificMatchData> specificMatches =
               (teamTable["specific_matches"] as List<dynamic>)
-                  .map(SpecificMatchData.parse)
+                  .map(
+                    (final dynamic match) =>
+                        SpecificMatchData.parse(match, idProvider),
+                  )
                   .toList();
           final dynamic pitTable = teamTable["pit"];
           final List<dynamic> faultTable = teamTable["faults"] as List<dynamic>;
@@ -192,8 +202,15 @@ Stream<SplayTreeSet<TeamData>> fetchMultipleTeamData(
                   .map((final TechnicalMatchData e) => e.data)
                   .toList(),
             ),
-            pitData: PitData.parse(pitTable),
-            faultEntrys: faultTable.map(FaultEntry.parse).toList(),
+            pitData: PitData.parse(pitTable, idProvider),
+            faultEntrys: faultTable
+                .map(
+                  (final dynamic faultStatus) => FaultEntry.parse(
+                    faultStatus,
+                    idProvider,
+                  ),
+                )
+                .toList(),
             summaryData: SpecificSummaryData.parse(specificSummaryTable),
             lightTeam: team,
             firstPicklistIndex: firstPicklistIndex,

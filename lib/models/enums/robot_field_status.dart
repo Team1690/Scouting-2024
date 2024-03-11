@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/id_providers.dart";
 
-enum RobotFieldStatus {
+enum RobotFieldStatus implements IdEnum {
   worked("Worked", Colors.green),
   didntComeToField("Didn't come to field", Colors.red),
   didntWorkOnField("Didn't work on field", Colors.purple),
@@ -8,12 +9,7 @@ enum RobotFieldStatus {
 
   const RobotFieldStatus(this.title, this.color);
 
+  @override
   final String title;
   final Color color;
 }
-
-RobotFieldStatus robotFieldStatusTitleToEnum(final String title) =>
-    RobotFieldStatus.values
-        .where((final RobotFieldStatus element) => element.title == title)
-        .singleOrNull ??
-    (throw Exception("Not A Valid Robot Field Status Title"));
