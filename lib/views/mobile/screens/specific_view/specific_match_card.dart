@@ -33,7 +33,7 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
   final TextEditingController matchController = TextEditingController();
 
   (ui.Image, ui.Image)? fieldImages;
-  late SpecificVars vars = SpecificVars(context);
+  late SpecificVars vars = SpecificVars();
   bool intialIsRed = false;
   late Future<
       List<

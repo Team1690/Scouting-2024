@@ -7,7 +7,7 @@ import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 
 class SpecificVars implements HasuraVars {
-  SpecificVars(final BuildContext context)
+  SpecificVars()
       : team = null,
         driveRating = null,
         intakeRating = null,
