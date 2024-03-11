@@ -3,14 +3,16 @@ import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/scouting_specific.dart";
 
 class ViewRatingDropdownLine extends StatefulWidget {
-  ViewRatingDropdownLine({
-    required this.color,
-    required this.label,
+  const ViewRatingDropdownLine({
+    super.key,
+    required this.rating,
     required this.ratingToMatch,
+    required this.label,
   });
-  final String label;
-  final Color color;
+
+  final Rating rating;
   final List<(int, int)> ratingToMatch;
+  final String label;
 
   @override
   State<ViewRatingDropdownLine> createState() => _ViewRatingDropdownLineState();
@@ -29,8 +31,8 @@ class _ViewRatingDropdownLineState extends State<ViewRatingDropdownLine> {
               });
             },
             child: SectionDivider(
-              label: widget.label,
-              color: widget.color,
+              label: "${widget.rating.letter} (${widget.label})",
+              color: widget.rating.color,
             ),
           ),
           AnimatedCrossFade(
@@ -46,8 +48,10 @@ class _ViewRatingDropdownLineState extends State<ViewRatingDropdownLine> {
                   (final (int, int) e) => Tooltip(
                     message: "match number: ${e.$2}",
                     child: Text(
-                      "${getRating(e.$1.toDouble()).$1}, ",
-                      style: TextStyle(color: getRating(e.$1.toDouble()).$2),
+                      "${getRating(e.$1.toDouble(), e.$2).letter}, ",
+                      style: TextStyle(
+                        color: getRating(e.$1.toDouble(), e.$2).color,
+                      ),
                     ),
                   ),
                 ),
