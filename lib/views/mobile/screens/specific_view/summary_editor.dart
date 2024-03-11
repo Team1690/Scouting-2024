@@ -71,7 +71,6 @@ class _SummaryEditorState extends State<SummaryEditor> {
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {});
             },
             isEnabled: true,
             controller: ampController,
@@ -79,7 +78,6 @@ class _SummaryEditorState extends State<SummaryEditor> {
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {});
             },
             isEnabled: true,
             controller: speakerController,
@@ -87,7 +85,6 @@ class _SummaryEditorState extends State<SummaryEditor> {
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {});
             },
             isEnabled: true,
             controller: intakeController,
@@ -95,7 +92,6 @@ class _SummaryEditorState extends State<SummaryEditor> {
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {});
             },
             isEnabled: true,
             controller: climbController,
@@ -103,7 +99,6 @@ class _SummaryEditorState extends State<SummaryEditor> {
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {});
             },
             isEnabled: true,
             controller: generalController,
@@ -111,7 +106,6 @@ class _SummaryEditorState extends State<SummaryEditor> {
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {});
             },
             isEnabled: true,
             controller: drivingController,
@@ -119,7 +113,6 @@ class _SummaryEditorState extends State<SummaryEditor> {
           ),
           SpecificSummaryTextField(
             onTextChanged: () {
-              setState(() {});
             },
             isEnabled: true,
             controller: defenseController,
