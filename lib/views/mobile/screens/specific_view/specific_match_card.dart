@@ -31,7 +31,6 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController teamController = TextEditingController();
   final TextEditingController matchController = TextEditingController();
-  final TextEditingController faultsController = TextEditingController();
 
   (ui.Image, ui.Image)? fieldImages;
   late SpecificVars vars = SpecificVars(context);
@@ -227,74 +226,6 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
                   const SizedBox(
                     height: 15,
                   ),
-                  FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        const FittedBox(
-                          fit: BoxFit.fitHeight,
-                          child: Text(
-                            "Robot fault:     ",
-                          ),
-                        ),
-                        FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: ToggleButtons(
-                            fillColor: const Color.fromARGB(10, 244, 67, 54),
-                            focusColor: const Color.fromARGB(170, 244, 67, 54),
-                            highlightColor:
-                                const Color.fromARGB(170, 244, 67, 54),
-                            selectedBorderColor:
-                                const Color.fromARGB(170, 244, 67, 54),
-                            selectedColor: Colors.red,
-                            children: const <Widget>[
-                              Icon(
-                                Icons.cancel,
-                              ),
-                            ],
-                            isSelected: <bool>[
-                              vars.faultMessage != null,
-                            ],
-                            onPressed: (final int index) {
-                              assert(index == 0);
-                              setState(() {
-                                vars = vars.copyWith(
-                                  faultMessage: always(
-                                    vars.faultMessage.onNull("No input"),
-                                  ),
-                                );
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  AnimatedCrossFade(
-                    duration: const Duration(milliseconds: 300),
-                    crossFadeState: vars.faultMessage == null
-                        ? CrossFadeState.showFirst
-                        : CrossFadeState.showSecond,
-                    firstChild: Container(),
-                    secondChild: TextField(
-                      controller: faultsController,
-                      textDirection: TextDirection.rtl,
-                      onChanged: (final String value) {
-                        setState(() {
-                          vars = vars.copyWith(
-                            faultMessage: always(value),
-                          );
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        hintText: "Robot fault",
-                      ),
-                    ),
-                  ),
                   const SizedBox(
                     height: 15,
                   ),
@@ -320,10 +251,9 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
                           vars = vars.reset(context);
                           teamController.clear();
                           matchController.clear();
-                          faultsController.clear();
                         });
                       },
-                      getMutation(vars.faultMessage),
+                      getMutation(),
                     ),
                   ),
                 ],
@@ -382,15 +312,11 @@ Future<ui.Image> getField(final bool isRed) async {
   return frameInfo.image;
 }
 
-String getMutation(final String? faultMessage) => """
-                mutation A( \$defense_rating: Int, \$driving_rating: Int, \$general_rating: Int, \$intake_rating: Int, \$is_rematch: Boolean, \$speaker_rating: Int, \$scouter_name: String, \$team_id: Int, \$url: String, \$climb_rating: Int, \$amp_rating: Int, \$schedule_match_id: Int, \$fault_message:String){
+String getMutation() => """
+                mutation A( \$defense_rating: Int, \$driving_rating: Int, \$general_rating: Int, \$intake_rating: Int, \$is_rematch: Boolean, \$speaker_rating: Int, \$scouter_name: String, \$team_id: Int, \$url: String, \$climb_rating: Int, \$amp_rating: Int, \$schedule_match_id: Int){
                   insert_specific_match(objects: {scouter_name: \$scouter_name, team_id: \$team_id, speaker_rating: \$speaker_rating, schedule_match_id: \$schedule_match_id, url: \$url, is_rematch: \$is_rematch, intake_rating: \$intake_rating, general_rating: \$general_rating, driving_rating: \$driving_rating, defense_rating: \$defense_rating, climb_rating: \$climb_rating, amp_rating: \$amp_rating}) {
                     affected_rows
                   }
-                  ${faultMessage == null ? "" : """
-                  insert_faults(objects: {team_id: \$team_id, message: \$fault_message, schedule_match_id: \$schedule_match_id, }) {
-                    affected_rows
-                  }"""}
                       }
                 
                 """;

@@ -18,7 +18,6 @@ class SpecificVars implements HasuraVars {
         scheduleMatch = null,
         name = "",
         isRematch = false,
-        faultMessage = null,
         autoPath = null;
 
   SpecificVars.all({
@@ -33,7 +32,6 @@ class SpecificVars implements HasuraVars {
     required this.scheduleMatch,
     required this.name,
     required this.isRematch,
-    required this.faultMessage,
     required this.autoPath,
   });
 
@@ -49,7 +47,6 @@ class SpecificVars implements HasuraVars {
     final ScheduleMatch? Function()? scheduleMatch,
     final String Function()? name,
     final bool Function()? isRematch,
-    final String? Function()? faultMessage,
     final Sketch? Function()? autoPath,
   }) =>
       SpecificVars.all(
@@ -68,7 +65,6 @@ class SpecificVars implements HasuraVars {
             scheduleMatch != null ? scheduleMatch() : this.scheduleMatch,
         name: name != null ? name() : this.name,
         isRematch: isRematch != null ? isRematch() : this.isRematch,
-        faultMessage: faultMessage != null ? faultMessage() : this.faultMessage,
         autoPath: autoPath != null ? autoPath() : this.autoPath,
       );
 
@@ -83,7 +79,6 @@ class SpecificVars implements HasuraVars {
   final ScheduleMatch? scheduleMatch;
   final String name;
   final bool isRematch;
-  final String? faultMessage;
   final Sketch? autoPath;
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -99,13 +94,11 @@ class SpecificVars implements HasuraVars {
         "is_rematch": isRematch,
         "schedule_match_id": scheduleMatch?.id,
         "scouter_name": name,
-        if (faultMessage != null) "fault_message": faultMessage,
       };
 
   SpecificVars reset(final BuildContext context) => copyWith(
         isRematch: always(false),
         scheduleMatch: always(null),
-        faultMessage: always(null),
         team: always(null),
         driveRating: always(null),
         climbRating: always(null),
