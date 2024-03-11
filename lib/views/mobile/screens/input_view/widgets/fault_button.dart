@@ -131,7 +131,6 @@ class _FaultButtonState extends State<FaultButton> {
               ],
             ),
           ),
-
           Visibility(
             child: TextField(
               controller: faultMessageController,
@@ -139,7 +138,6 @@ class _FaultButtonState extends State<FaultButton> {
             ),
             visible: isActivated,
           ),
-
         ],
       );
 }
