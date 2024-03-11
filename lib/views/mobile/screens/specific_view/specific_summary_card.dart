@@ -39,6 +39,9 @@ class _SpecificSummaryCardState extends State<SpecificSummaryCard> {
                 },
                 controller: teamSelectionController,
               ),
+              const SizedBox(
+                height: 10,
+              ),
               if (team != null)
                 StreamBuilder<SummaryEntry?>(
                   stream: fetchSpecificSummary(team!.id),

@@ -4,7 +4,7 @@ class SpecificSummaryTextField extends StatelessWidget {
   const SpecificSummaryTextField({
     super.key,
     required this.onTextChanged,
-    required this.isEnabled,
+    this.isEnabled = true,
     required this.controller,
     required this.label,
   });
