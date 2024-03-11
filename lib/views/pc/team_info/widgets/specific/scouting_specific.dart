@@ -1,4 +1,3 @@
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/data/specific_match_data.dart";
@@ -41,33 +40,33 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
             ),
             getSummaryText(
               "Driving",
-              (msg) => msg.drivingText,
-              (match) => match.drivetrainAndDriving,
+              (final SpecificSummaryData msg) => msg.drivingText,
+              (final SpecificMatchData match) => match.drivetrainAndDriving,
             ),
             getSummaryText(
               "Speaker",
-              (msg) => msg.speakerText,
-              (match) => match.speaker,
+              (final SpecificSummaryData msg) => msg.speakerText,
+              (final SpecificMatchData match) => match.speaker,
             ),
             getSummaryText(
               "Amp",
-              (msg) => msg.ampText,
-              (match) => match.amp,
+              (final SpecificSummaryData msg) => msg.ampText,
+              (final SpecificMatchData match) => match.amp,
             ),
             getSummaryText(
               "Intake",
-              (msg) => msg.intakeText,
-              (match) => match.intake,
+              (final SpecificSummaryData msg) => msg.intakeText,
+              (final SpecificMatchData match) => match.intake,
             ),
             getSummaryText(
               "Climb",
-              (msg) => msg.climbText,
-              (match) => match.climb,
+              (final SpecificSummaryData msg) => msg.climbText,
+              (final SpecificMatchData match) => match.climb,
             ),
             getSummaryText(
               "General",
-              (msg) => msg.generalText,
-              (match) => match.general,
+              (final SpecificSummaryData msg) => msg.generalText,
+              (final SpecificMatchData match) => match.general,
             ),
             getSummaryText(
               "Defense",
