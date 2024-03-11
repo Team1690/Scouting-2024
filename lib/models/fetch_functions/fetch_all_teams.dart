@@ -34,6 +34,7 @@ subscription FetchAllTeams {
       trap
       can_pass_under_stage
       can_eject
+      all_range_shooting
     }
     id
     name

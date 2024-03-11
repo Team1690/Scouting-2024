@@ -80,6 +80,7 @@ class FaultButton extends StatefulWidget {
 
   final Function(bool isActivated) onToggle;
   final Function(String message) onNewFaultMessage;
+
   @override
   State<FaultButton> createState() => _FaultButtonState();
 }
@@ -87,6 +88,7 @@ class FaultButton extends StatefulWidget {
 class _FaultButtonState extends State<FaultButton> {
   bool isActivated = false;
   TextEditingController faultMessageController = TextEditingController();
+
   @override
   Widget build(final BuildContext context) => Column(
         children: <Widget>[
@@ -129,6 +131,7 @@ class _FaultButtonState extends State<FaultButton> {
               ],
             ),
           ),
+
           Visibility(
             child: TextField(
               controller: faultMessageController,
@@ -136,6 +139,7 @@ class _FaultButtonState extends State<FaultButton> {
             ),
             visible: isActivated,
           ),
+
         ],
       );
 }
