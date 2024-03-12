@@ -19,6 +19,7 @@ class PitData {
     required this.canEject,
     required this.canPassUnderStage,
     required this.allRangeShooting,
+    required this.climb,
   });
 
   final DriveTrain driveTrainType;
@@ -35,6 +36,7 @@ class PitData {
   final List<String>? faultMessages;
   final LightTeam team;
   final bool allRangeShooting;
+  final bool climb;
 
   bool get canTrap => trap > 0;
 
@@ -59,6 +61,7 @@ class PitData {
               canEject: pit["can_eject"] as bool,
               canPassUnderStage: pit["can_pass_under_stage"] as bool,
               allRangeShooting: pit["all_range_shooting"] as bool,
+              climb: pit["climb"] as bool,
             )
           : null;
 }
