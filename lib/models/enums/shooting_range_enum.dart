@@ -8,9 +8,3 @@ enum ShootingRange implements IdEnum {
   @override
   final String title;
 }
-
-ShootingRange climbTitleToEnum(final String title) =>
-    ShootingRange.values
-        .where((final ShootingRange rangeOption) => rangeOption.title == title)
-        .singleOrNull ??
-    (throw Exception("Invalid title: $title"));
