@@ -243,6 +243,28 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
+                    ToggleButtons(
+                      fillColor: const Color.fromARGB(10, 244, 67, 54),
+                      selectedColor: Colors.blue,
+                      selectedBorderColor: Colors.blue,
+                      children: const <Widget>[
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text("Climb"),
+                        ),
+                      ],
+                      isSelected: <bool>[vars.climb],
+                      onPressed: (final int i) {
+                        setState(() {
+                          vars = vars.copyWith(
+                            climb: always(!vars.climb),
+                          );
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Switcher(
                       borderRadiusGeometry: defaultBorderRadius,
                       selected: vars.harmony.mapNullable(

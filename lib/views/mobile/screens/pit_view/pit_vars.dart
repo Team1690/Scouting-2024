@@ -21,7 +21,7 @@ class PitVars implements HasuraVars {
         length = null,
         width = null,
         allRangeShooting = null,
-        climb = null;
+        climb = false;
 
   PitVars.all({
     required this.driveTrainType,
@@ -54,7 +54,7 @@ class PitVars implements HasuraVars {
     final bool? Function()? canEject,
     final bool? Function()? canPassUnderStage,
     final bool? Function()? allRangeShooting,
-    final bool? Function()? climb,
+    final bool Function()? climb,
   }) =>
       PitVars.all(
         driveTrainType:
@@ -91,7 +91,7 @@ class PitVars implements HasuraVars {
   final String? url;
   final bool? canEject;
   final bool? allRangeShooting;
-  final bool? climb;
+  final bool climb;
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
         "drivetrain_id":
@@ -126,6 +126,6 @@ class PitVars implements HasuraVars {
         url: always(null),
         canEject: always(null),
         allRangeShooting: always(null),
-        climb: always(null),
+        climb: always(false),
       );
 }
