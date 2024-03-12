@@ -35,11 +35,11 @@ class GamepiecesLineChart extends StatelessWidget {
                           children: <TextSpan>[
                             TextSpan(
                               text: " Didnt Come ",
-                              style: TextStyle(color: Colors.purple),
+                              style: TextStyle(color: Colors.red),
                             ),
                             TextSpan(
                               text: " Didnt Work ",
-                              style: TextStyle(color: Colors.red),
+                              style: TextStyle(color: Colors.purple),
                             ),
                             TextSpan(
                               text: " Did Defense ",
@@ -60,6 +60,10 @@ class GamepiecesLineChart extends StatelessWidget {
                           TextSpan(
                             text: " Missed ",
                             style: TextStyle(color: Colors.red),
+                          ),
+                          TextSpan(
+                            text: " Delivered ",
+                            style: TextStyle(color: Colors.yellow),
                           ),
                         ],
                       ),
@@ -90,14 +94,23 @@ class GamepiecesLineChart extends StatelessWidget {
               inputedColors: const <Color>[
                 Colors.green,
                 Colors.red,
+                Colors.yellow
               ],
               distanceFromHighest: 4,
               dataSet: <List<int>>[
                 matches.technicalMatchExists.map(data).toList(),
                 if (missedData != null)
                   matches.technicalMatchExists.map(missedData!).toList(),
+                if (deliveryData != null)
+                  matches.technicalMatchExists.map(deliveryData!).toList(),
               ],
               robotMatchStatuses: <List<RobotFieldStatus>>[
+                matches.technicalMatchExists
+                    .map(
+                      (final MatchData e) =>
+                          e.technicalMatchData!.robotFieldStatus,
+                    )
+                    .toList(),
                 matches.technicalMatchExists
                     .map(
                       (final MatchData e) =>
