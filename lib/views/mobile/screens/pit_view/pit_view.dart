@@ -11,6 +11,7 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/image_picker_widget.dart";
 import "package:scouting_frontend/views/mobile/firebase_submit_button.dart";
+import "package:scouting_frontend/views/mobile/screens/pit_view/pit_toggle.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/widgets/measurement_conversion.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_vars.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
@@ -249,68 +250,38 @@ class _PitViewState extends State<PitView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        ToggleButtons(
-                          fillColor: const Color.fromARGB(10, 244, 67, 54),
-                          selectedColor: Colors.blue,
-                          selectedBorderColor: Colors.blue,
-                          children: const <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text("Climb"),
-                            ),
-                          ],
+                        PitToggle(
+                          setState: () => setState(() {
+                            vars = vars.copyWith(
+                              climb: always(!vars.climb),
+                            );
+                          }),
                           isSelected: <bool>[vars.climb],
-                          onPressed: (final int i) {
-                            setState(() {
-                              vars = vars.copyWith(
-                                climb: always(!vars.climb),
-                              );
-                            });
-                          },
+                          title: "Climb",
                         ),
                         const SizedBox(
                           width: 10,
                         ),
-                        ToggleButtons(
-                          fillColor: const Color.fromARGB(10, 244, 67, 54),
-                          selectedColor: Colors.blue,
-                          selectedBorderColor: Colors.blue,
-                          children: const <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text("Can Harmonize"),
-                            ),
-                          ],
+                        PitToggle(
+                          setState: () => setState(() {
+                            vars = vars.copyWith(
+                              harmony: always(!vars.harmony),
+                            );
+                          }),
                           isSelected: <bool>[vars.harmony],
-                          onPressed: (final int i) {
-                            setState(() {
-                              vars = vars.copyWith(
-                                harmony: always(!vars.harmony),
-                              );
-                            });
-                          },
+                          title: "Can Harmonize",
                         ),
                         const SizedBox(
                           width: 10,
                         ),
-                        ToggleButtons(
-                          fillColor: const Color.fromARGB(10, 244, 67, 54),
-                          selectedColor: Colors.blue,
-                          selectedBorderColor: Colors.blue,
-                          children: const <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text("Can Eject"),
-                            ),
-                          ],
+                        PitToggle(
+                          setState: () => setState(() {
+                            vars = vars.copyWith(
+                              canEject: always(!vars.canEject),
+                            );
+                          }),
                           isSelected: <bool>[vars.canEject],
-                          onPressed: (final int i) {
-                            setState(() {
-                              vars = vars.copyWith(
-                                canEject: always(!vars.canEject),
-                              );
-                            });
-                          },
+                          title: "Can Eject",
                         ),
                       ],
                     ),
@@ -320,47 +291,27 @@ class _PitViewState extends State<PitView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        ToggleButtons(
-                          fillColor: const Color.fromARGB(10, 244, 67, 54),
-                          selectedColor: Colors.blue,
-                          selectedBorderColor: Colors.blue,
-                          children: const <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text("Can Pass Under Stage"),
-                            ),
-                          ],
+                        PitToggle(
+                          setState: () => setState(() {
+                            vars = vars.copyWith(
+                              canPassUnderStage:
+                                  always(!vars.canPassUnderStage),
+                            );
+                          }),
                           isSelected: <bool>[vars.canPassUnderStage],
-                          onPressed: (final int i) {
-                            setState(() {
-                              vars = vars.copyWith(
-                                canPassUnderStage:
-                                    always(!vars.canPassUnderStage),
-                              );
-                            });
-                          },
+                          title: "Can Pass Under Stage",
                         ),
                         const SizedBox(
                           width: 20,
                         ),
-                        ToggleButtons(
-                          fillColor: const Color.fromARGB(10, 244, 67, 54),
-                          selectedColor: Colors.blue,
-                          selectedBorderColor: Colors.blue,
-                          children: const <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text("Can Trap"),
-                            ),
-                          ],
+                        PitToggle(
+                          setState: () => setState(() {
+                            vars = vars.copyWith(
+                              trap: always(!vars.trap),
+                            );
+                          }),
                           isSelected: <bool>[vars.trap],
-                          onPressed: (final int i) {
-                            setState(() {
-                              vars = vars.copyWith(
-                                trap: always(!vars.trap),
-                              );
-                            });
-                          },
+                          title: "Can Trap",
                         ),
                       ],
                     ),
