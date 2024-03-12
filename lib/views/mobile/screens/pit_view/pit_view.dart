@@ -243,125 +243,126 @@ class _PitViewState extends State<PitView> {
                     const SizedBox(
                       height: 20,
                     ),
-                    ToggleButtons(
-                      fillColor: const Color.fromARGB(10, 244, 67, 54),
-                      selectedColor: Colors.blue,
-                      selectedBorderColor: Colors.blue,
-                      children: const <Widget>[
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Text("Climb"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ToggleButtons(
+                          fillColor: const Color.fromARGB(10, 244, 67, 54),
+                          selectedColor: Colors.blue,
+                          selectedBorderColor: Colors.blue,
+                          children: const <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Text("Climb"),
+                            ),
+                          ],
+                          isSelected: <bool>[vars.climb],
+                          onPressed: (final int i) {
+                            setState(() {
+                              vars = vars.copyWith(
+                                climb: always(!vars.climb),
+                              );
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        ToggleButtons(
+                          fillColor: const Color.fromARGB(10, 244, 67, 54),
+                          selectedColor: Colors.blue,
+                          selectedBorderColor: Colors.blue,
+                          children: const <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Text("Can Harmonize"),
+                            ),
+                          ],
+                          isSelected: <bool>[vars.harmony],
+                          onPressed: (final int i) {
+                            setState(() {
+                              vars = vars.copyWith(
+                                harmony: always(!vars.harmony),
+                              );
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        ToggleButtons(
+                          fillColor: const Color.fromARGB(10, 244, 67, 54),
+                          selectedColor: Colors.blue,
+                          selectedBorderColor: Colors.blue,
+                          children: const <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Text("Can Eject"),
+                            ),
+                          ],
+                          isSelected: <bool>[vars.canEject],
+                          onPressed: (final int i) {
+                            setState(() {
+                              vars = vars.copyWith(
+                                canEject: always(!vars.canEject),
+                              );
+                            });
+                          },
                         ),
                       ],
-                      isSelected: <bool>[vars.climb],
-                      onPressed: (final int i) {
-                        setState(() {
-                          vars = vars.copyWith(
-                            climb: always(!vars.climb),
-                          );
-                        });
-                      },
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    Switcher(
-                      borderRadiusGeometry: defaultBorderRadius,
-                      selected: vars.harmony.mapNullable(
-                            (final bool canHarmonize) => canHarmonize ? 1 : 0,
-                          ) ??
-                          -1,
-                      labels: const <String>[
-                        "Can't Harmonize",
-                        "Can Harmonize",
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ToggleButtons(
+                          fillColor: const Color.fromARGB(10, 244, 67, 54),
+                          selectedColor: Colors.blue,
+                          selectedBorderColor: Colors.blue,
+                          children: const <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Text("Can Pass Under Stage"),
+                            ),
+                          ],
+                          isSelected: <bool>[vars.canPassUnderStage],
+                          onPressed: (final int i) {
+                            setState(() {
+                              vars = vars.copyWith(
+                                canPassUnderStage:
+                                    always(!vars.canPassUnderStage),
+                              );
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        ToggleButtons(
+                          fillColor: const Color.fromARGB(10, 244, 67, 54),
+                          selectedColor: Colors.blue,
+                          selectedBorderColor: Colors.blue,
+                          children: const <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Text("Can Trap"),
+                            ),
+                          ],
+                          isSelected: <bool>[vars.trap],
+                          onPressed: (final int i) {
+                            setState(() {
+                              vars = vars.copyWith(
+                                trap: always(!vars.trap),
+                              );
+                            });
+                          },
+                        ),
                       ],
-                      colors: const <Color>[
-                        Colors.white,
-                        Colors.white,
-                      ],
-                      onChange: (final int selection) {
-                        setState(() {
-                          vars = vars.copyWith(
-                            harmony: () =>
-                                <int, bool>{1: true, 0: false}[selection],
-                          );
-                        });
-                      },
                     ),
                     const SizedBox(
                       height: 20,
-                    ),
-                    Switcher(
-                      borderRadiusGeometry: defaultBorderRadius,
-                      selected: vars.canEject.mapNullable(
-                            (final bool canEject) => canEject ? 1 : 0,
-                          ) ??
-                          -1,
-                      labels: const <String>[
-                        "Can't Eject",
-                        "Can Eject",
-                      ],
-                      colors: const <Color>[
-                        Colors.white,
-                        Colors.white,
-                      ],
-                      onChange: (final int selection) {
-                        setState(() {
-                          vars = vars.copyWith(
-                            canEject: () =>
-                                <int, bool>{1: true, 0: false}[selection],
-                          );
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Switcher(
-                      borderRadiusGeometry: defaultBorderRadius,
-                      selected: vars.canPassUnderStage.mapNullable(
-                            (final bool canPassUnderStage) =>
-                                canPassUnderStage ? 1 : 0,
-                          ) ??
-                          -1,
-                      labels: const <String>[
-                        "Can't Pass Under Stage",
-                        "Can Pass Under Stage",
-                      ],
-                      colors: const <Color>[
-                        Colors.white,
-                        Colors.white,
-                      ],
-                      onChange: (final int selection) {
-                        setState(() {
-                          vars = vars.copyWith(
-                            canPassUnderStage: () =>
-                                <int, bool>{1: true, 0: false}[selection],
-                          );
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Switcher(
-                      borderRadiusGeometry: defaultBorderRadius,
-                      selected: vars.trap,
-                      labels: const <String>[
-                        "Can't Trap",
-                        "Can Trap",
-                      ],
-                      colors: const <Color>[
-                        Colors.white,
-                        Colors.white,
-                      ],
-                      onChange: (final int selection) {
-                        setState(() {
-                          vars = vars.copyWith(
-                            trap: () => selection,
-                          );
-                        });
-                      },
                     ),
                     Visibility(
                       visible: widget.initialVars == null,
@@ -438,7 +439,7 @@ class _PitViewState extends State<PitView> {
 }
 
 const String insertMutation = r"""
-mutation InsertPit($climb: Boolean!, $all_range_shooting: Boolean!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $drivetrain_id: Int, $drivemotor_id: Int, $width: float8!, $weight: float8!, $url: String!, $trap: Int!, $team_id: Int, $notes: String, $length: float8!, $harmony: Boolean!) {
+mutation InsertPit($climb: Boolean!, $all_range_shooting: Boolean!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $drivetrain_id: Int, $drivemotor_id: Int, $width: float8!, $weight: float8!, $url: String!, $trap: Boolean!, $team_id: Int, $notes: String, $length: float8!, $harmony: Boolean!) {
   insert_pit(objects: {climb: $climb, all_range_shooting: $all_range_shooting, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, drivetrain_id: $drivetrain_id, drivemotor_id: $drivemotor_id, width: $width, weight: $weight, url: $url, trap: $trap, team_id: $team_id, notes: $notes, length: $length, harmony: $harmony}) {
     affected_rows
   }
@@ -446,7 +447,7 @@ mutation InsertPit($climb: Boolean!, $all_range_shooting: Boolean!, $can_eject: 
 """;
 
 const String updateMutation = r"""
-mutation UpdatePit( $climb: Boolean!, $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Int!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!, $all_range_shooting: Boolean!) {
+mutation UpdatePit( $climb: Boolean!, $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Boolean!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!, $all_range_shooting: Boolean!) {
   update_pit(where: { team_id: {_eq: $team_id}}, _set: { climb: $climb, drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes, team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, length: $length, width: $width, all_range_shooting: $all_range_shooting,}) {
     affected_rows
   }

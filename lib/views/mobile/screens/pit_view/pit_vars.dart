@@ -13,11 +13,11 @@ class PitVars implements HasuraVars {
         notes = "",
         teamId = null,
         weight = null,
-        harmony = null,
-        trap = 0,
+        harmony = false,
+        trap = false,
         url = null,
-        canEject = null,
-        canPassUnderStage = null,
+        canEject = false,
+        canPassUnderStage = false,
         length = null,
         width = null,
         allRangeShooting = null,
@@ -48,11 +48,11 @@ class PitVars implements HasuraVars {
     final double? Function()? weight,
     final double? Function()? length,
     final double? Function()? width,
-    final bool? Function()? harmony,
-    final int Function()? trap,
+    final bool Function()? harmony,
+    final bool Function()? trap,
     final String? Function()? url,
-    final bool? Function()? canEject,
-    final bool? Function()? canPassUnderStage,
+    final bool Function()? canEject,
+    final bool Function()? canPassUnderStage,
     final bool? Function()? allRangeShooting,
     final bool Function()? climb,
   }) =>
@@ -85,11 +85,11 @@ class PitVars implements HasuraVars {
   final double? weight;
   final double? length;
   final double? width;
-  final bool? canPassUnderStage;
-  final bool? harmony;
-  final int trap;
+  final bool canPassUnderStage;
+  final bool harmony;
+  final bool trap;
   final String? url;
-  final bool? canEject;
+  final bool canEject;
   final bool? allRangeShooting;
   final bool climb;
   @override
@@ -103,12 +103,12 @@ class PitVars implements HasuraVars {
         "weight": weight,
         "length": length,
         "width": width,
-        "harmony": harmony ?? false,
+        "harmony": harmony,
         "trap": trap,
         "can_pass_under_stage": canPassUnderStage,
         "url": url,
-        "can_eject": canEject ?? false,
-        "all_range_shooting": allRangeShooting ?? false,
+        "can_eject": canEject,
+        "all_range_shooting": allRangeShooting,
         "climb": climb,
       };
 
@@ -120,11 +120,11 @@ class PitVars implements HasuraVars {
         weight: always(null),
         length: always(null),
         width: always(null),
-        harmony: always(null),
-        trap: always(0),
-        canPassUnderStage: always(null),
+        harmony: always(false),
+        trap: always(false),
+        canPassUnderStage: always(false),
         url: always(null),
-        canEject: always(null),
+        canEject: always(false),
         allRangeShooting: always(null),
         climb: always(false),
       );
