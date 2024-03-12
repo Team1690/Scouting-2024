@@ -190,6 +190,12 @@ class CalculatedTechnicalData<T extends num> implements TechnicalData<T> {
         (final TechnicalData<int> techdata) => techdata.missedTele,
       );
 
+  @override
+  T get delivery => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techData) => techData.delivery,
+      );
+
   T caclulateOnListOfField(
     final int Function(int, int) combine,
     final List<int> Function(TechnicalData<int>) getFields,
