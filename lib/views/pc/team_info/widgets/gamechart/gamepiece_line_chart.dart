@@ -94,7 +94,7 @@ class GamepiecesLineChart extends StatelessWidget {
               inputedColors: const <Color>[
                 Colors.green,
                 Colors.red,
-                Colors.yellow
+                Colors.yellow,
               ],
               distanceFromHighest: 4,
               dataSet: <List<int>>[
