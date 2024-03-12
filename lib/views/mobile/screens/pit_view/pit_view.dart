@@ -3,6 +3,7 @@ import "package:graphql/client.dart";
 import "package:image_picker/image_picker.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
+import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -228,14 +229,16 @@ class _PitViewState extends State<PitView> {
                       onChange: (final int selection) {
                         setState(() {
                           vars = vars.copyWith(
-                            allRangeShooting: () =>
-                                <int, bool>{1: true, 0: false}[selection],
+                            allRangeShooting: () => <int, ShootingRange>{
+                              0: ShootingRange.closeRange,
+                              1: ShootingRange.allRanges,
+                            }[selection],
                           );
                         });
                       },
                       selected: vars.allRangeShooting.mapNullable(
-                            (final bool canAllRangeShoot) =>
-                                canAllRangeShoot ? 1 : 0,
+                            (final ShootingRange canAllRangeShoot) =>
+                                canAllRangeShoot.index == 1 ? 1 : 0,
                           ) ??
                           -1,
                       borderRadiusGeometry: defaultBorderRadius,
@@ -439,16 +442,16 @@ class _PitViewState extends State<PitView> {
 }
 
 const String insertMutation = r"""
-mutation InsertPit($climb: Boolean!, $all_range_shooting: Boolean!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $drivetrain_id: Int, $drivemotor_id: Int, $width: float8!, $weight: float8!, $url: String!, $trap: Boolean!, $team_id: Int, $notes: String, $length: float8!, $harmony: Boolean!) {
-  insert_pit(objects: {climb: $climb, all_range_shooting: $all_range_shooting, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, drivetrain_id: $drivetrain_id, drivemotor_id: $drivemotor_id, width: $width, weight: $weight, url: $url, trap: $trap, team_id: $team_id, notes: $notes, length: $length, harmony: $harmony}) {
+mutation InsertPit($climb: Boolean!, $shooting_range_id: Int, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $drivetrain_id: Int, $drivemotor_id: Int, $width: float8!, $weight: float8!, $url: String!, $trap: Boolean!, $team_id: Int, $notes: String, $length: float8!, $harmony: Boolean!) {
+  insert_pit(objects: {climb: $climb, shooting_range_id: $shooting_range_id, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, drivetrain_id: $drivetrain_id, drivemotor_id: $drivemotor_id, width: $width, weight: $weight, url: $url, trap: $trap, team_id: $team_id, notes: $notes, length: $length, harmony: $harmony}) {
     affected_rows
   }
 }
 """;
 
 const String updateMutation = r"""
-mutation UpdatePit( $climb: Boolean!, $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Boolean!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!, $all_range_shooting: Boolean!) {
-  update_pit(where: { team_id: {_eq: $team_id}}, _set: { climb: $climb, drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes, team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, length: $length, width: $width, all_range_shooting: $all_range_shooting,}) {
+mutation UpdatePit( $climb: Boolean!, $drivemotor_id: Int, $drivetrain_id: Int, $notes: String, $team_id: Int, $weight: float8!, $harmony: Boolean!, $trap: Boolean!, $url: String!, $can_eject: Boolean!, $can_pass_under_stage: Boolean!, $length: float8!, $width: float8!, $shooting_range_id: Int) {
+  update_pit(where: { team_id: {_eq: $team_id}}, _set: { climb: $climb, drivemotor_id: $drivemotor_id, drivetrain_id: $drivetrain_id, notes: $notes, team_id: $team_id, weight: $weight, harmony: $harmony, trap: $trap, url: $url, can_eject: $can_eject, can_pass_under_stage: $can_pass_under_stage, length: $length, width: $width, shooting_range_id: $shooting_range_id}) {
     affected_rows
   }
 }

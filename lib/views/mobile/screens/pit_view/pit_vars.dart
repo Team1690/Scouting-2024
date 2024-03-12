@@ -3,6 +3,7 @@ import "package:flutter/widgets.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
+import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 
@@ -53,7 +54,7 @@ class PitVars implements HasuraVars {
     final String? Function()? url,
     final bool Function()? canEject,
     final bool Function()? canPassUnderStage,
-    final bool? Function()? allRangeShooting,
+    final ShootingRange? Function()? allRangeShooting,
     final bool Function()? climb,
   }) =>
       PitVars.all(
@@ -90,7 +91,7 @@ class PitVars implements HasuraVars {
   final bool trap;
   final String? url;
   final bool canEject;
-  final bool? allRangeShooting;
+  final ShootingRange? allRangeShooting;
   final bool climb;
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
@@ -108,7 +109,8 @@ class PitVars implements HasuraVars {
         "can_pass_under_stage": canPassUnderStage,
         "url": url,
         "can_eject": canEject,
-        "all_range_shooting": allRangeShooting,
+        "shooting_range_id":
+            IdProvider.of(context).shootingRange.enumToId[allRangeShooting],
         "climb": climb,
       };
 
