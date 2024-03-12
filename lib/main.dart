@@ -9,6 +9,7 @@ import "package:scouting_frontend/models/enums/drive_train_enum.dart";
 import "package:scouting_frontend/models/enums/fault_status_enum.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
+import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -32,6 +33,7 @@ void main() async {
     "robot_field_status",
     "fault_status",
     "starting_position",
+    "shooting_range",
   ], <String>[
     "match_type",
   ]);
@@ -50,6 +52,8 @@ void main() async {
       nameToIdToEnumToId(FaultStatus.values, enums["fault_status"]!);
   final Map<StartingPosition, int> startingPosition =
       nameToIdToEnumToId(StartingPosition.values, enums["starting_position"]!);
+  final Map<ShootingRange, int> shootingRange =
+      nameToIdToEnumToId(ShootingRange.values, enums["shooting_range"]!);
   final List<ScheduleMatch> matches = await fetchMatches(
     IdTable<MatchType>(
       matchTypes,
@@ -68,6 +72,7 @@ void main() async {
       driveMotorIds: driveMotors,
       robotFieldStatusIds: robotFieldStatuses,
       startingPosition: startingPosition,
+      shootingRange: shootingRange,
     ),
   );
 }
