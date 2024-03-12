@@ -6,16 +6,19 @@ import "package:scouting_frontend/views/constants.dart";
 
 class GamepiecesLineChart extends StatelessWidget {
   const GamepiecesLineChart({
+    super.key,
     required this.title,
     required this.matches,
     required this.data,
     this.missedData,
+    this.deliveryData,
   });
 
   final String title;
   final List<MatchData> matches;
   final int Function(MatchData) data;
   final int Function(MatchData)? missedData;
+  final int Function(MatchData)? deliveryData;
   @override
   Widget build(final BuildContext context) => Stack(
         children: <Widget>[
@@ -37,6 +40,10 @@ class GamepiecesLineChart extends StatelessWidget {
                             TextSpan(
                               text: " Didnt Work ",
                               style: TextStyle(color: Colors.red),
+                            ),
+                            TextSpan(
+                              text: " Did Defense ",
+                              style: TextStyle(color: Colors.blue),
                             ),
                           ],
                         ),
