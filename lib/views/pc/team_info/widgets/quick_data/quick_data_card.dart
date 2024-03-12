@@ -134,10 +134,16 @@ class QuickDataCard extends StatelessWidget {
                             "Avg Trap Amount: ${data.avgData.trapAmount.toStringAsFixed(1)}",
                           ),
                           Text(
+                            "Avg Trap Amount: ${data.avgData.delivery.toStringAsFixed(1)}",
+                          ),
+                          Text(
                             "Trap Success Rate: ${data.trapSuccessRate.isNaN ? "No Data" : "${data.trapSuccessRate.toStringAsFixed(1)}%"}",
                           ),
                           Text(
                             "Median Trap Amount: ${data.medianData.trapAmount}",
+                          ),
+                          Text(
+                            "Median Delivery: ${data.medianData.delivery}",
                           ),
                         ],
                       ),
