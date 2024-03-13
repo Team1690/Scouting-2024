@@ -35,6 +35,7 @@ class TechnicalMatchData {
         robotFieldStatus: idProvider.robotFieldStatus
             .idToEnum[match["robot_field_status"]["id"] as int]!,
         harmonyWith: match["harmony_with"] as int,
+        //TODO: idprovider climb
         climb: climbTitleToEnum(match["climb"]["title"] as String),
         scheduleMatchId: match["schedule_match"]["id"] as int,
         data: TechnicalData.parse(match),

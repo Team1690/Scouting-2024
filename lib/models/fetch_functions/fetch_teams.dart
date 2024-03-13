@@ -25,9 +25,10 @@ subscription FetchTeams($ids: [Int!]) {
       schedule_match {
         id
         match_type {
-          title
+          id
         }
         match_number
+        happened
       }
       is_rematch
       defense_rating
@@ -44,9 +45,10 @@ subscription FetchTeams($ids: [Int!]) {
       schedule_match {
         id
         match_type {
-          title
+          id
         }
         match_number
+        happened
       }
       is_rematch
       auto_amp
@@ -60,16 +62,17 @@ subscription FetchTeams($ids: [Int!]) {
       trap_amount
       traps_missed
       climb {
-        title
+        id
         points
+        title
       }
       robot_field_status {
-        title
+        id
       }
       harmony_with
       scouter_name
       starting_position {
-        title
+        id
       }
     }
     name
@@ -83,14 +86,16 @@ subscription FetchTeams($ids: [Int!]) {
       is_rematch
       message
       fault_status {
-        title
+        id
       }
       schedule_match_id
       schedule_match {
+        id
         match_number
         match_type {
-          title
+          id
         }
+        happened
       }
       id
       team {
@@ -102,10 +107,10 @@ subscription FetchTeams($ids: [Int!]) {
     }
     pit {
       drivemotor {
-        title
+        id
       }
       drivetrain {
-        title
+        id
       }
       harmony
       notes
@@ -115,7 +120,8 @@ subscription FetchTeams($ids: [Int!]) {
       width
       url
       can_eject
-      all_range_shooting
+      climb
+      shooting_range_id
       can_pass_under_stage
       team {
         faults {
@@ -151,6 +157,7 @@ Stream<SplayTreeSet<TeamData>> fetchMultipleTeamData(
 
   final Stream<QueryResult<SplayTreeSet<TeamData>>> result = client.subscribe(
     SubscriptionOptions<SplayTreeSet<TeamData>>(
+      cacheRereadPolicy: CacheRereadPolicy.ignoreAll,
       parserFn: (final Map<String, dynamic> teams) =>
           SplayTreeSet<TeamData>.from(
         (teams["team"] as List<dynamic>)

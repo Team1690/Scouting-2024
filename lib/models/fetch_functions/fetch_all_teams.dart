@@ -36,7 +36,7 @@ subscription FetchAllTeams {
       trap
       can_pass_under_stage
       can_eject
-      all_range_shooting
+      shooting_range_id
     }
     id
     name
