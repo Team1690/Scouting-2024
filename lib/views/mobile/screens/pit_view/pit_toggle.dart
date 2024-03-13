@@ -3,12 +3,13 @@ import "package:flutter/material.dart";
 class PitToggle extends StatelessWidget {
   const PitToggle({
     super.key,
-    required this.setState,
+    required this.onPressed,
     required this.isSelected,
     required this.title,
   });
-  final void Function() setState;
-  final List<bool> isSelected;
+
+  final void Function() onPressed;
+  final bool isSelected;
   final String title;
 
   @override
@@ -22,7 +23,7 @@ class PitToggle extends StatelessWidget {
             child: Text(title),
           ),
         ],
-        isSelected: isSelected,
-        onPressed: (final int i) => setState,
+        isSelected: <bool>[isSelected],
+        onPressed: (final int i) => onPressed(),
       );
 }
