@@ -8,13 +8,13 @@ import "package:scouting_frontend/models/data/starting_position_enum.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "dart:ui" as ui;
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/views/common/auto_path/multiple_path_canvas.dart";
+import "package:scouting_frontend/legacy/auto_path/multiple_path_canvas.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/fetch_auto_path.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
+import "package:scouting_frontend/legacy/auto_path/auto_path.dart";
+import "package:scouting_frontend/legacy/auto_path/fetch_auto_path.dart";
+import "package:scouting_frontend/legacy/auto_path/select_path.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_match_card.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 

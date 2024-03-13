@@ -2,7 +2,7 @@ import "dart:ui" as ui;
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/select_path.dart";
+import "package:scouting_frontend/legacy/auto_path/select_path.dart";
 
 class AutoPath extends StatefulWidget {
   const AutoPath({

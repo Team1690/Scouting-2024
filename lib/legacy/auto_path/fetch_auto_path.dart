@@ -12,8 +12,8 @@ import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path_csv.dart";
+import "package:scouting_frontend/legacy/auto_path/auto_path.dart";
+import "package:scouting_frontend/legacy/auto_path/auto_path_csv.dart";
 import "package:http/http.dart" as http;
 
 Future<List<AutoPathByUrl>> fetchUrls(

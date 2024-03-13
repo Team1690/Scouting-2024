@@ -4,7 +4,7 @@ import "package:scouting_frontend/models/data/specific_match_data.dart";
 import "package:scouting_frontend/models/data/specific_summary_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/views/pc/alliance_auto_planner/auto_planner_screen.dart";
+import "package:scouting_frontend/legacy/alliance_auto_planner/auto_planner_screen.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/view_rating_dropdown_line.dart";
 
 class ScoutingSpecific extends StatefulWidget {

@@ -2,7 +2,7 @@ import "dart:typed_data";
 import "dart:ui" as ui;
 
 import "package:collection/collection.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
+import "package:scouting_frontend/legacy/auto_path/auto_path.dart";
 
 Future<Uint8List> createCsv(final Sketch sketch) async => Uint8List.fromList(
       sketch.points

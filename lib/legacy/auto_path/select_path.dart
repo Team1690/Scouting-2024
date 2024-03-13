@@ -2,8 +2,8 @@ import "dart:ui" as ui;
 
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
-import "package:scouting_frontend/views/common/auto_path/path_canvas.dart";
+import "package:scouting_frontend/legacy/auto_path/auto_path.dart";
+import "package:scouting_frontend/legacy/auto_path/path_canvas.dart";
 
 class SelectPath extends StatefulWidget {
   const SelectPath({
