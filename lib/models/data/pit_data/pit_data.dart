@@ -1,5 +1,6 @@
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
+import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 
@@ -19,6 +20,7 @@ class PitData {
     required this.canEject,
     required this.canPassUnderStage,
     required this.allRangeShooting,
+    required this.climb,
   });
 
   final DriveTrain driveTrainType;
@@ -28,15 +30,14 @@ class PitData {
   final double length;
   final double width;
   final bool harmony;
-  final int trap;
+  final bool trap;
   final bool canEject;
   final bool canPassUnderStage;
   final String url;
   final List<String>? faultMessages;
   final LightTeam team;
-  final bool allRangeShooting;
-
-  bool get canTrap => trap > 0;
+  final ShootingRange allRangeShooting;
+  final bool climb;
 
   static PitData? parse(final dynamic pit, final IdProvider idProvider) =>
       pit != null
@@ -55,10 +56,12 @@ class PitData {
               width: (pit["width"] as num).toDouble(),
               team: LightTeam.fromJson(pit["team"]),
               harmony: pit["harmony"] as bool,
-              trap: pit["trap"] as int,
+              trap: pit["trap"] as bool,
               canEject: pit["can_eject"] as bool,
               canPassUnderStage: pit["can_pass_under_stage"] as bool,
-              allRangeShooting: pit["all_range_shooting"] as bool,
+              allRangeShooting: idProvider
+                  .shootingRange.idToEnum[pit["shooting_range_id"] as int]!,
+              climb: pit["climb"] as bool,
             )
           : null;
 }

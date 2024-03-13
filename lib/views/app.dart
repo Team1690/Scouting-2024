@@ -5,6 +5,7 @@ import "package:scouting_frontend/models/enums/drive_train_enum.dart";
 import "package:scouting_frontend/models/enums/fault_status_enum.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
+import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
@@ -25,6 +26,7 @@ class App extends StatelessWidget {
     required this.faultStatus,
     required this.matches,
     required this.startingPosition,
+    required this.shootingRange,
   });
   final List<ScheduleMatch> matches;
   final Map<RobotFieldStatus, int> robotFieldStatusIds;
@@ -35,6 +37,8 @@ class App extends StatelessWidget {
   final Map<MatchType, int> matchTypeIds;
   final Map<FaultStatus, int> faultStatus;
   final Map<StartingPosition, int> startingPosition;
+  final Map<ShootingRange, int> shootingRange;
+
   @override
   Widget build(final BuildContext context) => TeamProvider(
         teams: teams,
@@ -48,6 +52,7 @@ class App extends StatelessWidget {
             drivetrainIds: drivetrainIds,
             robotFieldStatusIds: robotFieldStatusIds,
             faultStatus: faultStatus,
+            shootingRange: shootingRange,
             child: MaterialApp(
               title: "Orbit Scouting",
               home: isPC(context) ? TeamInfoScreen() : const UserInput(),

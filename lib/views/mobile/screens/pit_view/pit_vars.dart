@@ -3,6 +3,7 @@ import "package:flutter/widgets.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
+import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 
@@ -13,14 +14,15 @@ class PitVars implements HasuraVars {
         notes = "",
         teamId = null,
         weight = null,
-        harmony = null,
-        trap = 0,
+        harmony = false,
+        trap = false,
         url = null,
-        canEject = null,
-        canPassUnderStage = null,
+        canEject = false,
+        canPassUnderStage = false,
         length = null,
         width = null,
-        allRangeShooting = null;
+        allRangeShooting = null,
+        climb = false;
 
   PitVars.all({
     required this.driveTrainType,
@@ -36,6 +38,7 @@ class PitVars implements HasuraVars {
     required this.length,
     required this.width,
     required this.allRangeShooting,
+    required this.climb,
   });
 
   PitVars copyWith({
@@ -46,12 +49,13 @@ class PitVars implements HasuraVars {
     final double? Function()? weight,
     final double? Function()? length,
     final double? Function()? width,
-    final bool? Function()? harmony,
-    final int Function()? trap,
+    final bool Function()? harmony,
+    final bool Function()? trap,
     final String? Function()? url,
-    final bool? Function()? canEject,
-    final bool? Function()? canPassUnderStage,
-    final bool? Function()? allRangeShooting,
+    final bool Function()? canEject,
+    final bool Function()? canPassUnderStage,
+    final ShootingRange? Function()? allRangeShooting,
+    final bool Function()? climb,
   }) =>
       PitVars.all(
         driveTrainType:
@@ -73,6 +77,7 @@ class PitVars implements HasuraVars {
         allRangeShooting: allRangeShooting != null
             ? allRangeShooting()
             : this.allRangeShooting,
+        climb: climb != null ? climb() : this.climb,
       );
   final DriveTrain? driveTrainType;
   final DriveMotor? driveMotorType;
@@ -81,12 +86,13 @@ class PitVars implements HasuraVars {
   final double? weight;
   final double? length;
   final double? width;
-  final bool? canPassUnderStage;
-  final bool? harmony;
-  final int trap;
+  final bool canPassUnderStage;
+  final bool harmony;
+  final bool trap;
   final String? url;
-  final bool? canEject;
-  final bool? allRangeShooting;
+  final bool canEject;
+  final ShootingRange? allRangeShooting;
+  final bool climb;
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
         "drivetrain_id":
@@ -98,12 +104,14 @@ class PitVars implements HasuraVars {
         "weight": weight,
         "length": length,
         "width": width,
-        "harmony": harmony ?? false,
+        "harmony": harmony,
         "trap": trap,
         "can_pass_under_stage": canPassUnderStage,
         "url": url,
-        "can_eject": canEject ?? false,
-        "all_range_shooting": allRangeShooting ?? false,
+        "can_eject": canEject,
+        "shooting_range_id":
+            IdProvider.of(context).shootingRange.enumToId[allRangeShooting],
+        "climb": climb,
       };
 
   PitVars reset() => copyWith(
@@ -114,11 +122,12 @@ class PitVars implements HasuraVars {
         weight: always(null),
         length: always(null),
         width: always(null),
-        harmony: always(null),
-        trap: always(0),
-        canPassUnderStage: always(null),
+        harmony: always(false),
+        trap: always(false),
+        canPassUnderStage: always(false),
         url: always(null),
-        canEject: always(null),
+        canEject: always(false),
         allRangeShooting: always(null),
+        climb: always(false),
       );
 }

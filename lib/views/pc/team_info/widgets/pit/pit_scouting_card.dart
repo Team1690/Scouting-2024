@@ -70,17 +70,14 @@ class PitScoutingCard extends StatelessWidget {
                 ),
                 const Divider(),
               ],
-              RobotHasSomething(
-                title: "Trap: ",
-                value: data.trap != 0,
-                numeralValue: data.trap,
-              ),
+              RobotHasSomething(title: "Trap: ", value: data.trap),
               RobotHasSomething(title: "Harmony: ", value: data.harmony),
               RobotHasSomething(title: "Can Eject: ", value: data.canEject),
               RobotHasSomething(
                 title: "Can Pass Under Stage",
                 value: data.canPassUnderStage,
               ),
+              RobotHasSomething(title: "Climb: ", value: data.climb),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(

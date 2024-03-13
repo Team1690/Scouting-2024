@@ -6,6 +6,7 @@ import "package:scouting_frontend/models/enums/drive_train_enum.dart";
 import "package:scouting_frontend/models/enums/fault_status_enum.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
+import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
 import "package:scouting_frontend/models/team_model.dart";
 
 class IdTable<T> {
@@ -47,6 +48,7 @@ class IdProvider extends InheritedWidget {
     required final Map<RobotFieldStatus, int> robotFieldStatusIds,
     required final Map<FaultStatus, int> faultStatus,
     required final Map<StartingPosition, int> startingPosition,
+    required final Map<ShootingRange, int> shootingRange,
   }) : this._inner(
           child: child,
           climb: IdTable<Climb>(climbIds),
@@ -56,6 +58,7 @@ class IdProvider extends InheritedWidget {
           robotFieldStatus: IdTable<RobotFieldStatus>(robotFieldStatusIds),
           faultStatus: IdTable<FaultStatus>(faultStatus),
           startingPosition: IdTable<StartingPosition>(startingPosition),
+          shootingRange: IdTable<ShootingRange>(shootingRange),
         );
 
   IdProvider._inner({
@@ -67,6 +70,7 @@ class IdProvider extends InheritedWidget {
     required this.robotFieldStatus,
     required this.faultStatus,
     required this.startingPosition,
+    required this.shootingRange,
   });
   final IdTable<RobotFieldStatus> robotFieldStatus;
   final IdTable<MatchType> matchType;
@@ -75,6 +79,7 @@ class IdProvider extends InheritedWidget {
   final IdTable<DriveMotor> drivemotor;
   final IdTable<FaultStatus> faultStatus;
   final IdTable<StartingPosition> startingPosition;
+  final IdTable<ShootingRange> shootingRange;
 
   @override
   bool updateShouldNotify(final IdProvider oldWidget) =>
@@ -84,7 +89,8 @@ class IdProvider extends InheritedWidget {
       driveTrain != oldWidget.driveTrain ||
       drivemotor != oldWidget.drivemotor ||
       faultStatus != oldWidget.faultStatus ||
-      startingPosition != oldWidget.startingPosition;
+      startingPosition != oldWidget.startingPosition ||
+      shootingRange != oldWidget.shootingRange;
 
   static IdProvider of(final BuildContext context) {
     final IdProvider? result =
