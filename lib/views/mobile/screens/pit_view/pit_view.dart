@@ -251,36 +251,40 @@ class _PitViewState extends State<PitView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         PitToggle(
-                          setState: () => setState(() {
+                          onPressed: () => setState(() {
+                            final bool newClimb = !vars.climb;
                             vars = vars.copyWith(
-                              climb: always(!vars.climb),
+                              climb: always(newClimb),
+                              harmony: always(false),
                             );
                           }),
-                          isSelected: <bool>[vars.climb],
+                          isSelected: vars.climb,
                           title: "Climb",
                         ),
                         const SizedBox(
                           width: 10,
                         ),
+                        if (vars.climb) ...<Widget>[
+                          PitToggle(
+                            onPressed: () => setState(() {
+                              vars = vars.copyWith(
+                                harmony: always(!vars.harmony),
+                              );
+                            }),
+                            isSelected: vars.harmony,
+                            title: "Can Harmonize",
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                        ],
                         PitToggle(
-                          setState: () => setState(() {
-                            vars = vars.copyWith(
-                              harmony: always(!vars.harmony),
-                            );
-                          }),
-                          isSelected: <bool>[vars.harmony],
-                          title: "Can Harmonize",
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        PitToggle(
-                          setState: () => setState(() {
+                          onPressed: () => setState(() {
                             vars = vars.copyWith(
                               canEject: always(!vars.canEject),
                             );
                           }),
-                          isSelected: <bool>[vars.canEject],
+                          isSelected: vars.canEject,
                           title: "Can Eject",
                         ),
                       ],
@@ -292,25 +296,25 @@ class _PitViewState extends State<PitView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         PitToggle(
-                          setState: () => setState(() {
+                          onPressed: () => setState(() {
                             vars = vars.copyWith(
                               canPassUnderStage:
                                   always(!vars.canPassUnderStage),
                             );
                           }),
-                          isSelected: <bool>[vars.canPassUnderStage],
+                          isSelected: vars.canPassUnderStage,
                           title: "Can Pass Under Stage",
                         ),
                         const SizedBox(
                           width: 20,
                         ),
                         PitToggle(
-                          setState: () => setState(() {
+                          onPressed: () => setState(() {
                             vars = vars.copyWith(
                               trap: always(!vars.trap),
                             );
                           }),
-                          isSelected: <bool>[vars.trap],
+                          isSelected: vars.trap,
                           title: "Can Trap",
                         ),
                       ],
