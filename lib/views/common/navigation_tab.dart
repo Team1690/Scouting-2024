@@ -49,19 +49,6 @@ class NavigationTab extends StatelessWidget {
               },
             ),
             ListTile(
-              title: const Text("Alliance Auto"),
-              leading: const Icon(Icons.route),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute<AutoPlannerScreen>(
-                    builder: (final BuildContext context) =>
-                        const AutoPlannerScreen(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
               title: const Text("Compare"),
               leading: const Icon(Icons.compare_arrows_rounded),
               onTap: () {

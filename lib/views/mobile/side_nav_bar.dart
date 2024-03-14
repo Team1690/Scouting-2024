@@ -67,11 +67,6 @@ class SideNavBar extends StatelessWidget {
               widget: PitView.new,
             ),
             const NavbarTile(
-              icon: Icons.route,
-              title: "Alliance Auto",
-              widget: AutoPlannerScreen.new,
-            ),
-            const NavbarTile(
               icon: Icons.construction,
               title: "Faults",
               widget: FaultView.new,

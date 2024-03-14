@@ -57,20 +57,6 @@ class CoachMatchScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(0.625),
                     child: Column(
                       children: <Widget>[
-                        IconButton(
-                          onPressed: () {
-                            match.mapNullable(
-                              (final ScheduleMatch match) => Navigator.push(
-                                context,
-                                MaterialPageRoute<AutoPlannerScreen>(
-                                  builder: (final BuildContext context) =>
-                                      AutoPlannerScreen(match.blueAlliance),
-                                ),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.route),
-                        ),
                         ...match.blueAlliance.map(
                           (final LightTeam e) => Expanded(
                             child: CoachTeamCard(
@@ -92,20 +78,6 @@ class CoachMatchScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(0.625),
                     child: Column(
                       children: <Widget>[
-                        IconButton(
-                          onPressed: () {
-                            match.mapNullable(
-                              (final ScheduleMatch match) => Navigator.push(
-                                context,
-                                MaterialPageRoute<AutoPlannerScreen>(
-                                  builder: (final BuildContext context) =>
-                                      AutoPlannerScreen(match.redAlliance),
-                                ),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.route),
-                        ),
                         ...match.redAlliance.map(
                           (final LightTeam e) => Expanded(
                             child: CoachTeamCard(

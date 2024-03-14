@@ -28,16 +28,6 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            ElevatedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute<AutoPlannerScreen>(
-                  builder: (final BuildContext context) =>
-                      AutoPlannerScreen(<LightTeam>[widget.team]),
-                ),
-              ),
-              child: const Text("View Auto"),
-            ),
             getSummaryText(
               "Driving",
               (final SpecificSummaryData msg) => msg.drivingText,
