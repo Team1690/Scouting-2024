@@ -1,4 +1,6 @@
 import "package:scouting_frontend/models/data/starting_position_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
@@ -16,18 +18,22 @@ import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dar
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 
 class App extends StatelessWidget {
-  App({
+  const App({
+    super.key,
+    required this.matches,
+    required this.robotFieldStatusIds,
     required this.teams,
     required this.climbIds,
-    required this.driveMotorIds,
     required this.drivetrainIds,
+    required this.driveMotorIds,
     required this.matchTypeIds,
-    required this.robotFieldStatusIds,
     required this.faultStatus,
-    required this.matches,
     required this.startingPosition,
     required this.shootingRange,
+    required this.autoGamepieceLocations,
+    required this.autoGamepieceStates,
   });
+
   final List<ScheduleMatch> matches;
   final Map<RobotFieldStatus, int> robotFieldStatusIds;
   final List<LightTeam> teams;
@@ -38,6 +44,8 @@ class App extends StatelessWidget {
   final Map<FaultStatus, int> faultStatus;
   final Map<StartingPosition, int> startingPosition;
   final Map<ShootingRange, int> shootingRange;
+  final Map<AutoGamepieceID, int> autoGamepieceLocations;
+  final Map<AutoGamepieceState, int> autoGamepieceStates;
 
   @override
   Widget build(final BuildContext context) => TeamProvider(
@@ -45,6 +53,8 @@ class App extends StatelessWidget {
         child: MatchesProvider(
           matches: matches,
           child: IdProvider(
+            autoGamepieceLocations: autoGamepieceLocations,
+            autoGamepieceStates: autoGamepieceStates,
             startingPosition: startingPosition,
             matchTypeIds: matchTypeIds,
             climbIds: climbIds,

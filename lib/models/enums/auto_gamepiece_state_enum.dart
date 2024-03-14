@@ -1,4 +1,6 @@
-enum AutoGamepieceState {
+import "package:scouting_frontend/models/id_providers.dart";
+
+enum AutoGamepieceState implements IdEnum {
   scoredSpeaker("Scored Speaker"),
   missedSpeaker("Missed Speaker"),
   scoredAmp("Scored Amp"),
@@ -7,5 +9,6 @@ enum AutoGamepieceState {
 
   const AutoGamepieceState(this.title);
 
+  @override
   final String title;
 }
