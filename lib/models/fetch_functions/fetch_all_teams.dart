@@ -13,10 +13,10 @@ subscription FetchAllTeams {
   team {
     pit {
       drivetrain {
-        title
+        id
       }
       drivemotor {
-        title
+        id
       }
       notes
       url
@@ -37,6 +37,7 @@ subscription FetchAllTeams {
       can_pass_under_stage
       can_eject
       shooting_range_id
+      climb
     }
     id
     name
@@ -60,14 +61,16 @@ subscription FetchAllTeams {
       is_rematch
       schedule_match {
         match_type {
-          title
+          id
         }
         match_number
         id
+        schedule_id
       }
       climb {
         title
         points
+        id
       }
       tele_amp
       tele_amp_missed
@@ -76,10 +79,10 @@ subscription FetchAllTeams {
       trap_amount
       traps_missed
       starting_position {
-        title
+        id
       }
       robot_field_status {
-        title
+        id
       }
     }
   }

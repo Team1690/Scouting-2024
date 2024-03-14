@@ -13,7 +13,6 @@ import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 
 class SideNavBar extends StatelessWidget {
-  SideNavBar();
   final TextEditingController teamSelectionController = TextEditingController();
   @override
   Widget build(final BuildContext context) => Drawer(
