@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
+import "package:scouting_frontend/views/constants.dart";
 
 class AutonomousGamepiece extends StatefulWidget {
   const AutonomousGamepiece({
@@ -21,9 +22,14 @@ class _AutonomousGamepieceState extends State<AutonomousGamepiece> {
 
   @override
   Widget build(final BuildContext context) => Card(
-        child: GestureDetector(
-          child: Text("Gamepiece: ${widget.gamepieceID.title}"),
-          onTap: () async {
+        margin: const EdgeInsets.all(defaultPadding / 2),
+        elevation: 4,
+        child: ElevatedButton(
+          child: Padding(
+            padding: const EdgeInsets.all(defaultPadding / 2),
+            child: Text("Gamepiece: ${widget.gamepieceID.title}"),
+          ),
+          onPressed: () async {
             gamepieceState = await showDialog<AutoGamepieceState>(
                   context: context,
                   builder: (final BuildContext context) => Dialog(
@@ -36,7 +42,10 @@ class _AutonomousGamepieceState extends State<AutonomousGamepiece> {
                                 onPressed: () {
                                   Navigator.pop(context, gamepieceState);
                                 },
-                                child: Text(gamepieceState.title),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(defaultPadding),
+                                  child: Text(gamepieceState.title),
+                                ),
                               ),
                             )
                             .toList(),

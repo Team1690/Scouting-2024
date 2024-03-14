@@ -1,10 +1,16 @@
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/autonomous/autonomous_gamepiece_card.dart";
 
 class AutonomousSelector extends StatefulWidget {
-  const AutonomousSelector({super.key});
+  const AutonomousSelector({
+    super.key,
+    required this.onChanged,
+  });
+
+  final void Function(Map<AutoGamepieceID, AutoGamepieceState>) onChanged;
 
   @override
   State<AutonomousSelector> createState() => _AutonomousSelectorState();
@@ -19,37 +25,48 @@ class _AutonomousSelectorState extends State<AutonomousSelector> {
 
   @override
   Widget build(final BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Column(
-            children: AutoGamepieceID.values
-                .where((final AutoGamepieceID element) =>
-                    element.title.characters.first == "L")
-                .map(
-                  (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
-                    gamepieceID: gamepieceId,
-                    onSelectedStateOfGamepiece:
-                        (final AutoGamepieceState state) {
-                      gamepieces[gamepieceId] = state;
-                    },
-                  ),
-                )
-                .toList(),
+          Expanded(
+            child: Column(
+              children: AutoGamepieceID.values
+                  .where(
+                    (final AutoGamepieceID element) =>
+                        element.title.characters.first == "L",
+                  )
+                  .map(
+                    (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
+                      gamepieceID: gamepieceId,
+                      onSelectedStateOfGamepiece:
+                          (final AutoGamepieceState state) {
+                        gamepieces[gamepieceId] = state;
+                        widget.onChanged(gamepieces);
+                      },
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
-          Column(
-            children: AutoGamepieceID.values
-                .where((final AutoGamepieceID element) =>
-                    element.title.characters.first == "M")
-                .map(
-                  (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
-                    gamepieceID: gamepieceId,
-                    onSelectedStateOfGamepiece:
-                        (final AutoGamepieceState state) {
-                      gamepieces[gamepieceId] = state;
-                    },
-                  ),
-                )
-                .toList(),
-          )
+          Expanded(
+            child: Column(
+              children: AutoGamepieceID.values
+                  .where(
+                    (final AutoGamepieceID element) =>
+                        element.title.characters.first == "M",
+                  )
+                  .map(
+                    (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
+                      gamepieceID: gamepieceId,
+                      onSelectedStateOfGamepiece:
+                          (final AutoGamepieceState state) {
+                        gamepieces[gamepieceId] = state;
+                        widget.onChanged(gamepieces);
+                      },
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
         ],
       );
 }
