@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/specific_match_card.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/specific_summary_card.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/match/specific_match_card.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/summary/specific_summary_card.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 
 class Specific extends StatefulWidget {

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/dropdown_line.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/specific_vars.dart";
+import "package:scouting_frontend/views/mobile/screens/specific_view/match/specific_vars.dart";
 
 class SpecificRating extends StatelessWidget {
   const SpecificRating({
