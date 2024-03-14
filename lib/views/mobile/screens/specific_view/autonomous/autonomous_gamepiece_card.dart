@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 
 class AutonomousGamepiece extends StatefulWidget {
@@ -8,7 +9,7 @@ class AutonomousGamepiece extends StatefulWidget {
     required this.onSelectedStateOfGamepiece,
   });
 
-  final int gamepieceID;
+  final AutoGamepieceID gamepieceID;
   final void Function(AutoGamepieceState) onSelectedStateOfGamepiece;
 
   @override
@@ -21,7 +22,7 @@ class _AutonomousGamepieceState extends State<AutonomousGamepiece> {
   @override
   Widget build(final BuildContext context) => Card(
         child: GestureDetector(
-          child: Text("${widget.gamepieceID}"),
+          child: Text("Gamepiece: ${widget.gamepieceID.title}"),
           onTap: () async {
             gamepieceState = await showDialog<AutoGamepieceState>(
                   context: context,
