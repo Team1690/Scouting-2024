@@ -65,7 +65,6 @@ subscription FetchAllTeams {
         }
         match_number
         id
-        schedule_id
       }
       climb {
         title
