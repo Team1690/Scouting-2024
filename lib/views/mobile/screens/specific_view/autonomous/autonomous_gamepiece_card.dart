@@ -22,11 +22,29 @@ class _AutonomousGamepieceState extends State<AutonomousGamepiece> {
   Widget build(final BuildContext context) => Card(
         child: GestureDetector(
           child: Text("${widget.gamepieceID}"),
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (final BuildContext context) => Container(),
-            );
+          onTap: () async {
+            gamepieceState = await showDialog<AutoGamepieceState>(
+                  context: context,
+                  builder: (final BuildContext context) => Dialog(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: AutoGamepieceState.values
+                            .map(
+                              (final AutoGamepieceState gamepieceState) =>
+                                  ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context, gamepieceState);
+                                },
+                                child: Text(gamepieceState.title),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ),
+                ) ??
+                gamepieceState;
+            widget.onSelectedStateOfGamepiece(gamepieceState);
           },
         ),
       );
