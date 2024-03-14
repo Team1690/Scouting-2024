@@ -4,7 +4,6 @@ import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
-import "package:scouting_frontend/legacy/auto_path/auto_path.dart";
 
 class SpecificVars implements HasuraVars {
   SpecificVars()
