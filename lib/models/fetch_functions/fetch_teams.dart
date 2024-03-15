@@ -16,7 +16,7 @@ import "package:scouting_frontend/models/data/specific_match_data.dart";
 import "package:scouting_frontend/models/data/specific_summary_data.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
-import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_view/fault_entry.dart";
 
 const String query = r"""
 subscription FetchTeams($ids: [Int!]) {
