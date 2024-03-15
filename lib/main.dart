@@ -45,9 +45,13 @@ void main() async {
   final Map<Climb, int> climbs =
       nameToIdToEnumToId(Climb.values, enums["climb"]!);
   final Map<AutoGamepieceID, int> autoGamepieceLocations = nameToIdToEnumToId(
-      AutoGamepieceID.values, enums["auto_gamepiece_location"]!);
+    AutoGamepieceID.values,
+    enums["auto_gamepiece_location"]!,
+  );
   final Map<AutoGamepieceState, int> autoGamepieceStates = nameToIdToEnumToId(
-      AutoGamepieceState.values, enums["auto_gamepiece_state"]!);
+    AutoGamepieceState.values,
+    enums["auto_gamepiece_state"]!,
+  );
   final Map<DriveTrain, int> driveTrains =
       nameToIdToEnumToId(DriveTrain.values, enums["drivetrain"]!);
   final Map<DriveMotor, int> driveMotors =
