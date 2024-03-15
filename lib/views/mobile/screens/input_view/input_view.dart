@@ -215,7 +215,6 @@ class _UserInputState extends State<UserInput> {
                             this.match = match;
                           });
                         },
-                        matchMode: MatchMode.tele,
                       ),
                       Row(
                         children: <Widget>[

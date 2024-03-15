@@ -99,10 +99,6 @@ Future<InputViewVars> fetchTechnicalMatch(
           robotFieldStatus: IdProvider.of(context)
               .robotFieldStatus
               .idToEnum[technicalMatch["robot_field_status"]["id"] as int]!,
-          autoAmp: technicalMatch["auto_amp"] as int,
-          autoAmpMissed: technicalMatch["auto_amp_missed"] as int,
-          autoSpeaker: technicalMatch["auto_speaker"] as int,
-          autoSpeakerMissed: technicalMatch["auto_speaker_missed"] as int,
           teleAmp: technicalMatch["tele_amp"] as int,
           teleAmpMissed: technicalMatch["tele_amp_missed"] as int,
           teleSpeaker: technicalMatch["tele_speaker"] as int,

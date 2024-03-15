@@ -98,55 +98,37 @@ class MatchModeGamePieceCounter extends StatelessWidget {
     super.key,
     required this.match,
     required this.onNewMatch,
-    required this.matchMode,
     required this.flickerScreen,
   });
   final m.InputViewVars match;
-  final m.MatchMode matchMode;
   final void Function(m.InputViewVars) onNewMatch;
   final void Function(int newValue, int oldValue) flickerScreen;
-
-  int modeValue(final int autoValue, final int teleValue) =>
-      switch (matchMode) {
-        m.MatchMode.auto => autoValue,
-        m.MatchMode.tele => teleValue,
-        m.MatchMode.endGame => 0,
-      };
 
   @override
   Widget build(final BuildContext context) => GamePieceCounter(
         flickerScreen: flickerScreen,
-        amp: modeValue(match.autoAmp, match.teleAmp),
-        ampMissed: modeValue(match.autoAmpMissed, match.teleAmpMissed),
-        speaker: modeValue(match.autoSpeaker, match.teleSpeaker),
-        speakerMissed:
-            modeValue(match.autoSpeakerMissed, match.teleSpeakerMissed),
+        amp: match.teleAmp,
+        ampMissed: match.teleAmpMissed,
+        speaker: match.teleSpeaker,
+        speakerMissed: match.teleSpeakerMissed,
         onAmpChange: (final int amp) {
           onNewMatch(
-            matchMode == m.MatchMode.tele
-                ? match.copyWith(teleAmp: always(amp))
-                : match.copyWith(autoAmp: always(amp)),
+            match.copyWith(teleAmp: always(amp)),
           );
         },
         onAmpMissedChange: (final int ampMissed) {
           onNewMatch(
-            matchMode == m.MatchMode.tele
-                ? match.copyWith(teleAmpMissed: always(ampMissed))
-                : match.copyWith(autoAmpMissed: always(ampMissed)),
+            match.copyWith(teleAmpMissed: always(ampMissed)),
           );
         },
         onSpeakerChange: (final int speaker) {
           onNewMatch(
-            matchMode == m.MatchMode.tele
-                ? match.copyWith(teleSpeaker: always(speaker))
-                : match.copyWith(autoSpeaker: always(speaker)),
+            match.copyWith(teleSpeaker: always(speaker)),
           );
         },
         onSpeakerMissedChange: (final int speakerMissed) {
           onNewMatch(
-            matchMode == m.MatchMode.tele
-                ? match.copyWith(teleSpeakerMissed: always(speakerMissed))
-                : match.copyWith(autoSpeakerMissed: always(speakerMissed)),
+            match.copyWith(teleSpeakerMissed: always(speakerMissed)),
           );
         },
       );
