@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_view/fault_view.dart";
 
 class DeleteFault extends StatelessWidget {
   const DeleteFault({required this.faultId, required this.onFinished});

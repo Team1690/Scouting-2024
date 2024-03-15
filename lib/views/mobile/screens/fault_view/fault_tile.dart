@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_view/fault_entry.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_view/fault_view.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/change_fault_status.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/delete_fault.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/update_fault_message.dart";
-import "package:scouting_frontend/views/mobile/screens/fault_entry.dart";
 
 class FaultTile extends StatelessWidget {
   const FaultTile(this.e);

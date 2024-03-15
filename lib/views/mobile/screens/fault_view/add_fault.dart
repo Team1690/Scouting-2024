@@ -6,7 +6,7 @@ import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_view/fault_view.dart";
 import "package:scouting_frontend/views/mobile/team_and_match_selection.dart";
 
 class AddFault extends StatelessWidget {
