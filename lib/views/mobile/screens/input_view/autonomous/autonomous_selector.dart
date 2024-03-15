@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/autonomous/autonomous_gamepiece_card.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_gamepiece_card.dart";
 
 class AutonomousSelector extends StatefulWidget {
   const AutonomousSelector({

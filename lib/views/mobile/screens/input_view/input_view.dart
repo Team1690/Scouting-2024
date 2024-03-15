@@ -1,12 +1,16 @@
 import "dart:async";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
-import "package:scouting_frontend/models/input_view_vars.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/local_save_button.dart";
 import "package:scouting_frontend/views/mobile/manage_preferences.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_selector.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/climbing.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/fault_button.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/game_piece_counter.dart";
@@ -53,6 +57,7 @@ class _UserInputState extends State<UserInput> {
   final TextEditingController teamNumberController = TextEditingController();
   final TextEditingController scouterNameController = TextEditingController();
   bool toggleLightsState = false;
+  AutoGamepieces autoGamepieces = AutoGamepieces.base();
   late InputViewVars match = InputViewVars();
   // -1 means nothing
   late final Map<int, RobotFieldStatus> robotFieldStatusIndexToEnum =
@@ -190,19 +195,16 @@ class _UserInputState extends State<UserInput> {
                       const SizedBox(
                         height: 15,
                       ),
-                      SectionDivider(label: "Autonomous"),
-                      MatchModeGamePieceCounter(
-                        flickerScreen: flickerScreen,
-                        match: match,
-                        onNewMatch: (final InputViewVars match) {
-                          setState(() {
-                            this.match = match;
-                          });
+                      AutonomousSelector(
+                        onChanged: (
+                          final Map<AutoGamepieceID, AutoGamepieceState>
+                              gamepieces,
+                        ) {
+                          autoGamepieces = AutoGamepieces.fromMap(gamepieces);
                         },
-                        matchMode: MatchMode.auto,
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 15,
                       ),
                       SectionDivider(label: "Teleoperated"),
                       MatchModeGamePieceCounter(

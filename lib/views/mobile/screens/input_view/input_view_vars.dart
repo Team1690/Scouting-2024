@@ -1,4 +1,6 @@
 import "package:flutter/cupertino.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/id_providers.dart";
@@ -15,10 +17,6 @@ class InputViewVars implements HasuraVars {
         scouterName = "",
         robotFieldStatus = RobotFieldStatus.worked,
         delivery = 0,
-        autoAmp = 0,
-        autoAmpMissed = 0,
-        autoSpeaker = 0,
-        autoSpeakerMissed = 0,
         teleAmp = 0,
         teleAmpMissed = 0,
         teleSpeaker = 0,
@@ -35,10 +33,6 @@ class InputViewVars implements HasuraVars {
     required this.scheduleMatch,
     required this.scouterName,
     required this.robotFieldStatus,
-    required this.autoAmp,
-    required this.autoAmpMissed,
-    required this.autoSpeaker,
-    required this.autoSpeakerMissed,
     required this.teleAmp,
     required this.teleAmpMissed,
     required this.teleSpeaker,
@@ -57,10 +51,6 @@ class InputViewVars implements HasuraVars {
     final ScheduleMatch? Function()? scheduleMatch,
     final String? Function()? scouterName,
     final RobotFieldStatus Function()? robotFieldStatus,
-    final int Function()? autoAmp,
-    final int Function()? autoAmpMissed,
-    final int Function()? autoSpeaker,
-    final int Function()? autoSpeakerMissed,
     final int Function()? teleAmp,
     final int Function()? teleAmpMissed,
     final int Function()? teleSpeaker,
@@ -80,13 +70,6 @@ class InputViewVars implements HasuraVars {
         robotFieldStatus: robotFieldStatus != null
             ? robotFieldStatus()
             : this.robotFieldStatus,
-        autoAmp: autoAmp != null ? autoAmp() : this.autoAmp,
-        autoAmpMissed:
-            autoAmpMissed != null ? autoAmpMissed() : this.autoAmpMissed,
-        autoSpeaker: autoSpeaker != null ? autoSpeaker() : this.autoSpeaker,
-        autoSpeakerMissed: autoSpeakerMissed != null
-            ? autoSpeakerMissed()
-            : this.autoSpeakerMissed,
         teleAmp: teleAmp != null ? teleAmp() : this.teleAmp,
         teleAmpMissed:
             teleAmpMissed != null ? teleAmpMissed() : this.teleAmpMissed,
@@ -107,10 +90,6 @@ class InputViewVars implements HasuraVars {
   final ScheduleMatch? scheduleMatch;
   final String? scouterName;
   final RobotFieldStatus robotFieldStatus;
-  final int autoAmp;
-  final int autoAmpMissed;
-  final int autoSpeaker;
-  final int autoSpeakerMissed;
   final int teleAmp;
   final int teleAmpMissed;
   final int teleSpeaker;
@@ -129,10 +108,6 @@ class InputViewVars implements HasuraVars {
         "robot_field_status_id":
             IdProvider.of(context).robotFieldStatus.enumToId[robotFieldStatus]!,
         "is_rematch": isRematch,
-        "auto_amp": autoAmp,
-        "auto_amp_missed": autoAmpMissed,
-        "auto_speaker": autoSpeaker,
-        "auto_speaker_missed": autoSpeakerMissed,
         "tele_amp": teleAmp,
         "tele_amp_missed": teleAmpMissed,
         "tele_speaker": teleSpeaker,

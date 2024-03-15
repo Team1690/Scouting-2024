@@ -6,7 +6,7 @@ import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/autonomous/autonomous_selector.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_selector.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/match/specific_ratings.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/match/specific_vars.dart";
 import "package:scouting_frontend/views/mobile/submit_button.dart";
@@ -24,7 +24,6 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController teamController = TextEditingController();
   final TextEditingController matchController = TextEditingController();
-  Map<AutoGamepieceID, AutoGamepieceState>? autoGamepieces;
   late SpecificVars vars = SpecificVars();
   bool intialIsRed = false;
 
@@ -105,14 +104,6 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
                         isRematch: always(!vars.isRematch),
                       );
                     });
-                  },
-                ),
-                const SizedBox(height: 15.0),
-                AutonomousSelector(
-                  onChanged: (
-                    final Map<AutoGamepieceID, AutoGamepieceState> gamepieces,
-                  ) {
-                    autoGamepieces = gamepieces;
                   },
                 ),
                 const SizedBox(height: 15.0),

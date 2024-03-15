@@ -2,7 +2,7 @@ import "dart:convert";
 import "package:flutter/material.dart";
 import "package:progress_state_button/iconed_button.dart";
 import "package:progress_state_button/progress_button.dart";
-import "package:scouting_frontend/models/input_view_vars.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 class LocalSaveButton extends StatefulWidget {
