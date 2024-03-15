@@ -57,7 +57,6 @@ class _UserInputState extends State<UserInput> {
   final TextEditingController teamNumberController = TextEditingController();
   final TextEditingController scouterNameController = TextEditingController();
   bool toggleLightsState = false;
-  AutoGamepieces autoGamepieces = AutoGamepieces.base();
   late InputViewVars match = InputViewVars();
   // -1 means nothing
   late final Map<int, RobotFieldStatus> robotFieldStatusIndexToEnum =
@@ -200,7 +199,10 @@ class _UserInputState extends State<UserInput> {
                           final Map<AutoGamepieceID, AutoGamepieceState>
                               gamepieces,
                         ) {
-                          autoGamepieces = AutoGamepieces.fromMap(gamepieces);
+                          match = match.copyWith(
+                            autoGamepieces: () =>
+                                AutoGamepieces.fromMap(gamepieces),
+                          );
                         },
                       ),
                       const SizedBox(
@@ -363,8 +365,8 @@ class _UserInputState extends State<UserInput> {
       );
 
   String insertMutation(final bool hasFault, final String? faultMessage) => """
-mutation MyMutation(\$auto_amp: Int!, \$auto_amp_missed: Int!, \$auto_speaker: Int!, \$auto_speaker_missed: Int!, \$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!) {
-  insert_technical_match(objects: {auto_amp: \$auto_amp, auto_amp_missed: \$auto_amp_missed, auto_speaker: \$auto_speaker, auto_speaker_missed: \$auto_speaker_missed, cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery}) {
+mutation MyMutation(\$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!, \$L0_id: Int!, \$L1_id: Int!, \$L2_id: Int!, \$M0_id: Int!, \$M1_id: Int!, \$M2_id: Int!, \$M3_id: Int!, \$M4_id: Int!) {
+  insert_technical_match(objects: { cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery, L0_id: \$L0_id, L1_id: \$L1_id, L2_id: \$L2_id, M0_id: \$M0_id, M1_id: \$M1_id, M2_id: \$M2_id, M3_id: \$M3_id, M4_id: \$M4_id}) {
     affected_rows
   }
   ${hasFault ? "" : """
@@ -377,8 +379,8 @@ insert_faults(objects: {team_id: \$team_id, message: ${faultMessage ?? "\"יש �
 """;
 
   String updateMutation = """
-mutation MyMutation(\$auto_amp: Int!, \$auto_amp_missed: Int!, \$auto_speaker: Int!, \$auto_speaker_missed: Int!, \$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!) {
-  update_technical_match(where: {team_id: {_eq: \$team_id}, schedule_id: {_eq: \$schedule_id}, is_rematch: {_eq: \$is_rematch}} _set: {auto_amp: \$auto_amp, auto_amp_missed: \$auto_amp_missed, auto_speaker: \$auto_speaker, auto_speaker_missed: \$auto_speaker_missed, cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery}) {
+mutation MyMutation(\$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!, \$L0_id: Int!, \$L1_id: Int!, \$L2_id: Int!, \$M0_id: Int!, \$M1_id: Int!, \$M2_id: Int!, \$M3_id: Int!, \$M4_id: Int!) {
+  update_technical_match(where: {team_id: {_eq: \$team_id}, schedule_id: {_eq: \$schedule_id}, is_rematch: {_eq: \$is_rematch}} _set: {cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery, L0_id: \$L0_id, L1_id: \$L1_id, L2_id: \$L2_id, M0_id: \$M0_id, M1_id: \$M1_id, M2_id: \$M2_id, M3_id: \$M3_id, M4_id: \$M4_id}) {
     affected_rows
   }
 """;

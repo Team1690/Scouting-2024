@@ -9,6 +9,7 @@ import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
 
 class InputViewVars implements HasuraVars {
   InputViewVars()
@@ -25,7 +26,8 @@ class InputViewVars implements HasuraVars {
         harmonyWith = 0,
         trapAmount = 0,
         trapsMissed = 0,
-        scoutedTeam = null;
+        scoutedTeam = null,
+        autoGamepieces = AutoGamepieces.base();
   InputViewVars.all({
     required this.delivery,
     required this.trapsMissed,
@@ -41,6 +43,7 @@ class InputViewVars implements HasuraVars {
     required this.harmonyWith,
     required this.trapAmount,
     required this.scoutedTeam,
+    required this.autoGamepieces,
   });
 
   InputViewVars cleared() =>
@@ -61,6 +64,7 @@ class InputViewVars implements HasuraVars {
     final int Function()? trapsMissed,
     final LightTeam? Function()? scoutedTeam,
     final int Function()? delivery,
+    final AutoGamepieces Function()? autoGamepieces,
   }) =>
       InputViewVars.all(
         isRematch: isRematch != null ? isRematch() : this.isRematch,
@@ -83,6 +87,8 @@ class InputViewVars implements HasuraVars {
         trapsMissed: trapsMissed != null ? trapsMissed() : this.trapsMissed,
         scoutedTeam: scoutedTeam != null ? scoutedTeam() : this.scoutedTeam,
         delivery: delivery != null ? delivery() : this.delivery,
+        autoGamepieces:
+            autoGamepieces != null ? autoGamepieces() : this.autoGamepieces,
       );
 
   final int delivery;
@@ -99,6 +105,7 @@ class InputViewVars implements HasuraVars {
   final int trapAmount;
   final int trapsMissed;
   final LightTeam? scoutedTeam;
+  final AutoGamepieces autoGamepieces;
 
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
@@ -117,5 +124,29 @@ class InputViewVars implements HasuraVars {
         "trap_amount": trapAmount,
         "traps_missed": trapsMissed,
         "delivery": delivery,
+        "L0_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.l0]!,
+        "L1_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.l1]!,
+        "L2_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.l2]!,
+        "M0_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.m0]!,
+        "M1_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.m1]!,
+        "M2_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.m2]!,
+        "M3_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.m3]!,
+        "M4_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.m4]!,
       };
 }

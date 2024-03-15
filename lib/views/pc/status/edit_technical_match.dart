@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -108,6 +109,32 @@ Future<InputViewVars> fetchTechnicalMatch(
               .idToEnum[technicalMatch["climb"]["id"] as int],
           harmonyWith: technicalMatch["harmony_with"] as int,
           trapAmount: technicalMatch["trap_amount"] as int,
+          autoGamepieces: AutoGamepieces(
+            l0: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["L0_id"] as int]!,
+            l1: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["L1_id"] as int]!,
+            l2: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["L2_id"] as int]!,
+            m0: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["M0_id"] as int]!,
+            m1: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["M1_id"] as int]!,
+            m2: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["M2_id"] as int]!,
+            m3: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["M3_id"] as int]!,
+            m4: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["M4_id"] as int]!,
+          ),
           scoutedTeam: teamForQuery,
         );
       },
