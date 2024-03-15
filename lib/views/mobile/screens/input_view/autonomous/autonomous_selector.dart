@@ -2,15 +2,19 @@ import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_gamepiece_card.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 
 class AutonomousSelector extends StatefulWidget {
   const AutonomousSelector({
     super.key,
-    required this.onChanged,
+    required this.match,
+    required this.onNewMatch,
   });
 
-  final void Function(Map<AutoGamepieceID, AutoGamepieceState>) onChanged;
+  final InputViewVars match;
+  final void Function(InputViewVars) onNewMatch;
 
   @override
   State<AutonomousSelector> createState() => _AutonomousSelectorState();
@@ -19,8 +23,14 @@ class AutonomousSelector extends StatefulWidget {
 class _AutonomousSelectorState extends State<AutonomousSelector> {
   Map<AutoGamepieceID, AutoGamepieceState> gamepieces =
       <AutoGamepieceID, AutoGamepieceState>{
-    for (final AutoGamepieceID id in AutoGamepieceID.values)
-      id: AutoGamepieceState.notTaken,
+    AutoGamepieceID.one: AutoGamepieceState.notTaken,
+    AutoGamepieceID.two: AutoGamepieceState.notTaken,
+    AutoGamepieceID.three: AutoGamepieceState.notTaken,
+    AutoGamepieceID.four: AutoGamepieceState.notTaken,
+    AutoGamepieceID.five: AutoGamepieceState.notTaken,
+    AutoGamepieceID.six: AutoGamepieceState.notTaken,
+    AutoGamepieceID.seven: AutoGamepieceState.notTaken,
+    AutoGamepieceID.eight: AutoGamepieceState.notTaken,
   };
 
   @override
@@ -40,7 +50,13 @@ class _AutonomousSelectorState extends State<AutonomousSelector> {
                       onSelectedStateOfGamepiece:
                           (final AutoGamepieceState state) {
                         gamepieces[gamepieceId] = state;
-                        widget.onChanged(gamepieces);
+                        widget.onNewMatch(
+                          widget.match.copyWith(
+                            autoGamepieces: () =>
+                                AutoGamepieces.fromMap(gamepieces),
+                          ),
+                        );
+                        setState(() {});
                       },
                     ),
                   )
@@ -60,7 +76,13 @@ class _AutonomousSelectorState extends State<AutonomousSelector> {
                       onSelectedStateOfGamepiece:
                           (final AutoGamepieceState state) {
                         gamepieces[gamepieceId] = state;
-                        widget.onChanged(gamepieces);
+                        widget.onNewMatch(
+                          widget.match.copyWith(
+                            autoGamepieces: () =>
+                                AutoGamepieces.fromMap(gamepieces),
+                          ),
+                        );
+                        setState(() {});
                       },
                     ),
                   )

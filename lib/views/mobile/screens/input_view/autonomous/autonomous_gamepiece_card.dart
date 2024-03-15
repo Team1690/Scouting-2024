@@ -21,13 +21,35 @@ class _AutonomousGamepieceState extends State<AutonomousGamepiece> {
   AutoGamepieceState gamepieceState = AutoGamepieceState.notTaken;
 
   @override
+  void initState() {
+    super.initState();
+    gamepieceState = AutoGamepieceState.notTaken;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    gamepieceState = AutoGamepieceState.notTaken;
+  }
+
+  @override
   Widget build(final BuildContext context) => Card(
         margin: const EdgeInsets.all(defaultPadding / 2),
         elevation: 4,
         child: ElevatedButton(
           child: Padding(
             padding: const EdgeInsets.all(defaultPadding / 2),
-            child: Text("Gamepiece: ${widget.gamepieceID.title}"),
+            child: Column(
+              children: <Widget>[
+                Text("Gamepiece: ${widget.gamepieceID.title}"),
+                Row(
+                  children: <Widget>[
+                    Text(gamepieceState.title),
+                    Icon(gamepieceState.icon),
+                  ],
+                ),
+              ],
+            ),
           ),
           onPressed: () async {
             gamepieceState = await showDialog<AutoGamepieceState>(
@@ -54,7 +76,9 @@ class _AutonomousGamepieceState extends State<AutonomousGamepiece> {
                   ),
                 ) ??
                 gamepieceState;
-            widget.onSelectedStateOfGamepiece(gamepieceState);
+            setState(() {
+              widget.onSelectedStateOfGamepiece(gamepieceState);
+            });
           },
         ),
       );

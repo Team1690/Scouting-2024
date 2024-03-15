@@ -194,14 +194,11 @@ class _UserInputState extends State<UserInput> {
                         height: 15,
                       ),
                       AutonomousSelector(
-                        onChanged: (
-                          final Map<AutoGamepieceID, AutoGamepieceState>
-                              gamepieces,
-                        ) {
-                          match = match.copyWith(
-                            autoGamepieces: () =>
-                                AutoGamepieces.fromMap(gamepieces),
-                          );
+                        match: match,
+                        onNewMatch: (final InputViewVars match) {
+                          setState(() {
+                            this.match = match;
+                          });
                         },
                       ),
                       const SizedBox(
