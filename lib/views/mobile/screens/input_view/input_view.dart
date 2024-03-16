@@ -63,7 +63,10 @@ class _UserInputState extends State<UserInput> {
     2: RobotFieldStatus.didDefense,
   };
 
-  bool initialFlag = false;
+  final bool initialFlag = false;
+
+  bool isRedAlliance = false;
+
   bool hasFault = false;
   String? faultMessage;
 
@@ -190,11 +193,20 @@ class _UserInputState extends State<UserInput> {
                       const SizedBox(
                         height: 15,
                       ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isRedAlliance = !isRedAlliance;
+                          });
+                        },
+                        icon: const Icon(Icons.switch_left),
+                      ),
                       AutonomousSelector(
-                        isRedAlliance: match.scheduleMatch != null
-                            ? match.scheduleMatch!.redAlliance
-                                .contains(match.scoutedTeam)
-                            : false,
+                        isRedAlliance: (match.scheduleMatch != null
+                                ? match.scheduleMatch!.redAlliance
+                                    .contains(match.scoutedTeam)
+                                : isRedAlliance) ||
+                            isRedAlliance,
                         match: match,
                         onNewMatch: (final InputViewVars match) {
                           setState(() {
@@ -323,6 +335,9 @@ class _UserInputState extends State<UserInput> {
                             match = match.cleared();
                             teamNumberController.clear();
                             matchController.clear();
+                            faultMessage = null;
+                            hasFault = false;
+                            isRedAlliance = false;
                           });
                         },
                         validate: () => formKey.currentState!.validate(),
@@ -344,6 +359,9 @@ class _UserInputState extends State<UserInput> {
                             match = match.cleared();
                             teamNumberController.clear();
                             matchController.clear();
+                            faultMessage = null;
+                            hasFault = false;
+                            isRedAlliance = false;
                           });
                         },
                         validate: () => formKey.currentState!.validate(),
