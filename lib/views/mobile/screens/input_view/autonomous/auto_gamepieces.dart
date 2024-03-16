@@ -26,13 +26,25 @@ class AutoGamepieces {
   AutoGamepieces.fromMap(
     final Map<AutoGamepieceID, AutoGamepieceState> gamepieces,
   )   : l0 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.notTaken,
-        l1 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.notTaken,
-        l2 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.notTaken,
-        m0 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.notTaken,
-        m1 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.notTaken,
-        m2 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.notTaken,
-        m3 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.notTaken,
-        m4 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.notTaken;
+        l1 = gamepieces[AutoGamepieceID.two] ?? AutoGamepieceState.notTaken,
+        l2 = gamepieces[AutoGamepieceID.three] ?? AutoGamepieceState.notTaken,
+        m0 = gamepieces[AutoGamepieceID.four] ?? AutoGamepieceState.notTaken,
+        m1 = gamepieces[AutoGamepieceID.five] ?? AutoGamepieceState.notTaken,
+        m2 = gamepieces[AutoGamepieceID.six] ?? AutoGamepieceState.notTaken,
+        m3 = gamepieces[AutoGamepieceID.seven] ?? AutoGamepieceState.notTaken,
+        m4 = gamepieces[AutoGamepieceID.eight] ?? AutoGamepieceState.notTaken;
+
+  Map<AutoGamepieceID, AutoGamepieceState> get asMap =>
+      <AutoGamepieceID, AutoGamepieceState>{
+        AutoGamepieceID.one: l0,
+        AutoGamepieceID.two: l1,
+        AutoGamepieceID.three: l2,
+        AutoGamepieceID.four: m0,
+        AutoGamepieceID.five: m1,
+        AutoGamepieceID.six: m2,
+        AutoGamepieceID.seven: m3,
+        AutoGamepieceID.eight: m4,
+      };
 
   final AutoGamepieceState l0;
   final AutoGamepieceState l1;

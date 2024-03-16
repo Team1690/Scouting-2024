@@ -14,7 +14,7 @@ import "package:scouting_frontend/views/mobile/screens/input_view/widgets/game_p
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/trap_amount.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/traps_missed.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
-import "package:scouting_frontend/views/mobile/screens/scouter_name_input.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/scouter_name_input.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
