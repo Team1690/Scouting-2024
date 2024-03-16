@@ -191,6 +191,10 @@ class _UserInputState extends State<UserInput> {
                         height: 15,
                       ),
                       AutonomousSelector(
+                        isRedAlliance: match.scheduleMatch != null
+                            ? match.scheduleMatch!.redAlliance
+                                .contains(match.scoutedTeam)
+                            : false,
                         match: match,
                         onNewMatch: (final InputViewVars match) {
                           setState(() {

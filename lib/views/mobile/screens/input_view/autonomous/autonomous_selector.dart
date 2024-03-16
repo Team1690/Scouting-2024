@@ -11,10 +11,12 @@ class AutonomousSelector extends StatelessWidget {
     super.key,
     required this.match,
     required this.onNewMatch,
+    this.isRedAlliance = false,
   });
 
   final InputViewVars match;
   final void Function(InputViewVars) onNewMatch;
+  final bool isRedAlliance;
 
   @override
   Widget build(final BuildContext context) {
@@ -22,18 +24,21 @@ class AutonomousSelector extends StatelessWidget {
         match.autoGamepieces.asMap;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
+      children: List<Widget>.generate(
+        2,
+        (final int index) => Expanded(
           child: Column(
-            children: AutoGamepieceID.values
+            children: gamepieces.keys
                 .where(
                   (final AutoGamepieceID element) =>
-                      element.title.characters.first == "L",
+                      (element.title.characters.first == "L" &&
+                          index == (isRedAlliance ? 1 : 0)) ||
+                      (element.title.characters.first == "M" &&
+                          index == (isRedAlliance ? 0 : 1)),
                 )
                 .map(
                   (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
-                    state:
-                        gamepieces[gamepieceId] ?? AutoGamepieceState.notTaken,
+                    state: gamepieces[gamepieceId]!,
                     gamepieceID: gamepieceId,
                     onSelectedStateOfGamepiece:
                         (final AutoGamepieceState state) {
@@ -50,34 +55,7 @@ class AutonomousSelector extends StatelessWidget {
                 .toList(),
           ),
         ),
-        Expanded(
-          child: Column(
-            children: AutoGamepieceID.values
-                .where(
-                  (final AutoGamepieceID element) =>
-                      element.title.characters.first == "M",
-                )
-                .map(
-                  (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
-                    state:
-                        gamepieces[gamepieceId] ?? AutoGamepieceState.notTaken,
-                    gamepieceID: gamepieceId,
-                    onSelectedStateOfGamepiece:
-                        (final AutoGamepieceState state) {
-                      gamepieces[gamepieceId] = state;
-                      onNewMatch(
-                        match.copyWith(
-                          autoGamepieces: () =>
-                              AutoGamepieces.fromMap(gamepieces),
-                        ),
-                      );
-                    },
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
