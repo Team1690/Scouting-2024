@@ -264,6 +264,11 @@ class _PickListState extends State<PickList> {
                                     pickListTeam.toString(),
                                   ),
                                 ),
+                                Expanded(
+                                  child: Text(
+                                    "Worked: ${pickListTeam.workedPercentage == double.negativeInfinity ? "No Data" : ("${pickListTeam.workedPercentage.toStringAsFixed(2)}%")}",
+                                  ),
+                                ),
                               ],
                             ),
                             trailing: const SizedBox(),
