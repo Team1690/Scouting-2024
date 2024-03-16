@@ -39,10 +39,9 @@
 //       }
 //     }
 //     is_rematch
-      
+
 //     }
 //   }
-
 
 //   """;
 //   final QueryResult<List<AutoPathByUrl>> result = await client.query(
