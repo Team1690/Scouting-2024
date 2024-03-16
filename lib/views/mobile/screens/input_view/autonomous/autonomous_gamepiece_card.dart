@@ -9,13 +9,17 @@ class AutonomousGamepiece extends StatelessWidget {
     required this.gamepieceID,
     required this.onSelectedStateOfGamepiece,
     required this.state,
+    this.color,
   });
 
   final AutoGamepieceID gamepieceID;
   final void Function(AutoGamepieceState) onSelectedStateOfGamepiece;
   final AutoGamepieceState state;
+  final Color? color;
+
   @override
   Widget build(final BuildContext context) => Card(
+        color: color,
         margin: const EdgeInsets.all(defaultPadding / 2),
         elevation: 4,
         child: ElevatedButton(
@@ -23,10 +27,21 @@ class AutonomousGamepiece extends StatelessWidget {
             padding: const EdgeInsets.all(defaultPadding / 2),
             child: Column(
               children: <Widget>[
-                Text("Gamepiece: ${gamepieceID.title}"),
+                Text(
+                  "Gamepiece: ${gamepieceID.title}",
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(state.title),
+                    Text(
+                      state.title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                     Icon(state.icon),
                   ],
                 ),

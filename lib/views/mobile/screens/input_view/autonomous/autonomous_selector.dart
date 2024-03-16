@@ -38,6 +38,7 @@ class AutonomousSelector extends StatelessWidget {
                 )
                 .map(
                   (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
+                    color: isRedAlliance ? Colors.red : Colors.blue,
                     state: gamepieces[gamepieceId]!,
                     gamepieceID: gamepieceId,
                     onSelectedStateOfGamepiece:
