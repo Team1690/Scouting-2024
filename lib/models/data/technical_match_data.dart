@@ -42,7 +42,12 @@ class TechnicalMatchData {
             idProvider.autoGamepieceStates
                 .idToEnum[match[autoGamepieceID.title]["id"] as int]!
           ),
-      ].sorted((
+      ]
+          .where(
+        (final (AutoGamepieceID, AutoGamepieceState) element) =>
+            element.$2 != AutoGamepieceState.noAttempt,
+      )
+          .sorted((
         final (AutoGamepieceID, AutoGamepieceState) a,
         final (AutoGamepieceID, AutoGamepieceState) b,
       ) {
