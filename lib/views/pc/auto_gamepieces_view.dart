@@ -1,13 +1,19 @@
 import "dart:typed_data";
 import "dart:ui" as ui;
 
+import "package:collection/collection.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:flutter/semantics.dart";
 import "package:flutter/services.dart";
 import "package:flutter/widgets.dart";
+import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/data/team_data/team_data.dart";
+import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
+import "package:scouting_frontend/models/fetch_functions/fetch_single_team.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
@@ -80,42 +86,127 @@ class _AutoFieldState extends State<AutoField> {
           const SizedBox(
             height: 10,
           ),
-          if (field != null)
-            Expanded(
-              child: Row(
-                children: [
-                  AspectRatio(
-                    aspectRatio: autoFieldWidth / fieldheight,
-                    child: LayoutBuilder(
-                      builder: (
-                        final BuildContext context,
-                        final BoxConstraints constraints,
-                      ) =>
-                          Listener(
-                        onPointerDown: (event) {
-                          final RenderBox box =
-                              context.findRenderObject() as RenderBox;
-
-                          final double pixelToMeterRatio =
-                              autoFieldWidth / constraints.maxWidth;
-                          final Offset offset = box
-                              .globalToLocal(event.position)
-                              .scale(pixelToMeterRatio, pixelToMeterRatio);
-                          print("${offset.dx} ${offset.dy}");
-                        },
-                        child: CustomPaint(
-                          painter: AutoFieldCanvas(
-                            fieldBackground: field!,
-                          ),
-                        ),
+          if (team != null && field != null)
+            StreamBuilder(
+                stream: fetchSingleTeamData(team!.id, context),
+                builder: (context, snapshot) => snapshot.mapSnapshot(
+                      onWaiting: () => const Center(
+                        child: CircularProgressIndicator(),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                      onError: (final Object error) => Text(error.toString()),
+                      onNoData: () => const Center(
+                        child: Text("No data"),
+                      ),
+                      onSuccess: (data) =>
+                          AutoGamepiecesData(data: data, field: field!),
+                    )),
         ],
       );
+}
+
+class AutoGamepiecesData extends StatefulWidget {
+  const AutoGamepiecesData({required this.data, required this.field});
+  final TeamData data;
+  final ui.Image field;
+
+  @override
+  State<AutoGamepiecesData> createState() => _AutoGamepiecesDataState();
+}
+
+class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
+  List<AutoGamepieceID> currentAuto = [];
+  AutoGamepieceID? selectedNote;
+  @override
+  Widget build(BuildContext context) {
+    final Map<List<AutoGamepieceID>, List<TechnicalMatchData>> autos = groupBy(
+      widget.data.technicalMatches,
+      (final TechnicalMatchData match) => match.autoGamepieces
+          .map((final (AutoGamepieceID, AutoGamepieceState) autogampiece) =>
+              autogampiece.$1)
+          .toList(),
+    );
+    if (autos.isNotEmpty) {
+      currentAuto = autos.entries.first.key;
+    }
+
+    return Expanded(
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: AspectRatio(
+              aspectRatio: autoFieldWidth / fieldheight,
+              child: LayoutBuilder(
+                builder: (
+                  final BuildContext context,
+                  final BoxConstraints constraints,
+                ) =>
+                    Listener(
+                  onPointerDown: (event) {
+                    final RenderBox box =
+                        context.findRenderObject() as RenderBox;
+
+                    final double pixelToMeterRatio =
+                        autoFieldWidth / constraints.maxWidth;
+                    final Offset offset = box
+                        .globalToLocal(event.position)
+                        .scale(pixelToMeterRatio, pixelToMeterRatio);
+                    print("${offset.dx} ${offset.dy}");
+                    Offset? clickedNote = notesPlacements.keys.firstWhereOrNull(
+                        (e) =>
+                            inTolarance(offset.dx, e.dx, 0.3) &&
+                            inTolarance(offset.dy, e.dy, 0.3));
+                    selectedNote = clickedNote != null
+                        ? notesPlacements[clickedNote]
+                        : null;
+                    setState(() {});
+                  },
+                  child: CustomPaint(
+                    painter: AutoFieldCanvas(
+                      fieldBackground: widget.field,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          //TODO
+                        },
+                        icon: Icon(Icons.skip_previous)),
+                    IconButton(
+                        onPressed: () {
+                          //TODO
+                        },
+                        icon: Icon(Icons.skip_next))
+                  ],
+                ),
+                if (currentAuto.isNotEmpty) ...[
+                  Text(
+                      "avg gamepieces: ${(autos[currentAuto]!.map((e) => e.data.autoGamepieces).toList().averageOrNull ?? 0).toStringAsFixed(2)}"),
+                  Text(
+                      "avg points: ${(autos[currentAuto]!.map((e) => e.data.autoPoints).toList().averageOrNull ?? 0).toStringAsFixed(2)}"),
+                  Text(
+                      "avg misses: ${(autos[currentAuto]!.map((e) => e.data.missedAuto).toList().averageOrNull ?? 0).toStringAsFixed(2)}"),
+                ],
+                if (selectedNote != null) ...[
+                  Text("${selectedNote?.title}"),
+                ]
+              ],
+            ),
+            flex: 1,
+          )
+        ],
+      ),
+    );
+  }
 }
 
 Future<ui.Image> getField(final bool isRed) async {
@@ -152,14 +243,16 @@ class AutoFieldCanvas extends CustomPainter {
   bool shouldRepaint(covariant final AutoFieldCanvas oldDelegate) => true;
 }
 
-List<(AutoGamepieceID, Offset)> notesPlacements =
-    <(AutoGamepieceID, ui.Offset)>[
-  (AutoGamepieceID.one, const Offset(2.88, 1.22)),
-  (AutoGamepieceID.two, const Offset(2.88, 2.65)),
-  (AutoGamepieceID.three, const Offset(2.88, 4.04)),
-  (AutoGamepieceID.four, const Offset(8.2, 0.75)),
-  (AutoGamepieceID.five, const Offset(8.2, 2.375)),
-  (AutoGamepieceID.six, const Offset(8.2, 4.05)),
-  (AutoGamepieceID.seven, const Offset(8.2, 5.7)),
-  (AutoGamepieceID.eight, const Offset(8.2, 3.32)),
-];
+Map<Offset, AutoGamepieceID> notesPlacements = Map.fromEntries([
+  (const Offset(2.88, 1.22), AutoGamepieceID.one),
+  (const Offset(2.88, 2.65), AutoGamepieceID.two),
+  (const Offset(2.88, 3.88), AutoGamepieceID.three),
+  (const Offset(8.2, 0.75), AutoGamepieceID.four),
+  (const Offset(8.2, 2.375), AutoGamepieceID.five),
+  (const Offset(8.2, 4.05), AutoGamepieceID.six),
+  (const Offset(8.2, 5.7), AutoGamepieceID.seven),
+  (const Offset(8.2, 7.04), AutoGamepieceID.eight),
+].map((e) => MapEntry(e.$1, e.$2)));
+
+bool inTolarance(double val, double target, double tolerance) =>
+    val <= target + tolerance && val >= target - tolerance;
