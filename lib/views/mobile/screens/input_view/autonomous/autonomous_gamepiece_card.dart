@@ -25,56 +25,50 @@ class AutonomousGamepiece extends StatelessWidget {
         child: ElevatedButton(
           child: Padding(
             padding: const EdgeInsets.all(defaultPadding / 2),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  "Gamepiece: ${gamepieceID.title}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      state.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
+            child: FittedBox(
+              fit: BoxFit.fill,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    textAlign: TextAlign.center,
+                    "Gamepiece: ${gamepieceID.title}",
+                    style: const TextStyle(
+                      color: Colors.white,
                     ),
-                    Icon(state.icon),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          onPressed: () async {
-            final AutoGamepieceState newState =
-                await showDialog<AutoGamepieceState>(
-                      context: context,
-                      builder: (final BuildContext context) => Dialog(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: AutoGamepieceState.values
-                                .map(
-                                  (final AutoGamepieceState gamepieceState) =>
-                                      ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, gamepieceState);
-                                    },
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.all(defaultPadding),
-                                      child: Text(gamepieceState.title),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        textAlign: TextAlign.center,
+                        state.title,
+                        style: const TextStyle(
+                          color: Colors.white,
                         ),
                       ),
-                    ) ??
-                    state;
+                      Icon(state.icon),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          onPressed: () {
+            AutoGamepieceState newState = state;
+            switch (newState) {
+              case AutoGamepieceState.noAttempt:
+                newState = AutoGamepieceState.scoredSpeaker;
+                break;
+              case AutoGamepieceState.scoredSpeaker:
+                newState = AutoGamepieceState.missedSpeaker;
+                break;
+              case AutoGamepieceState.missedSpeaker:
+                newState = AutoGamepieceState.notTaken;
+                break;
+              case AutoGamepieceState.notTaken:
+                newState = AutoGamepieceState.noAttempt;
+                break;
+            }
             onSelectedStateOfGamepiece(newState);
           },
         ),
