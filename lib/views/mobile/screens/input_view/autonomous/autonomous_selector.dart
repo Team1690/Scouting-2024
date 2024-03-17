@@ -64,7 +64,9 @@ class AutonomousSelector extends StatelessWidget {
 }
 
 Color getColorByState(
-    final AutoGamepieceState gamepieceState, final bool isRed) {
+  final AutoGamepieceState gamepieceState,
+  final bool isRed,
+) {
   switch (gamepieceState) {
     case AutoGamepieceState.noAttempt:
       return Colors.grey;
