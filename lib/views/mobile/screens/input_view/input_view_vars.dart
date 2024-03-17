@@ -146,5 +146,8 @@ class InputViewVars implements HasuraVars {
         "M4_id": IdProvider.of(context)
             .autoGamepieceStates
             .enumToId[autoGamepieces.m4]!,
+        "R0_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.r0]!,
       };
 }

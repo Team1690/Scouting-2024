@@ -1,6 +1,7 @@
 import "package:scouting_frontend/models/id_providers.dart";
 
 enum AutoGamepieceID implements IdEnum {
+  zero("R0"),
   one("L0"),
   two("L1"),
   three("L2"),

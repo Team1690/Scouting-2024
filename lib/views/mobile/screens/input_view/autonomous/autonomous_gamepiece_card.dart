@@ -29,13 +29,6 @@ class AutonomousGamepiece extends StatelessWidget {
               fit: BoxFit.fill,
               child: Column(
                 children: <Widget>[
-                  Text(
-                    textAlign: TextAlign.center,
-                    "Gamepiece: ${gamepieceID.title}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

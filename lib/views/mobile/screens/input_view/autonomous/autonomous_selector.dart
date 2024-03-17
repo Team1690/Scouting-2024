@@ -21,44 +21,43 @@ class AutonomousSelector extends StatelessWidget {
   Widget build(final BuildContext context) {
     final Map<AutoGamepieceID, AutoGamepieceState> gamepieces =
         match.autoGamepieces.asMap;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List<Widget>.generate(
-        2,
-        (final int index) => Expanded(
-          child: Column(
-            children: gamepieces.keys
-                .where(
-                  (final AutoGamepieceID element) =>
-                      (element.title.characters.first == "L" &&
-                          index == (isRedAlliance ? 0 : 1)) ||
-                      (element.title.characters.first == "M" &&
-                          index == (isRedAlliance ? 1 : 0)),
-                )
-                .map(
-                  (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
-                    color: getColorByState(
-                      gamepieces[gamepieceId] ?? AutoGamepieceState.noAttempt,
-                      isRedAlliance,
-                    ),
-                    state: gamepieces[gamepieceId]!,
-                    gamepieceID: gamepieceId,
-                    onSelectedStateOfGamepiece:
-                        (final AutoGamepieceState state) {
-                      gamepieces[gamepieceId] = state;
-                      onNewMatch(
-                        match.copyWith(
-                          autoGamepieces: () =>
-                              AutoGamepieces.fromMap(gamepieces),
-                        ),
-                      );
-                    },
+    final List<Widget> buttonColumns = List<Widget>.generate(
+      3,
+      (final int index) => Expanded(
+        child: Column(
+          children: gamepieces.keys
+              .where(
+                (final AutoGamepieceID element) =>
+                    element.title.startsWith("R") && index == 0 ||
+                    (element.title.startsWith("L") && index == 1) ||
+                    (element.title.startsWith("M") && index == 2),
+              )
+              .map(
+                (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
+                  color: getColorByState(
+                    gamepieces[gamepieceId] ?? AutoGamepieceState.noAttempt,
+                    isRedAlliance,
                   ),
-                )
-                .toList(),
-          ),
+                  state: gamepieces[gamepieceId]!,
+                  gamepieceID: gamepieceId,
+                  onSelectedStateOfGamepiece: (final AutoGamepieceState state) {
+                    gamepieces[gamepieceId] = state;
+                    onNewMatch(
+                      match.copyWith(
+                        autoGamepieces: () =>
+                            AutoGamepieces.fromMap(gamepieces),
+                      ),
+                    );
+                  },
+                ),
+              )
+              .toList(),
         ),
       ),
+    );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: isRedAlliance ? buttonColumns : buttonColumns.reversed.toList(),
     );
   }
 }
