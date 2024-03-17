@@ -119,8 +119,6 @@ Stream<List<(FaultEntry, int?)>> fetchFaults(final BuildContext context) {
           .map(
             (final dynamic e) => (e["faults"] as List<dynamic>).map(
               (final dynamic fault) {
-                print(1);
-                print((data["schedule_matches"] as List<dynamic>));
                 final int lastMatch =
                     (data["schedule_matches"] as List<dynamic>).isNotEmpty
                         ? ScheduleMatch.fromJson(
@@ -133,7 +131,6 @@ Stream<List<(FaultEntry, int?)>> fetchFaults(final BuildContext context) {
                             IdProvider.of(context).matchType,
                           ).matchIdentifier.number
                         : 0;
-                print("$lastMatch");
                 final dynamic nextMatch =
                     (data["schedule_matches"] as List<dynamic>)
                         .where(
@@ -153,7 +150,6 @@ Stream<List<(FaultEntry, int?)>> fetchFaults(final BuildContext context) {
                                 !(element["happened"] as bool),
                           ),
                         );
-                print(3);
 
                 return (
                   FaultEntry.parse(fault, IdProvider.of(context)),
