@@ -42,12 +42,30 @@ class AutonomousSelector extends StatelessWidget {
                   gamepieceID: gamepieceId,
                   onSelectedStateOfGamepiece: (final AutoGamepieceState state) {
                     gamepieces[gamepieceId] = state;
-                    onNewMatch(
-                      match.copyWith(
-                        autoGamepieces: () =>
-                            AutoGamepieces.fromMap(gamepieces),
-                      ),
+                    InputViewVars newMatch = match.copyWith(
+                      autoGamepieces: () => AutoGamepieces.fromMap(gamepieces),
                     );
+                    if (!newMatch.autoOrder.contains(gamepieceId) &&
+                        state != AutoGamepieceState.noAttempt) {
+                      newMatch = newMatch.copyWith(
+                        autoOrder: () => newMatch.autoOrder.followedBy(
+                          <AutoGamepieceID>[gamepieceId],
+                        ).toList(),
+                      );
+                    }
+
+                    if (newMatch.autoOrder.contains(gamepieceId) &&
+                        state == AutoGamepieceState.noAttempt) {
+                      newMatch = newMatch.copyWith(
+                        autoOrder: () => newMatch.autoOrder
+                            .where(
+                              (final AutoGamepieceID element) =>
+                                  element != gamepieceId,
+                            )
+                            .toList(),
+                      );
+                    }
+                    onNewMatch(newMatch);
                   },
                 ),
               )

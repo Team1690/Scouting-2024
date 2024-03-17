@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
@@ -41,7 +42,27 @@ class TechnicalMatchData {
             idProvider.autoGamepieceStates
                 .idToEnum[match[autoGamepieceID.title]["id"] as int]!
           ),
-      ];
+      ]
+          .where(
+        (final (AutoGamepieceID, AutoGamepieceState) element) =>
+            element.$2 != AutoGamepieceState.noAttempt,
+      )
+          .sorted((
+        final (AutoGamepieceID, AutoGamepieceState) a,
+        final (AutoGamepieceID, AutoGamepieceState) b,
+      ) {
+        final List<String> autoOrder =
+            (match["auto_order"] as String).split(",");
+        int getIndexInOrder(final AutoGamepieceID element) {
+          final int index = autoOrder.indexOf(element.title);
+          return index == -1 ? autoOrder.length : index;
+        }
+
+        final int aIndex = getIndexInOrder(a.$1);
+        final int bIndex = getIndexInOrder(b.$1);
+
+        return aIndex.compareTo(bIndex);
+      });
 
   static TechnicalMatchData parse(
     final dynamic match,

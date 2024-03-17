@@ -1,4 +1,5 @@
 import "package:flutter/cupertino.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/id_providers.dart";
@@ -25,8 +26,10 @@ class InputViewVars implements HasuraVars {
         trapAmount = 0,
         trapsMissed = 0,
         scoutedTeam = null,
+        autoOrder = <AutoGamepieceID>[],
         autoGamepieces = AutoGamepieces.base();
   InputViewVars.all({
+    required this.autoOrder,
     required this.delivery,
     required this.trapsMissed,
     required this.isRematch,
@@ -63,6 +66,7 @@ class InputViewVars implements HasuraVars {
     final LightTeam? Function()? scoutedTeam,
     final int Function()? delivery,
     final AutoGamepieces Function()? autoGamepieces,
+    final List<AutoGamepieceID> Function()? autoOrder,
   }) =>
       InputViewVars.all(
         isRematch: isRematch != null ? isRematch() : this.isRematch,
@@ -87,8 +91,10 @@ class InputViewVars implements HasuraVars {
         delivery: delivery != null ? delivery() : this.delivery,
         autoGamepieces:
             autoGamepieces != null ? autoGamepieces() : this.autoGamepieces,
+        autoOrder: autoOrder != null ? autoOrder() : this.autoOrder,
       );
 
+  final List<AutoGamepieceID> autoOrder;
   final int delivery;
   final bool isRematch;
   final ScheduleMatch? scheduleMatch;
@@ -149,5 +155,7 @@ class InputViewVars implements HasuraVars {
         "R0_id": IdProvider.of(context)
             .autoGamepieceStates
             .enumToId[autoGamepieces.r0]!,
+        "auto_order":
+            autoOrder.map((final AutoGamepieceID e) => e.title).join(","),
       };
 }
