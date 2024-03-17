@@ -50,7 +50,7 @@ class EditTechnicalMatch extends StatelessWidget {
       );
 }
 
-//TODO add new query here
+//TODO add auto stuff
 const String query = r"""
 query FetchTechnicalMatch($team_id: Int!, $match_type_id: Int!, $match_number: Int!, $is_rematch: Boolean!) {
   technical_match(where: {schedule_match: {match_type: {id: {_eq: $match_type_id}}, match_number: {_eq: $match_number}}, is_rematch: {_eq: $is_rematch}, team_id: {_eq: $team_id}}) {
@@ -92,6 +92,9 @@ Future<InputViewVars> fetchTechnicalMatch(
       parserFn: (final Map<String, dynamic> data) {
         final dynamic technicalMatch = data["technical_match"][0];
         return InputViewVars.all(
+          // TODO fix order in edit
+          autoOrder: [],
+
           delivery: technicalMatch["delivery"] as int,
           trapsMissed: technicalMatch["traps_missed"] as int,
           isRematch: scheduleMatch.matchIdentifier.isRematch,

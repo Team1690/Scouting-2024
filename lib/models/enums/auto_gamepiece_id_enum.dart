@@ -15,4 +15,7 @@ enum AutoGamepieceID implements IdEnum {
 
   @override
   final String title;
+
+  AutoGamepieceID fromString(final String id) =>
+      values.firstWhere((final AutoGamepieceID e) => e.title == id);
 }
