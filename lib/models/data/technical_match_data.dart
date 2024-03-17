@@ -56,7 +56,7 @@ class TechnicalMatchData {
         final int aIndex = getIndexInOrder(a.$1);
         final int bIndex = getIndexInOrder(b.$1);
 
-        return bIndex.compareTo(aIndex);
+        return aIndex.compareTo(bIndex);
       });
 
   static TechnicalMatchData parse(
@@ -65,6 +65,7 @@ class TechnicalMatchData {
   ) {
     final List<(AutoGamepieceID, AutoGamepieceState)> gamepieces =
         parseGamepieces(match, idProvider);
+    print(gamepieces);
     return TechnicalMatchData(
       autoGamepieces: gamepieces,
       matchIdentifier: MatchIdentifier.fromJson(match, idProvider.matchType),

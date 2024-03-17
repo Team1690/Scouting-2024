@@ -51,6 +51,7 @@ subscription FetchTeams(\$ids: [Int!]) {
         happened
       }
       is_rematch
+      auto_order
       ${AutoGamepieceID.values.map((final AutoGamepieceID e) => '${e.title} { id }').join('\n')}
       tele_amp
       tele_amp_missed
