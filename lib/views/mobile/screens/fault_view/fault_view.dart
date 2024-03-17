@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
@@ -192,8 +194,10 @@ class NewFault {
 String subscription = """
 subscription MyQuery {
   schedule_matches(order_by: {match_type: {order: asc}, match_number: asc}) {
-        faults(order_by: {fault_status: {order: asc}}) {
+    happened    
+    faults(order_by: {fault_status: {order: asc}}) {
       fault_status {
+        id
       title
     }
     id
@@ -205,7 +209,9 @@ subscription MyQuery {
     }
     message
     schedule_match {
+      happened
       match_type {
+        id
         title
       }
       match_number
@@ -218,6 +224,7 @@ subscription MyQuery {
     match_number
     match_type {
       title
+      id
     }
     ${teamValues.map(
           (final String e) => """$e{
