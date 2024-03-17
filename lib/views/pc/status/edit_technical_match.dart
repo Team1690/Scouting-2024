@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
@@ -93,7 +94,7 @@ Future<InputViewVars> fetchTechnicalMatch(
         final dynamic technicalMatch = data["technical_match"][0];
         return InputViewVars.all(
           // TODO fix order in edit
-          autoOrder: [],
+          autoOrder: <AutoGamepieceID>[],
 
           delivery: technicalMatch["delivery"] as int,
           trapsMissed: technicalMatch["traps_missed"] as int,

@@ -65,7 +65,6 @@ class TechnicalMatchData {
   ) {
     final List<(AutoGamepieceID, AutoGamepieceState)> gamepieces =
         parseGamepieces(match, idProvider);
-    print(gamepieces);
     return TechnicalMatchData(
       autoGamepieces: gamepieces,
       matchIdentifier: MatchIdentifier.fromJson(match, idProvider.matchType),
