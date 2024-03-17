@@ -205,7 +205,7 @@ class _UserInputState extends State<UserInput> {
                         isRedAlliance: (match.scheduleMatch != null
                                 ? match.scheduleMatch!.redAlliance
                                     .contains(match.scoutedTeam)
-                                : isRedAlliance) ||
+                                : isRedAlliance) ^
                             isRedAlliance,
                         match: match,
                         onNewMatch: (final InputViewVars match) {
