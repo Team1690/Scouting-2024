@@ -38,8 +38,9 @@ class AutonomousSelector extends StatelessWidget {
                 .map(
                   (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
                     color: getColorByState(
-                        gamepieces[gamepieceId] ?? AutoGamepieceState.noAttempt,
-                        isRedAlliance),
+                      gamepieces[gamepieceId] ?? AutoGamepieceState.noAttempt,
+                      isRedAlliance,
+                    ),
                     state: gamepieces[gamepieceId]!,
                     gamepieceID: gamepieceId,
                     onSelectedStateOfGamepiece:
@@ -62,7 +63,10 @@ class AutonomousSelector extends StatelessWidget {
   }
 }
 
-Color getColorByState(AutoGamepieceState gamepieceState, bool isRed) {
+Color getColorByState(
+  final AutoGamepieceState gamepieceState,
+  final bool isRed,
+) {
   switch (gamepieceState) {
     case AutoGamepieceState.noAttempt:
       return Colors.grey;

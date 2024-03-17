@@ -1,3 +1,5 @@
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
@@ -15,6 +17,7 @@ class TechnicalMatchData {
     required this.climb,
     required this.matchIdentifier,
     required this.startingPosition,
+    required this.autoGamepieces,
   });
 
   final RobotFieldStatus robotFieldStatus;
@@ -25,22 +28,40 @@ class TechnicalMatchData {
   final int scheduleMatchId;
   final StartingPosition startingPosition;
   final String scouterName;
+  final List<(AutoGamepieceID, AutoGamepieceState)> autoGamepieces;
+
+  static List<(AutoGamepieceID, AutoGamepieceState)> parseGamepieces(
+    final dynamic match,
+    final IdProvider idProvider,
+  ) =>
+      <(AutoGamepieceID, AutoGamepieceState)>[
+        for (final AutoGamepieceID autoGamepieceID in AutoGamepieceID.values)
+          (
+            autoGamepieceID,
+            idProvider.autoGamepieceStates
+                .idToEnum[match[autoGamepieceID.title]["id"] as int]!
+          ),
+      ];
 
   static TechnicalMatchData parse(
     final dynamic match,
     final IdProvider idProvider,
-  ) =>
-      TechnicalMatchData(
-        matchIdentifier: MatchIdentifier.fromJson(match, idProvider.matchType),
-        robotFieldStatus: idProvider.robotFieldStatus
-            .idToEnum[match["robot_field_status"]["id"] as int]!,
-        harmonyWith: match["harmony_with"] as int,
-        //TODO: idprovider climb
-        climb: climbTitleToEnum(match["climb"]["title"] as String),
-        scheduleMatchId: match["schedule_match"]["id"] as int,
-        data: TechnicalData.parse(match),
-        startingPosition: idProvider.startingPosition
-            .idToEnum[match["starting_position"]["id"] as int]!,
-        scouterName: match["scouter_name"] as String,
-      );
+  ) {
+    final List<(AutoGamepieceID, AutoGamepieceState)> gamepieces =
+        parseGamepieces(match, idProvider);
+    return TechnicalMatchData(
+      autoGamepieces: gamepieces,
+      matchIdentifier: MatchIdentifier.fromJson(match, idProvider.matchType),
+      robotFieldStatus: idProvider
+          .robotFieldStatus.idToEnum[match["robot_field_status"]["id"] as int]!,
+      harmonyWith: match["harmony_with"] as int,
+      //TODO: idprovider climb
+      climb: climbTitleToEnum(match["climb"]["title"] as String),
+      scheduleMatchId: match["schedule_match"]["id"] as int,
+      data: TechnicalData.parse(match, gamepieces),
+      startingPosition: idProvider
+          .startingPosition.idToEnum[match["starting_position"]["id"] as int]!,
+      scouterName: match["scouter_name"] as String,
+    );
+  }
 }

@@ -3,6 +3,7 @@ import "dart:collection";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/matches_provider.dart";
@@ -18,9 +19,9 @@ import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/fault_entry.dart";
 
-const String query = r"""
-subscription FetchTeams($ids: [Int!]) {
-  team(where: {id: {_in: $ids}}) {
+final String query = """
+subscription FetchTeams(\$ids: [Int!]) {
+  team(where: {id: {_in: \$ids}}) {
     specific_matches {
       schedule_match {
         id
@@ -50,10 +51,7 @@ subscription FetchTeams($ids: [Int!]) {
         happened
       }
       is_rematch
-      auto_amp
-      auto_amp_missed
-      auto_speaker
-      auto_speaker_missed
+      ${AutoGamepieceID.values.map((final AutoGamepieceID e) => '${e.title} { id }').join('\n')}
       tele_amp
       tele_amp_missed
       tele_speaker
