@@ -3,7 +3,9 @@ import "dart:ui" as ui;
 
 import "package:collection/collection.dart";
 import "package:flutter/cupertino.dart";
+import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
+import "package:flutter/painting.dart";
 import "package:flutter/rendering.dart";
 import "package:flutter/semantics.dart";
 import "package:flutter/services.dart";
@@ -163,8 +165,10 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
                   },
                   child: CustomPaint(
                     painter: AutoFieldCanvas(
-                      fieldBackground: widget.field,
-                    ),
+                        fieldBackground: widget.field,
+                        gamepieceOrder: currentAuto,
+                        meterToPixelRatio:
+                            constraints.maxWidth / autoFieldWidth),
                   ),
                 ),
               ),
@@ -219,10 +223,13 @@ Future<ui.Image> getField(final bool isRed) async {
 }
 
 class AutoFieldCanvas extends CustomPainter {
-  AutoFieldCanvas({
-    required this.fieldBackground,
-  });
+  AutoFieldCanvas(
+      {required this.fieldBackground,
+      required this.gamepieceOrder,
+      required this.meterToPixelRatio});
   final ui.Image fieldBackground;
+  final List<AutoGamepieceID> gamepieceOrder;
+  final double meterToPixelRatio;
 
   @override
   void paint(final Canvas canvas, final ui.Size size) async {
@@ -237,6 +244,31 @@ class AutoFieldCanvas extends CustomPainter {
       Rect.fromLTWH(0, 0, size.width, size.height),
       Paint(),
     );
+
+    for (int i = 0; i < gamepieceOrder.length; i++) {
+      final textPainter = TextPainter(
+        text: TextSpan(
+            text: i.toString(),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 30,
+            )),
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout(
+        minWidth: 0,
+        maxWidth: size.width,
+      );
+      textPainter.paint(
+          canvas,
+          notesPlacements.entries
+                  .firstWhereOrNull(
+                      (MapEntry<ui.Offset, AutoGamepieceID> element) =>
+                          element.value == gamepieceOrder[i])
+                  ?.key
+                  .scale(meterToPixelRatio, meterToPixelRatio) ??
+              Offset(0, 0));
+    }
   }
 
   @override
