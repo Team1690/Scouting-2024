@@ -14,25 +14,25 @@ class AutoGamepieces {
   });
 
   AutoGamepieces.base()
-      : l1 = AutoGamepieceState.notTaken,
-        l2 = AutoGamepieceState.notTaken,
-        l0 = AutoGamepieceState.notTaken,
-        m0 = AutoGamepieceState.notTaken,
-        m1 = AutoGamepieceState.notTaken,
-        m2 = AutoGamepieceState.notTaken,
-        m3 = AutoGamepieceState.notTaken,
-        m4 = AutoGamepieceState.notTaken;
+      : l1 = AutoGamepieceState.noAttempt,
+        l2 = AutoGamepieceState.noAttempt,
+        l0 = AutoGamepieceState.noAttempt,
+        m0 = AutoGamepieceState.noAttempt,
+        m1 = AutoGamepieceState.noAttempt,
+        m2 = AutoGamepieceState.noAttempt,
+        m3 = AutoGamepieceState.noAttempt,
+        m4 = AutoGamepieceState.noAttempt;
 
   AutoGamepieces.fromMap(
     final Map<AutoGamepieceID, AutoGamepieceState> gamepieces,
-  )   : l0 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.notTaken,
-        l1 = gamepieces[AutoGamepieceID.two] ?? AutoGamepieceState.notTaken,
-        l2 = gamepieces[AutoGamepieceID.three] ?? AutoGamepieceState.notTaken,
-        m0 = gamepieces[AutoGamepieceID.four] ?? AutoGamepieceState.notTaken,
-        m1 = gamepieces[AutoGamepieceID.five] ?? AutoGamepieceState.notTaken,
-        m2 = gamepieces[AutoGamepieceID.six] ?? AutoGamepieceState.notTaken,
-        m3 = gamepieces[AutoGamepieceID.seven] ?? AutoGamepieceState.notTaken,
-        m4 = gamepieces[AutoGamepieceID.eight] ?? AutoGamepieceState.notTaken;
+  )   : l0 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.noAttempt,
+        l1 = gamepieces[AutoGamepieceID.two] ?? AutoGamepieceState.noAttempt,
+        l2 = gamepieces[AutoGamepieceID.three] ?? AutoGamepieceState.noAttempt,
+        m0 = gamepieces[AutoGamepieceID.four] ?? AutoGamepieceState.noAttempt,
+        m1 = gamepieces[AutoGamepieceID.five] ?? AutoGamepieceState.noAttempt,
+        m2 = gamepieces[AutoGamepieceID.six] ?? AutoGamepieceState.noAttempt,
+        m3 = gamepieces[AutoGamepieceID.seven] ?? AutoGamepieceState.noAttempt,
+        m4 = gamepieces[AutoGamepieceID.eight] ?? AutoGamepieceState.noAttempt;
 
   Map<AutoGamepieceID, AutoGamepieceState> get asMap =>
       <AutoGamepieceID, AutoGamepieceState>{

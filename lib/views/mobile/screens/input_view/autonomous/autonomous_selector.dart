@@ -31,13 +31,15 @@ class AutonomousSelector extends StatelessWidget {
                 .where(
                   (final AutoGamepieceID element) =>
                       (element.title.characters.first == "L" &&
-                          index == (isRedAlliance ? 1 : 0)) ||
+                          index == (isRedAlliance ? 0 : 1)) ||
                       (element.title.characters.first == "M" &&
-                          index == (isRedAlliance ? 0 : 1)),
+                          index == (isRedAlliance ? 1 : 0)),
                 )
                 .map(
                   (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
-                    color: isRedAlliance ? Colors.red : Colors.blue,
+                    color: getColorByState(
+                        gamepieces[gamepieceId] ?? AutoGamepieceState.noAttempt,
+                        isRedAlliance),
                     state: gamepieces[gamepieceId]!,
                     gamepieceID: gamepieceId,
                     onSelectedStateOfGamepiece:
@@ -57,5 +59,18 @@ class AutonomousSelector extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Color getColorByState(AutoGamepieceState gamepieceState, bool isRed) {
+  switch (gamepieceState) {
+    case AutoGamepieceState.noAttempt:
+      return Colors.grey;
+    case AutoGamepieceState.scoredSpeaker:
+      return Colors.green;
+    case AutoGamepieceState.missedSpeaker:
+      return Colors.amber;
+    case AutoGamepieceState.notTaken:
+      return Colors.red;
   }
 }
