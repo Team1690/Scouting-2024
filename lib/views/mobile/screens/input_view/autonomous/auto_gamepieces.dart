@@ -11,10 +11,12 @@ class AutoGamepieces {
     required this.m2,
     required this.m3,
     required this.m4,
+    required this.r0,
   });
 
   AutoGamepieces.base()
-      : l1 = AutoGamepieceState.noAttempt,
+      : r0 = AutoGamepieceState.noAttempt,
+        l1 = AutoGamepieceState.noAttempt,
         l2 = AutoGamepieceState.noAttempt,
         l0 = AutoGamepieceState.noAttempt,
         m0 = AutoGamepieceState.noAttempt,
@@ -25,7 +27,8 @@ class AutoGamepieces {
 
   AutoGamepieces.fromMap(
     final Map<AutoGamepieceID, AutoGamepieceState> gamepieces,
-  )   : l0 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.noAttempt,
+  )   : r0 = gamepieces[AutoGamepieceID.zero] ?? AutoGamepieceState.noAttempt,
+        l0 = gamepieces[AutoGamepieceID.one] ?? AutoGamepieceState.noAttempt,
         l1 = gamepieces[AutoGamepieceID.two] ?? AutoGamepieceState.noAttempt,
         l2 = gamepieces[AutoGamepieceID.three] ?? AutoGamepieceState.noAttempt,
         m0 = gamepieces[AutoGamepieceID.four] ?? AutoGamepieceState.noAttempt,
@@ -36,6 +39,7 @@ class AutoGamepieces {
 
   Map<AutoGamepieceID, AutoGamepieceState> get asMap =>
       <AutoGamepieceID, AutoGamepieceState>{
+        AutoGamepieceID.zero: r0,
         AutoGamepieceID.one: l0,
         AutoGamepieceID.two: l1,
         AutoGamepieceID.three: l2,
@@ -46,6 +50,7 @@ class AutoGamepieces {
         AutoGamepieceID.eight: m4,
       };
 
+  final AutoGamepieceState r0;
   final AutoGamepieceState l0;
   final AutoGamepieceState l1;
   final AutoGamepieceState l2;

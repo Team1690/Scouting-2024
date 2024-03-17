@@ -110,6 +110,9 @@ Future<InputViewVars> fetchTechnicalMatch(
           harmonyWith: technicalMatch["harmony_with"] as int,
           trapAmount: technicalMatch["trap_amount"] as int,
           autoGamepieces: AutoGamepieces(
+            r0: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["R0_id"] as int]!,
             l0: IdProvider.of(context)
                 .autoGamepieceStates
                 .idToEnum[technicalMatch["L0_id"] as int]!,

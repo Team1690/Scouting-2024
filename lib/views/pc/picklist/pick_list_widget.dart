@@ -84,11 +84,6 @@ class _PickListState extends State<PickList> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      "Auto Amp\n Average: ${pickListTeam.aggregateData.avgData.autoAmp.toStringAsFixed(2)}",
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
                                       "Auto Speaker\n Average: ${pickListTeam.aggregateData.avgData.autoSpeaker.toStringAsFixed(2)}",
                                     ),
                                   ),

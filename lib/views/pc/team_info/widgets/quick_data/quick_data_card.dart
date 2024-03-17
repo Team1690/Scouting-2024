@@ -34,13 +34,7 @@ class QuickDataCard extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                            "Median Auto Amp: ${data.medianData.autoAmp.toStringAsFixed(2)}",
-                          ),
-                          Text(
                             "Median Tele Amp: ${data.medianData.teleAmp.toStringAsFixed(2)}",
-                          ),
-                          Text(
-                            "Avg Auto Amp: ${data.avgData.autoAmp.toStringAsFixed(2)}",
                           ),
                           Text(
                             "Avg Tele Amp: ${data.avgData.autoSpeaker.toStringAsFixed(2)}",
@@ -55,13 +49,7 @@ class QuickDataCard extends StatelessWidget {
                             "Min Total Amp: ${data.minData.ampGamepieces.toStringAsFixed(2)}",
                           ),
                           Text(
-                            "Avg Auto Amp Missed: ${data.avgData.autoAmpMissed.toStringAsFixed(2)}",
-                          ),
-                          Text(
                             "Avg Tele Amp Missed ${data.avgData.teleAmpMissed.toStringAsFixed(2)}",
-                          ),
-                          Text(
-                            "Median auto Amp Missed: ${data.medianData.autoAmpMissed.toStringAsFixed(2)}",
                           ),
                           Text(
                             "Median Tele Amp Missed: ${data.medianData.teleAmpMissed.toStringAsFixed(2)}",

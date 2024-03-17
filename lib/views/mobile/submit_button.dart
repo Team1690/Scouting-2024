@@ -104,6 +104,8 @@ class _SubmitButtonState extends State<SubmitButton> {
             print(errors.map((final GraphQLError e) => (e.message)).toList());
             if (errors.length == 1) {
               final GraphQLError error = errors.single;
+              // ignore: avoid_print
+              print(error.message);
               _errorMessage = error.extensions?["code"]?.toString() ==
                       "constraint-violation"
                   ? "That match already exisits check if you scouted that correct robot/wrote the correct match"
