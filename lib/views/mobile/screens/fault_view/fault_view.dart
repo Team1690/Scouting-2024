@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
@@ -117,6 +119,8 @@ Stream<List<(FaultEntry, int?)>> fetchFaults(final BuildContext context) {
           .map(
             (final dynamic e) => (e["faults"] as List<dynamic>).map(
               (final dynamic fault) {
+                print(1);
+                print((data["schedule_matches"] as List<dynamic>));
                 final int lastMatch =
                     (data["schedule_matches"] as List<dynamic>).isNotEmpty
                         ? ScheduleMatch.fromJson(
@@ -129,6 +133,7 @@ Stream<List<(FaultEntry, int?)>> fetchFaults(final BuildContext context) {
                             IdProvider.of(context).matchType,
                           ).matchIdentifier.number
                         : 0;
+                print("$lastMatch");
                 final dynamic nextMatch =
                     (data["schedule_matches"] as List<dynamic>)
                         .where(
@@ -148,6 +153,7 @@ Stream<List<(FaultEntry, int?)>> fetchFaults(final BuildContext context) {
                                 !(element["happened"] as bool),
                           ),
                         );
+                print(3);
 
                 return (
                   FaultEntry.parse(fault, IdProvider.of(context)),
@@ -192,8 +198,10 @@ class NewFault {
 String subscription = """
 subscription MyQuery {
   schedule_matches(order_by: {match_type: {order: asc}, match_number: asc}) {
-        faults(order_by: {fault_status: {order: asc}}) {
+    happened    
+    faults(order_by: {fault_status: {order: asc}}) {
       fault_status {
+        id
       title
     }
     id
@@ -205,7 +213,9 @@ subscription MyQuery {
     }
     message
     schedule_match {
+      happened
       match_type {
+        id
         title
       }
       match_number
@@ -218,6 +228,7 @@ subscription MyQuery {
     match_number
     match_type {
       title
+      id
     }
     ${teamValues.map(
           (final String e) => """$e{
