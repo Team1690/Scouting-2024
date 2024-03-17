@@ -36,7 +36,6 @@ subscription FetchTeams($ids: [Int!]) {
       general_rating
       intake_rating
       speaker_rating
-      url
       climb_rating
       amp_rating
       scouter_name
