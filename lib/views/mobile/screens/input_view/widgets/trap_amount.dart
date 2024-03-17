@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
-import "package:scouting_frontend/models/input_view_vars.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 
 class TrapAmount extends StatelessWidget {
   const TrapAmount({

@@ -4,7 +4,6 @@ import "package:scouting_frontend/models/data/specific_match_data.dart";
 import "package:scouting_frontend/models/data/specific_summary_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
-import "package:scouting_frontend/views/pc/alliance_auto_planner/auto_planner_screen.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/specific/view_rating_dropdown_line.dart";
 
 class ScoutingSpecific extends StatefulWidget {
@@ -28,16 +27,6 @@ class _ScoutingSpecificState extends State<ScoutingSpecific> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            ElevatedButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute<AutoPlannerScreen>(
-                  builder: (final BuildContext context) =>
-                      AutoPlannerScreen(<LightTeam>[widget.team]),
-                ),
-              ),
-              child: const Text("View Auto"),
-            ),
             getSummaryText(
               "Driving",
               (final SpecificSummaryData msg) => msg.drivingText,

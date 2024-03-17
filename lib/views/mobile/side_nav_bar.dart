@@ -4,11 +4,10 @@ import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info/coach_team_info.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_view/coach_view.dart";
-import "package:scouting_frontend/views/mobile/screens/fault_view.dart";
+import "package:scouting_frontend/views/mobile/screens/fault_view/fault_view.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_view.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_view.dart";
-import "package:scouting_frontend/views/pc/alliance_auto_planner/auto_planner_screen.dart";
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 
@@ -64,11 +63,6 @@ class SideNavBar extends StatelessWidget {
               icon: Icons.build,
               title: "Pit",
               widget: PitView.new,
-            ),
-            const NavbarTile(
-              icon: Icons.route,
-              title: "Alliance Auto",
-              widget: AutoPlannerScreen.new,
             ),
             const NavbarTile(
               icon: Icons.construction,

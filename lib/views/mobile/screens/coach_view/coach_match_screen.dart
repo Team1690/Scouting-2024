@@ -5,7 +5,6 @@ import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_view/coach_team_card.dart";
-import "package:scouting_frontend/views/pc/alliance_auto_planner/auto_planner_screen.dart";
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
 
 class CoachMatchScreen extends StatelessWidget {
@@ -57,20 +56,6 @@ class CoachMatchScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(0.625),
                     child: Column(
                       children: <Widget>[
-                        IconButton(
-                          onPressed: () {
-                            match.mapNullable(
-                              (final ScheduleMatch match) => Navigator.push(
-                                context,
-                                MaterialPageRoute<AutoPlannerScreen>(
-                                  builder: (final BuildContext context) =>
-                                      AutoPlannerScreen(match.blueAlliance),
-                                ),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.route),
-                        ),
                         ...match.blueAlliance.map(
                           (final LightTeam e) => Expanded(
                             child: CoachTeamCard(
@@ -92,20 +77,6 @@ class CoachMatchScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(0.625),
                     child: Column(
                       children: <Widget>[
-                        IconButton(
-                          onPressed: () {
-                            match.mapNullable(
-                              (final ScheduleMatch match) => Navigator.push(
-                                context,
-                                MaterialPageRoute<AutoPlannerScreen>(
-                                  builder: (final BuildContext context) =>
-                                      AutoPlannerScreen(match.redAlliance),
-                                ),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.route),
-                        ),
                         ...match.redAlliance.map(
                           (final LightTeam e) => Expanded(
                             child: CoachTeamCard(

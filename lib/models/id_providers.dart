@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/data/starting_position_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
@@ -49,6 +51,8 @@ class IdProvider extends InheritedWidget {
     required final Map<FaultStatus, int> faultStatus,
     required final Map<StartingPosition, int> startingPosition,
     required final Map<ShootingRange, int> shootingRange,
+    required final Map<AutoGamepieceID, int> autoGamepieceLocations,
+    required final Map<AutoGamepieceState, int> autoGamepieceStates,
   }) : this._inner(
           child: child,
           climb: IdTable<Climb>(climbIds),
@@ -59,6 +63,9 @@ class IdProvider extends InheritedWidget {
           faultStatus: IdTable<FaultStatus>(faultStatus),
           startingPosition: IdTable<StartingPosition>(startingPosition),
           shootingRange: IdTable<ShootingRange>(shootingRange),
+          autoGamepieceLocations:
+              IdTable<AutoGamepieceID>(autoGamepieceLocations),
+          autoGamepieceStates: IdTable<AutoGamepieceState>(autoGamepieceStates),
         );
 
   IdProvider._inner({
@@ -71,6 +78,8 @@ class IdProvider extends InheritedWidget {
     required this.faultStatus,
     required this.startingPosition,
     required this.shootingRange,
+    required this.autoGamepieceLocations,
+    required this.autoGamepieceStates,
   });
   final IdTable<RobotFieldStatus> robotFieldStatus;
   final IdTable<MatchType> matchType;
@@ -80,6 +89,8 @@ class IdProvider extends InheritedWidget {
   final IdTable<FaultStatus> faultStatus;
   final IdTable<StartingPosition> startingPosition;
   final IdTable<ShootingRange> shootingRange;
+  final IdTable<AutoGamepieceID> autoGamepieceLocations;
+  final IdTable<AutoGamepieceState> autoGamepieceStates;
 
   @override
   bool updateShouldNotify(final IdProvider oldWidget) =>
@@ -90,7 +101,9 @@ class IdProvider extends InheritedWidget {
       drivemotor != oldWidget.drivemotor ||
       faultStatus != oldWidget.faultStatus ||
       startingPosition != oldWidget.startingPosition ||
-      shootingRange != oldWidget.shootingRange;
+      shootingRange != oldWidget.shootingRange ||
+      autoGamepieceLocations != oldWidget.autoGamepieceLocations ||
+      autoGamepieceStates != oldWidget.autoGamepieceStates;
 
   static IdProvider of(final BuildContext context) {
     final IdProvider? result =

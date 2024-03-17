@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/id_providers.dart";
-import "package:scouting_frontend/models/input_view_vars.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -99,10 +100,6 @@ Future<InputViewVars> fetchTechnicalMatch(
           robotFieldStatus: IdProvider.of(context)
               .robotFieldStatus
               .idToEnum[technicalMatch["robot_field_status"]["id"] as int]!,
-          autoAmp: technicalMatch["auto_amp"] as int,
-          autoAmpMissed: technicalMatch["auto_amp_missed"] as int,
-          autoSpeaker: technicalMatch["auto_speaker"] as int,
-          autoSpeakerMissed: technicalMatch["auto_speaker_missed"] as int,
           teleAmp: technicalMatch["tele_amp"] as int,
           teleAmpMissed: technicalMatch["tele_amp_missed"] as int,
           teleSpeaker: technicalMatch["tele_speaker"] as int,
@@ -112,6 +109,32 @@ Future<InputViewVars> fetchTechnicalMatch(
               .idToEnum[technicalMatch["climb"]["id"] as int],
           harmonyWith: technicalMatch["harmony_with"] as int,
           trapAmount: technicalMatch["trap_amount"] as int,
+          autoGamepieces: AutoGamepieces(
+            l0: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["L0_id"] as int]!,
+            l1: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["L1_id"] as int]!,
+            l2: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["L2_id"] as int]!,
+            m0: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["M0_id"] as int]!,
+            m1: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["M1_id"] as int]!,
+            m2: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["M2_id"] as int]!,
+            m3: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["M3_id"] as int]!,
+            m4: IdProvider.of(context)
+                .autoGamepieceStates
+                .idToEnum[technicalMatch["M4_id"] as int]!,
+          ),
           scoutedTeam: teamForQuery,
         );
       },

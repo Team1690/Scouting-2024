@@ -1,26 +1,26 @@
 import "dart:async";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
-import "package:scouting_frontend/models/input_view_vars.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/local_save_button.dart";
 import "package:scouting_frontend/views/mobile/manage_preferences.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_selector.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/climbing.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/fault_button.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/game_piece_counter.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/trap_amount.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/traps_missed.dart";
 import "package:scouting_frontend/views/mobile/screens/robot_image.dart";
-import "package:scouting_frontend/views/mobile/screens/scouter_name_input.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/scouter_name_input.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/submit_button.dart";
 import "package:scouting_frontend/views/mobile/team_and_match_selection.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/enums/match_mode_enum.dart";
 
 class UserInput extends StatefulWidget {
   const UserInput([this.initialVars]);
@@ -63,7 +63,10 @@ class _UserInputState extends State<UserInput> {
     2: RobotFieldStatus.didDefense,
   };
 
-  bool initialFlag = false;
+  final bool initialFlag = false;
+
+  bool isRedAlliance = false;
+
   bool hasFault = false;
   String? faultMessage;
 
@@ -190,19 +193,29 @@ class _UserInputState extends State<UserInput> {
                       const SizedBox(
                         height: 15,
                       ),
-                      SectionDivider(label: "Autonomous"),
-                      MatchModeGamePieceCounter(
-                        flickerScreen: flickerScreen,
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isRedAlliance = !isRedAlliance;
+                          });
+                        },
+                        icon: const Icon(Icons.switch_left),
+                      ),
+                      AutonomousSelector(
+                        isRedAlliance: (match.scheduleMatch != null
+                                ? match.scheduleMatch!.redAlliance
+                                    .contains(match.scoutedTeam)
+                                : isRedAlliance) ^
+                            isRedAlliance,
                         match: match,
                         onNewMatch: (final InputViewVars match) {
                           setState(() {
                             this.match = match;
                           });
                         },
-                        matchMode: MatchMode.auto,
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 15,
                       ),
                       SectionDivider(label: "Teleoperated"),
                       MatchModeGamePieceCounter(
@@ -213,7 +226,6 @@ class _UserInputState extends State<UserInput> {
                             this.match = match;
                           });
                         },
-                        matchMode: MatchMode.tele,
                       ),
                       Row(
                         children: <Widget>[
@@ -323,6 +335,9 @@ class _UserInputState extends State<UserInput> {
                             match = match.cleared();
                             teamNumberController.clear();
                             matchController.clear();
+                            faultMessage = null;
+                            hasFault = false;
+                            isRedAlliance = false;
                           });
                         },
                         validate: () => formKey.currentState!.validate(),
@@ -344,6 +359,9 @@ class _UserInputState extends State<UserInput> {
                             match = match.cleared();
                             teamNumberController.clear();
                             matchController.clear();
+                            faultMessage = null;
+                            hasFault = false;
+                            isRedAlliance = false;
                           });
                         },
                         validate: () => formKey.currentState!.validate(),
@@ -362,8 +380,8 @@ class _UserInputState extends State<UserInput> {
       );
 
   String insertMutation(final bool hasFault, final String? faultMessage) => """
-mutation MyMutation(\$auto_amp: Int!, \$auto_amp_missed: Int!, \$auto_speaker: Int!, \$auto_speaker_missed: Int!, \$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!) {
-  insert_technical_match(objects: {auto_amp: \$auto_amp, auto_amp_missed: \$auto_amp_missed, auto_speaker: \$auto_speaker, auto_speaker_missed: \$auto_speaker_missed, cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery}) {
+mutation MyMutation(\$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!, \$L0_id: Int!, \$L1_id: Int!, \$L2_id: Int!, \$M0_id: Int!, \$M1_id: Int!, \$M2_id: Int!, \$M3_id: Int!, \$M4_id: Int!) {
+  insert_technical_match(objects: { cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery, L0_id: \$L0_id, L1_id: \$L1_id, L2_id: \$L2_id, M0_id: \$M0_id, M1_id: \$M1_id, M2_id: \$M2_id, M3_id: \$M3_id, M4_id: \$M4_id}) {
     affected_rows
   }
   ${hasFault ? "" : """
@@ -376,8 +394,8 @@ insert_faults(objects: {team_id: \$team_id, message: ${faultMessage ?? "\"יש �
 """;
 
   String updateMutation = """
-mutation MyMutation(\$auto_amp: Int!, \$auto_amp_missed: Int!, \$auto_speaker: Int!, \$auto_speaker_missed: Int!, \$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!) {
-  update_technical_match(where: {team_id: {_eq: \$team_id}, schedule_id: {_eq: \$schedule_id}, is_rematch: {_eq: \$is_rematch}} _set: {auto_amp: \$auto_amp, auto_amp_missed: \$auto_amp_missed, auto_speaker: \$auto_speaker, auto_speaker_missed: \$auto_speaker_missed, cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery}) {
+mutation MyMutation(\$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!, \$L0_id: Int!, \$L1_id: Int!, \$L2_id: Int!, \$M0_id: Int!, \$M1_id: Int!, \$M2_id: Int!, \$M3_id: Int!, \$M4_id: Int!) {
+  update_technical_match(where: {team_id: {_eq: \$team_id}, schedule_id: {_eq: \$schedule_id}, is_rematch: {_eq: \$is_rematch}} _set: {cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery, L0_id: \$L0_id, L1_id: \$L1_id, L2_id: \$L2_id, M0_id: \$M0_id, M1_id: \$M1_id, M2_id: \$M2_id, M3_id: \$M3_id, M4_id: \$M4_id}) {
     affected_rows
   }
 """;

@@ -7,6 +7,7 @@ import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
 
 class InputViewVars implements HasuraVars {
   InputViewVars()
@@ -15,10 +16,6 @@ class InputViewVars implements HasuraVars {
         scouterName = "",
         robotFieldStatus = RobotFieldStatus.worked,
         delivery = 0,
-        autoAmp = 0,
-        autoAmpMissed = 0,
-        autoSpeaker = 0,
-        autoSpeakerMissed = 0,
         teleAmp = 0,
         teleAmpMissed = 0,
         teleSpeaker = 0,
@@ -27,7 +24,8 @@ class InputViewVars implements HasuraVars {
         harmonyWith = 0,
         trapAmount = 0,
         trapsMissed = 0,
-        scoutedTeam = null;
+        scoutedTeam = null,
+        autoGamepieces = AutoGamepieces.base();
   InputViewVars.all({
     required this.delivery,
     required this.trapsMissed,
@@ -35,10 +33,6 @@ class InputViewVars implements HasuraVars {
     required this.scheduleMatch,
     required this.scouterName,
     required this.robotFieldStatus,
-    required this.autoAmp,
-    required this.autoAmpMissed,
-    required this.autoSpeaker,
-    required this.autoSpeakerMissed,
     required this.teleAmp,
     required this.teleAmpMissed,
     required this.teleSpeaker,
@@ -47,6 +41,7 @@ class InputViewVars implements HasuraVars {
     required this.harmonyWith,
     required this.trapAmount,
     required this.scoutedTeam,
+    required this.autoGamepieces,
   });
 
   InputViewVars cleared() =>
@@ -57,10 +52,6 @@ class InputViewVars implements HasuraVars {
     final ScheduleMatch? Function()? scheduleMatch,
     final String? Function()? scouterName,
     final RobotFieldStatus Function()? robotFieldStatus,
-    final int Function()? autoAmp,
-    final int Function()? autoAmpMissed,
-    final int Function()? autoSpeaker,
-    final int Function()? autoSpeakerMissed,
     final int Function()? teleAmp,
     final int Function()? teleAmpMissed,
     final int Function()? teleSpeaker,
@@ -71,6 +62,7 @@ class InputViewVars implements HasuraVars {
     final int Function()? trapsMissed,
     final LightTeam? Function()? scoutedTeam,
     final int Function()? delivery,
+    final AutoGamepieces Function()? autoGamepieces,
   }) =>
       InputViewVars.all(
         isRematch: isRematch != null ? isRematch() : this.isRematch,
@@ -80,13 +72,6 @@ class InputViewVars implements HasuraVars {
         robotFieldStatus: robotFieldStatus != null
             ? robotFieldStatus()
             : this.robotFieldStatus,
-        autoAmp: autoAmp != null ? autoAmp() : this.autoAmp,
-        autoAmpMissed:
-            autoAmpMissed != null ? autoAmpMissed() : this.autoAmpMissed,
-        autoSpeaker: autoSpeaker != null ? autoSpeaker() : this.autoSpeaker,
-        autoSpeakerMissed: autoSpeakerMissed != null
-            ? autoSpeakerMissed()
-            : this.autoSpeakerMissed,
         teleAmp: teleAmp != null ? teleAmp() : this.teleAmp,
         teleAmpMissed:
             teleAmpMissed != null ? teleAmpMissed() : this.teleAmpMissed,
@@ -100,6 +85,8 @@ class InputViewVars implements HasuraVars {
         trapsMissed: trapsMissed != null ? trapsMissed() : this.trapsMissed,
         scoutedTeam: scoutedTeam != null ? scoutedTeam() : this.scoutedTeam,
         delivery: delivery != null ? delivery() : this.delivery,
+        autoGamepieces:
+            autoGamepieces != null ? autoGamepieces() : this.autoGamepieces,
       );
 
   final int delivery;
@@ -107,10 +94,6 @@ class InputViewVars implements HasuraVars {
   final ScheduleMatch? scheduleMatch;
   final String? scouterName;
   final RobotFieldStatus robotFieldStatus;
-  final int autoAmp;
-  final int autoAmpMissed;
-  final int autoSpeaker;
-  final int autoSpeakerMissed;
   final int teleAmp;
   final int teleAmpMissed;
   final int teleSpeaker;
@@ -120,6 +103,7 @@ class InputViewVars implements HasuraVars {
   final int trapAmount;
   final int trapsMissed;
   final LightTeam? scoutedTeam;
+  final AutoGamepieces autoGamepieces;
 
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
@@ -129,10 +113,6 @@ class InputViewVars implements HasuraVars {
         "robot_field_status_id":
             IdProvider.of(context).robotFieldStatus.enumToId[robotFieldStatus]!,
         "is_rematch": isRematch,
-        "auto_amp": autoAmp,
-        "auto_amp_missed": autoAmpMissed,
-        "auto_speaker": autoSpeaker,
-        "auto_speaker_missed": autoSpeakerMissed,
         "tele_amp": teleAmp,
         "tele_amp_missed": teleAmpMissed,
         "tele_speaker": teleSpeaker,
@@ -142,5 +122,29 @@ class InputViewVars implements HasuraVars {
         "trap_amount": trapAmount,
         "traps_missed": trapsMissed,
         "delivery": delivery,
+        "L0_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.l0]!,
+        "L1_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.l1]!,
+        "L2_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.l2]!,
+        "M0_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.m0]!,
+        "M1_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.m1]!,
+        "M2_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.m2]!,
+        "M3_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.m3]!,
+        "M4_id": IdProvider.of(context)
+            .autoGamepieceStates
+            .enumToId[autoGamepieces.m4]!,
       };
 }

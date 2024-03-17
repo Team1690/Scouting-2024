@@ -4,7 +4,6 @@ import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
-import "package:scouting_frontend/views/mobile/screens/specific_view/auto_path.dart";
 
 class SpecificVars implements HasuraVars {
   SpecificVars()
@@ -18,8 +17,7 @@ class SpecificVars implements HasuraVars {
         generalRating = null,
         scheduleMatch = null,
         name = "",
-        isRematch = false,
-        autoPath = null;
+        isRematch = false;
 
   SpecificVars.all({
     required this.team,
@@ -33,7 +31,6 @@ class SpecificVars implements HasuraVars {
     required this.scheduleMatch,
     required this.name,
     required this.isRematch,
-    required this.autoPath,
   });
 
   SpecificVars copyWith({
@@ -48,7 +45,6 @@ class SpecificVars implements HasuraVars {
     final ScheduleMatch? Function()? scheduleMatch,
     final String Function()? name,
     final bool Function()? isRematch,
-    final Sketch? Function()? autoPath,
   }) =>
       SpecificVars.all(
         team: team != null ? team() : this.team,
@@ -66,7 +62,6 @@ class SpecificVars implements HasuraVars {
             scheduleMatch != null ? scheduleMatch() : this.scheduleMatch,
         name: name != null ? name() : this.name,
         isRematch: isRematch != null ? isRematch() : this.isRematch,
-        autoPath: autoPath != null ? autoPath() : this.autoPath,
       );
 
   final LightTeam? team;
@@ -80,11 +75,9 @@ class SpecificVars implements HasuraVars {
   final ScheduleMatch? scheduleMatch;
   final String name;
   final bool isRematch;
-  final Sketch? autoPath;
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
         "team_id": team?.id,
-        if (autoPath!.url != null) "url": autoPath!.url!,
         "driving_rating": driveRating,
         "intake_rating": intakeRating,
         "climb_rating": climbRating,
@@ -108,6 +101,5 @@ class SpecificVars implements HasuraVars {
         speakerRating: always(null),
         defenseRating: always(null),
         generalRating: always(null),
-        autoPath: always(null),
       );
 }

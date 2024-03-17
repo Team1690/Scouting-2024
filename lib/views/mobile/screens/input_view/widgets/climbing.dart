@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
-import "package:scouting_frontend/models/input_view_vars.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 
 class HarmonyWith extends StatelessWidget {
   const HarmonyWith({super.key, required this.match, required this.onNewMatch});
