@@ -251,7 +251,7 @@ class AutoFieldCanvas extends CustomPainter {
             text: i.toString(),
             style: TextStyle(
               color: Colors.black,
-              fontSize: 30,
+              fontSize: 25,
             )),
         textDirection: TextDirection.ltr,
       );
@@ -262,12 +262,11 @@ class AutoFieldCanvas extends CustomPainter {
       textPainter.paint(
           canvas,
           notesPlacements.entries
-                  .firstWhereOrNull(
-                      (MapEntry<ui.Offset, AutoGamepieceID> element) =>
-                          element.value == gamepieceOrder[i])
-                  ?.key
-                  .scale(meterToPixelRatio, meterToPixelRatio) ??
-              Offset(0, 0));
+              .firstWhereOrNull(
+                  (MapEntry<ui.Offset, AutoGamepieceID> element) =>
+                      element.value == gamepieceOrder[i])!
+              .key
+              .scale(meterToPixelRatio, meterToPixelRatio));
     }
   }
 
@@ -276,6 +275,7 @@ class AutoFieldCanvas extends CustomPainter {
 }
 
 Map<Offset, AutoGamepieceID> notesPlacements = Map.fromEntries([
+  (const Offset(0, fieldheight / 2), AutoGamepieceID.zero),
   (const Offset(2.88, 1.22), AutoGamepieceID.one),
   (const Offset(2.88, 2.65), AutoGamepieceID.two),
   (const Offset(2.88, 3.88), AutoGamepieceID.three),
