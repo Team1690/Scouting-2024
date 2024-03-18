@@ -139,7 +139,7 @@ Future<InputViewVars> fetchTechnicalMatch(
                 .autoGamepieceStates
                 .idToEnum[technicalMatch["M4_id"] as int]!,
           ),
-          scoutedTeam: teamForQuery,
+          scoutedTeam: teamForQuery, faultMessage: "",
         );
       },
       document: gql(query),
