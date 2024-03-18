@@ -23,27 +23,24 @@ class AutonomousGamepiece extends StatelessWidget {
         margin: const EdgeInsets.all(defaultPadding / 2),
         elevation: 4,
         child: ElevatedButton(
-          child: Padding(
-            padding: const EdgeInsets.all(defaultPadding / 2),
-            child: FittedBox(
-              fit: BoxFit.fill,
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        textAlign: TextAlign.center,
-                        state.title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
+          child: FittedBox(
+            fit: BoxFit.fill,
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      textAlign: TextAlign.center,
+                      state.title,
+                      style: const TextStyle(
+                        color: Colors.white,
                       ),
-                      Icon(state.icon),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    Icon(state.icon),
+                  ],
+                ),
+              ],
             ),
           ),
           onPressed: () {
