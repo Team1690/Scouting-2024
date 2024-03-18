@@ -31,19 +31,25 @@ class GamepiecesLineChart extends StatelessWidget {
                   children: <Widget>[
                     if (isPC(context)) ...<Widget>[
                       RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                           children: <TextSpan>[
                             TextSpan(
                               text: " Didnt Come ",
-                              style: TextStyle(color: Colors.red),
+                              style: TextStyle(
+                                color: RobotFieldStatus.didntComeToField.color,
+                              ),
                             ),
                             TextSpan(
                               text: " Didnt Work ",
-                              style: TextStyle(color: Colors.purple),
+                              style: TextStyle(
+                                color: RobotFieldStatus.didntWorkOnField.color,
+                              ),
                             ),
                             TextSpan(
                               text: " Did Defense ",
-                              style: TextStyle(color: Colors.blue),
+                              style: TextStyle(
+                                color: RobotFieldStatus.didDefense.color,
+                              ),
                             ),
                           ],
                         ),
