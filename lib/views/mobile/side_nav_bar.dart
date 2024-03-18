@@ -8,6 +8,7 @@ import "package:scouting_frontend/views/mobile/screens/fault_view/fault_view.dar
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_view.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_view.dart";
+import "package:scouting_frontend/views/pc/auto_gamepieces/auto_gamepieces_view.dart";
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 
@@ -68,6 +69,11 @@ class SideNavBar extends StatelessWidget {
               icon: Icons.construction,
               title: "Faults",
               widget: FaultView.new,
+            ),
+            const NavbarTile(
+              icon: Icons.route,
+              title: "Auto",
+              widget: AutoGamepiecesScreen.new,
             ),
             const NavbarTile(
               icon: Icons.feed_outlined,

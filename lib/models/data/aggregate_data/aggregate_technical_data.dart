@@ -3,6 +3,13 @@ import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/math_utils.dart";
 import "package:scouting_frontend/models/data/calculated_technical_data.dart";
 import "package:scouting_frontend/models/data/technical_data.dart";
+import "package:scouting_frontend/models/data/technical_match_data.dart";
+
+extension AggregateDataListExtension on List<TechnicalMatchData> {
+  AggregateData get scoutingAggregations => AggregateData.fromTechnicalData(
+        map((final TechnicalMatchData e) => e.data).toList(),
+      );
+}
 
 class AggregateData {
   AggregateData({
