@@ -70,9 +70,6 @@ subscription FetchTeams(\$ids: [Int!]) {
       }
       harmony_with
       scouter_name
-      starting_position {
-        id
-      }
     }
     name
     number

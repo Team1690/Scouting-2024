@@ -4,7 +4,6 @@ import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
-import "package:scouting_frontend/models/data/starting_position_enum.dart";
 import "package:scouting_frontend/models/data/technical_data.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
@@ -17,7 +16,6 @@ class TechnicalMatchData {
     required this.harmonyWith,
     required this.climb,
     required this.matchIdentifier,
-    required this.startingPosition,
     required this.autoGamepieces,
   });
 
@@ -27,7 +25,6 @@ class TechnicalMatchData {
   final int harmonyWith;
   final Climb climb;
   final int scheduleMatchId;
-  final StartingPosition startingPosition;
   final String scouterName;
   final List<(AutoGamepieceID, AutoGamepieceState)> autoGamepieces;
 
@@ -80,8 +77,6 @@ class TechnicalMatchData {
       climb: climbTitleToEnum(match["climb"]["title"] as String),
       scheduleMatchId: match["schedule_match"]["id"] as int,
       data: TechnicalData.parse(match, gamepieces),
-      startingPosition: idProvider
-          .startingPosition.idToEnum[match["starting_position"]["id"] as int]!,
       scouterName: match["scouter_name"] as String,
     );
   }

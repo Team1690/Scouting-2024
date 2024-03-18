@@ -1,4 +1,3 @@
-import "package:scouting_frontend/models/data/starting_position_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
@@ -28,7 +27,6 @@ class App extends StatelessWidget {
     required this.driveMotorIds,
     required this.matchTypeIds,
     required this.faultStatus,
-    required this.startingPosition,
     required this.shootingRange,
     required this.autoGamepieceLocations,
     required this.autoGamepieceStates,
@@ -42,7 +40,6 @@ class App extends StatelessWidget {
   final Map<DriveMotor, int> driveMotorIds;
   final Map<MatchType, int> matchTypeIds;
   final Map<FaultStatus, int> faultStatus;
-  final Map<StartingPosition, int> startingPosition;
   final Map<ShootingRange, int> shootingRange;
   final Map<AutoGamepieceID, int> autoGamepieceLocations;
   final Map<AutoGamepieceState, int> autoGamepieceStates;
@@ -55,7 +52,6 @@ class App extends StatelessWidget {
           child: IdProvider(
             autoGamepieceLocations: autoGamepieceLocations,
             autoGamepieceStates: autoGamepieceStates,
-            startingPosition: startingPosition,
             matchTypeIds: matchTypeIds,
             climbIds: climbIds,
             drivemotorIds: driveMotorIds,

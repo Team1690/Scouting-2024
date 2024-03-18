@@ -73,9 +73,6 @@ query FetchTechnicalMatch($team_id: Int!, $match_type_id: Int!, $match_number: I
     tele_speaker_missed
     trap_amount
     traps_missed
-    starting_position {
-      id
-    }
   }
 }
 

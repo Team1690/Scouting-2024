@@ -76,9 +76,6 @@ subscription FetchAllTeams {
       tele_speaker_missed
       trap_amount
       traps_missed
-      starting_position {
-        id
-      }
       robot_field_status {
         id
       }
