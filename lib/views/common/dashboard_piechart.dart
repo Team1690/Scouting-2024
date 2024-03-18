@@ -17,8 +17,8 @@ class DashboardPieChartState extends State<DashboardPieChart> {
   List<PieChartSectionData> showingSections() => widget.sections.mapIndexed(
           (final int index, final (int, String text, Color) section) {
         final bool isTouched = index == touchedIndex;
-        final double fontSize = isTouched ? 20.0 : 16.0;
-        final double radius = isTouched ? 110.0 : 100.0;
+        final double fontSize = isTouched ? 20.0 : 8.0;
+        final double radius = isTouched ? 150.0 : 130.0;
         const List<Shadow> shadows = <Shadow>[
           Shadow(color: Colors.black, blurRadius: 2),
         ];
