@@ -5,6 +5,7 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/list_utils.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
@@ -16,19 +17,6 @@ import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
-
-class DeepEqList<T> {
-  const DeepEqList(this.list);
-
-  final List<T> list;
-
-  @override
-  bool operator ==(final Object other) =>
-      other is DeepEqList<T> && ListEquality<T>().equals(other.list, list);
-
-  @override
-  int get hashCode => list.hashCode;
-}
 
 class AutoGamepiecesScreen extends StatelessWidget {
   const AutoGamepiecesScreen({super.key});
@@ -79,7 +67,6 @@ class _AutoFieldState extends State<AutoField> {
                 child: TeamSelectionFuture(
                   onChange: (final LightTeam p0) async {
                     field = await getField(false);
-                    print(field);
                     setState(() {
                       team = p0;
                     });
@@ -97,7 +84,7 @@ class _AutoFieldState extends State<AutoField> {
             height: 10,
           ),
           if (team != null && field != null)
-            StreamBuilder(
+            StreamBuilder<TeamData>(
               stream: fetchSingleTeamData(team!.id, context),
               builder: (
                 final BuildContext context,
@@ -133,30 +120,30 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
   AutoGamepieceID? selectedNote;
   @override
   Widget build(final BuildContext context) {
-    final grouped = groupBy(
+    final Map<DeepEqList<AutoGamepieceID>, List<TechnicalMatchData>> grouped =
+        groupBy(
       widget.data.technicalMatches,
       (final TechnicalMatchData match) => DeepEqList<AutoGamepieceID>(
         match.autoGamepieces
             .map(
-              (
-                final (AutoGamepieceID, AutoGamepieceState) autogampiece,
-              ) =>
+              (final (AutoGamepieceID, AutoGamepieceState) autogampiece) =>
                   autogampiece.$1,
             )
             .toList(),
       ),
     );
-    print(grouped.keys);
 
     final List<({List<AutoGamepieceID> auto, List<TechnicalMatchData> matches})>
-        autos = grouped.entries.map(
-      (
-        final MapEntry<DeepEqList<AutoGamepieceID>, List<TechnicalMatchData>>
-            element,
-      ) {
-        return (auto: element.key.list, matches: element.value);
-      },
-    ).toList();
+        autos = grouped.entries
+            .map(
+              (
+                final MapEntry<DeepEqList<AutoGamepieceID>,
+                        List<TechnicalMatchData>>
+                    element,
+              ) =>
+                  (auto: element.key.list, matches: element.value),
+            )
+            .toList();
 
     // print(autos.length);
     if (autos.isEmpty) {
@@ -289,21 +276,21 @@ class AutoFieldCanvas extends CustomPainter {
     );
 
     for (int i = 0; i < gamepieceOrder.length; i++) {
-      final TextPainter textPainter = TextPainter(
+      final TextPainter frontTextPainter = TextPainter(
         text: TextSpan(
           text: i.toString(),
           style: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 25,
           ),
         ),
         textDirection: TextDirection.ltr,
       );
-      textPainter.layout(
+      frontTextPainter.layout(
         minWidth: 0,
         maxWidth: size.width,
       );
-      textPainter.paint(
+      frontTextPainter.paint(
         canvas,
         notesPlacements.entries
             .firstWhereOrNull(
@@ -320,7 +307,8 @@ class AutoFieldCanvas extends CustomPainter {
   bool shouldRepaint(covariant final AutoFieldCanvas oldDelegate) => true;
 }
 
-Map<Offset, AutoGamepieceID> notesPlacements = Map.fromEntries(
+Map<Offset, AutoGamepieceID> notesPlacements =
+    Map<Offset, AutoGamepieceID>.fromEntries(
   <(ui.Offset, AutoGamepieceID)>[
     (const Offset(0, fieldheight / 2), AutoGamepieceID.zero),
     (const Offset(2.88, 1.22), AutoGamepieceID.one),
@@ -331,7 +319,10 @@ Map<Offset, AutoGamepieceID> notesPlacements = Map.fromEntries(
     (const Offset(8.2, 4.05), AutoGamepieceID.six),
     (const Offset(8.2, 5.7), AutoGamepieceID.seven),
     (const Offset(8.2, 7.04), AutoGamepieceID.eight),
-  ].map((final (ui.Offset, AutoGamepieceID) e) => MapEntry(e.$1, e.$2)),
+  ].map(
+    (final (ui.Offset, AutoGamepieceID) e) =>
+        MapEntry<Offset, AutoGamepieceID>(e.$1, e.$2),
+  ),
 );
 
 bool inTolarance(
