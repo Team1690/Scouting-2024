@@ -56,7 +56,7 @@ class NavigationTab extends StatelessWidget {
                   context,
                   MaterialPageRoute<AutoGamepiecesScreen>(
                     builder: (final BuildContext context) =>
-                        AutoGamepiecesScreen(),
+                        const AutoGamepiecesScreen(),
                   ),
                 );
               },
