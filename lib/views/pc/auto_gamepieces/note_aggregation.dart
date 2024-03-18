@@ -48,9 +48,10 @@ class NoteAggregation extends StatelessWidget {
               .firstWhereOrNull(
                 (final (AutoGamepieceID, AutoGamepieceState) element) =>
                     element.$1 == selectedNote,
-              )!
-              .$2,
+              )
+              ?.$2,
         )
+        .whereNotNull() // Happens when selectedNote is not in the auto
         .toList();
     return totalInteractions.where(options.contains).length /
         totalInteractions.length *

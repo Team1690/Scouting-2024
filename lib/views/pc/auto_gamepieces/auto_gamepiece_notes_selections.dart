@@ -12,9 +12,11 @@ class AutoNoteSelection extends StatelessWidget {
     required this.gamepieceOrder,
     required this.field,
     required this.onNoteClicked,
+    required this.selectedGamepiece,
   });
 
   final List<AutoGamepieceID> gamepieceOrder;
+  final AutoGamepieceID? selectedGamepiece;
   final ui.Image field;
   final void Function(AutoGamepieceID?) onNoteClicked;
 
@@ -45,6 +47,7 @@ class AutoNoteSelection extends StatelessWidget {
             },
             child: CustomPaint(
               painter: AutoFieldCanvas(
+                selectedGamepiece: selectedGamepiece,
                 fieldBackground: field,
                 gamepieceOrder: gamepieceOrder,
                 meterToPixelRatio: constraints.maxWidth / autoFieldWidth,

@@ -10,10 +10,12 @@ class AutoFieldCanvas extends CustomPainter {
     required this.fieldBackground,
     required this.gamepieceOrder,
     required this.meterToPixelRatio,
+    required this.selectedGamepiece,
   });
   final ui.Image fieldBackground;
   final List<AutoGamepieceID> gamepieceOrder;
   final double meterToPixelRatio;
+  final AutoGamepieceID? selectedGamepiece;
 
   @override
   void paint(final Canvas canvas, final ui.Size size) async {
@@ -33,9 +35,11 @@ class AutoFieldCanvas extends CustomPainter {
       final TextPainter frontTextPainter = TextPainter(
         text: TextSpan(
           text: i.toString(),
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 25,
+          style: TextStyle(
+            color: selectedGamepiece == gamepieceOrder[i]
+                ? Colors.red
+                : Colors.white,
+            fontSize: 40,
           ),
         ),
         textDirection: TextDirection.ltr,
@@ -44,6 +48,8 @@ class AutoFieldCanvas extends CustomPainter {
         minWidth: 0,
         maxWidth: size.width,
       );
+      final double textHorizontalOffset = (frontTextPainter.width) / 2;
+      final double textVerticalOffset = (frontTextPainter.height) / 2;
       frontTextPainter.paint(
         canvas,
         notesPlacements.entries
@@ -52,7 +58,8 @@ class AutoFieldCanvas extends CustomPainter {
                   element.value == gamepieceOrder[i],
             )!
             .key
-            .scale(meterToPixelRatio, meterToPixelRatio),
+            .scale(meterToPixelRatio, meterToPixelRatio)
+            .translate(textHorizontalOffset, -textVerticalOffset),
       );
     }
   }

@@ -53,7 +53,7 @@ final Map<Offset, AutoGamepieceID> notesPlacements =
       (const Offset(2.88, 2.65), AutoGamepieceID.two),
       (const Offset(2.88, 3.88), AutoGamepieceID.three),
       (const Offset(8.2, 0.75), AutoGamepieceID.four),
-      (const Offset(8.2, 2.375), AutoGamepieceID.five),
+      (const Offset(8.2, 2.395), AutoGamepieceID.five),
       (const Offset(8.2, 4.05), AutoGamepieceID.six),
       (const Offset(8.2, 5.7), AutoGamepieceID.seven),
       (const Offset(8.2, 7.04), AutoGamepieceID.eight),

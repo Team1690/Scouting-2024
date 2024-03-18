@@ -60,77 +60,88 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
     return Flex(
       direction: isPC(context) ? Axis.horizontal : Axis.vertical,
       children: <Widget>[
-        SizedBox(
-          width: double.infinity,
-          child: AutoNoteSelection(
-            field: widget.field,
-            gamepieceOrder: autos[currentAutoIndex].auto,
-            onNoteClicked: (final AutoGamepieceID? note) {
-              setState(() {
-                selectedNote = note;
-              });
-            },
+        Expanded(
+          flex: isPC(context) ? 4 : 0,
+          child: SizedBox(
+            width: isPC(context) ? 300 : double.infinity,
+            child: AutoNoteSelection(
+              selectedGamepiece: selectedNote,
+              field: widget.field,
+              gamepieceOrder: autos[currentAutoIndex].auto,
+              onNoteClicked: (final AutoGamepieceID? note) {
+                setState(() {
+                  if (!autos[currentAutoIndex].auto.contains(note)) {
+                    selectedNote = null;
+                  } else {
+                    selectedNote = note;
+                  }
+                });
+              },
+            ),
           ),
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SingleChildScrollView(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+        Expanded(
+          flex: isPC(context) ? 2 : 0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SingleChildScrollView(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ...autos.mapIndexed(
+                      (
+                        final int index,
+                        final ({
+                          List<AutoGamepieceID> auto,
+                          List<TechnicalMatchData> matches
+                        }) e,
+                      ) =>
+                          Icon(
+                        size: 15,
+                        currentAutoIndex == index
+                            ? Icons.circle
+                            : Icons.circle_outlined,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  ...autos.mapIndexed(
-                    (
-                      final int index,
-                      final ({
-                        List<AutoGamepieceID> auto,
-                        List<TechnicalMatchData> matches
-                      }) e,
-                    ) =>
-                        Icon(
-                      size: 15,
-                      currentAutoIndex == index
-                          ? Icons.circle
-                          : Icons.circle_outlined,
-                    ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        currentAutoIndex = max(0, currentAutoIndex - 1);
+                      });
+                    },
+                    icon: const Icon(Icons.skip_previous),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        currentAutoIndex =
+                            min(autos.length - 1, currentAutoIndex + 1);
+                      });
+                    },
+                    icon: const Icon(Icons.skip_next),
                   ),
                 ],
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      currentAutoIndex = max(0, currentAutoIndex - 1);
-                    });
-                  },
-                  icon: const Icon(Icons.skip_previous),
+              if (autos[currentAutoIndex].auto.isNotEmpty) ...<Widget>[
+                AutoAggreagte(
+                  technicalMatchData: autos[currentAutoIndex].matches,
                 ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      currentAutoIndex =
-                          min(autos.length - 1, currentAutoIndex + 1);
-                    });
-                  },
-                  icon: const Icon(Icons.skip_next),
-                ),
+                if (selectedNote != null)
+                  NoteAggregation(
+                    selectedNote: selectedNote!,
+                    auto: autos[currentAutoIndex],
+                  ),
               ],
-            ),
-            if (autos[currentAutoIndex].auto.isNotEmpty) ...<Widget>[
-              AutoAggreagte(
-                technicalMatchData: autos[currentAutoIndex].matches,
-              ),
-              if (selectedNote != null)
-                NoteAggregation(
-                  selectedNote: selectedNote!,
-                  auto: autos[currentAutoIndex],
-                ),
             ],
-          ],
+          ),
         ),
       ],
     );
