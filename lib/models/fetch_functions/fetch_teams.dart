@@ -59,6 +59,7 @@ subscription FetchTeams(\$ids: [Int!]) {
       tele_speaker_missed
       trap_amount
       traps_missed
+      delivery
       climb {
         id
         points

@@ -6,16 +6,19 @@ import "package:scouting_frontend/views/constants.dart";
 
 class GamepiecesLineChart extends StatelessWidget {
   const GamepiecesLineChart({
+    super.key,
     required this.title,
     required this.matches,
     required this.data,
     this.missedData,
+    this.deliveryData,
   });
 
   final String title;
   final List<MatchData> matches;
   final int Function(MatchData) data;
   final int Function(MatchData)? missedData;
+  final int Function(MatchData)? deliveryData;
   @override
   Widget build(final BuildContext context) => Stack(
         children: <Widget>[
@@ -28,15 +31,25 @@ class GamepiecesLineChart extends StatelessWidget {
                   children: <Widget>[
                     if (isPC(context)) ...<Widget>[
                       RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                           children: <TextSpan>[
                             TextSpan(
                               text: " Didnt Come ",
-                              style: TextStyle(color: Colors.purple),
+                              style: TextStyle(
+                                color: RobotFieldStatus.didntComeToField.color,
+                              ),
                             ),
                             TextSpan(
                               text: " Didnt Work ",
-                              style: TextStyle(color: Colors.red),
+                              style: TextStyle(
+                                color: RobotFieldStatus.didntWorkOnField.color,
+                              ),
+                            ),
+                            TextSpan(
+                              text: " Did Defense ",
+                              style: TextStyle(
+                                color: RobotFieldStatus.didDefense.color,
+                              ),
                             ),
                           ],
                         ),
@@ -53,6 +66,10 @@ class GamepiecesLineChart extends StatelessWidget {
                           TextSpan(
                             text: " Missed ",
                             style: TextStyle(color: Colors.red),
+                          ),
+                          TextSpan(
+                            text: " Delivered ",
+                            style: TextStyle(color: Colors.yellow),
                           ),
                         ],
                       ),
@@ -83,14 +100,23 @@ class GamepiecesLineChart extends StatelessWidget {
               inputedColors: const <Color>[
                 Colors.green,
                 Colors.red,
+                Colors.yellow,
               ],
               distanceFromHighest: 4,
               dataSet: <List<int>>[
                 matches.technicalMatchExists.map(data).toList(),
                 if (missedData != null)
                   matches.technicalMatchExists.map(missedData!).toList(),
+                if (deliveryData != null)
+                  matches.technicalMatchExists.map(deliveryData!).toList(),
               ],
               robotMatchStatuses: <List<RobotFieldStatus>>[
+                matches.technicalMatchExists
+                    .map(
+                      (final MatchData e) =>
+                          e.technicalMatchData!.robotFieldStatus,
+                    )
+                    .toList(),
                 matches.technicalMatchExists
                     .map(
                       (final MatchData e) =>

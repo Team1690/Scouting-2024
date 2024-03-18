@@ -13,6 +13,7 @@ class TechnicalData<T extends num> {
     required this.trapsMissed,
     required this.teleAmp,
     required this.climbingPoints,
+    required this.delivery,
   });
 
   final T autoSpeakerMissed;
@@ -24,6 +25,7 @@ class TechnicalData<T extends num> {
   final T trapsMissed;
   final T teleAmp;
   final T climbingPoints;
+  final T delivery;
 
   T get ampGamepieces => teleAmp;
   T get speakerGamepieces => teleSpeaker + autoSpeaker as T;
@@ -74,6 +76,7 @@ class TechnicalData<T extends num> {
         trapAmount: (table["trap_amount"] as num? ?? 0).numericCast(),
         trapsMissed: (table["traps_missed"] as num? ?? 0).numericCast(),
         climbingPoints: (table["climb"]["points"] as num? ?? 0).numericCast(),
+        delivery: (table["delivery"] as num? ?? 0).numericCast(),
       );
 }
 
