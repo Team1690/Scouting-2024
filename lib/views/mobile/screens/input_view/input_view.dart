@@ -64,7 +64,7 @@ class _UserInputState extends State<UserInput> {
   };
 
   final bool initialFlag = false;
-
+  bool showFault = false;
   bool isRedAlliance = false;
 
   void updateTextFields() {
@@ -318,113 +318,96 @@ class _UserInputState extends State<UserInput> {
                       const SizedBox(
                         height: 20,
                       ),
-                      FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            const FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: Text(
-                                "Robot fault:     ",
-                              ),
-                            ),
-                            FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: ToggleButtons(
-                                fillColor:
-                                    const Color.fromARGB(10, 244, 67, 54),
-                                focusColor:
-                                    const Color.fromARGB(170, 244, 67, 54),
-                                highlightColor:
-                                    const Color.fromARGB(170, 244, 67, 54),
-                                selectedBorderColor:
-                                    const Color.fromARGB(170, 244, 67, 54),
-                                selectedColor: Colors.red,
-                                children: const <Widget>[
-                                  Icon(
-                                    Icons.cancel,
-                                  ),
-                                ],
-                                isSelected: <bool>[
-                                  match.faultMessage != null,
-                                ],
-                                onPressed: (final int index) {
-                                  assert(index == 0);
-                                  setState(() {
-                                    match = match.copyWith(
-                                      faultMessage: always(
-                                        match.faultMessage.onNull(
-                                          "\"יש לרובוט בעיה (technical scouting)\"",
-                                        ),
-                                      ),
-                                    );
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            AnimatedCrossFade(
-                              duration: const Duration(milliseconds: 300),
-                              crossFadeState: match.faultMessage == null
-                                  ? CrossFadeState.showFirst
-                                  : CrossFadeState.showSecond,
-                              firstChild: Container(),
-                              secondChild: TextField(
-                                controller: faultMessageController,
-                                textDirection: TextDirection.rtl,
-                                onChanged: (final String value) {
-                                  match = match.copyWith(
-                                    faultMessage: always(value),
-                                  );
-                                },
-                                decoration: const InputDecoration(
-                                  hintText: "Robot fault",
+                      ToggleButtons(
+                        fillColor: const Color.fromARGB(10, 244, 67, 54),
+                        focusColor: const Color.fromARGB(170, 244, 67, 54),
+                        highlightColor: const Color.fromARGB(170, 244, 67, 54),
+                        selectedBorderColor:
+                            const Color.fromARGB(170, 244, 67, 54),
+                        selectedColor: Colors.red,
+                        children: const <Widget>[
+                          Icon(
+                            Icons.cancel,
+                          ),
+                        ],
+                        isSelected: <bool>[
+                          showFault == true,
+                        ],
+                        onPressed: (final int index) {
+                          assert(index == 0);
+                          setState(() {
+                            showFault = !showFault;
+                            match = match.copyWith(
+                              faultMessage: always(
+                                match.faultMessage.onNull(
+                                  "\"יש לרובוט בעיה (technical scouting)\"",
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            SubmitButton(
-                              resetForm: () {
-                                setState(() {
-                                  match = match.cleared();
-                                  teamNumberController.clear();
-                                  matchController.clear();
-                                  faultMessageController.clear();
-                                  isRedAlliance = false;
-                                });
-                              },
-                              validate: () => formKey.currentState!.validate(),
-                              getJson: match.toJson,
-                              mutation: widget.initialVars == null
-                                  ? insertMutation(match.faultMessage)
-                                  : updateMutation,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            LocalSaveButton(
-                              vars: match,
-                              mutation: widget.initialVars == null
-                                  ? insertMutation(match.faultMessage)
-                                  : updateMutation,
-                              resetForm: () {
-                                setState(() {
-                                  match = match.cleared();
-                                  teamNumberController.clear();
-                                  matchController.clear();
-                                  faultMessageController.clear();
-                                  isRedAlliance = false;
-                                });
-                              },
-                              validate: () => formKey.currentState!.validate(),
-                            ),
-                          ],
+                            );
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 300),
+                        crossFadeState: showFault
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
+                        firstChild: Container(),
+                        secondChild: TextField(
+                          controller: faultMessageController,
+                          textDirection: TextDirection.rtl,
+                          onChanged: (final String value) {
+                            match = match.copyWith(
+                              faultMessage: always(value),
+                            );
+                          },
+                          decoration: const InputDecoration(
+                            hintText: "Robot fault",
+                          ),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      SubmitButton(
+                        resetForm: () {
+                          setState(() {
+                            match = match.cleared();
+                            teamNumberController.clear();
+                            matchController.clear();
+                            faultMessageController.clear();
+                            isRedAlliance = false;
+                            showFault = false;
+                          });
+                        },
+                        validate: () => formKey.currentState!.validate(),
+                        getJson: match.toJson,
+                        mutation: widget.initialVars == null
+                            ? insertMutation(match.faultMessage)
+                            : updateMutation,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      LocalSaveButton(
+                        vars: match,
+                        mutation: widget.initialVars == null
+                            ? insertMutation(match.faultMessage)
+                            : updateMutation,
+                        resetForm: () {
+                          setState(() {
+                            match = match.cleared();
+                            teamNumberController.clear();
+                            matchController.clear();
+                            faultMessageController.clear();
+                            isRedAlliance = false;
+                            showFault = false;
+                          });
+                        },
+                        validate: () => formKey.currentState!.validate(),
                       ),
                     ],
                   ),
