@@ -167,7 +167,9 @@ class MatchSearchBox extends StatelessWidget {
               matches[matches.indexWhere(
                 (final ScheduleMatch match) =>
                     match.matchIdentifier.number ==
-                    suggestion.matchIdentifier.number,
+                        suggestion.matchIdentifier.number &&
+                    match.matchIdentifier.type ==
+                        suggestion.matchIdentifier.type,
               )],
             );
           },
