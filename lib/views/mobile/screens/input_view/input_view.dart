@@ -9,7 +9,6 @@ import "package:scouting_frontend/views/mobile/local_save_button.dart";
 import "package:scouting_frontend/views/mobile/manage_preferences.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_selector.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/climbing.dart";
-import "package:scouting_frontend/views/mobile/screens/input_view/widgets/fault_button.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/game_piece_counter.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/trap_amount.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/traps_missed.dart";
@@ -52,6 +51,7 @@ class _UserInputState extends State<UserInput> {
   final GlobalKey<FormState> jsonFormKey = GlobalKey();
   final TextEditingController teamNumberController = TextEditingController();
   final TextEditingController scouterNameController = TextEditingController();
+  final TextEditingController faultMessageController = TextEditingController();
   bool toggleLightsState = false;
   late InputViewVars match = InputViewVars();
   // -1 means nothing
@@ -64,11 +64,8 @@ class _UserInputState extends State<UserInput> {
   };
 
   final bool initialFlag = false;
-
+  bool showFault = false;
   bool isRedAlliance = false;
-
-  bool hasFault = false;
-  String? faultMessage;
 
   void updateTextFields() {
     matchController.text =
@@ -117,7 +114,7 @@ class _UserInputState extends State<UserInput> {
                   builder: (final BuildContext dialogContext) =>
                       ManagePreferences(
                     mutation: widget.initialVars == null
-                        ? insertMutation(hasFault, faultMessage)
+                        ? insertMutation(match.faultMessage)
                         : updateMutation,
                   ),
                 ));
@@ -145,8 +142,9 @@ class _UserInputState extends State<UserInput> {
                     children: <Widget>[
                       ScouterNameInput(
                         onScouterNameChange: (final String scouterName) {
-                          match =
-                              match.copyWith(scouterName: always(scouterName));
+                          match = match.copyWith(
+                            scouterName: always(scouterName),
+                          );
                         },
                         scouterNameController: scouterNameController,
                       ),
@@ -261,8 +259,9 @@ class _UserInputState extends State<UserInput> {
                             child: TrapAmount(
                               onTrapChange: (final int trap) {
                                 setState(() {
-                                  match =
-                                      match.copyWith(trapAmount: always(trap));
+                                  match = match.copyWith(
+                                    trapAmount: always(trap),
+                                  );
                                 });
                               },
                               match: match,
@@ -274,8 +273,9 @@ class _UserInputState extends State<UserInput> {
                             child: TrapsMissed(
                               onTrapChange: (final int trap) {
                                 setState(() {
-                                  match =
-                                      match.copyWith(trapsMissed: always(trap));
+                                  match = match.copyWith(
+                                    trapsMissed: always(trap),
+                                  );
                                 });
                               },
                               flickerScreen: flickerScreen,
@@ -318,13 +318,56 @@ class _UserInputState extends State<UserInput> {
                       const SizedBox(
                         height: 20,
                       ),
-                      FaultButton(
-                        onToggle: (final bool isActivated) {
-                          hasFault = isActivated;
+                      ToggleButtons(
+                        fillColor: const Color.fromARGB(10, 244, 67, 54),
+                        focusColor: const Color.fromARGB(170, 244, 67, 54),
+                        highlightColor: const Color.fromARGB(170, 244, 67, 54),
+                        selectedBorderColor:
+                            const Color.fromARGB(170, 244, 67, 54),
+                        selectedColor: Colors.red,
+                        children: const <Widget>[
+                          Icon(
+                            Icons.cancel,
+                          ),
+                        ],
+                        isSelected: <bool>[
+                          showFault == true,
+                        ],
+                        onPressed: (final int index) {
+                          assert(index == 0);
+                          setState(() {
+                            showFault = !showFault;
+                            match = match.copyWith(
+                              faultMessage: always(
+                                match.faultMessage.onNull(
+                                  "\"יש לרובוט בעיה (technical scouting)\"",
+                                ),
+                              ),
+                            );
+                          });
                         },
-                        onNewFaultMessage: (final String message) {
-                          faultMessage = message;
-                        },
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      AnimatedCrossFade(
+                        duration: const Duration(milliseconds: 300),
+                        crossFadeState: showFault
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
+                        firstChild: Container(),
+                        secondChild: TextField(
+                          controller: faultMessageController,
+                          textDirection: TextDirection.rtl,
+                          onChanged: (final String value) {
+                            match = match.copyWith(
+                              faultMessage: always(value),
+                            );
+                          },
+                          decoration: const InputDecoration(
+                            hintText: "Robot fault",
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -335,15 +378,15 @@ class _UserInputState extends State<UserInput> {
                             match = match.cleared();
                             teamNumberController.clear();
                             matchController.clear();
-                            faultMessage = null;
-                            hasFault = false;
+                            faultMessageController.clear();
                             isRedAlliance = false;
+                            showFault = false;
                           });
                         },
                         validate: () => formKey.currentState!.validate(),
                         getJson: match.toJson,
                         mutation: widget.initialVars == null
-                            ? insertMutation(hasFault, faultMessage)
+                            ? insertMutation(match.faultMessage)
                             : updateMutation,
                       ),
                       const SizedBox(
@@ -352,16 +395,16 @@ class _UserInputState extends State<UserInput> {
                       LocalSaveButton(
                         vars: match,
                         mutation: widget.initialVars == null
-                            ? insertMutation(hasFault, faultMessage)
+                            ? insertMutation(match.faultMessage)
                             : updateMutation,
                         resetForm: () {
                           setState(() {
                             match = match.cleared();
                             teamNumberController.clear();
                             matchController.clear();
-                            faultMessage = null;
-                            hasFault = false;
+                            faultMessageController.clear();
                             isRedAlliance = false;
+                            showFault = false;
                           });
                         },
                         validate: () => formKey.currentState!.validate(),
@@ -379,13 +422,13 @@ class _UserInputState extends State<UserInput> {
         ),
       );
 
-  String insertMutation(final bool hasFault, final String? faultMessage) => """
+  String insertMutation(final String? faultMessage) => """
 mutation MyMutation(\$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!, \$L0_id: Int!, \$L1_id: Int!, \$L2_id: Int!, \$M0_id: Int!, \$M1_id: Int!, \$M2_id: Int!, \$M3_id: Int!, \$M4_id: Int!, \$R0_id: Int = 10, \$auto_order: String = "") {
   insert_technical_match(objects: {cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery, L0_id: \$L0_id, L1_id: \$L1_id, L2_id: \$L2_id, M0_id: \$M0_id, M1_id: \$M1_id, M2_id: \$M2_id, M3_id: \$M3_id, M4_id: \$M4_id, R0_id: \$R0_id, auto_order: \$auto_order}) {
     affected_rows
   }
-  ${hasFault ? "" : """
-insert_faults(objects: {team_id: \$team_id, message: ${faultMessage ?? "\"יש לרובוט בעיה (technical scouting)\""}, schedule_match_id: \$schedule_id fault_status_id: 1 is_rematch: \$is_rematch}) {
+  ${faultMessage == null ? "" : """
+insert_faults(objects: {team_id: \$team_id, message: $faultMessage, schedule_match_id: \$schedule_id fault_status_id: 1 is_rematch: \$is_rematch}) {
     affected_rows
   }
   """}

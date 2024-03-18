@@ -27,8 +27,10 @@ class InputViewVars implements HasuraVars {
         trapsMissed = 0,
         scoutedTeam = null,
         autoOrder = <AutoGamepieceID>[],
-        autoGamepieces = AutoGamepieces.base();
+        autoGamepieces = AutoGamepieces.base(),
+        faultMessage = "";
   InputViewVars.all({
+    required this.faultMessage,
     required this.autoOrder,
     required this.delivery,
     required this.trapsMissed,
@@ -67,8 +69,10 @@ class InputViewVars implements HasuraVars {
     final int Function()? delivery,
     final AutoGamepieces Function()? autoGamepieces,
     final List<AutoGamepieceID> Function()? autoOrder,
+    final String? Function()? faultMessage,
   }) =>
       InputViewVars.all(
+        faultMessage: faultMessage != null ? faultMessage() : this.faultMessage,
         isRematch: isRematch != null ? isRematch() : this.isRematch,
         scheduleMatch:
             scheduleMatch != null ? scheduleMatch() : this.scheduleMatch,
@@ -110,6 +114,7 @@ class InputViewVars implements HasuraVars {
   final int trapsMissed;
   final LightTeam? scoutedTeam;
   final AutoGamepieces autoGamepieces;
+  final String? faultMessage;
 
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
