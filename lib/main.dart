@@ -2,7 +2,6 @@ import "dart:io";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/data/starting_position_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
@@ -34,7 +33,6 @@ void main() async {
     "drivemotor",
     "robot_field_status",
     "fault_status",
-    "starting_position",
     "shooting_range",
     "auto_gamepiece_location",
     "auto_gamepiece_state",
@@ -62,8 +60,6 @@ void main() async {
       nameToIdToEnumToId(RobotFieldStatus.values, enums["robot_field_status"]!);
   final Map<FaultStatus, int> faultStatus =
       nameToIdToEnumToId(FaultStatus.values, enums["fault_status"]!);
-  final Map<StartingPosition, int> startingPosition =
-      nameToIdToEnumToId(StartingPosition.values, enums["starting_position"]!);
   final Map<ShootingRange, int> shootingRange =
       nameToIdToEnumToId(ShootingRange.values, enums["shooting_range"]!);
   final List<ScheduleMatch> matches = await fetchMatches(
@@ -85,7 +81,6 @@ void main() async {
       climbIds: climbs,
       driveMotorIds: driveMotors,
       robotFieldStatusIds: robotFieldStatuses,
-      startingPosition: startingPosition,
       shootingRange: shootingRange,
     ),
   );

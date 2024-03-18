@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/data/starting_position_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
@@ -49,7 +48,6 @@ class IdProvider extends InheritedWidget {
     required final Map<MatchType, int> matchTypeIds,
     required final Map<RobotFieldStatus, int> robotFieldStatusIds,
     required final Map<FaultStatus, int> faultStatus,
-    required final Map<StartingPosition, int> startingPosition,
     required final Map<ShootingRange, int> shootingRange,
     required final Map<AutoGamepieceID, int> autoGamepieceLocations,
     required final Map<AutoGamepieceState, int> autoGamepieceStates,
@@ -61,7 +59,6 @@ class IdProvider extends InheritedWidget {
           matchType: IdTable<MatchType>(matchTypeIds),
           robotFieldStatus: IdTable<RobotFieldStatus>(robotFieldStatusIds),
           faultStatus: IdTable<FaultStatus>(faultStatus),
-          startingPosition: IdTable<StartingPosition>(startingPosition),
           shootingRange: IdTable<ShootingRange>(shootingRange),
           autoGamepieceLocations:
               IdTable<AutoGamepieceID>(autoGamepieceLocations),
@@ -76,7 +73,6 @@ class IdProvider extends InheritedWidget {
     required this.matchType,
     required this.robotFieldStatus,
     required this.faultStatus,
-    required this.startingPosition,
     required this.shootingRange,
     required this.autoGamepieceLocations,
     required this.autoGamepieceStates,
@@ -87,7 +83,6 @@ class IdProvider extends InheritedWidget {
   final IdTable<DriveTrain> driveTrain;
   final IdTable<DriveMotor> drivemotor;
   final IdTable<FaultStatus> faultStatus;
-  final IdTable<StartingPosition> startingPosition;
   final IdTable<ShootingRange> shootingRange;
   final IdTable<AutoGamepieceID> autoGamepieceLocations;
   final IdTable<AutoGamepieceState> autoGamepieceStates;
@@ -100,7 +95,6 @@ class IdProvider extends InheritedWidget {
       driveTrain != oldWidget.driveTrain ||
       drivemotor != oldWidget.drivemotor ||
       faultStatus != oldWidget.faultStatus ||
-      startingPosition != oldWidget.startingPosition ||
       shootingRange != oldWidget.shootingRange ||
       autoGamepieceLocations != oldWidget.autoGamepieceLocations ||
       autoGamepieceStates != oldWidget.autoGamepieceStates;
