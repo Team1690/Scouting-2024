@@ -2,10 +2,13 @@ import "dart:math";
 import "dart:ui" as ui;
 
 import "package:collection/collection.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:flutter/widgets.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/list_utils.dart";
+import "package:scouting_frontend/math_utils.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
@@ -197,7 +200,21 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                SingleChildScrollView(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ...autos.mapIndexed((index, e) => Icon(
+                          size: 15,
+                          currentAutoIndex == index
+                              ? Icons.circle
+                              : Icons.circle_outlined))
+                    ],
+                  ),
+                ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     IconButton(
                       onPressed: () {
@@ -219,18 +236,66 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
                   ],
                 ),
                 if (autos[currentAutoIndex].auto.isNotEmpty) ...<Widget>[
-                  Text(
-                    "avg gamepieces: ${(autos[currentAutoIndex].matches.map((final TechnicalMatchData e) => e.data.autoGamepieces).toList().averageOrNull ?? 0).toStringAsFixed(2)}",
+                  const Text(
+                    "General Stats",
+                    style: TextStyle(fontSize: 20),
                   ),
                   Text(
-                    "avg points: ${(autos[currentAutoIndex].matches.map((final TechnicalMatchData e) => e.data.autoPoints).toList().averageOrNull ?? 0).toStringAsFixed(2)}",
+                    "Played In: ${(autos[currentAutoIndex].matches.map((final TechnicalMatchData e) => e.matchIdentifier.toString()))}",
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    "Median",
                   ),
                   Text(
-                    "avg misses: ${(autos[currentAutoIndex].matches.map((final TechnicalMatchData e) => e.data.missedAuto).toList().averageOrNull ?? 0).toStringAsFixed(2)}",
+                    "Median Gamepieces: ${(autos[currentAutoIndex].matches.map((final TechnicalMatchData e) => e.data.autoGamepieces).toList().median).toStringAsFixed(2)}",
+                  ),
+                  Text(
+                    "Median Misses: ${(autos[currentAutoIndex].matches.map((final TechnicalMatchData e) => e.data.missedAuto).toList().median).toStringAsFixed(2)}",
+                  ),
+                  Text(
+                    "Median Points: ${(autos[currentAutoIndex].matches.map((final TechnicalMatchData e) => e.data.autoPoints).toList().median).toStringAsFixed(2)}",
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    "Max",
+                  ),
+                  Text(
+                    "Max Gamepieces: ${(autos[currentAutoIndex].matches.map((final TechnicalMatchData e) => e.data.autoGamepieces).toList().median).toStringAsFixed(2)}",
+                  ),
+                  Text(
+                    "Max Misses: ${(autos[currentAutoIndex].matches.map((final TechnicalMatchData e) => e.data.missedAuto).toList().median).toStringAsFixed(2)}",
+                  ),
+                  Text(
+                    "Max Points: ${(autos[currentAutoIndex].matches.map((final TechnicalMatchData e) => e.data.autoPoints).toList().median).toStringAsFixed(2)}",
                   ),
                 ],
                 if (selectedNote != null) ...<Widget>[
-                  Text("${selectedNote?.title}"),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "${selectedNote?.title} Stats",
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    "Intake Percantage: ${getPercentage(
+                      autos,
+                      (p0) =>
+                          p0 == AutoGamepieceState.missedSpeaker ||
+                          p0 == AutoGamepieceState.scoredSpeaker,
+                    ).toStringAsFixed(2)}%",
+                  ),
+                  Text(
+                    "Score Percantage: ${getPercentage(
+                      autos,
+                      (p0) => p0 == AutoGamepieceState.scoredSpeaker,
+                    ).toStringAsFixed(2)}%",
+                  ),
                 ],
               ],
             ),
@@ -239,6 +304,22 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
         ],
       ),
     );
+  }
+
+  double getPercentage(
+      List<({List<AutoGamepieceID> auto, List<TechnicalMatchData> matches})>
+          autos,
+      bool Function(AutoGamepieceState?) condition) {
+    final List<AutoGamepieceState?> totalInteractions = autos[currentAutoIndex]
+        .matches
+        .map((final TechnicalMatchData e) => e.autoGamepieces
+            .firstWhereOrNull(((AutoGamepieceID, AutoGamepieceState) element) =>
+                element.$1 == selectedNote)
+            ?.$2)
+        .toList();
+    return totalInteractions.where((element) => condition(element)).length /
+        totalInteractions.length *
+        100;
   }
 }
 
