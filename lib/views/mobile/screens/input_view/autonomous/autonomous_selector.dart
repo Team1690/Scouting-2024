@@ -34,10 +34,9 @@ class AutonomousSelector extends StatelessWidget {
               )
               .map(
                 (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
-                  color: getColorByState(
-                    gamepieces[gamepieceId] ?? AutoGamepieceState.noAttempt,
-                    isRedAlliance,
-                  ),
+                  color:
+                      (gamepieces[gamepieceId] ?? AutoGamepieceState.noAttempt)
+                          .color,
                   state: gamepieces[gamepieceId]!,
                   gamepieceID: gamepieceId,
                   onSelectedStateOfGamepiece: (final AutoGamepieceState state) {
@@ -77,21 +76,5 @@ class AutonomousSelector extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: isRedAlliance ? buttonColumns : buttonColumns.reversed.toList(),
     );
-  }
-}
-
-Color getColorByState(
-  final AutoGamepieceState gamepieceState,
-  final bool isRed,
-) {
-  switch (gamepieceState) {
-    case AutoGamepieceState.noAttempt:
-      return Colors.grey;
-    case AutoGamepieceState.scoredSpeaker:
-      return Colors.green;
-    case AutoGamepieceState.missedSpeaker:
-      return Colors.amber;
-    case AutoGamepieceState.notTaken:
-      return Colors.red;
   }
 }
