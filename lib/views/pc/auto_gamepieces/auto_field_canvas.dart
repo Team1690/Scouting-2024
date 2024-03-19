@@ -3,6 +3,7 @@ import "dart:ui" as ui;
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/auto_gamepieces/auto_gamepieces_view.dart";
 
 class AutoFieldCanvas extends CustomPainter {
@@ -11,7 +12,9 @@ class AutoFieldCanvas extends CustomPainter {
     required this.gamepieceOrder,
     required this.meterToPixelRatio,
     required this.selectedGamepiece,
+    required this.context,
   });
+  final BuildContext context;
   final ui.Image fieldBackground;
   final List<AutoGamepieceID> gamepieceOrder;
   final double meterToPixelRatio;
@@ -39,7 +42,7 @@ class AutoFieldCanvas extends CustomPainter {
             color: selectedGamepiece == gamepieceOrder[i]
                 ? Colors.red
                 : Colors.white,
-            fontSize: 40,
+            fontSize: isPC(context) ? 40 : 20,
           ),
         ),
         textDirection: TextDirection.ltr,

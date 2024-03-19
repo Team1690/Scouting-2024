@@ -11,6 +11,7 @@ import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/auto_gamepieces/auto_aggregations.dart";
 import "package:scouting_frontend/views/pc/auto_gamepieces/auto_gamepiece_notes_selections.dart";
+import "package:scouting_frontend/views/pc/auto_gamepieces/auto_pie_chart.dart";
 import "package:scouting_frontend/views/pc/auto_gamepieces/note_aggregation.dart";
 
 class AutoGamepiecesData extends StatefulWidget {
@@ -25,6 +26,13 @@ class AutoGamepiecesData extends StatefulWidget {
 class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
   int currentAutoIndex = 0;
   AutoGamepieceID? selectedNote;
+
+  @override
+  void didUpdateWidget(covariant final AutoGamepiecesData oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    currentAutoIndex = 0;
+    selectedNote = null;
+  }
 
   late final Map<DeepEqList<AutoGamepieceID>, List<TechnicalMatchData>>
       grouped = groupBy(
@@ -59,6 +67,7 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
     }
     return Flex(
       direction: isPC(context) ? Axis.horizontal : Axis.vertical,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
           flex: isPC(context) ? 4 : 0,
@@ -81,32 +90,30 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
           ),
         ),
         Expanded(
-          flex: isPC(context) ? 2 : 0,
+          flex: isPC(context) ? 3 : 0,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              SingleChildScrollView(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ...autos.mapIndexed(
-                      (
-                        final int index,
-                        final ({
-                          List<AutoGamepieceID> auto,
-                          List<TechnicalMatchData> matches
-                        }) e,
-                      ) =>
-                          Icon(
-                        size: 15,
-                        currentAutoIndex == index
-                            ? Icons.circle
-                            : Icons.circle_outlined,
-                      ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ...autos.mapIndexed(
+                    (
+                      final int index,
+                      final ({
+                        List<AutoGamepieceID> auto,
+                        List<TechnicalMatchData> matches
+                      }) e,
+                    ) =>
+                        Icon(
+                      size: 15,
+                      currentAutoIndex == index
+                          ? Icons.circle
+                          : Icons.circle_outlined,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -115,6 +122,7 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
                     onPressed: () {
                       setState(() {
                         currentAutoIndex = max(0, currentAutoIndex - 1);
+                        selectedNote = null;
                       });
                     },
                     icon: const Icon(Icons.skip_previous),
@@ -124,6 +132,7 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
                       setState(() {
                         currentAutoIndex =
                             min(autos.length - 1, currentAutoIndex + 1);
+                        selectedNote = null;
                       });
                     },
                     icon: const Icon(Icons.skip_next),
@@ -134,11 +143,25 @@ class _AutoGamepiecesDataState extends State<AutoGamepiecesData> {
                 AutoAggreagte(
                   technicalMatchData: autos[currentAutoIndex].matches,
                 ),
-                if (selectedNote != null)
+                if (selectedNote != null) ...<Widget>[
                   NoteAggregation(
                     selectedNote: selectedNote!,
                     auto: autos[currentAutoIndex],
                   ),
+                  LayoutBuilder(
+                    builder: (
+                      final BuildContext context,
+                      final BoxConstraints constraints,
+                    ) =>
+                        SizedBox(
+                      height: constraints.maxWidth * 0.5,
+                      child: AutoPieChart(
+                        selected: selectedNote!,
+                        matches: autos[currentAutoIndex].matches,
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ],
           ),

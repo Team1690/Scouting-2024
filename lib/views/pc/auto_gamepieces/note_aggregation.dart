@@ -1,8 +1,8 @@
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
+import "package:scouting_frontend/views/pc/auto_gamepieces/auto_pie_chart.dart";
 
 class NoteAggregation extends StatelessWidget {
   NoteAggregation({
@@ -44,14 +44,9 @@ class NoteAggregation extends StatelessWidget {
   ) {
     final List<AutoGamepieceState?> totalInteractions = auto.matches
         .map(
-          (final TechnicalMatchData e) => e.autoGamepieces
-              .firstWhereOrNull(
-                (final (AutoGamepieceID, AutoGamepieceState) element) =>
-                    element.$1 == selectedNote,
-              )
-              ?.$2,
+          (final TechnicalMatchData e) =>
+              getValueInAuto(selectedNote, e.autoGamepieces),
         )
-        .whereNotNull() // Happens when selectedNote is not in the auto
         .toList();
     return totalInteractions.where(options.contains).length /
         totalInteractions.length *
