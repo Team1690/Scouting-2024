@@ -3,9 +3,14 @@ import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
 
 class DashboardPieChart extends StatefulWidget {
-  const DashboardPieChart({super.key, required this.sections});
+  const DashboardPieChart({
+    super.key,
+    required this.sections,
+    required this.radius,
+  });
 
   final List<(int, String text, Color)> sections;
+  final double radius;
 
   @override
   State<DashboardPieChart> createState() => DashboardPieChartState();
@@ -18,7 +23,7 @@ class DashboardPieChartState extends State<DashboardPieChart> {
           (final int index, final (int, String text, Color) section) {
         final bool isTouched = index == touchedIndex;
         final double fontSize = isTouched ? 20.0 : 8.0;
-        final double radius = isTouched ? 150.0 : 130.0;
+        final double radius = isTouched ? widget.radius * 1.1 : widget.radius;
         const List<Shadow> shadows = <Shadow>[
           Shadow(color: Colors.black, blurRadius: 2),
         ];

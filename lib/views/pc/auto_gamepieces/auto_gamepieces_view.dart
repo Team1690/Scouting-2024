@@ -25,12 +25,14 @@ class AutoGamepiecesScreen extends StatelessWidget {
             centerTitle: true,
           ),
           drawer: SideNavBar(),
-          body: const Padding(
-            padding: EdgeInsets.all(defaultPadding),
-            child: SingleChildScrollView(
-              child: AutoScreenInput(),
-              scrollDirection: Axis.vertical,
-            ),
+          body: Padding(
+            padding: const EdgeInsets.all(defaultPadding),
+            child: isPC(context)
+                ? const AutoScreenInput()
+                : const SingleChildScrollView(
+                    child: AutoScreenInput(),
+                    scrollDirection: Axis.vertical,
+                  ),
           ),
         );
 }

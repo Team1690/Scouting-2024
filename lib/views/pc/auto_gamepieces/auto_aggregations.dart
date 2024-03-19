@@ -16,7 +16,7 @@ class AutoAggreagte extends StatelessWidget {
             style: TextStyle(fontSize: 20),
           ),
           Text(
-            "Played In: ${aggregateData.gamesPlayed}",
+            "Played In: ${technicalMatchData.map((e) => e.matchIdentifier.toString())}",
           ),
           const SizedBox(
             height: 10,
