@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
@@ -52,27 +54,46 @@ class EditTechnicalMatch extends StatelessWidget {
 }
 
 //TODO add auto stuff
-const String query = r"""
-query FetchTechnicalMatch($team_id: Int!, $match_type_id: Int!, $match_number: Int!, $is_rematch: Boolean!) {
-  technical_match(where: {schedule_match: {match_type: {id: {_eq: $match_type_id}}, match_number: {_eq: $match_number}}, is_rematch: {_eq: $is_rematch}, team_id: {_eq: $team_id}}) {
-    auto_amp
-    auto_amp_missed
-    auto_speaker
-    auto_speaker_missed
-    climb {
-      id
-    }
-    harmony_with
-    robot_field_status {
-      id
-    }
-    scouter_name
-    tele_amp
-    tele_amp_missed
-    tele_speaker
-    tele_speaker_missed
-    trap_amount
-    traps_missed
+final String query = """
+query FetchTechnicalMatch(\$team_id: Int!, \$match_type_id: Int!, \$match_number: Int!, \$is_rematch: Boolean!) {
+  technical_match(where: {schedule_match: {match_type: {id: {_eq: \$match_type_id}}, match_number: {_eq: \$match_number}}, is_rematch: {_eq: \$is_rematch}, team_id: {_eq: \$team_id}}) {
+    schedule_match {
+        id
+        match_type {
+          id
+        }
+        match_number
+        happened
+      }
+      is_rematch
+      auto_order
+      ${AutoGamepieceID.values.map((final AutoGamepieceID e) => '${e.title} { id }').join('\n')}
+      R0_id
+      L0_id
+      L1_id
+      L2_id
+      M0_id
+      M1_id
+      M2_id
+      M3_id
+      M4_id
+      tele_amp
+      tele_amp_missed
+      tele_speaker
+      tele_speaker_missed
+      trap_amount
+      traps_missed
+      delivery
+      climb {
+        id
+        points
+        title
+      }
+      robot_field_status {
+        id
+      }
+      harmony_with
+      scouter_name
   }
 }
 
@@ -90,9 +111,12 @@ Future<InputViewVars> fetchTechnicalMatch(
       parserFn: (final Map<String, dynamic> data) {
         final dynamic technicalMatch = data["technical_match"][0];
         return InputViewVars.all(
-          // TODO fix order in edit
-          autoOrder: <AutoGamepieceID>[],
-
+          autoOrder: TechnicalMatchData.parseGamepieces(
+            technicalMatch,
+            IdProvider.of(context),
+          )
+              .map((final (AutoGamepieceID, AutoGamepieceState) e) => e.$1)
+              .toList(),
           delivery: technicalMatch["delivery"] as int,
           trapsMissed: technicalMatch["traps_missed"] as int,
           isRematch: scheduleMatch.matchIdentifier.isRematch,
@@ -139,7 +163,8 @@ Future<InputViewVars> fetchTechnicalMatch(
                 .autoGamepieceStates
                 .idToEnum[technicalMatch["M4_id"] as int]!,
           ),
-          scoutedTeam: teamForQuery, faultMessage: "",
+          scoutedTeam: teamForQuery,
+          faultMessage: "",
         );
       },
       document: gql(query),
