@@ -1,6 +1,10 @@
 import "dart:async";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_gamepiece_card.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -198,6 +202,49 @@ class _UserInputState extends State<UserInput> {
                           });
                         },
                         icon: const Icon(Icons.switch_left),
+                      ),
+                      AutonomousGamepiece(
+                        gamepieceID: match.autoGamepieces.asMap.keys.first,
+                        onSelectedStateOfGamepiece:
+                            (final AutoGamepieceState state) {
+                          final AutoGamepieceID gamepieceId =
+                              match.autoGamepieces.asMap.keys.first;
+                          setState(() {
+                            match = match.copyWith(
+                              autoGamepieces: () => AutoGamepieces.fromMap(
+                                match.autoGamepieces.asMap
+                                  ..[AutoGamepieceID.zero] = state,
+                              ),
+                            );
+                          });
+                          if (!match.autoOrder.contains(gamepieceId) &&
+                              state != AutoGamepieceState.noAttempt) {
+                            match = match.copyWith(
+                              autoOrder: () => match.autoOrder.followedBy(
+                                <AutoGamepieceID>[gamepieceId],
+                              ).toList(),
+                            );
+                          }
+
+                          if (match.autoOrder.contains(
+                                gamepieceId,
+                              ) &&
+                              state == AutoGamepieceState.noAttempt) {
+                            match = match.copyWith(
+                              autoOrder: () => match.autoOrder
+                                  .where(
+                                    (final AutoGamepieceID element) =>
+                                        element != gamepieceId,
+                                  )
+                                  .toList(),
+                            );
+                          }
+                        },
+                        state: match.autoGamepieces.r0,
+                        color: getColorByState(
+                          match.autoGamepieces.r0,
+                          isRedAlliance,
+                        ),
                       ),
                       AutonomousSelector(
                         isRedAlliance: (match.scheduleMatch != null

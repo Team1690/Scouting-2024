@@ -22,15 +22,15 @@ class AutonomousSelector extends StatelessWidget {
     final Map<AutoGamepieceID, AutoGamepieceState> gamepieces =
         match.autoGamepieces.asMap;
     final List<Widget> buttonColumns = List<Widget>.generate(
-      3,
+      2,
       (final int index) => Expanded(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: gamepieces.keys
               .where(
                 (final AutoGamepieceID element) =>
-                    element.title.startsWith("R") && index == 0 ||
-                    (element.title.startsWith("L") && index == 1) ||
-                    (element.title.startsWith("M") && index == 2),
+                    (element.title.startsWith("L") && index == 0) ||
+                    (element.title.startsWith("M") && index == 1),
               )
               .map(
                 (final AutoGamepieceID gamepieceId) => AutonomousGamepiece(
