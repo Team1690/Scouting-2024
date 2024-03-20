@@ -28,7 +28,7 @@ class InputViewVars implements HasuraVars {
         scoutedTeam = null,
         autoOrder = <AutoGamepieceID>[],
         autoGamepieces = AutoGamepieces.base(),
-        faultMessage = "";
+        faultMessage = null;
   InputViewVars.all({
     required this.faultMessage,
     required this.autoOrder,
@@ -118,6 +118,7 @@ class InputViewVars implements HasuraVars {
 
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
+        "fault_message": faultMessage,
         "team_id": scoutedTeam?.id,
         "scouter_name": scouterName,
         "schedule_id": scheduleMatch?.id,
