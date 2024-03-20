@@ -69,7 +69,7 @@ class _UserInputState extends State<UserInput> {
 
   final bool initialFlag = false;
   bool showFault = false;
-  bool isRedAlliance = false;
+  bool isRedAlliance = true;
 
   void updateTextFields() {
     matchController.text =
@@ -241,10 +241,7 @@ class _UserInputState extends State<UserInput> {
                           }
                         },
                         state: match.autoGamepieces.r0,
-                        color: getColorByState(
-                          match.autoGamepieces.r0,
-                          isRedAlliance,
-                        ),
+                        color: match.autoGamepieces.r0.color,
                       ),
                       AutonomousSelector(
                         isRedAlliance: (match.scheduleMatch != null
@@ -407,9 +404,11 @@ class _UserInputState extends State<UserInput> {
                           controller: faultMessageController,
                           textDirection: TextDirection.rtl,
                           onChanged: (final String value) {
-                            match = match.copyWith(
-                              faultMessage: always(value),
-                            );
+                            setState(() {
+                              match = match.copyWith(
+                                faultMessage: always(value),
+                              );
+                            });
                           },
                           decoration: const InputDecoration(
                             hintText: "Robot fault",

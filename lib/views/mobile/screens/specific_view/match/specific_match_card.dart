@@ -136,8 +136,8 @@ class _SpecificMatchCardState extends State<SpecificMatchCard> {
 }
 
 String getMutation() => """
-                mutation A( \$defense_rating: Int, \$driving_rating: Int, \$general_rating: Int, \$intake_rating: Int, \$is_rematch: Boolean, \$speaker_rating: Int, \$scouter_name: String, \$team_id: Int, \$url: String, \$climb_rating: Int, \$amp_rating: Int, \$schedule_match_id: Int){
-                  insert_specific_match(objects: {scouter_name: \$scouter_name, team_id: \$team_id, speaker_rating: \$speaker_rating, schedule_match_id: \$schedule_match_id, url: \$url, is_rematch: \$is_rematch, intake_rating: \$intake_rating, general_rating: \$general_rating, driving_rating: \$driving_rating, defense_rating: \$defense_rating, climb_rating: \$climb_rating, amp_rating: \$amp_rating}) {
+                mutation A( \$defense_rating: Int, \$driving_rating: Int, \$general_rating: Int, \$intake_rating: Int, \$is_rematch: Boolean, \$speaker_rating: Int, \$scouter_name: String, \$team_id: Int, \$climb_rating: Int, \$amp_rating: Int, \$schedule_match_id: Int){
+                  insert_specific_match(objects: {scouter_name: \$scouter_name, team_id: \$team_id, speaker_rating: \$speaker_rating, schedule_match_id: \$schedule_match_id, is_rematch: \$is_rematch, intake_rating: \$intake_rating, general_rating: \$general_rating, driving_rating: \$driving_rating, defense_rating: \$defense_rating, climb_rating: \$climb_rating, amp_rating: \$amp_rating}) {
                     affected_rows
                   }
                       }
