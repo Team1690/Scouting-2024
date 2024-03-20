@@ -1,6 +1,10 @@
 import "dart:async";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_gamepiece_card.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -65,7 +69,7 @@ class _UserInputState extends State<UserInput> {
 
   final bool initialFlag = false;
   bool showFault = false;
-  bool isRedAlliance = false;
+  bool isRedAlliance = true;
 
   void updateTextFields() {
     matchController.text =
@@ -198,6 +202,46 @@ class _UserInputState extends State<UserInput> {
                           });
                         },
                         icon: const Icon(Icons.switch_left),
+                      ),
+                      AutonomousGamepiece(
+                        gamepieceID: match.autoGamepieces.asMap.keys.first,
+                        onSelectedStateOfGamepiece:
+                            (final AutoGamepieceState state) {
+                          final AutoGamepieceID gamepieceId =
+                              match.autoGamepieces.asMap.keys.first;
+                          setState(() {
+                            match = match.copyWith(
+                              autoGamepieces: () => AutoGamepieces.fromMap(
+                                match.autoGamepieces.asMap
+                                  ..[AutoGamepieceID.zero] = state,
+                              ),
+                            );
+                          });
+                          if (!match.autoOrder.contains(gamepieceId) &&
+                              state != AutoGamepieceState.noAttempt) {
+                            match = match.copyWith(
+                              autoOrder: () => match.autoOrder.followedBy(
+                                <AutoGamepieceID>[gamepieceId],
+                              ).toList(),
+                            );
+                          }
+
+                          if (match.autoOrder.contains(
+                                gamepieceId,
+                              ) &&
+                              state == AutoGamepieceState.noAttempt) {
+                            match = match.copyWith(
+                              autoOrder: () => match.autoOrder
+                                  .where(
+                                    (final AutoGamepieceID element) =>
+                                        element != gamepieceId,
+                                  )
+                                  .toList(),
+                            );
+                          }
+                        },
+                        state: match.autoGamepieces.r0,
+                        color: match.autoGamepieces.r0.color,
                       ),
                       AutonomousSelector(
                         isRedAlliance: (match.scheduleMatch != null
@@ -360,9 +404,11 @@ class _UserInputState extends State<UserInput> {
                           controller: faultMessageController,
                           textDirection: TextDirection.rtl,
                           onChanged: (final String value) {
-                            match = match.copyWith(
-                              faultMessage: always(value),
-                            );
+                            setState(() {
+                              match = match.copyWith(
+                                faultMessage: always(value),
+                              );
+                            });
                           },
                           decoration: const InputDecoration(
                             hintText: "Robot fault",
@@ -437,9 +483,10 @@ insert_faults(objects: {team_id: \$team_id, message: $faultMessage, schedule_mat
 """;
 
   String updateMutation = """
-mutation MyMutation(\$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!, \$L0_id: Int!, \$L1_id: Int!, \$L2_id: Int!, \$M0_id: Int!, \$M1_id: Int!, \$M2_id: Int!, \$M3_id: Int!, \$M4_id: Int!) {
-  update_technical_match(where: {team_id: {_eq: \$team_id}, schedule_id: {_eq: \$schedule_id}, is_rematch: {_eq: \$is_rematch}} _set: {cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery, L0_id: \$L0_id, L1_id: \$L1_id, L2_id: \$L2_id, M0_id: \$M0_id, M1_id: \$M1_id, M2_id: \$M2_id, M3_id: \$M3_id, M4_id: \$M4_id}) {
+mutation MyMutation(\$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!, \$tele_speaker: Int!, \$tele_speaker_missed: Int!, \$trap_amount: Int!, \$traps_missed: Int!, \$harmony_with: Int!, \$is_rematch: Boolean!, \$robot_field_status_id: Int, \$schedule_id: Int!, \$team_id: Int!, \$scouter_name: String!, \$delivery: Int!, \$L0_id: Int!, \$L1_id: Int!, \$L2_id: Int!, \$M0_id: Int!, \$M1_id: Int!, \$M2_id: Int!, \$M3_id: Int!, \$M4_id: Int!, \$R0_id: Int!, \$auto_order: String!) {
+  update_technical_match(where: {team_id: {_eq: \$team_id}, schedule_id: {_eq: \$schedule_id}, is_rematch: {_eq: \$is_rematch}} _set: {cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery, L0_id: \$L0_id, L1_id: \$L1_id, L2_id: \$L2_id, M0_id: \$M0_id, M1_id: \$M1_id, M2_id: \$M2_id, M3_id: \$M3_id, M4_id: \$M4_id, R0_id: \$R0_id, auto_order: \$auto_order}) {
     affected_rows
+  }
   }
 """;
 }

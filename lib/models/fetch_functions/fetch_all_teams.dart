@@ -112,9 +112,9 @@ Stream<List<AllTeamData>> fetchAllTeams(final BuildContext context) =>
 
                 return AllTeamData(
                   team: LightTeam.fromJson(team),
-                  firstPicklistIndex: team["first_picklist_index"] as int,
-                  secondPicklistIndex: team["second_picklist_index"] as int,
-                  thirdPickListIndex: team["third_picklist_index"] as int,
+                  firstPicklistIndex: (team["first_picklist_index"] as int),
+                  secondPicklistIndex: (team["second_picklist_index"] as int),
+                  thirdPickListIndex: (team["third_picklist_index"] as int),
                   taken: team["taken"] as bool,
                   faultMessages: faultTable
                       .map((final dynamic fault) => fault["message"] as String)

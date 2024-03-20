@@ -49,22 +49,25 @@ class _AutoScreenInputState extends State<AutoScreenInput> {
             height: 10,
           ),
           if (team != null && field != null)
-            StreamBuilder<TeamData>(
-              stream: fetchSingleTeamData(team!.id, context),
-              builder: (
-                final BuildContext context,
-                final AsyncSnapshot<TeamData> snapshot,
-              ) =>
-                  snapshot.mapSnapshot(
-                onWaiting: () => const Center(
-                  child: CircularProgressIndicator(),
+            Expanded(
+              flex: isPC(context) ? 1 : 0,
+              child: StreamBuilder<TeamData>(
+                stream: fetchSingleTeamData(team!.id, context),
+                builder: (
+                  final BuildContext context,
+                  final AsyncSnapshot<TeamData> snapshot,
+                ) =>
+                    snapshot.mapSnapshot(
+                  onWaiting: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  onError: (final Object error) => Text(error.toString()),
+                  onNoData: () => const Center(
+                    child: Text("No data"),
+                  ),
+                  onSuccess: (final TeamData data) =>
+                      AutoGamepiecesData(data: data, field: field!),
                 ),
-                onError: (final Object error) => Text(error.toString()),
-                onNoData: () => const Center(
-                  child: Text("No data"),
-                ),
-                onSuccess: (final TeamData data) =>
-                    AutoGamepiecesData(data: data, field: field!),
               ),
             ),
         ],

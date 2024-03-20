@@ -47,6 +47,7 @@ class AutoNoteSelection extends StatelessWidget {
             },
             child: CustomPaint(
               painter: AutoFieldCanvas(
+                context: context,
                 selectedGamepiece: selectedGamepiece,
                 fieldBackground: field,
                 gamepieceOrder: gamepieceOrder,
