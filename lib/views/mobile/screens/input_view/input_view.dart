@@ -427,7 +427,7 @@ mutation MyMutation(\$climb_id: Int!, \$tele_amp: Int!, \$tele_amp_missed: Int!,
   insert_technical_match(objects: {cilmb_id: \$climb_id, tele_amp: \$tele_amp, tele_amp_missed: \$tele_amp_missed, tele_speaker: \$tele_speaker, tele_speaker_missed: \$tele_speaker_missed, trap_amount: \$trap_amount, traps_missed: \$traps_missed, harmony_with: \$harmony_with, is_rematch: \$is_rematch, robot_field_status_id: \$robot_field_status_id, schedule_id: \$schedule_id, team_id: \$team_id, scouter_name: \$scouter_name, delivery: \$delivery, L0_id: \$L0_id, L1_id: \$L1_id, L2_id: \$L2_id, M0_id: \$M0_id, M1_id: \$M1_id, M2_id: \$M2_id, M3_id: \$M3_id, M4_id: \$M4_id, R0_id: \$R0_id, auto_order: \$auto_order}) {
     affected_rows
   }
-  ${faultMessage == null ? "" : """
+  ${faultMessage == null || faultMessage == "" ? "" : """
 insert_faults(objects: {team_id: \$team_id, message: $faultMessage, schedule_match_id: \$schedule_id fault_status_id: 1 is_rematch: \$is_rematch}) {
     affected_rows
   }
