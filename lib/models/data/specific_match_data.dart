@@ -10,7 +10,6 @@ class SpecificMatchData {
     required this.climb,
     required this.defense,
     required this.general,
-    required this.url,
     required this.matchIdentifier,
     required this.scheduleMatchId,
     required this.scouterName,
@@ -24,7 +23,6 @@ class SpecificMatchData {
   final int? climb;
   final int? defense;
   final int? general;
-  final String url;
   final MatchIdentifier matchIdentifier;
   final String scouterName;
 
@@ -43,7 +41,6 @@ class SpecificMatchData {
         climb: specificMatchTable["climb_rating"] as int?,
         defense: specificMatchTable["defense_rating"] as int?,
         general: specificMatchTable["general_rating"] as int?,
-        url: specificMatchTable["url"] as String,
         scouterName: specificMatchTable["scouter_name"] as String,
       );
 }
