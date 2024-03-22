@@ -118,6 +118,7 @@ class InputViewVars implements HasuraVars {
 
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
+        if(faultMessage != null)
         "fault_message": faultMessage,
         "team_id": scoutedTeam?.id,
         "scouter_name": scouterName,
