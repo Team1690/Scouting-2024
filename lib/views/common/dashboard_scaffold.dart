@@ -5,7 +5,7 @@ import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/scatter/scatters_screen.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 
-import "package:scouting_frontend/views/common/navigation_tab.dart";
+import "package:scouting_frontend/views/pc/navigation_tab.dart";
 
 class DashboardScaffold extends StatelessWidget {
   DashboardScaffold({
@@ -49,10 +49,10 @@ class DashboardScaffold extends StatelessWidget {
                 event.runtimeType == KeyDownEvent,
           );
 
-          keyboardShortcut<ScattersScreen>(
+          keyboardShortcut<ScatterScreen>(
             context,
             event,
-            ScattersScreen(),
+            ScatterScreen(),
             (final KeyEvent event) =>
                 event.logicalKey == LogicalKeyboardKey.controlLeft &&
                 event.physicalKey == PhysicalKeyboardKey.slash &&
