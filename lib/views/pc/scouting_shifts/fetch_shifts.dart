@@ -27,7 +27,7 @@ Stream<List<ScoutingShift>> fetchShifts(final BuildContext context) =>
         );
 
 String subscription = """
-query MyQuery {
+subscription FetchShifts {
   scouting_shifts {
     id
     name

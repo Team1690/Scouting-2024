@@ -18,7 +18,7 @@ class ScoutingShift {
       ScoutingShift(
         name: shift["name"] as String,
         matchIdentifier: MatchIdentifier.fromJson(
-          shift["match"],
+          shift,
           provider.matchType,
           false,
         ),
