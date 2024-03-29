@@ -5,7 +5,7 @@ import "package:scouting_frontend/views/pc/auto_gamepieces/auto_gamepieces_view.
 import "package:scouting_frontend/views/pc/matches/matches_screen.dart";
 import "package:scouting_frontend/views/pc/scatter/scatters_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
-import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shifts.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shifts_screen.dart";
 import "package:scouting_frontend/views/pc/status/status.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
@@ -56,7 +56,7 @@ class NavigationTab extends StatelessWidget {
             const NavbarTile(
               icon: Icons.groups,
               title: "Scouting Shifts",
-              widget: ScoutingShifts.new,
+              widget: ScoutingShiftsScreen.new,
             ),
             const NavbarTile(
               icon: Icons.list_alt,
