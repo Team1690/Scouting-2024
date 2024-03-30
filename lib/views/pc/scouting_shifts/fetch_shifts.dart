@@ -30,7 +30,7 @@ String subscription = """
 subscription FetchShifts {
   scouting_shifts {
     id
-    name
+    scouter_name
     schedule_match {
       match_number
       match_type {

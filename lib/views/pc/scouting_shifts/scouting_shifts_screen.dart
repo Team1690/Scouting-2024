@@ -5,7 +5,7 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/fetch_shifts.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
-import "package:scouting_frontend/views/pc/scouting_shifts/widgets/add_scouter_button.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/widgets/edit_scouters_button.dart";
 
 class ScoutingShiftsScreen extends StatelessWidget {
   const ScoutingShiftsScreen({super.key});
@@ -16,7 +16,7 @@ class ScoutingShiftsScreen extends StatelessWidget {
         body: Column(
           children: <Widget>[
             const Row(
-              children: <Widget>[AddScouterButton()],
+              children: <Widget>[EditScoutersButton()],
             ),
             StreamBuilder<List<ScoutingShift>>(
               stream: fetchShifts(context),
