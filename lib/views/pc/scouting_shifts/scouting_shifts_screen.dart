@@ -5,6 +5,8 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/fetch_shifts.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/functions/calc_shifts.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/queries/fetch_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/widgets/edit_scouters_button.dart";
 
@@ -14,14 +16,14 @@ class ScoutingShiftsScreen extends StatelessWidget {
   //TODO: mapSnapshot needs a default value for nodata error and on waiting, so to get rid of duplicate code
   @override
   Widget build(final BuildContext context) => DashboardScaffold(
-        body: StreamBuilder<List<ScoutingShift>>(
-          stream: fetchShifts(context),
+        body: StreamBuilder(
+          stream: fetchScouters(),
           builder: (
             final BuildContext context,
-            final AsyncSnapshot<List<ScoutingShift>> snapshot,
+            final AsyncSnapshot<List<String>> snapshot,
           ) =>
               snapshot.mapSnapshot(
-            onSuccess: (final List<ScoutingShift> data) => ListView(
+            onSuccess: (final List<String> data) => ListView(
               children: <Widget>[
                 AppBar(
                   actions: const <Widget>[
@@ -33,7 +35,7 @@ class ScoutingShiftsScreen extends StatelessWidget {
                   ],
                   backgroundColor: bgColor,
                 ),
-                ...data.map(
+                ...calcScoutingShifts(context, data).map(
                   (final ScoutingShift e) => ListTile(
                     title: Text(
                       "${e.name} ${e.team.number} ${e.matchIdentifier}",
