@@ -6,55 +6,66 @@ import "package:scouting_frontend/views/pc/scouting_shifts/functions/calc_shifts
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/fetch_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/widgets/edit_scouters_button.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/widgets/export_csv_button.dart";
 
-class ScoutingShiftsScreen extends StatelessWidget {
+class ScoutingShiftsScreen extends StatefulWidget {
   const ScoutingShiftsScreen({super.key});
 
+  @override
+  State<ScoutingShiftsScreen> createState() => _ScoutingShiftsScreenState();
+}
+
+class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
+  List<String> scouters = [];
   //TODO: mapSnapshot needs a default value for nodata error and on waiting, so to get rid of duplicate code
   @override
   Widget build(final BuildContext context) => DashboardScaffold(
-        body: Column(
-          children: <Widget>[
-            AppBar(
-              actions: const <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[EditScoutersButton()],
-                ),
-                Spacer(),
-              ],
-              backgroundColor: bgColor,
-            ),
-            Expanded(
-              child: StreamBuilder<List<String>>(
-                stream: fetchScouters(),
-                builder: (
-                  final BuildContext context,
-                  final AsyncSnapshot<List<String>> snapshot,
-                ) =>
-                    snapshot.mapSnapshot(
-                  onSuccess: (final List<String> data) => ListView(
-                    children: <Widget>[
-                      ...calcScoutingShifts(context, data).map(
-                        (final ScoutingShift e) => ListTile(
-                          title: Text(
-                            "${e.name} ${e.team.number} ${e.matchIdentifier}",
-                          ),
+        body: Expanded(
+          child: StreamBuilder<List<String>>(
+            stream: fetchScouters(),
+            builder: (
+              final BuildContext context,
+              final AsyncSnapshot<List<String>> snapshot,
+            ) =>
+                snapshot.mapSnapshot(
+              onSuccess: (final List<String> data) {
+                scouters = data;
+                return ListView(
+                  children: <Widget>[
+                    AppBar(
+                      actions: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            EditScoutersButton(),
+                            ExportCSVButton(
+                              scouters: scouters,
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                      ],
+                      backgroundColor: bgColor,
+                    ),
+                    ...calcScoutingShifts(context, data).map(
+                      (final ScoutingShift e) => ListTile(
+                        title: Text(
+                          "${e.name} ${e.team.number} ${e.matchIdentifier}",
                         ),
                       ),
-                    ],
-                  ),
-                  onWaiting: () => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  onNoData: () => const Text("No Data"),
-                  onError: (final Object error) => Center(
-                    child: Text(error.toString()),
-                  ),
-                ),
+                    ),
+                  ],
+                );
+              },
+              onWaiting: () => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              onNoData: () => const Text("No Data"),
+              onError: (final Object error) => Center(
+                child: Text(error.toString()),
               ),
             ),
-          ],
+          ),
         ),
       );
 }
