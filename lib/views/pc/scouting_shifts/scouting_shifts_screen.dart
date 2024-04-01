@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
@@ -47,13 +48,19 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
                       ],
                       backgroundColor: bgColor,
                     ),
-                    ...calcScoutingShifts(context, data).map(
-                      (final ScoutingShift e) => ListTile(
-                        title: Text(
-                          "${e.name} ${e.team.number} ${e.matchIdentifier}",
-                        ),
-                      ),
-                    ),
+                    ...calcScoutingShifts(context, data).slices(6).map((e) =>
+                        ListTile(
+                          title: Row(
+                            children: [
+                              Text("${e.first.matchIdentifier.toString()} : "),
+                              ...e.map(
+                                (final ScoutingShift e) => Text(
+                                  "${e.name} ${e.team.number} ,,, ",
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
                   ],
                 );
               },
