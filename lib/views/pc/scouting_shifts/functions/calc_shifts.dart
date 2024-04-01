@@ -25,7 +25,8 @@ List<ScoutingShift> calcScoutingShifts(
               (match) =>
                   match.redAlliance.followedBy(match.blueAlliance).mapIndexed(
                         (teamIndex, team) => ScoutingShift(
-                          name: scoutingBatches[matchBatchIndex][teamIndex],
+                          name: scoutingBatches[matchBatchIndex %
+                              (scoutingBatches.length - 1)][teamIndex % 6],
                           matchIdentifier: match.matchIdentifier,
                           team: team,
                         ),

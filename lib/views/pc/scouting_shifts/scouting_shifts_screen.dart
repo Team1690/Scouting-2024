@@ -16,42 +16,48 @@ class ScoutingShiftsScreen extends StatelessWidget {
   //TODO: mapSnapshot needs a default value for nodata error and on waiting, so to get rid of duplicate code
   @override
   Widget build(final BuildContext context) => DashboardScaffold(
-        body: StreamBuilder(
-          stream: fetchScouters(),
-          builder: (
-            final BuildContext context,
-            final AsyncSnapshot<List<String>> snapshot,
-          ) =>
-              snapshot.mapSnapshot(
-            onSuccess: (final List<String> data) => ListView(
-              children: <Widget>[
-                AppBar(
-                  actions: const <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[EditScoutersButton()],
-                    ),
-                    Spacer()
-                  ],
-                  backgroundColor: bgColor,
+        body: Column(
+          children: [
+            AppBar(
+              actions: const <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[EditScoutersButton()],
                 ),
-                ...calcScoutingShifts(context, data).map(
-                  (final ScoutingShift e) => ListTile(
-                    title: Text(
-                      "${e.name} ${e.team.number} ${e.matchIdentifier}",
-                    ),
+                Spacer()
+              ],
+              backgroundColor: bgColor,
+            ),
+            Expanded(
+              child: StreamBuilder(
+                stream: fetchScouters(),
+                builder: (
+                  final BuildContext context,
+                  final AsyncSnapshot<List<String>> snapshot,
+                ) =>
+                    snapshot.mapSnapshot(
+                  onSuccess: (final List<String> data) => ListView(
+                    children: <Widget>[
+                      ...calcScoutingShifts(context, data).map(
+                        (final ScoutingShift e) => ListTile(
+                          title: Text(
+                            "${e.name} ${e.team.number} ${e.matchIdentifier}",
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  onWaiting: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  onNoData: () => const Text("No Data"),
+                  onError: (final Object error) => Center(
+                    child: Text(error.toString()),
                   ),
                 ),
-              ],
+              ),
             ),
-            onWaiting: () => const Center(
-              child: CircularProgressIndicator(),
-            ),
-            onNoData: () => const Text("No Data"),
-            onError: (final Object error) => Center(
-              child: Text(error.toString()),
-            ),
-          ),
+          ],
         ),
       );
 }
