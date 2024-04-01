@@ -9,28 +9,31 @@ List<ScoutingShift> calcScoutingShifts(
   final BuildContext context,
   final List<String> scouters,
 ) {
-  final List<ScheduleMatch> matches = MatchesProvider.of(context).matches;
-  List<ScoutingShift> shifts = [];
-  for (int i = 0; i < scoutingShiftLength; i++) {
-    shifts.addAll(
-      matches
-          .where(
-            (element) =>
-                element.matchIdentifier.number % scoutingShiftLength == i &&
-                element.matchIdentifier.isRematch == false,
-          )
-          .map(
-            (match) =>
-                match.blueAlliance.followedBy(match.redAlliance).mapIndexed(
-                      (index, team) => ScoutingShift(
-                        name: scouters[index],
-                        matchIdentifier: match.matchIdentifier,
-                        team: team,
+  final List<List<ScheduleMatch>> matchBatches = MatchesProvider.of(context)
+      .matches
+      .where(
+        (ScheduleMatch element) => element.matchIdentifier.isRematch == false,
+      )
+      .slices(scoutingShiftLength)
+      .toList();
+
+  final List<List<String>> scoutingBatches = scouters.slices(6).toList();
+  List<ScoutingShift> shifts = matchBatches
+      .mapIndexed(
+        (matchBatchIndex, matchBatch) => matchBatch
+            .map(
+              (match) =>
+                  match.redAlliance.followedBy(match.blueAlliance).mapIndexed(
+                        (teamIndex, team) => ScoutingShift(
+                          name: scoutingBatches[matchBatchIndex][teamIndex],
+                          matchIdentifier: match.matchIdentifier,
+                          team: team,
+                        ),
                       ),
-                    ),
-          )
-          .flattened,
-    );
-  }
+            )
+            .flattened,
+      )
+      .flattened
+      .toList();
   return shifts;
 }
