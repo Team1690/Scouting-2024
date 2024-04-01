@@ -1,4 +1,4 @@
-import "dart:math";
+import "package:collection/collection.dart";
 import "package:fl_chart/fl_chart.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_all_teams.dart";
@@ -151,7 +151,9 @@ class _ScatterState extends State<Scatter> {
                                     final double title,
                                     final TitleMeta meta,
                                   ) =>
-                                      Container(child: Text(title.toString())),
+                                      Container(
+                                    child: Text(title.toString()),
+                                  ),
                                   showTitles: true,
                                   interval: 5,
                                 ),
@@ -170,7 +172,9 @@ class _ScatterState extends State<Scatter> {
                                     final double title,
                                     final TitleMeta meta,
                                   ) =>
-                                      Container(child: Text(title.toString())),
+                                      Container(
+                                    child: Text(title.toString()),
+                                  ),
                                   reservedSize: 22,
                                   showTitles: true,
                                   interval: 5,
@@ -185,12 +189,16 @@ class _ScatterState extends State<Scatter> {
                               checkToShowHorizontalLine: (final double value) =>
                                   true,
                               getDrawingHorizontalLine: (final double value) =>
-                                  FlLine(color: Colors.black.withOpacity(0.1)),
+                                  FlLine(
+                                color: Colors.black.withOpacity(0.1),
+                              ),
                               drawVerticalLine: true,
                               checkToShowVerticalLine: (final double value) =>
                                   true,
                               getDrawingVerticalLine: (final double value) =>
-                                  FlLine(color: Colors.black.withOpacity(0.1)),
+                                  FlLine(
+                                color: Colors.black.withOpacity(0.1),
+                              ),
                             ),
                             borderData: FlBorderData(
                               show: true,
@@ -207,7 +215,7 @@ class _ScatterState extends State<Scatter> {
                                       : (e.aggregateData.avgData.gamepieces + 1)
                                           .roundToDouble(),
                                 )
-                                .reduce(max),
+                                .max,
                             maxY: report
                                 .map(
                                   (final AllTeamData e) => isPoints
@@ -220,7 +228,7 @@ class _ScatterState extends State<Scatter> {
                                               1)
                                           .roundToDouble(),
                                 )
-                                .fold<double>(25.0, max),
+                                .max,
                           ),
                         );
                       }) ??
