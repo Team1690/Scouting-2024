@@ -139,7 +139,7 @@ class _StatusScreenState extends State<StatusScreen> {
                           )
                         : delete(
                             context,
-                            data.scheduleMatch.id,
+                            data.specificMatchData!.id,
                             deleteSpecific,
                           ),
                     child: StatusBox(
