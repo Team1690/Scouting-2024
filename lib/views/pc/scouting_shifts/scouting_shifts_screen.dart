@@ -17,7 +17,7 @@ class ScoutingShiftsScreen extends StatefulWidget {
 }
 
 class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
-  List<String> scouters = [];
+  List<String> scouters = <String>[];
   //TODO: mapSnapshot needs a default value for nodata error and on waiting, so to get rid of duplicate code
   @override
   Widget build(final BuildContext context) => DashboardScaffold(
@@ -38,29 +38,32 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            EditScoutersButton(),
+                            const EditScoutersButton(),
                             ExportCSVButton(
                               scouters: scouters,
                             ),
                           ],
                         ),
-                        Spacer(),
+                        const Spacer(),
                       ],
                       backgroundColor: bgColor,
                     ),
-                    ...calcScoutingShifts(context, data).slices(6).map((e) =>
-                        ListTile(
-                          title: Row(
-                            children: [
-                              Text("${e.first.matchIdentifier.toString()} : "),
-                              ...e.map(
-                                (final ScoutingShift e) => Text(
-                                  "${e.name} ${e.team.number} ,,, ",
+                    ...calcScoutingShifts(context, data).slices(6).map(
+                          (final List<ScoutingShift> e) => ListTile(
+                            title: Row(
+                              children: <Widget>[
+                                Text(
+                                  "${e.first.matchIdentifier.toString()} : ",
                                 ),
-                              ),
-                            ],
+                                ...e.map(
+                                  (final ScoutingShift e) => Text(
+                                    "${e.name} ${e.team.number} ,,, ",
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        )),
+                        ),
                   ],
                 );
               },
