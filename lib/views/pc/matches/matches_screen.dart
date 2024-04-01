@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:graphql/client.dart";
 import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -9,6 +8,7 @@ import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/matches/change_match.dart";
+import "package:scouting_frontend/views/pc/matches/delete.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 
 class MatchesScreen extends StatelessWidget {
@@ -141,69 +141,7 @@ class MatchesScreen extends StatelessWidget {
                                 ),
                                 IconButton(
                                   onPressed: () async {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        duration: Duration(seconds: 5),
-                                        content: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text(
-                                              "Deleting",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        backgroundColor: Colors.blue,
-                                      ),
-                                    );
-                                    final GraphQLClient client = getClient();
-
-                                    final QueryResult<void> result =
-                                        await client.mutate(
-                                      MutationOptions<void>(
-                                        document: gql(delete),
-                                        variables: <String, dynamic>{
-                                          "id": e.id,
-                                        },
-                                      ),
-                                    );
-                                    if (result.hasException) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          duration: const Duration(seconds: 5),
-                                          content: Text(
-                                            "Error: ${result.exception}",
-                                          ),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                      );
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .clearSnackBars();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          duration: Duration(seconds: 2),
-                                          content: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Text(
-                                                "Saved",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          backgroundColor: Colors.green,
-                                        ),
-                                      );
-                                    }
+                                    delete(context, e.id, deleteMatch);
                                   },
                                   icon: const Icon(Icons.delete),
                                 ),
@@ -221,7 +159,8 @@ class MatchesScreen extends StatelessWidget {
       );
 }
 
-const String delete = """mutation DeleteMatch(\$id: Int!){
+const String deleteMatch = """
+mutation DeleteMatch(\$id: Int!){
   delete_schedule_matches_by_pk(id: \$id){
   	id
   }

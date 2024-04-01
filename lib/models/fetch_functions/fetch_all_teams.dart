@@ -52,6 +52,7 @@ subscription FetchAllTeams {
       message
     }
     technical_matches {
+      id
       scouter_name
       auto_order
       ${AutoGamepieceID.values.map((final AutoGamepieceID e) => '${e.title} { id }').join('\n')}

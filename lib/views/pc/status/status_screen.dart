@@ -5,6 +5,7 @@ import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/views/pc/matches/delete.dart";
 import "package:scouting_frontend/views/pc/status/edit_technical_match.dart";
 import "package:scouting_frontend/views/pc/status/widgets/status_list.dart";
 import "package:scouting_frontend/views/pc/status/widgets/status_box.dart";
@@ -130,6 +131,17 @@ class _StatusScreenState extends State<StatusScreen> {
                         ),
                       );
                     },
+                    onLongPress: () => !isSpecific
+                        ? delete(
+                            context,
+                            data.technicalMatchData!.id,
+                            deleteTechnical,
+                          )
+                        : delete(
+                            context,
+                            data.specificMatchData!.id,
+                            deleteSpecific,
+                          ),
                     child: StatusBox(
                       child: Column(
                         children: <Widget>[
@@ -194,3 +206,17 @@ class _StatusScreenState extends State<StatusScreen> {
         ),
       );
 }
+
+const String deleteTechnical = """
+mutation DeleteTechnical(\$id: Int!) {
+  delete_technical_match_by_pk(id: \$id){
+    id
+  }
+}""";
+
+const String deleteSpecific = """
+mutation DeleteSpecific(\$id: Int!) {
+  delete_specific_match_by_pk(id: \$id){
+    id
+  }
+}""";

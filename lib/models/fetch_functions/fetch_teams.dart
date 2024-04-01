@@ -40,6 +40,7 @@ subscription FetchTeams(\$ids: [Int!]) {
       climb_rating
       amp_rating
       scouter_name
+      id
     }
     technical_matches(where: {ignored: {_eq: false}}, order_by: [{schedule_match: {match_type: {order: asc}}}, {schedule_match: {match_number: asc}}, {is_rematch: asc}]) {
       schedule_match {
@@ -49,6 +50,7 @@ subscription FetchTeams(\$ids: [Int!]) {
         }
         match_number
         happened
+        id
       }
       is_rematch
       auto_order
@@ -70,6 +72,7 @@ subscription FetchTeams(\$ids: [Int!]) {
       }
       harmony_with
       scouter_name
+      id
     }
     name
     number
@@ -140,9 +143,6 @@ subscription FetchTeams(\$ids: [Int!]) {
     }
   }
 }
-
-
-
 """;
 
 Stream<SplayTreeSet<TeamData>> fetchMultipleTeamData(

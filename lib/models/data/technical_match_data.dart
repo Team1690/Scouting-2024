@@ -9,6 +9,7 @@ import "package:scouting_frontend/models/enums/robot_field_status.dart";
 
 class TechnicalMatchData {
   TechnicalMatchData({
+    required this.id,
     required this.scouterName,
     required this.scheduleMatchId,
     required this.robotFieldStatus,
@@ -18,7 +19,7 @@ class TechnicalMatchData {
     required this.matchIdentifier,
     required this.autoGamepieces,
   });
-
+  final int id;
   final RobotFieldStatus robotFieldStatus;
   final MatchIdentifier matchIdentifier;
   final TechnicalData<int> data;
@@ -68,6 +69,7 @@ class TechnicalMatchData {
     final List<(AutoGamepieceID, AutoGamepieceState)> gamepieces =
         parseGamepieces(match, idProvider);
     return TechnicalMatchData(
+      id: match["id"] as int,
       autoGamepieces: gamepieces,
       matchIdentifier: MatchIdentifier.fromJson(match, idProvider.matchType),
       robotFieldStatus: idProvider
