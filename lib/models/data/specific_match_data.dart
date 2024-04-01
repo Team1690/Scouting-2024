@@ -3,6 +3,7 @@ import "package:scouting_frontend/models/match_identifier.dart";
 
 class SpecificMatchData {
   const SpecificMatchData({
+    required this.id,
     required this.drivetrainAndDriving,
     required this.intake,
     required this.amp,
@@ -15,7 +16,7 @@ class SpecificMatchData {
     required this.scouterName,
   });
   final int scheduleMatchId;
-
+  final int id;
   final int? drivetrainAndDriving;
   final int? intake;
   final int? speaker;
@@ -31,6 +32,7 @@ class SpecificMatchData {
     final IdProvider idProvider,
   ) =>
       SpecificMatchData(
+        id: specificMatchTable["id"] as int,
         matchIdentifier:
             MatchIdentifier.fromJson(specificMatchTable, idProvider.matchType),
         scheduleMatchId: specificMatchTable["schedule_match"]["id"] as int,
