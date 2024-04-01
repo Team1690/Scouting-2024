@@ -220,8 +220,8 @@ class _PitViewState extends State<PitView> {
                     SectionDivider(label: "OnStage"),
                     Switcher(
                       labels: const <String>[
-                        "Close Range Shooting",
-                        "All Range Shooting",
+                        "Free Range",
+                        "Subwoofer",
                       ],
                       colors: const <Color>[
                         Colors.white,
@@ -231,8 +231,8 @@ class _PitViewState extends State<PitView> {
                         setState(() {
                           vars = vars.copyWith(
                             allRangeShooting: () => <int, ShootingRange>{
-                              0: ShootingRange.closeRange,
-                              1: ShootingRange.allRanges,
+                              0: ShootingRange.subwoofer,
+                              1: ShootingRange.freeRange,
                             }[selection],
                           );
                         });
