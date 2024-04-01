@@ -219,9 +219,9 @@ class _PitViewState extends State<PitView> {
                     ),
                     SectionDivider(label: "OnStage"),
                     Switcher(
-                      labels: const <String>[
-                        "Free Range",
-                        "Subwoofer",
+                      labels: <String>[
+                        ShootingRange.freeRange.title,
+                        ShootingRange.subwoofer.title,
                       ],
                       colors: const <Color>[
                         Colors.white,
