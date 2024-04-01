@@ -6,7 +6,7 @@ import "package:scouting_frontend/views/pc/scatter/scatter.dart";
 
 //TODo: need to get some fake data to test it.
 
-class ScattersScreen extends StatelessWidget {
+class ScatterScreen extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => DashboardScaffold(
         body: Padding(
