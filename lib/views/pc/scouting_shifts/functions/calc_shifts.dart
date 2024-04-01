@@ -12,9 +12,8 @@ List<ScoutingShift> calcScoutingShifts(
 ) {
   final List<List<ScheduleMatch>> matchBatches = MatchesProvider.of(context)
       .matches
-      .where(
-        (final ScheduleMatch element) =>
-            element.matchIdentifier.isRematch == false,
+      .whereNot(
+        (final ScheduleMatch element) => element.matchIdentifier.isRematch,
       )
       .slices(scoutingShiftLength)
       .toList();
