@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/add_scouter.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/delete_scouter.dart";
@@ -45,31 +44,38 @@ class _EditScoutersButtonState extends State<EditScoutersButton> {
                           snapshot.mapSnapshot(
                         onSuccess: (final List<String> data) =>
                             SingleChildScrollView(
-                                child: Column(
-                          children: data
-                              .map(
-                                ((final String scouterName) => Row(
-                                      children: [
-                                        Expanded(
-                                          child: TextField(
-                                            controller: TextEditingController(
-                                                text: scouterName),
-                                            onSubmitted: (final String value) {
-                                              updateScouter(scouterName, value);
-                                            },
+                          child: Column(
+                            children: data
+                                .map(
+                                  ((final String scouterName) => Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: TextField(
+                                              controller: TextEditingController(
+                                                text: scouterName,
+                                              ),
+                                              onSubmitted:
+                                                  (final String value) {
+                                                updateScouter(
+                                                  scouterName,
+                                                  value,
+                                                );
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                        IconButton(
-                                          onPressed: () {
-                                            deleteScouter(scouterName);
-                                          },
-                                          icon: const Icon(Icons.group_remove),
-                                        )
-                                      ],
-                                    )),
-                              )
-                              .toList(),
-                        )),
+                                          IconButton(
+                                            onPressed: () {
+                                              deleteScouter(scouterName);
+                                            },
+                                            icon:
+                                                const Icon(Icons.group_remove),
+                                          ),
+                                        ],
+                                      )),
+                                )
+                                .toList(),
+                          ),
+                        ),
                         onWaiting: () => const Center(
                           child: CircularProgressIndicator(),
                         ),

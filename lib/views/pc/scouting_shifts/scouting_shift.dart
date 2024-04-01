@@ -14,7 +14,9 @@ class ScoutingShift {
   final LightTeam team;
 
   static ScoutingShift fromJson(
-          final dynamic shift, final IdProvider provider) =>
+    final dynamic shift,
+    final IdProvider provider,
+  ) =>
       ScoutingShift(
         name: shift["name"] as String,
         matchIdentifier: MatchIdentifier.fromJson(

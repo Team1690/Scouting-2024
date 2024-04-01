@@ -11,8 +11,7 @@ import "package:scouting_frontend/views/mobile/screens/specific_view/specific_vi
 import "package:scouting_frontend/views/pc/auto_gamepieces/auto_gamepieces_view.dart";
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
-
-import "../common/navbar_tile.dart";
+import "package:scouting_frontend/views/common/navbar_tile.dart";
 
 class SideNavBar extends StatelessWidget {
   final TextEditingController teamSelectionController = TextEditingController();
