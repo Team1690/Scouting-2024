@@ -5,7 +5,7 @@ import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
-import "package:scouting_frontend/views/mobile/submit_button.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/submit/submit_button.dart";
 import "package:scouting_frontend/views/pc/matches/matches_vars.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 

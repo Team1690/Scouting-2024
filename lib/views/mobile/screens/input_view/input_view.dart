@@ -9,8 +9,8 @@ import "package:scouting_frontend/views/mobile/screens/input_view/input_view_var
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/mobile/local_save_button.dart";
-import "package:scouting_frontend/views/mobile/manage_preferences.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/shared_preferences/local_save_button.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/shared_preferences/manage_preferences.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_selector.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/climbing.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/game_piece_counter.dart";
@@ -21,7 +21,7 @@ import "package:scouting_frontend/views/mobile/screens/input_view/scouter_name_i
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
-import "package:scouting_frontend/views/mobile/submit_button.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/submit/submit_button.dart";
 import "package:scouting_frontend/views/mobile/team_and_match_selection.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 

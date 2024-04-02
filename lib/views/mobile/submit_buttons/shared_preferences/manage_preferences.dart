@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/mobile/manage_local_data.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/shared_preferences/manage_local_data.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 class ManagePreferences extends StatefulWidget {

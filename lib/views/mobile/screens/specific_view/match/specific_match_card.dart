@@ -6,7 +6,7 @@ import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/match/specific_ratings.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/match/specific_vars.dart";
-import "package:scouting_frontend/views/mobile/submit_button.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/submit/submit_button.dart";
 import "package:scouting_frontend/views/mobile/team_and_match_selection.dart";
 
 class SpecificMatchCard extends StatefulWidget {
