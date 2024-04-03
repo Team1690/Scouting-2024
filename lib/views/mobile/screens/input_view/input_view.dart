@@ -410,6 +410,13 @@ class _UserInputState extends State<UserInput> {
                               );
                             });
                           },
+                          onTap: () {
+                            if (match.faultMessage ==
+                                "\"יש לרובוט בעיה (technical scouting)\"") {
+                              faultMessageController.clear();
+                              match = match.copyWith(faultMessage: always(""));
+                            }
+                          },
                           decoration: const InputDecoration(
                             hintText: "Robot fault",
                           ),
