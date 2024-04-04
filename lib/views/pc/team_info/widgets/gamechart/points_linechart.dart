@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
@@ -8,11 +9,15 @@ class PointsLineChart extends StatelessWidget {
     required this.title,
     required this.data,
     required this.matches,
+    this.color = Colors.green,
+    this.sideTitlesInterval = 10,
   });
 
   final int Function(MatchData) data;
   final List<MatchData> matches;
   final String title;
+  final Color color;
+  final int sideTitlesInterval;
 
   @override
   Widget build(final BuildContext context) => Stack(
@@ -31,17 +36,16 @@ class PointsLineChart extends StatelessWidget {
               top: 40,
             ),
             child: DashboardLineChart(
-              sideTitlesInterval: 10,
+              sideTitlesInterval: sideTitlesInterval.toDouble(),
               showShadow: true,
               gameNumbers: matches.technicalMatchExists
                   .map(
                     (final MatchData e) => e.scheduleMatch.matchIdentifier,
                   )
                   .toList(),
-              inputedColors: const <Color>[
-                Colors.green,
+              inputedColors: <Color>[
+                color,
               ],
-              distanceFromHighest: 20,
               dataSet: <List<int>>[
                 matches.technicalMatchExists.map(data).toList(),
               ],

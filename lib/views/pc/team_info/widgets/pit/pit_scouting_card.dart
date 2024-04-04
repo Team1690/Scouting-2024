@@ -1,5 +1,6 @@
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/edit_pit.dart";
@@ -70,19 +71,20 @@ class PitScoutingCard extends StatelessWidget {
                 ),
                 const Divider(),
               ],
-              RobotHasSomething(title: "Trap: ", value: data.trap),
-              RobotHasSomething(title: "Harmony: ", value: data.harmony),
-              RobotHasSomething(title: "Can Eject: ", value: data.canEject),
+              RobotHasSomething(title: "Trap", value: data.trap),
+              RobotHasSomething(title: "Harmony", value: data.harmony),
+              RobotHasSomething(title: "Can Eject", value: data.canEject),
               RobotHasSomething(
                 title: "Can Pass Under Stage",
                 value: data.canPassUnderStage,
               ),
-              RobotHasSomething(title: "Climb: ", value: data.climb),
+              RobotHasSomething(title: "Climb", value: data.climb),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    Text("Shooting Range: ${data.allRangeShooting.title}"),
                     Text(
                       "Drivetrain: ${data.driveTrainType.title}",
                     ),

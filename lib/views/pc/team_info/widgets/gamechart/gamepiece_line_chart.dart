@@ -57,20 +57,21 @@ class GamepiecesLineChart extends StatelessWidget {
                     ],
                     const Spacer(),
                     RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         children: <InlineSpan>[
-                          TextSpan(
+                          const TextSpan(
                             text: " Scored ",
                             style: TextStyle(color: Colors.green),
                           ),
-                          TextSpan(
+                          const TextSpan(
                             text: " Missed ",
                             style: TextStyle(color: Colors.red),
                           ),
-                          TextSpan(
-                            text: " Delivered ",
-                            style: TextStyle(color: Colors.yellow),
-                          ),
+                          if (deliveryData != null)
+                            const TextSpan(
+                              text: " Delivered ",
+                              style: TextStyle(color: Colors.yellow),
+                            ),
                         ],
                       ),
                     ),

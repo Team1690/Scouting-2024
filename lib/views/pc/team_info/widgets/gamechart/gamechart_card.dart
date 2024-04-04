@@ -28,6 +28,8 @@ class Gamechart extends StatelessWidget {
                         p0.technicalMatchData!.data.gamepieces,
                     missedData: (final MatchData p0) =>
                         p0.technicalMatchData!.data.totalMissed,
+                    deliveryData: (final MatchData p0) =>
+                        p0.technicalMatchData!.data.delivery,
                   ),
                   GamepiecesLineChart(
                     title: "Auto Gamepieces",
@@ -58,6 +60,14 @@ class Gamechart extends StatelessWidget {
                     matches: data.matches,
                     data: (final MatchData p0) =>
                         p0.technicalMatchData!.data.gamePiecesPoints,
+                  ),
+                  PointsLineChart(
+                    title: "Delivered Gamepieces",
+                    data: (final MatchData p0) =>
+                        p0.technicalMatchData!.data.delivery,
+                    matches: data.matches,
+                    color: Colors.yellow,
+                    sideTitlesInterval: 2,
                   ),
                   GamepiecesLineChart(
                     title: "Traps",
