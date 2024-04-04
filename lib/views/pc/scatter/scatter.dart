@@ -7,7 +7,6 @@ import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:orbit_standard_library/orbit_standard_library.dart";
 
 class Scatter extends StatefulWidget {
   @override
@@ -51,12 +50,13 @@ class _ScatterState extends State<Scatter> {
           },
         ),
         IconButton(
-            onPressed: () {
-              setState(() {
-                normalize = !normalize;
-              });
-            },
-            icon: const Icon(Icons.auto_fix_normal)),
+          onPressed: () {
+            setState(() {
+              normalize = !normalize;
+            });
+          },
+          icon: const Icon(Icons.auto_fix_normal),
+        ),
       ],
       body: Column(
         children: <Widget>[
