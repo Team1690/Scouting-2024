@@ -36,7 +36,6 @@ const double autoFieldWidth = fieldWidth - 5.87248;
 const int scoutingShiftLength = 8;
 
 bool isPC(final BuildContext context) {
-  return false;
   switch (Theme.of(context).platform) {
     case TargetPlatform.android:
     case TargetPlatform.iOS:
