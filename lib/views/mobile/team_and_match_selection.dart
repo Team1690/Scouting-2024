@@ -1,11 +1,16 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_typeahead/flutter_typeahead.dart";
+import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
+import "package:scouting_frontend/models/providers/shifts_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/providers/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/teams_search_box.dart";
 import "package:scouting_frontend/models/providers/team_provider.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 
 class TeamAndMatchSelection extends StatefulWidget {
   const TeamAndMatchSelection({
@@ -62,10 +67,14 @@ class TeamAndMatchSelectionState extends State<TeamAndMatchSelection> {
           ),
           if (scheduleMatch != null)
             TeamsSearchBox(
-              buildSuggestion: (final LightTeam currentTeam) =>
-                  scheduleMatch!.isUnofficial
-                      ? "${currentTeam.number} ${currentTeam.name}"
-                      : scheduleMatch!.getTeamStation(currentTeam) ?? "",
+              buildSuggestion: (final LightTeam currentTeam) {
+                final List<ScoutingShift> shifts =
+                    ShiftProvider.of(context).shifts;
+
+                return scheduleMatch!.isUnofficial
+                    ? "${currentTeam.number} ${currentTeam.name}"
+                    : scheduleMatch!.getTeamStation(currentTeam, shifts);
+              },
               teams: teams,
               typeAheadController: widget.teamNumberController,
               onChange: (final LightTeam team) {

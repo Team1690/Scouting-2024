@@ -4,7 +4,6 @@ import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/queries/hasura_helper.dart";
 
 const List<String> allianceMembers = <String>[
   "red_0",

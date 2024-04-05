@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
+import "package:scouting_frontend/models/providers/shifts_provider.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_gamepiece_card.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
@@ -78,7 +79,10 @@ class _UserInputState extends State<UserInput> {
       "Pre scouting",
     ].contains(match.scheduleMatch!.matchIdentifier.type.title)
         ? "${match.scoutedTeam!.number} ${match.scoutedTeam!.name}"
-        : match.scheduleMatch!.getTeamStation(match.scoutedTeam!) ?? "";
+        : match.scheduleMatch!.getTeamStation(
+            match.scoutedTeam!,
+            ShiftProvider.of(context).shifts,
+          );
     scouterNameController.text = match.scouterName!;
   }
 

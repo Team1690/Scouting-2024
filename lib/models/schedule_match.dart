@@ -3,6 +3,7 @@ import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/fetch_matches.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 
 class ScheduleMatch {
   ScheduleMatch({
@@ -42,18 +43,18 @@ class ScheduleMatch {
       matchIdentifier.type == MatchType.practice ||
       matchIdentifier.type == MatchType.pre;
 
-  // String? getTeamStation(final LightTeam team) {
-  //   String? fieldPositionOf(
-  //     final List<LightTeam> alliance,
-  //     final String color,
-  //   ) {
-  //     final int index = alliance.indexOf(team);
-  //     return index == -1
-  //         ? null
-  //         : "${team.number} ${team.name} - $color ${index + 1}";
-  //   }
-
-  //   return fieldPositionOf(redAlliance, "red") ??
-  //       fieldPositionOf(blueAlliance, "blue");
-  // }
+  String getTeamStation(
+          final LightTeam team, final List<ScoutingShift> shifts) =>
+      "${team.number} ${team.name} - ${shifts.firstWhere(
+            (final ScoutingShift element) =>
+                element.matchIdentifier.number == matchIdentifier.number &&
+                element.matchIdentifier.type == matchIdentifier.type &&
+                element.team == team,
+            orElse: () => ScoutingShift(
+              name: "",
+              matchIdentifier: matchIdentifier,
+              team: team,
+              scheduleId: id,
+            ),
+          ).name}";
 }
