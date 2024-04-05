@@ -4,7 +4,7 @@ import "package:image_picker/image_picker.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
 import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
@@ -19,6 +19,8 @@ import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/submit_buttons/submit/submit_button.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/widgets/teams_without_pit.dart";
+
+import "../../../../models/providers/team_provider.dart";
 
 const double kgToPoundFactor = 2.20462262;
 const double mToFt = 1 / 0.3048;

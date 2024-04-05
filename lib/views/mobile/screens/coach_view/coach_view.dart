@@ -4,7 +4,7 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_teams.dart";
-import "package:scouting_frontend/models/matches_provider.dart";
+import "package:scouting_frontend/models/providers/matches_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";

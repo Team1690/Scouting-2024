@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/mobile/screens/coach_team_info/coach_team_info.dart";
@@ -12,6 +12,8 @@ import "package:scouting_frontend/views/pc/auto_gamepieces/auto_gamepieces_view.
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/common/navbar_tile.dart";
+
+import "../../models/providers/team_provider.dart";
 
 class SideNavBar extends StatelessWidget {
   final TextEditingController teamSelectionController = TextEditingController();

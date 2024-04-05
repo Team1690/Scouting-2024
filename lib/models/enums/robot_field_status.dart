@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 
 enum RobotFieldStatus implements IdEnum {
   worked("Worked", Colors.green),

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/enums/fault_status_enum.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/fault_view/fault_view.dart";

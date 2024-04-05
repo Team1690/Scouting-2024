@@ -7,14 +7,16 @@ import "package:scouting_frontend/models/enums/fault_status_enum.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
-import "package:scouting_frontend/models/matches_provider.dart";
+import "package:scouting_frontend/models/providers/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
+
+import "../models/providers/team_provider.dart";
 
 class App extends StatelessWidget {
   const App({

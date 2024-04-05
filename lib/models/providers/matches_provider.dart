@@ -11,7 +11,7 @@ class MatchesProvider extends InheritedWidget {
   });
   final List<ScheduleMatch> matches;
   @override
-  bool updateShouldNotify(final MatchesProvider oldWidget) =>
+  bool updateShouldNotify(covariant final MatchesProvider oldWidget) =>
       matches != oldWidget.matches;
 
   static MatchesProvider of(final BuildContext context) {

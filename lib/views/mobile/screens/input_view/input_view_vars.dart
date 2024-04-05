@@ -2,7 +2,7 @@ import "package:flutter/cupertino.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";

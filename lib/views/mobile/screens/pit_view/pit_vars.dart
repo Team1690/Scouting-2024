@@ -4,7 +4,7 @@ import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
 import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/views/mobile/hasura_vars.dart";
 
 class PitVars implements HasuraVars {

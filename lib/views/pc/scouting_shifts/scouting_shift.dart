@@ -1,4 +1,4 @@
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_model.dart";
 

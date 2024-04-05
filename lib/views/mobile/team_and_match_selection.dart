@@ -1,12 +1,13 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_typeahead/flutter_typeahead.dart";
-import "package:scouting_frontend/models/enums/match_type_enum.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
-import "package:scouting_frontend/models/matches_provider.dart";
+import "package:scouting_frontend/models/providers/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/teams_search_box.dart";
+
+import "../../models/providers/team_provider.dart";
 
 class TeamAndMatchSelection extends StatefulWidget {
   const TeamAndMatchSelection({
@@ -28,10 +29,6 @@ class TeamAndMatchSelectionState extends State<TeamAndMatchSelection> {
   ScheduleMatch? scheduleMatch;
   List<LightTeam> teams = <LightTeam>[];
   LightTeam? team;
-  bool isUnofficial(final ScheduleMatch match) => <MatchType>[
-        MatchType.pre,
-        MatchType.practice,
-      ].contains(match.matchIdentifier.type);
 
   @override
   Widget build(final BuildContext context) => Column(
@@ -51,7 +48,7 @@ class TeamAndMatchSelectionState extends State<TeamAndMatchSelection> {
               onChange: (final ScheduleMatch selectedMatch) {
                 setState(() {
                   scheduleMatch = selectedMatch;
-                  teams = isUnofficial(selectedMatch)
+                  teams = selectedMatch.isUnofficial
                       ? TeamProvider.of(context).teams
                       : <LightTeam>[
                           ...selectedMatch.blueAlliance,
@@ -68,7 +65,7 @@ class TeamAndMatchSelectionState extends State<TeamAndMatchSelection> {
           if (scheduleMatch != null)
             TeamsSearchBox(
               buildSuggestion: (final LightTeam currentTeam) =>
-                  isUnofficial(scheduleMatch!)
+                  scheduleMatch!.isUnofficial
                       ? "${currentTeam.number} ${currentTeam.name}"
                       : scheduleMatch!.getTeamStation(currentTeam) ?? "",
               teams: teams,

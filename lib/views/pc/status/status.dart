@@ -2,11 +2,13 @@ import "dart:collection";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_teams.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/pc/status/status_screen.dart";
+
+import "../../../models/providers/team_provider.dart";
 
 class Status extends StatelessWidget {
   @override

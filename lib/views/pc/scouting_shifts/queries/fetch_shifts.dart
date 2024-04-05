@@ -1,6 +1,6 @@
 import "package:flutter/widgets.dart";
 import "package:graphql/client.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 
