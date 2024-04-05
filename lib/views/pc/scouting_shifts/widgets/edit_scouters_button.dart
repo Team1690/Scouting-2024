@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/pc/scouting_shifts/queries/add_scouter.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/fetch_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/update_scouter_name.dart";
 
@@ -12,7 +11,6 @@ class EditScoutersButton extends StatefulWidget {
 }
 
 class _EditScoutersButtonState extends State<EditScoutersButton> {
-  TextEditingController addController = TextEditingController();
   @override
   Widget build(final BuildContext context) => IconButton(
         onPressed: () {
@@ -22,18 +20,6 @@ class _EditScoutersButtonState extends State<EditScoutersButton> {
               content: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    TextField(
-                      controller: addController,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        if (addController.text != "") {
-                          addScouter(addController.text);
-                        }
-                        addController.clear();
-                      },
-                      icon: const Icon(Icons.person_add_alt_1),
-                    ),
                     StreamBuilder<List<String>>(
                       stream: fetchScouters(),
                       builder: (

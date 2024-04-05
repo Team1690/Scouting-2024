@@ -44,7 +44,9 @@ class ScheduleMatch {
       matchIdentifier.type == MatchType.pre;
 
   String getTeamStation(
-          final LightTeam team, final List<ScoutingShift> shifts) =>
+    final LightTeam team,
+    final List<ScoutingShift> shifts,
+  ) =>
       "${team.number} ${team.name} - ${shifts.firstWhere(
             (final ScoutingShift element) =>
                 element.matchIdentifier.number == matchIdentifier.number &&

@@ -31,7 +31,7 @@ class ScouterSearchBox extends StatelessWidget {
               hintText: "Scouter name",
             ),
           ),
-          onSuggestionSelected: (suggestion) {
+          onSuggestionSelected: (final String suggestion) {
             typeAheadController.text = suggestion;
             onChanged(suggestion);
           },
@@ -62,8 +62,8 @@ class ScouterSearchBox extends StatelessWidget {
               ),
             ),
           ),
-          suggestionsCallback: (final String pattern) =>
-              scouters.where((element) => element.startsWith(pattern)),
+          suggestionsCallback: (final String pattern) => scouters
+              .where((final String element) => element.startsWith(pattern)),
         ),
       );
 }

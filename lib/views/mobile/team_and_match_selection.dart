@@ -1,9 +1,5 @@
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_typeahead/flutter_typeahead.dart";
-import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/enums/match_type_enum.dart";
-import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/providers/shifts_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/providers/matches_provider.dart";
@@ -37,9 +33,9 @@ class TeamAndMatchSelectionState extends State<TeamAndMatchSelection> {
 
   @override
   Widget build(final BuildContext context) {
-    List<ScoutingShift> shifts = ShiftProvider.of(context)
+    final List<ScoutingShift> shifts = ShiftProvider.of(context)
         .shifts
-        .where((element) => element.name == widget.scouter)
+        .where((final ScoutingShift element) => element.name == widget.scouter)
         .toList();
 
     return Column(
@@ -56,7 +52,7 @@ class TeamAndMatchSelectionState extends State<TeamAndMatchSelection> {
                       !element.matchIdentifier.isRematch &&
                       (widget.scouter != null && shifts.isNotEmpty
                           ? shifts
-                              .map((e) => e.matchIdentifier)
+                              .map((final ScoutingShift e) => e.matchIdentifier)
                               .contains(element.matchIdentifier)
                           : true),
                 )
