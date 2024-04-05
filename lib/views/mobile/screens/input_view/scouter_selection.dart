@@ -18,18 +18,23 @@ class ScouterSearchBox extends StatelessWidget {
         child: TypeAheadFormField<String>(
           minCharsForSuggestions: 1,
           validator: (final String? selectedScouter) =>
-              selectedScouter == "" ? "Please Enter Scouter Name" : null,
+              selectedScouter != null && selectedScouter.isNotEmpty
+                  ? null
+                  : "Please enter your name",
           textFieldConfiguration: TextFieldConfiguration(
             onTap: typeAheadController.clear,
             controller: typeAheadController,
             keyboardType: TextInputType.name,
             decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: Icon(Icons.person),
               border: OutlineInputBorder(),
-              hintText: "Search Scouters",
+              hintText: "Scouter name",
             ),
           ),
-          onSuggestionSelected: onChanged,
+          onSuggestionSelected: (suggestion) {
+            typeAheadController.text = suggestion;
+            onChanged(suggestion);
+          },
           itemBuilder: (final BuildContext context, final String suggestion) =>
               ListTile(
             title: Text(

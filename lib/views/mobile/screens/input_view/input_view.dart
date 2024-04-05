@@ -149,9 +149,11 @@ class _UserInputState extends State<UserInput> {
                     children: <Widget>[
                       ScouterNameInput(
                         onScouterNameChange: (final String scouterName) {
-                          match = match.copyWith(
-                            scouterName: always(scouterName),
-                          );
+                          setState(() {
+                            match = match.copyWith(
+                              scouterName: always(scouterName),
+                            );
+                          });
                         },
                         scouterNameController: scouterNameController,
                       ),
@@ -159,6 +161,7 @@ class _UserInputState extends State<UserInput> {
                         height: 15,
                       ),
                       TeamAndMatchSelection(
+                        scouter: match.scouterName,
                         matchController: matchController,
                         teamNumberController: teamNumberController,
                         onChange: (
