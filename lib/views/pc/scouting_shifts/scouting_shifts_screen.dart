@@ -6,6 +6,7 @@ import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/functions/calc_shifts.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/initial_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/fetch_scouters.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/queries/fetch_shifts.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/widgets/edit_scouters_button.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/widgets/export_csv_button.dart";
@@ -29,27 +30,38 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
               final AsyncSnapshot<List<String>> snapshot,
             ) =>
                 snapshot.mapSnapshot(
-              onSuccess: (final List<String> data) {
-                if (data.isEmpty) return const InitialScouters();
-                scouters = data;
-                return ListView(
-                  children: <Widget>[
-                    AppBar(
-                      actions: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
+              onSuccess: (final List<String> scouterData) {
+                if (scouterData.isEmpty) return const InitialScouters();
+                scouters = scouterData;
+                return StreamBuilder(
+                  stream: fetchShifts(context),
+                  builder: (context, snapshot) => snapshot.mapSnapshot(
+                    onSuccess: (final List<ScoutingShift> shiftData) =>
+                        ListView(
+                      children: <Widget>[
+                        AppBar(
+                          actions: <Widget>[
                             const EditScoutersButton(),
                             ExportCSVButton(
                               scouters: scouters,
                             ),
+                            const Spacer()
                           ],
+                          backgroundColor: bgColor,
                         ),
-                        const Spacer(),
-                      ],
-                      backgroundColor: bgColor,
-                    ),
-                    ...calcScoutingShifts(context, data).slices(6).map(
+                        ...shiftData
+                            .groupListsBy((element) => element.matchIdentifier)
+                            .values
+                            .sorted((a, b) {
+                          final int cmp =
+                              a.first.matchIdentifier.type.order.compareTo(
+                            b.first.matchIdentifier.type.order,
+                          );
+                          if (cmp != 0) return cmp;
+                          return a.first.matchIdentifier.number.compareTo(
+                            b.first.matchIdentifier.number,
+                          );
+                        }).map(
                           (final List<ScoutingShift> e) => ListTile(
                             title: Row(
                               children: <Widget>[
@@ -65,7 +77,16 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
                             ),
                           ),
                         ),
-                  ],
+                      ],
+                    ),
+                    onWaiting: () => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    onNoData: () => const Text("No Data"),
+                    onError: (final Object error) => Center(
+                      child: Text(error.toString()),
+                    ),
+                  ),
                 );
               },
               onWaiting: () => const Center(

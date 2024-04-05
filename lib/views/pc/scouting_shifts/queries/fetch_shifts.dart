@@ -36,6 +36,7 @@ subscription FetchShifts {
       match_type {
         id
       }
+      id
     }
     team {
       colors_index

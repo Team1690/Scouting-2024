@@ -33,6 +33,7 @@ List<ScoutingShift> calcScoutingShifts(
                               (scoutingBatches.length - 1)][teamIndex % 6],
                           matchIdentifier: match.matchIdentifier,
                           team: team,
+                          scheduleId: match.id,
                         ),
                       ),
                 )

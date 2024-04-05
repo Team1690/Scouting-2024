@@ -1,5 +1,8 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/functions/calc_shifts.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/add_scouter.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/queries/add_shift.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 
 class InitialScoutersDialog extends StatefulWidget {
   const InitialScoutersDialog({super.key});
@@ -43,6 +46,10 @@ class _InitialScoutersDialogState extends State<InitialScoutersDialog> {
               IconButton(
                 onPressed: () {
                   scouters.forEach(addScouter);
+                  final List<ScoutingShift> shifts =
+                      calcScoutingShifts(context, scouters);
+                  shifts.forEach(addShift);
+                  Navigator.pop(context);
                 },
                 icon: const Icon(Icons.schedule_send),
               ),
