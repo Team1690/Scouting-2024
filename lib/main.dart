@@ -15,6 +15,7 @@ import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/fetch_matches.dart";
+import "package:scouting_frontend/net/fetch_scouters.dart";
 import "package:scouting_frontend/net/fetch_shifts.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/app.dart";
@@ -71,6 +72,7 @@ void main() async {
   );
   final List<ScoutingShift> shifts =
       await fetchShifts(IdTable<MatchType>(matchTypes));
+  final List<String> scouters = await fetchScouters();
   final List<LightTeam> teams = await fetchTeams();
 
   runApp(
@@ -87,6 +89,7 @@ void main() async {
       robotFieldStatusIds: robotFieldStatuses,
       shootingRange: shootingRange,
       shifts: shifts,
+      scouters: scouters,
     ),
   );
 }

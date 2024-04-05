@@ -129,12 +129,10 @@ class MatchSearchBox extends StatelessWidget {
               hintText: "Search Match",
             ),
           ),
-          suggestionsCallback: (final String pattern) => matches
-              .where(
-                (final ScheduleMatch match) =>
-                    match.matchIdentifier.number.toString().startsWith(pattern),
-              )
-              .toList(),
+          suggestionsCallback: (final String pattern) => matches.where(
+            (final ScheduleMatch match) =>
+                match.matchIdentifier.number.toString().startsWith(pattern),
+          ),
           itemBuilder:
               (final BuildContext context, final ScheduleMatch suggestion) =>
                   ListTile(

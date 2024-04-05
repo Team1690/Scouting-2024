@@ -8,6 +8,7 @@ import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
+import "package:scouting_frontend/models/providers/scouter_provider.dart";
 import "package:scouting_frontend/models/providers/shifts_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/providers/matches_provider.dart";
@@ -34,6 +35,7 @@ class App extends StatelessWidget {
     required this.autoGamepieceLocations,
     required this.autoGamepieceStates,
     required this.shifts,
+    required this.scouters,
   });
 
   final List<ScheduleMatch> matches;
@@ -48,6 +50,7 @@ class App extends StatelessWidget {
   final Map<AutoGamepieceID, int> autoGamepieceLocations;
   final Map<AutoGamepieceState, int> autoGamepieceStates;
   final List<ScoutingShift> shifts;
+  final List<String> scouters;
 
   @override
   Widget build(final BuildContext context) => TeamProvider(
@@ -66,11 +69,14 @@ class App extends StatelessWidget {
             shootingRange: shootingRange,
             child: ShiftProvider(
               shifts: shifts,
-              child: MaterialApp(
-                title: "Orbit Scouting",
-                home: isPC(context) ? TeamInfoScreen() : const UserInput(),
-                theme: darkModeTheme,
-                debugShowCheckedModeBanner: false,
+              child: ScouterProvider(
+                scouters: scouters,
+                child: MaterialApp(
+                  title: "Orbit Scouting",
+                  home: isPC(context) ? TeamInfoScreen() : const UserInput(),
+                  theme: darkModeTheme,
+                  debugShowCheckedModeBanner: false,
+                ),
               ),
             ),
           ),
