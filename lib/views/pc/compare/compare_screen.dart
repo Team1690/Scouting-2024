@@ -2,7 +2,6 @@ import "dart:collection";
 import "package:carousel_slider/carousel_slider.dart";
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
-import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_teams.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
@@ -13,8 +12,7 @@ import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/lineChart/compare_gamechart_card.dart";
 import "package:scouting_frontend/views/pc/compare/widgets/spiderChart/spider_chart_card.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
-
-import "../../../models/providers/team_provider.dart";
+import "package:scouting_frontend/models/providers/team_provider.dart";
 
 class CompareScreen extends StatefulWidget {
   CompareScreen([this.initialTeams = const <LightTeam>[]]);

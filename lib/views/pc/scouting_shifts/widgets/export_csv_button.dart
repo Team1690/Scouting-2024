@@ -1,7 +1,6 @@
 import "package:file_saver/file_saver.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/utils/byte_utils.dart";
-import "package:scouting_frontend/views/pc/scouting_shifts/functions/calc_shifts.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/functions/shifts_to_csv.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 

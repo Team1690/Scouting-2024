@@ -4,7 +4,6 @@ import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/pc/scouting_shifts/functions/calc_shifts.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/initial_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/delete_all_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/fetch_scouters.dart";
@@ -35,15 +34,25 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
               onSuccess: (final List<String> scouterData) {
                 if (scouterData.isEmpty) return const InitialScouters();
                 scouters = scouterData;
-                return StreamBuilder(
+                return StreamBuilder<List<ScoutingShift>>(
                   stream:
                       fetchShiftsSubscription(IdProvider.of(context).matchType),
-                  builder: (context, snapshot) => snapshot.mapSnapshot(
+                  builder: (
+                    final BuildContext context,
+                    final AsyncSnapshot<List<ScoutingShift>> snapshot,
+                  ) =>
+                      snapshot.mapSnapshot(
                     onSuccess: (final List<ScoutingShift> rawShiftData) {
-                      List<List<ScoutingShift>> shiftData = rawShiftData
-                          .groupListsBy((element) => element.matchIdentifier)
+                      final List<List<ScoutingShift>> shiftData = rawShiftData
+                          .groupListsBy(
+                            (final ScoutingShift element) =>
+                                element.matchIdentifier,
+                          )
                           .values
-                          .sorted((a, b) {
+                          .sorted((
+                        final List<ScoutingShift> a,
+                        final List<ScoutingShift> b,
+                      ) {
                         final int cmp =
                             a.first.matchIdentifier.type.order.compareTo(
                           b.first.matchIdentifier.type.order,
@@ -65,7 +74,7 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
                                 onPressed: deleteScouters,
                                 icon: Icon(Icons.delete),
                               ),
-                              const Spacer()
+                              const Spacer(),
                             ],
                             backgroundColor: bgColor,
                           ),

@@ -16,10 +16,10 @@ class _InitialScoutersDialogState extends State<InitialScoutersDialog> {
   List<String> scouters = <String>[];
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
+  Widget build(final BuildContext context) => AlertDialog(
         content: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               TextField(
                 controller: addController,
               ),
@@ -34,28 +34,30 @@ class _InitialScoutersDialogState extends State<InitialScoutersDialog> {
                 },
                 icon: const Icon(Icons.person_add_alt_1),
               ),
-              ...scouters.map((e) => Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: TextEditingController(text: e),
-                          onChanged: (value) {
-                            setState(() {
-                              scouters[scouters.indexOf(e)] = value;
-                            });
-                          },
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
+              ...scouters.map(
+                (final String e) => Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        controller: TextEditingController(text: e),
+                        onChanged: (final String value) {
                           setState(() {
-                            scouters.remove(e);
+                            scouters[scouters.indexOf(e)] = value;
                           });
                         },
-                        icon: const Icon(Icons.group_remove),
                       ),
-                    ],
-                  )),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          scouters.remove(e);
+                        });
+                      },
+                      icon: const Icon(Icons.group_remove),
+                    ),
+                  ],
+                ),
+              ),
               IconButton(
                 onPressed: () {
                   scouters.forEach(addScouter);

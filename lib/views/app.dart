@@ -17,8 +17,7 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
-
-import "../models/providers/team_provider.dart";
+import "package:scouting_frontend/models/providers/team_provider.dart";
 
 class App extends StatelessWidget {
   const App({

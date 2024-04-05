@@ -1,13 +1,11 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_typeahead/flutter_typeahead.dart";
-import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/providers/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/teams_search_box.dart";
-
-import "../../models/providers/team_provider.dart";
+import "package:scouting_frontend/models/providers/team_provider.dart";
 
 class TeamAndMatchSelection extends StatefulWidget {
   const TeamAndMatchSelection({
