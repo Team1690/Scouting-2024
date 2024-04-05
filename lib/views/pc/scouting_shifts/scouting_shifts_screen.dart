@@ -37,53 +37,55 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
                 return StreamBuilder(
                   stream: fetchShifts(context),
                   builder: (context, snapshot) => snapshot.mapSnapshot(
-                    onSuccess: (final List<ScoutingShift> shiftData) =>
-                        ListView(
-                      children: <Widget>[
-                        AppBar(
-                          actions: <Widget>[
-                            const EditScoutersButton(),
-                            ExportCSVButton(
-                              scouters: scouters,
-                            ),
-                            const IconButton(
-                              onPressed: deleteScouters,
-                              icon: Icon(Icons.delete),
-                            ),
-                            const Spacer()
-                          ],
-                          backgroundColor: bgColor,
-                        ),
-                        ...shiftData
-                            .groupListsBy((element) => element.matchIdentifier)
-                            .values
-                            .sorted((a, b) {
-                          final int cmp =
-                              a.first.matchIdentifier.type.order.compareTo(
-                            b.first.matchIdentifier.type.order,
-                          );
-                          if (cmp != 0) return cmp;
-                          return a.first.matchIdentifier.number.compareTo(
-                            b.first.matchIdentifier.number,
-                          );
-                        }).map(
-                          (final List<ScoutingShift> e) => ListTile(
-                            title: Row(
-                              children: <Widget>[
-                                Text(
-                                  "${e.first.matchIdentifier.toString()} : ",
-                                ),
-                                ...e.map(
-                                  (final ScoutingShift e) => Text(
-                                    "${e.name} ${e.team.number} ,,, ",
+                    onSuccess: (final List<ScoutingShift> rawShiftData) {
+                      List<List<ScoutingShift>> shiftData = rawShiftData
+                          .groupListsBy((element) => element.matchIdentifier)
+                          .values
+                          .sorted((a, b) {
+                        final int cmp =
+                            a.first.matchIdentifier.type.order.compareTo(
+                          b.first.matchIdentifier.type.order,
+                        );
+                        if (cmp != 0) return cmp;
+                        return a.first.matchIdentifier.number.compareTo(
+                          b.first.matchIdentifier.number,
+                        );
+                      });
+                      return ListView(
+                        children: <Widget>[
+                          AppBar(
+                            actions: <Widget>[
+                              const EditScoutersButton(),
+                              ExportCSVButton(
+                                shifts: shiftData,
+                              ),
+                              const IconButton(
+                                onPressed: deleteScouters,
+                                icon: Icon(Icons.delete),
+                              ),
+                              const Spacer()
+                            ],
+                            backgroundColor: bgColor,
+                          ),
+                          ...shiftData.map(
+                            (final List<ScoutingShift> e) => ListTile(
+                              title: Row(
+                                children: <Widget>[
+                                  Text(
+                                    "${e.first.matchIdentifier.toString()} : ",
                                   ),
-                                ),
-                              ],
+                                  ...e.map(
+                                    (final ScoutingShift e) => Text(
+                                      "${e.name} ${e.team.number} ,,, ",
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      );
+                    },
                     onWaiting: () => const Center(
                       child: CircularProgressIndicator(),
                     ),
