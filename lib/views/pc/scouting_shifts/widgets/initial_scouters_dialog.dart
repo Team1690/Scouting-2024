@@ -31,17 +31,30 @@ class _InitialScoutersDialogState extends State<InitialScoutersDialog> {
                     }
                     addController.clear();
                   });
-                  setState(() {});
                 },
                 icon: const Icon(Icons.person_add_alt_1),
               ),
-              ...scouters.map((e) => TextField(
-                    controller: TextEditingController(text: e),
-                    onChanged: (value) {
-                      setState(() {
-                        scouters[scouters.indexOf(e)] = value;
-                      });
-                    },
+              ...scouters.map((e) => Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: TextEditingController(text: e),
+                          onChanged: (value) {
+                            setState(() {
+                              scouters[scouters.indexOf(e)] = value;
+                            });
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            scouters.remove(e);
+                          });
+                        },
+                        icon: const Icon(Icons.group_remove),
+                      ),
+                    ],
                   )),
               IconButton(
                 onPressed: () {

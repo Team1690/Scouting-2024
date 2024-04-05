@@ -5,6 +5,7 @@ import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/functions/calc_shifts.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/initial_scouters.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/queries/delete_all_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/fetch_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/fetch_shifts.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
@@ -44,6 +45,10 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
                             const EditScoutersButton(),
                             ExportCSVButton(
                               scouters: scouters,
+                            ),
+                            const IconButton(
+                              onPressed: deleteScouters,
+                              icon: Icon(Icons.delete),
                             ),
                             const Spacer()
                           ],

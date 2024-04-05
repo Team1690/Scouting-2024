@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/add_scouter.dart";
-import "package:scouting_frontend/views/pc/scouting_shifts/queries/delete_scouter.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/fetch_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/update_scouter_name.dart";
 
@@ -62,13 +61,6 @@ class _EditScoutersButtonState extends State<EditScoutersButton> {
                                                 );
                                               },
                                             ),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {
-                                              deleteScouter(scouterName);
-                                            },
-                                            icon:
-                                                const Icon(Icons.group_remove),
                                           ),
                                         ],
                                       )),
