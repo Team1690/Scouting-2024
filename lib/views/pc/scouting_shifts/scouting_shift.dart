@@ -1,3 +1,4 @@
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -17,13 +18,13 @@ class ScoutingShift {
 
   static ScoutingShift fromJson(
     final dynamic shift,
-    final IdProvider provider,
+    final IdTable<MatchType> matchType,
   ) =>
       ScoutingShift(
         name: shift["scouter_name"] as String,
         matchIdentifier: MatchIdentifier.fromJson(
           shift,
-          provider.matchType,
+          matchType,
           false,
         ),
         team: LightTeam.fromJson(shift["team"]),

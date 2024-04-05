@@ -1,5 +1,6 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -35,7 +36,8 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
                 if (scouterData.isEmpty) return const InitialScouters();
                 scouters = scouterData;
                 return StreamBuilder(
-                  stream: fetchShifts(context),
+                  stream:
+                      fetchShiftsSubscription(IdProvider.of(context).matchType),
                   builder: (context, snapshot) => snapshot.mapSnapshot(
                     onSuccess: (final List<ScoutingShift> rawShiftData) {
                       List<List<ScoutingShift>> shiftData = rawShiftData

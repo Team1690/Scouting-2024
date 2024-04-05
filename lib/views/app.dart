@@ -8,12 +8,14 @@ import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
 import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
+import "package:scouting_frontend/models/providers/shifts_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/providers/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 import "package:scouting_frontend/views/pc/team_info/team_info_screen.dart";
 
 import "../models/providers/team_provider.dart";
@@ -32,6 +34,7 @@ class App extends StatelessWidget {
     required this.shootingRange,
     required this.autoGamepieceLocations,
     required this.autoGamepieceStates,
+    required this.shifts,
   });
 
   final List<ScheduleMatch> matches;
@@ -45,6 +48,7 @@ class App extends StatelessWidget {
   final Map<ShootingRange, int> shootingRange;
   final Map<AutoGamepieceID, int> autoGamepieceLocations;
   final Map<AutoGamepieceState, int> autoGamepieceStates;
+  final List<ScoutingShift> shifts;
 
   @override
   Widget build(final BuildContext context) => TeamProvider(
@@ -61,11 +65,14 @@ class App extends StatelessWidget {
             robotFieldStatusIds: robotFieldStatusIds,
             faultStatus: faultStatus,
             shootingRange: shootingRange,
-            child: MaterialApp(
-              title: "Orbit Scouting",
-              home: isPC(context) ? TeamInfoScreen() : const UserInput(),
-              theme: darkModeTheme,
-              debugShowCheckedModeBanner: false,
+            child: ShiftProvider(
+              shifts: shifts,
+              child: MaterialApp(
+                title: "Orbit Scouting",
+                home: isPC(context) ? TeamInfoScreen() : const UserInput(),
+                theme: darkModeTheme,
+                debugShowCheckedModeBanner: false,
+              ),
             ),
           ),
         ),

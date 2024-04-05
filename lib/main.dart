@@ -15,10 +15,12 @@ import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/fetch_matches.dart";
+import "package:scouting_frontend/net/fetch_shifts.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/app.dart";
 import "package:scouting_frontend/firebase_options.dart";
 import "package:scouting_frontend/models/id_helpers.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,6 +69,8 @@ void main() async {
       matchTypes,
     ), /* TODO: dont create new IdTable use one that is created afterwards */
   );
+  final List<ScoutingShift> shifts =
+      await fetchShifts(IdTable<MatchType>(matchTypes));
   final List<LightTeam> teams = await fetchTeams();
 
   runApp(
@@ -82,6 +86,7 @@ void main() async {
       driveMotorIds: driveMotors,
       robotFieldStatusIds: robotFieldStatuses,
       shootingRange: shootingRange,
+      shifts: shifts,
     ),
   );
 }

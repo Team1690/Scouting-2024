@@ -1,10 +1,12 @@
 import "package:flutter/widgets.dart";
 import "package:graphql/client.dart";
+import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 
-Stream<List<ScoutingShift>> fetchShifts(final BuildContext context) =>
+Stream<List<ScoutingShift>> fetchShiftsSubscription(
+        final IdTable<MatchType> matchType) =>
     getClient()
         .subscribe(
           SubscriptionOptions<List<ScoutingShift>>(
@@ -15,7 +17,7 @@ Stream<List<ScoutingShift>> fetchShifts(final BuildContext context) =>
               return shifts
                   .map(
                     (final dynamic shift) =>
-                        ScoutingShift.fromJson(shift, IdProvider.of(context)),
+                        ScoutingShift.fromJson(shift, matchType),
                   )
                   .toList();
             },
