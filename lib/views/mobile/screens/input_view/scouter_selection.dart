@@ -16,6 +16,7 @@ class ScouterSearchBox extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => SingleChildScrollView(
         child: TypeAheadFormField<String>(
+          hideOnEmpty: true,
           minCharsForSuggestions: 1,
           validator: (final String? selectedScouter) =>
               selectedScouter != null && selectedScouter.isNotEmpty
@@ -52,15 +53,6 @@ class ScouterSearchBox extends StatelessWidget {
             opacity: CurvedAnimation(
               parent: controller!,
               curve: Curves.fastOutSlowIn,
-            ),
-          ),
-          noItemsFoundBuilder: (final BuildContext context) => Container(
-            height: 60,
-            child: const Center(
-              child: Text(
-                "No Scouters Found",
-                style: TextStyle(fontSize: 16),
-              ),
             ),
           ),
           suggestionsCallback: (final String pattern) => scouters
