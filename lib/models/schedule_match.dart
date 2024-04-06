@@ -47,7 +47,7 @@ class ScheduleMatch {
     final LightTeam team,
     final List<ScoutingShift> shifts,
   ) =>
-      "${team.number} ${team.name} - ${shifts.firstWhere(
+      "${team.number} ${team.name} - ${redAlliance.contains(team) ? "Red" : "Blue"} ${shifts.firstWhere(
             (final ScoutingShift element) =>
                 element.matchIdentifier.number == matchIdentifier.number &&
                 element.matchIdentifier.type == matchIdentifier.type &&

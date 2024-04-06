@@ -22,6 +22,7 @@ class ScouterSearchBox extends StatelessWidget {
                   ? null
                   : "Please enter your name",
           textFieldConfiguration: TextFieldConfiguration(
+            onChanged: onChanged,
             onTap: typeAheadController.clear,
             controller: typeAheadController,
             keyboardType: TextInputType.name,

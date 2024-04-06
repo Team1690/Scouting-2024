@@ -153,6 +153,8 @@ class _UserInputState extends State<UserInput> {
                             match = match.copyWith(
                               scouterName: always(scouterName),
                             );
+                            matchController.clear();
+                            teamNumberController.clear();
                           });
                         },
                         scouterNameController: scouterNameController,
