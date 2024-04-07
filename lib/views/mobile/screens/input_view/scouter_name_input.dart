@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/providers/scouter_provider.dart";
+import "package:scouting_frontend/views/mobile/screens/input_view/scouter_selection.dart";
 
 class ScouterNameInput extends StatelessWidget {
   const ScouterNameInput({
@@ -10,15 +12,9 @@ class ScouterNameInput extends StatelessWidget {
   final TextEditingController scouterNameController;
 
   @override
-  Widget build(final BuildContext context) => TextFormField(
-        controller: scouterNameController,
-        validator: (final String? value) =>
-            value != null && value.isNotEmpty ? null : "Please enter your name",
+  Widget build(final BuildContext context) => ScouterSearchBox(
+        typeAheadController: scouterNameController,
         onChanged: onScouterNameChange,
-        decoration: const InputDecoration(
-          prefixIcon: Icon(Icons.person),
-          border: OutlineInputBorder(),
-          hintText: "Scouter name",
-        ),
+        scouters: ScouterProvider.of(context).scouters,
       );
 }

@@ -1,18 +1,19 @@
-import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter_typeahead/flutter_typeahead.dart";
-import "package:scouting_frontend/models/enums/match_type_enum.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/shifts_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
-import "package:scouting_frontend/models/matches_provider.dart";
+import "package:scouting_frontend/models/providers/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/teams_search_box.dart";
+import "package:scouting_frontend/models/providers/team_provider.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 
 class TeamAndMatchSelection extends StatefulWidget {
   const TeamAndMatchSelection({
     required this.onChange,
     required this.matchController,
     required this.teamNumberController,
+    this.scouter,
   });
   final TextEditingController matchController;
   final TextEditingController teamNumberController;
@@ -20,6 +21,7 @@ class TeamAndMatchSelection extends StatefulWidget {
     ScheduleMatch,
     LightTeam?,
   ) onChange;
+  final String? scouter;
   @override
   State<TeamAndMatchSelection> createState() => TeamAndMatchSelectionState();
 }
@@ -28,59 +30,71 @@ class TeamAndMatchSelectionState extends State<TeamAndMatchSelection> {
   ScheduleMatch? scheduleMatch;
   List<LightTeam> teams = <LightTeam>[];
   LightTeam? team;
-  bool isUnofficial(final ScheduleMatch match) => <MatchType>[
-        MatchType.pre,
-        MatchType.practice,
-      ].contains(match.matchIdentifier.type);
 
   @override
-  Widget build(final BuildContext context) => Column(
-        children: <Widget>[
-          if (MatchesProvider.of(context).matches.isEmpty)
-            const Text("No matches found :(")
-          else
-            MatchSearchBox(
-              typeAheadController: widget.matchController,
-              matches: MatchesProvider.of(context)
-                  .matches
-                  .whereNot(
-                    (final ScheduleMatch element) =>
-                        element.matchIdentifier.isRematch,
-                  )
-                  .toList(),
-              onChange: (final ScheduleMatch selectedMatch) {
-                setState(() {
-                  scheduleMatch = selectedMatch;
-                  teams = isUnofficial(selectedMatch)
-                      ? TeamProvider.of(context).teams
-                      : <LightTeam>[
-                          ...selectedMatch.blueAlliance,
-                          ...selectedMatch.redAlliance,
-                        ];
-                  widget.teamNumberController.clear();
-                  widget.onChange(selectedMatch, null);
-                });
-              },
-            ),
-          const SizedBox(
-            height: 15,
+  Widget build(final BuildContext context) {
+    final List<ScoutingShift> shifts = ShiftProvider.of(context)
+        .shifts
+        .where((final ScoutingShift element) => element.name == widget.scouter)
+        .toList();
+
+    return Column(
+      children: <Widget>[
+        if (MatchesProvider.of(context).matches.isEmpty)
+          const Text("No matches found :(")
+        else
+          MatchSearchBox(
+            typeAheadController: widget.matchController,
+            matches: MatchesProvider.of(context)
+                .matches
+                .where(
+                  (final ScheduleMatch element) =>
+                      !element.matchIdentifier.isRematch &&
+                      (widget.scouter != null && shifts.isNotEmpty
+                          ? shifts
+                              .map((final ScoutingShift e) => e.matchIdentifier)
+                              .contains(element.matchIdentifier)
+                          : true),
+                )
+                .toList(),
+            onChange: (final ScheduleMatch selectedMatch) {
+              setState(() {
+                scheduleMatch = selectedMatch;
+                teams = selectedMatch.isUnofficial
+                    ? TeamProvider.of(context).teams
+                    : <LightTeam>[
+                        ...selectedMatch.blueAlliance,
+                        ...selectedMatch.redAlliance,
+                      ];
+                widget.teamNumberController.clear();
+                widget.onChange(selectedMatch, null);
+              });
+            },
           ),
-          if (scheduleMatch != null)
-            TeamsSearchBox(
-              buildSuggestion: (final LightTeam currentTeam) =>
-                  isUnofficial(scheduleMatch!)
-                      ? "${currentTeam.number} ${currentTeam.name}"
-                      : scheduleMatch!.getTeamStation(currentTeam) ?? "",
-              teams: teams,
-              typeAheadController: widget.teamNumberController,
-              onChange: (final LightTeam team) {
-                setState(() {
-                  widget.onChange(scheduleMatch!, team);
-                });
-              },
-            ),
-        ],
-      );
+        const SizedBox(
+          height: 15,
+        ),
+        if (scheduleMatch != null)
+          TeamsSearchBox(
+            buildSuggestion: (final LightTeam currentTeam) {
+              final List<ScoutingShift> shifts =
+                  ShiftProvider.of(context).shifts;
+
+              return scheduleMatch!.isUnofficial
+                  ? "${currentTeam.number} ${currentTeam.name}"
+                  : scheduleMatch!.getTeamStation(currentTeam, shifts);
+            },
+            teams: teams,
+            typeAheadController: widget.teamNumberController,
+            onChange: (final LightTeam team) {
+              setState(() {
+                widget.onChange(scheduleMatch!, team);
+              });
+            },
+          ),
+      ],
+    );
+  }
 }
 
 class MatchSearchBox extends StatelessWidget {
@@ -125,12 +139,10 @@ class MatchSearchBox extends StatelessWidget {
               hintText: "Search Match",
             ),
           ),
-          suggestionsCallback: (final String pattern) => matches
-              .where(
-                (final ScheduleMatch match) =>
-                    match.matchIdentifier.number.toString().startsWith(pattern),
-              )
-              .toList(),
+          suggestionsCallback: (final String pattern) => matches.where(
+            (final ScheduleMatch match) =>
+                match.matchIdentifier.number.toString().startsWith(pattern),
+          ),
           itemBuilder:
               (final BuildContext context, final ScheduleMatch suggestion) =>
                   ListTile(

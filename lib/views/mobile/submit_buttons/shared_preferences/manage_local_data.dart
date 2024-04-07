@@ -3,7 +3,7 @@ import "dart:convert";
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
-import "package:scouting_frontend/views/mobile/send_prefrences.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/shared_preferences/send_prefrences.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:scouting_frontend/views/constants.dart";
 

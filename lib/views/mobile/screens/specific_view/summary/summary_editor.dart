@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/summary/specific_summary_card.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/summary/specific_summary_text_field.dart";
-import "package:scouting_frontend/views/mobile/submit_button.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/submit/submit_button.dart";
 
 class SummaryEditor extends StatefulWidget {
   const SummaryEditor({

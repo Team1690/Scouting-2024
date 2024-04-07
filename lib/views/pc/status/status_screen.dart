@@ -95,7 +95,12 @@ class _StatusScreenState extends State<StatusScreen> {
                         p1.scheduleMatch.matchIdentifier.type.order.compareTo(
                               p0.scheduleMatch.matchIdentifier.type.order,
                             ) !=
-                            0) return -1;
+                            0) {
+                      return p1.scheduleMatch.matchIdentifier.type.order
+                          .compareTo(
+                        p0.scheduleMatch.matchIdentifier.type.order,
+                      );
+                    }
                     return isPreScouting
                         ? p0.team.number.compareTo(p1.team.number)
                         : p1.scheduleMatch.matchIdentifier.number.compareTo(

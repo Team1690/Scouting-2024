@@ -33,7 +33,7 @@ const double fieldWidth = 16.4846;
 const double fieldheight = 8.1026;
 
 const double autoFieldWidth = fieldWidth - 5.87248;
-const int scoutingShiftLength = 8;
+const int scoutingShiftLength = 10;
 
 bool isPC(final BuildContext context) {
   switch (Theme.of(context).platform) {

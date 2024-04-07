@@ -1,4 +1,4 @@
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 
 enum ShootingRange implements IdEnum {
   subwoofer("Subwoofer"),

@@ -1,6 +1,6 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/matches_provider.dart";
+import "package:scouting_frontend/models/providers/matches_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
@@ -33,6 +33,7 @@ List<ScoutingShift> calcScoutingShifts(
                               (scoutingBatches.length - 1)][teamIndex % 6],
                           matchIdentifier: match.matchIdentifier,
                           team: team,
+                          scheduleId: match.id,
                         ),
                       ),
                 )

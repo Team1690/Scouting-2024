@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
-import "package:scouting_frontend/models/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/summary/summary_editor.dart";
+import "package:scouting_frontend/models/providers/team_provider.dart";
 
 class SpecificSummaryCard extends StatefulWidget {
   const SpecificSummaryCard({

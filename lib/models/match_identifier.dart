@@ -1,5 +1,5 @@
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 
 class MatchIdentifier {
   MatchIdentifier({

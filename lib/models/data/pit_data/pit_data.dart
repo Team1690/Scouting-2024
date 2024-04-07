@@ -1,7 +1,7 @@
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
 import "package:scouting_frontend/models/enums/shooting_range_enum.dart";
-import "package:scouting_frontend/models/id_providers.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 
 class PitData {

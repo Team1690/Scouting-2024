@@ -3,14 +3,15 @@ import "package:flutter/material.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/robot_field_status.dart";
+import "package:scouting_frontend/models/providers/shifts_provider.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_gamepiece_card.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/constants.dart";
-import "package:scouting_frontend/views/mobile/local_save_button.dart";
-import "package:scouting_frontend/views/mobile/manage_preferences.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/shared_preferences/local_save_button.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/shared_preferences/manage_preferences.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/autonomous_selector.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/climbing.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/widgets/game_piece_counter.dart";
@@ -21,7 +22,7 @@ import "package:scouting_frontend/views/mobile/screens/input_view/scouter_name_i
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
-import "package:scouting_frontend/views/mobile/submit_button.dart";
+import "package:scouting_frontend/views/mobile/submit_buttons/submit/submit_button.dart";
 import "package:scouting_frontend/views/mobile/team_and_match_selection.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 
@@ -78,7 +79,10 @@ class _UserInputState extends State<UserInput> {
       "Pre scouting",
     ].contains(match.scheduleMatch!.matchIdentifier.type.title)
         ? "${match.scoutedTeam!.number} ${match.scoutedTeam!.name}"
-        : match.scheduleMatch!.getTeamStation(match.scoutedTeam!) ?? "";
+        : match.scheduleMatch!.getTeamStation(
+            match.scoutedTeam!,
+            ShiftProvider.of(context).shifts,
+          );
     scouterNameController.text = match.scouterName!;
   }
 
@@ -145,9 +149,13 @@ class _UserInputState extends State<UserInput> {
                     children: <Widget>[
                       ScouterNameInput(
                         onScouterNameChange: (final String scouterName) {
-                          match = match.copyWith(
-                            scouterName: always(scouterName),
-                          );
+                          setState(() {
+                            match = match.copyWith(
+                              scouterName: always(scouterName),
+                            );
+                            matchController.clear();
+                            teamNumberController.clear();
+                          });
                         },
                         scouterNameController: scouterNameController,
                       ),
@@ -155,6 +163,7 @@ class _UserInputState extends State<UserInput> {
                         height: 15,
                       ),
                       TeamAndMatchSelection(
+                        scouter: match.scouterName,
                         matchController: matchController,
                         teamNumberController: teamNumberController,
                         onChange: (

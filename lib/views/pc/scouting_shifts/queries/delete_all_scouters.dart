@@ -2,20 +2,20 @@ import "package:graphql/client.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 
 String deleteScouterMutation = """
-mutation DeleteScouter(\$scouter_name: String!) {
-  delete_scouters(where: {scouter_name: {_eq: \$scouter_name}}) {
+mutation DeleteScouter {
+  delete_scouting_shifts(where: {}) {
+    affected_rows
+  }
+  delete_scouters(where: {}) {
     affected_rows
   }
 }
 """;
 
-void deleteScouter(final String name) {
+void deleteScouters() {
   getClient().mutate(
     MutationOptions<void>(
       document: gql(deleteScouterMutation),
-      variables: <String, String>{
-        "scouter_name": name,
-      },
     ),
   );
 }

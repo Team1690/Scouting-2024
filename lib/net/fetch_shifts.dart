@@ -4,13 +4,11 @@ import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 
-Stream<List<ScoutingShift>> fetchShiftsSubscription(
-  final IdTable<MatchType> matchType,
-) =>
+Future<List<ScoutingShift>> fetchShifts(final IdTable<MatchType> matchType) =>
     getClient()
-        .subscribe(
-          SubscriptionOptions<List<ScoutingShift>>(
-            document: gql(subscription),
+        .query(
+          QueryOptions<List<ScoutingShift>>(
+            document: gql(query),
             parserFn: (final Map<String, dynamic> data) {
               final List<dynamic> shifts =
                   data["scouting_shifts"] as List<dynamic>;
@@ -23,13 +21,13 @@ Stream<List<ScoutingShift>> fetchShiftsSubscription(
             },
           ),
         )
-        .map(
-          (final QueryResult<List<ScoutingShift>> event) =>
-              event.mapQueryResult(),
+        .then(
+          (final QueryResult<List<ScoutingShift>> value) =>
+              value.mapQueryResult(),
         );
 
-String subscription = """
-subscription FetchShifts {
+String query = """
+query FetchShifts {
   scouting_shifts {
     id
     scouter_name
