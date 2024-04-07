@@ -180,23 +180,6 @@ class _ChangeMatchState extends State<ChangeMatch> {
                     ],
                   ),
                 ),
-                ToggleButtons(
-                  fillColor: const Color.fromARGB(10, 244, 67, 54),
-                  selectedColor: Colors.blue,
-                  selectedBorderColor: Colors.blue,
-                  children: const <Widget>[
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text("Happened"),
-                    ),
-                  ],
-                  isSelected: <bool>[vars.happened],
-                  onPressed: (final int i) {
-                    setState(() {
-                      vars.happened = !vars.happened;
-                    });
-                  },
-                ),
                 const SizedBox(
                   height: 15,
                 ),

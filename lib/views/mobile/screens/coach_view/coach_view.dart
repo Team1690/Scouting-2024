@@ -37,6 +37,14 @@ class CoachView extends StatelessWidget {
                 height: double.infinity,
                 aspectRatio: 2.0,
                 viewportFraction: 1,
+                initialPage: MatchesProvider.matchesWith(1690, context)
+                    .map((final ScheduleMatch e) => e.happened)
+                    .indexed
+                    .firstWhere(
+                      (final (int, bool) team) => !team.$2,
+                      orElse: () => (0, false),
+                    )
+                    .$1,
               ),
               items: MatchesProvider.matchesWith(1690, context)
                   .map(

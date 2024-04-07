@@ -13,7 +13,6 @@ class MatchesVars implements HasuraVars {
     this.blue1,
     this.blue2,
     this.blue3,
-    this.happened = false,
     this.matchType,
     this.red0,
     this.red1,
@@ -29,7 +28,6 @@ class MatchesVars implements HasuraVars {
           blue1: match.blueAlliance[1],
           blue2: match.blueAlliance[2],
           blue3: match.blueAlliance.length == 4 ? match.blueAlliance[3] : null,
-          happened: match.happened,
           matchNumber: match.matchIdentifier.number,
           matchType: match.matchIdentifier.type,
           matchesIdToUpdate: match.id,
@@ -49,7 +47,7 @@ class MatchesVars implements HasuraVars {
   LightTeam? red1;
   LightTeam? red2;
   LightTeam? red3;
-  bool happened;
+
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
         if (matchesIdToUpdate != null) "id": matchesIdToUpdate,
@@ -64,7 +62,6 @@ class MatchesVars implements HasuraVars {
           "red_1_id": red1?.id,
           "red_2_id": red2?.id,
           "red_3_id": red3?.id,
-          "happened": happened,
         },
       };
 
@@ -79,6 +76,5 @@ class MatchesVars implements HasuraVars {
     red1 = null;
     red2 = null;
     red3 = null;
-    happened = false;
   }
 }
