@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/net/fetch_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/functions/calc_shifts.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/add_scouter.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/add_shift.dart";

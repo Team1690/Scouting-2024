@@ -1,4 +1,5 @@
 import "package:collection/collection.dart";
+import "package:scouting_frontend/models/schedule_match.dart";
 
 class DeepEqList<T> {
   const DeepEqList(this.list);
@@ -11,4 +12,11 @@ class DeepEqList<T> {
 
   @override
   int get hashCode => Object.hashAll(list);
+}
+
+extension OrderedScheduleList on List<ScheduleMatch> {
+  List<ScheduleMatch> get ordered => sorted(
+        (final ScheduleMatch a, final ScheduleMatch b) =>
+            a.matchIdentifier.compareTo(b.matchIdentifier),
+      );
 }
