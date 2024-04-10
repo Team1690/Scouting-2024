@@ -72,6 +72,10 @@ subscription FetchAllTeams {
       tele_amp_missed
       tele_speaker
       tele_speaker_missed
+      auto_amp
+      auto_amp_missed
+      auto_speaker
+      auto_speaker_missed
       trap_amount
       traps_missed
       robot_field_status {

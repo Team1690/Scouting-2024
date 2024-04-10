@@ -54,10 +54,9 @@ class TechnicalData<T extends num> {
             (table["tele_speaker_missed"] as num? ?? 0).numericCast(),
         teleAmpMissed: (table["tele_amp_missed"] as num? ?? 0).numericCast(),
         teleSpeaker: (table["tele_speaker"] as num? ?? 0).numericCast(),
-        autoSpeaker: ,
-        // (table["auto_speaker"] as num? ?? 0).numericCast(),
-        autoSpeakerMissed:,
-        //(table["auto_speaker_missed"] as num? ?? 0).numericCast(),
+        autoSpeaker: (table["auto_speaker"] as num? ?? 0).numericCast(),
+        autoSpeakerMissed:
+            (table["auto_speaker_missed"] as num? ?? 0).numericCast(),
         teleAmp: (table["tele_amp"] as num? ?? 0).numericCast(),
         trapAmount: (table["trap_amount"] as num? ?? 0).numericCast(),
         trapsMissed: (table["traps_missed"] as num? ?? 0).numericCast(),
@@ -65,4 +64,3 @@ class TechnicalData<T extends num> {
         delivery: (table["delivery"] as num? ?? 0).numericCast(),
       );
 }
-

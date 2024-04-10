@@ -62,11 +62,14 @@ query FetchTechnicalMatch(\$team_id: Int!, \$match_type_id: Int!, \$match_number
         happened
       }
       is_rematch
-      
       tele_amp
       tele_amp_missed
       tele_speaker
       tele_speaker_missed
+      auto_amp
+      auto_amp_missed
+      auto_speaker
+      auto_speaker_missed
       trap_amount
       traps_missed
       delivery
@@ -109,6 +112,10 @@ Future<InputViewVars> fetchTechnicalMatch(
           teleAmpMissed: technicalMatch["tele_amp_missed"] as int,
           teleSpeaker: technicalMatch["tele_speaker"] as int,
           teleSpeakerMissed: technicalMatch["tele_speaker_missed"] as int,
+          autoAmp: technicalMatch["auto_amp"] as int,
+          autoAmpMissed: technicalMatch["auto_amp_missed"] as int,
+          autoSpeaker: technicalMatch["auto_speaker"] as int,
+          autoSpeakerMissed: technicalMatch["auto_speaker_missed"] as int,
           climb: IdProvider.of(context)
               .climb
               .idToEnum[technicalMatch["climb"]["id"] as int],
