@@ -281,7 +281,7 @@ class _ChangeMatchState extends State<ChangeMatch> {
                             ),
                           )
                           .toList();
-                      shifts.forEach(addShift);
+                      addShifts(shifts);
                     }
                   },
                 ),

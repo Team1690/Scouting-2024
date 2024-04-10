@@ -64,7 +64,7 @@ class _InitialScoutersDialogState extends State<InitialScoutersDialog> {
                   scouters.forEach(addScouter);
                   final List<ScoutingShift> shifts =
                       calcScoutingShifts(context, scouters);
-                  shifts.forEach(addShift);
+                  addShifts(shifts);
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.schedule_send),
