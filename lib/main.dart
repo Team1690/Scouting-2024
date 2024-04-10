@@ -2,8 +2,8 @@ import "dart:io";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
-import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
+import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
@@ -37,22 +37,12 @@ void main() async {
     "robot_field_status",
     "fault_status",
     "shooting_range",
-    "auto_gamepiece_location",
-    "auto_gamepiece_state",
   ], <String>[
     "match_type",
   ]);
 
   final Map<Climb, int> climbs =
       nameToIdToEnumToId(Climb.values, enums["climb"]!);
-  final Map<AutoGamepieceID, int> autoGamepieceLocations = nameToIdToEnumToId(
-    AutoGamepieceID.values,
-    enums["auto_gamepiece_location"]!,
-  );
-  final Map<AutoGamepieceState, int> autoGamepieceStates = nameToIdToEnumToId(
-    AutoGamepieceState.values,
-    enums["auto_gamepiece_state"]!,
-  );
   final Map<DriveTrain, int> driveTrains =
       nameToIdToEnumToId(DriveTrain.values, enums["drivetrain"]!);
   final Map<DriveMotor, int> driveMotors =
@@ -77,8 +67,6 @@ void main() async {
 
   runApp(
     App(
-      autoGamepieceLocations: autoGamepieceLocations,
-      autoGamepieceStates: autoGamepieceStates,
       matches: matches,
       faultStatus: faultStatus,
       matchTypeIds: matchTypes,

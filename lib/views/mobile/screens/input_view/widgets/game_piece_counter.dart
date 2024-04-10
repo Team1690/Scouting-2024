@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/views/mobile/counter.dart";
-import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart"
-    as m;
+import "package:scouting_frontend/models/enums/match_mode_enum.dart" as m;
+import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 
 class GamePieceCounter extends StatelessWidget {
   const GamePieceCounter({
@@ -97,37 +97,55 @@ class MatchModeGamePieceCounter extends StatelessWidget {
     super.key,
     required this.match,
     required this.onNewMatch,
+    required this.matchMode,
     required this.flickerScreen,
   });
-  final m.InputViewVars match;
-  final void Function(m.InputViewVars) onNewMatch;
+  final InputViewVars match;
+  final m.MatchMode matchMode;
+  final void Function(InputViewVars) onNewMatch;
   final void Function(int newValue, int oldValue) flickerScreen;
+
+  int modeValue(final int autoValue, final int teleValue) =>
+      switch (matchMode) {
+        m.MatchMode.auto => autoValue,
+        m.MatchMode.tele => teleValue,
+        m.MatchMode.endGame => 0,
+      };
 
   @override
   Widget build(final BuildContext context) => GamePieceCounter(
         flickerScreen: flickerScreen,
-        amp: match.teleAmp,
-        ampMissed: match.teleAmpMissed,
-        speaker: match.teleSpeaker,
-        speakerMissed: match.teleSpeakerMissed,
+        amp: modeValue(match.autoAmp, match.teleAmp),
+        ampMissed: modeValue(match.autoAmpMissed, match.teleAmpMissed),
+        speaker: modeValue(match.autoSpeaker, match.teleSpeaker),
+        speakerMissed:
+            modeValue(match.autoSpeakerMissed, match.teleSpeakerMissed),
         onAmpChange: (final int amp) {
           onNewMatch(
-            match.copyWith(teleAmp: always(amp)),
+            matchMode == m.MatchMode.tele
+                ? match.copyWith(teleAmp: always(amp))
+                : match.copyWith(autoAmp: always(amp)),
           );
         },
         onAmpMissedChange: (final int ampMissed) {
           onNewMatch(
-            match.copyWith(teleAmpMissed: always(ampMissed)),
+            matchMode == m.MatchMode.tele
+                ? match.copyWith(teleAmpMissed: always(ampMissed))
+                : match.copyWith(autoAmpMissed: always(ampMissed)),
           );
         },
         onSpeakerChange: (final int speaker) {
           onNewMatch(
-            match.copyWith(teleSpeaker: always(speaker)),
+            matchMode == m.MatchMode.tele
+                ? match.copyWith(teleSpeaker: always(speaker))
+                : match.copyWith(autoSpeaker: always(speaker)),
           );
         },
         onSpeakerMissedChange: (final int speakerMissed) {
           onNewMatch(
-            match.copyWith(teleSpeakerMissed: always(speakerMissed)),
+            matchMode == m.MatchMode.tele
+                ? match.copyWith(teleSpeakerMissed: always(speakerMissed))
+                : match.copyWith(autoSpeakerMissed: always(speakerMissed)),
           );
         },
       );

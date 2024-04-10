@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
-import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
-import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
+import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
-import "package:scouting_frontend/views/mobile/screens/input_view/autonomous/auto_gamepieces.dart";
+import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepieces.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -54,7 +54,7 @@ class EditTechnicalMatch extends StatelessWidget {
 }
 
 //TODO add auto stuff
-final String query = """
+const String query = """
 query FetchTechnicalMatch(\$team_id: Int!, \$match_type_id: Int!, \$match_number: Int!, \$is_rematch: Boolean!) {
   technical_match(where: {schedule_match: {match_type: {id: {_eq: \$match_type_id}}, match_number: {_eq: \$match_number}}, is_rematch: {_eq: \$is_rematch}, team_id: {_eq: \$team_id}}) {
     schedule_match {
@@ -66,17 +66,7 @@ query FetchTechnicalMatch(\$team_id: Int!, \$match_type_id: Int!, \$match_number
         happened
       }
       is_rematch
-      auto_order
-      ${AutoGamepieceID.values.map((final AutoGamepieceID e) => '${e.title} { id }').join('\n')}
-      R0_id
-      L0_id
-      L1_id
-      L2_id
-      M0_id
-      M1_id
-      M2_id
-      M3_id
-      M4_id
+      
       tele_amp
       tele_amp_missed
       tele_speaker
@@ -111,12 +101,6 @@ Future<InputViewVars> fetchTechnicalMatch(
       parserFn: (final Map<String, dynamic> data) {
         final dynamic technicalMatch = data["technical_match"][0];
         return InputViewVars.all(
-          autoOrder: TechnicalMatchData.parseGamepieces(
-            technicalMatch,
-            IdProvider.of(context),
-          )
-              .map((final (AutoGamepieceID, AutoGamepieceState) e) => e.$1)
-              .toList(),
           delivery: technicalMatch["delivery"] as int,
           trapsMissed: technicalMatch["traps_missed"] as int,
           isRematch: scheduleMatch.matchIdentifier.isRematch,
@@ -134,35 +118,6 @@ Future<InputViewVars> fetchTechnicalMatch(
               .idToEnum[technicalMatch["climb"]["id"] as int],
           harmonyWith: technicalMatch["harmony_with"] as int,
           trapAmount: technicalMatch["trap_amount"] as int,
-          autoGamepieces: AutoGamepieces(
-            r0: IdProvider.of(context)
-                .autoGamepieceStates
-                .idToEnum[technicalMatch["R0_id"] as int]!,
-            l0: IdProvider.of(context)
-                .autoGamepieceStates
-                .idToEnum[technicalMatch["L0_id"] as int]!,
-            l1: IdProvider.of(context)
-                .autoGamepieceStates
-                .idToEnum[technicalMatch["L1_id"] as int]!,
-            l2: IdProvider.of(context)
-                .autoGamepieceStates
-                .idToEnum[technicalMatch["L2_id"] as int]!,
-            m0: IdProvider.of(context)
-                .autoGamepieceStates
-                .idToEnum[technicalMatch["M0_id"] as int]!,
-            m1: IdProvider.of(context)
-                .autoGamepieceStates
-                .idToEnum[technicalMatch["M1_id"] as int]!,
-            m2: IdProvider.of(context)
-                .autoGamepieceStates
-                .idToEnum[technicalMatch["M2_id"] as int]!,
-            m3: IdProvider.of(context)
-                .autoGamepieceStates
-                .idToEnum[technicalMatch["M3_id"] as int]!,
-            m4: IdProvider.of(context)
-                .autoGamepieceStates
-                .idToEnum[technicalMatch["M4_id"] as int]!,
-          ),
           scoutedTeam: teamForQuery,
           faultMessage: "",
         );

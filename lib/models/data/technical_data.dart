@@ -1,6 +1,7 @@
-import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
-import "package:scouting_frontend/models/enums/auto_gamepiece_state_enum.dart";
+import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_id_enum.dart";
+import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/point_giver_enum.dart";
+import "package:scouting_frontend/utils/math_utils.dart";
 
 class TechnicalData<T extends num> {
   TechnicalData({
@@ -49,28 +50,15 @@ class TechnicalData<T extends num> {
 
   static TechnicalData<T> parse<T extends num>(
     final dynamic table,
-    final List<(AutoGamepieceID, AutoGamepieceState)> autoGamepieces,
   ) =>
       TechnicalData<T>(
         teleSpeakerMissed:
             (table["tele_speaker_missed"] as num? ?? 0).numericCast(),
         teleAmpMissed: (table["tele_amp_missed"] as num? ?? 0).numericCast(),
         teleSpeaker: (table["tele_speaker"] as num? ?? 0).numericCast(),
-        autoSpeaker: autoGamepieces
-            .where(
-              (final (AutoGamepieceID, AutoGamepieceState) state) =>
-                  state.$2 == AutoGamepieceState.scoredSpeaker,
-            )
-            .length
-            .numericCast(),
+        autoSpeaker: ,
         // (table["auto_speaker"] as num? ?? 0).numericCast(),
-        autoSpeakerMissed: autoGamepieces
-            .where(
-              (final (AutoGamepieceID, AutoGamepieceState) state) =>
-                  state.$2 == AutoGamepieceState.missedSpeaker,
-            )
-            .length
-            .numericCast(),
+        autoSpeakerMissed:,
         //(table["auto_speaker_missed"] as num? ?? 0).numericCast(),
         teleAmp: (table["tele_amp"] as num? ?? 0).numericCast(),
         trapAmount: (table["trap_amount"] as num? ?? 0).numericCast(),
@@ -80,15 +68,3 @@ class TechnicalData<T extends num> {
       );
 }
 
-//TODO: util folder
-extension NumericExtension on num {
-  T numericCast<T extends num>() {
-    if (T == double) {
-      return toDouble() as T;
-    } else if (T == int) {
-      return toInt() as T;
-    } else {
-      throw Exception("Invalid num implmenetor");
-    }
-  }
-}

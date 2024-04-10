@@ -32,3 +32,15 @@ extension ListStatisticsExtensions<T extends num> on Iterable<T> {
 
   int? get sumOrNull => isEmpty ? null : sum.numericCast();
 }
+
+extension NumericExtension on num {
+  T numericCast<T extends num>() {
+    if (T == double) {
+      return toDouble() as T;
+    } else if (T == int) {
+      return toInt() as T;
+    } else {
+      throw Exception("Invalid num implmenetor");
+    }
+  }
+}
