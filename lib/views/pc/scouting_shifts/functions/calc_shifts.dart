@@ -21,8 +21,10 @@ List<ScoutingShift> calcScoutingShifts(
       .slices(scoutingShiftLength)
       .toList();
 
-  final List<List<String>> scoutingBatches =
-      scouters.slices(6).where((element) => element.length == 6).toList();
+  final List<List<String>> scoutingBatches = scouters
+      .slices(6)
+      .where((final List<String> element) => element.length == 6)
+      .toList();
   return matchBatches
       .mapIndexed(
         (final int matchBatchIndex, final List<ScheduleMatch> matchBatch) =>

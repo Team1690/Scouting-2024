@@ -210,7 +210,7 @@ class _ChangeMatchState extends State<ChangeMatch> {
                       final List<ScoutingShift> allShifts =
                           await fetchShifts(IdProvider.of(context).matchType);
                       final Map<int, List<ScoutingShift>> orderedAllShifts =
-                          Map.fromEntries(
+                          Map<int, List<ScoutingShift>>.fromEntries(
                         allShifts
                             .groupListsBy(
                               (final ScoutingShift element) =>
@@ -261,7 +261,7 @@ class _ChangeMatchState extends State<ChangeMatch> {
                         ),
                       );
                       final List<String> scouters = scouterBatches.firstWhere(
-                        (element) => element.contains(
+                        (final List<String> element) => element.contains(
                           index <= 0
                               ? orderedAllShifts.values.first.first.name
                               : orderedAllShifts.values
@@ -273,7 +273,8 @@ class _ChangeMatchState extends State<ChangeMatch> {
                       final List<ScoutingShift> shifts = match.redAlliance
                           .followedBy(match.blueAlliance)
                           .mapIndexed(
-                            (index, element) => ScoutingShift(
+                            (final int index, final LightTeam element) =>
+                                ScoutingShift(
                               name: scouters[index],
                               matchIdentifier: currentMatch,
                               team: element,
