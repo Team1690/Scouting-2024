@@ -1,10 +1,6 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
-import "package:scouting_frontend/models/data/technical_match_data.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_id_enum.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepieces.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view_vars.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";

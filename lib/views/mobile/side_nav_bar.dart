@@ -7,7 +7,6 @@ import "package:scouting_frontend/views/mobile/screens/fault_view/fault_view.dar
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
 import "package:scouting_frontend/views/mobile/screens/pit_view/pit_view.dart";
 import "package:scouting_frontend/views/mobile/screens/specific_view/specific_view.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepieces/auto_gamepieces_view.dart";
 import "package:scouting_frontend/views/pc/compare/compare_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/common/navbar_tile.dart";

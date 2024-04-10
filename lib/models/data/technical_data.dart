@@ -1,5 +1,3 @@
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_id_enum.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/point_giver_enum.dart";
 import "package:scouting_frontend/utils/math_utils.dart";
 

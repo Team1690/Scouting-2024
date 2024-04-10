@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";

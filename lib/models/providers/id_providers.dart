@@ -1,6 +1,4 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_id_enum.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";

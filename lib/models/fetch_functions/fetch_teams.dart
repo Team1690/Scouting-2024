@@ -3,7 +3,6 @@ import "dart:collection";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/providers/matches_provider.dart";

@@ -1,6 +1,3 @@
-import "package:collection/collection.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_id_enum.dart";
-import "package:scouting_frontend/legacy/dcmp-autonomous/auto_gamepiece_state_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
