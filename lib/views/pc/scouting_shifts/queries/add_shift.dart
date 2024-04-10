@@ -17,11 +17,7 @@ void addShift(final ScoutingShift shift) {
       document: gql(addShiftMutation),
       variables: <String, dynamic>{
         "scouter_shifts": <Map<String, dynamic>>[
-          <String, dynamic>{
-            "scouter_name": shift.name,
-            "schedule_id": shift.scheduleId,
-            "team_id": shift.team.id,
-          },
+          shift.toJson(),
         ],
       },
     ),
@@ -34,13 +30,8 @@ void addShifts(final List<ScoutingShift> shifts) {
     MutationOptions<void>(
       document: gql(addShiftMutation),
       variables: <String, dynamic>{
-        "scouting_shifts": <Map<String, Object>>[
-          for (final ScoutingShift shift in shifts)
-            <String, Object>{
-              "scouter_name": shift.name,
-              "schedule_id": shift.scheduleId,
-              "team_id": shift.team.id,
-            },
+        "scouting_shifts": <Map<String, dynamic>>[
+          for (final ScoutingShift shift in shifts) shift.toJson(),
         ],
       },
     ),
