@@ -37,7 +37,7 @@ class MatchIdentifier {
         isRematch: isRematch ?? match["is_rematch"] as bool,
       );
 
-  int compareTo(MatchIdentifier other) {
+  int compareTo(final MatchIdentifier other) {
     final int cmp = type.order.compareTo(other.type.order);
     if (cmp != 0) return cmp;
     return number.compareTo(other.number);
