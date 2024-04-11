@@ -351,6 +351,7 @@ class _UserInputState extends State<UserInput> {
                                 ),
                               ),
                             );
+
                             faultMessageController.text =
                                 match.faultMessage ?? "";
                           });
@@ -368,6 +369,7 @@ class _UserInputState extends State<UserInput> {
                         secondChild: TextField(
                           controller: faultMessageController,
                           textDirection: TextDirection.rtl,
+                          onTap: faultMessageController.clear,
                           onChanged: (final String value) {
                             setState(() {
                               match = match.copyWith(
