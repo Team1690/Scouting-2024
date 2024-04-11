@@ -2,14 +2,13 @@ import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
-import "package:scouting_frontend/models/enums/auto_gamepiece_id_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/models/data/aggregate_data/aggregate_technical_data.dart";
 import "package:scouting_frontend/models/data/all_team_data.dart";
 
-final String subscription = """
+const String subscription = """
 subscription FetchAllTeams {
   team {
     pit {
@@ -54,8 +53,6 @@ subscription FetchAllTeams {
     technical_matches {
       id
       scouter_name
-      auto_order
-      ${AutoGamepieceID.values.map((final AutoGamepieceID e) => '${e.title} { id }').join('\n')}
       cilmb_id
       harmony_with
       is_rematch
@@ -75,6 +72,10 @@ subscription FetchAllTeams {
       tele_amp_missed
       tele_speaker
       tele_speaker_missed
+      auto_amp
+      auto_amp_missed
+      auto_speaker
+      auto_speaker_missed
       trap_amount
       traps_missed
       robot_field_status {

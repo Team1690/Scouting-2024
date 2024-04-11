@@ -1,7 +1,5 @@
 import "dart:math";
-
 import "package:collection/collection.dart";
-import "package:scouting_frontend/models/data/technical_data.dart";
 
 extension ListStatisticsExtensions<T extends num> on Iterable<T> {
   double get median {
@@ -31,4 +29,16 @@ extension ListStatisticsExtensions<T extends num> on Iterable<T> {
   double? get standardErrorOrNull => isEmpty ? null : standardError;
 
   int? get sumOrNull => isEmpty ? null : sum.numericCast();
+}
+
+extension NumericExtension on num {
+  T numericCast<T extends num>() {
+    if (T == double) {
+      return toDouble() as T;
+    } else if (T == int) {
+      return toInt() as T;
+    } else {
+      throw Exception("Invalid num implmenetor");
+    }
+  }
 }

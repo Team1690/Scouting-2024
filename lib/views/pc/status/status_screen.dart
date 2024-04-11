@@ -20,7 +20,6 @@ class StatusScreen extends StatefulWidget {
 }
 
 class _StatusScreenState extends State<StatusScreen> {
-  //TODO: add status screen for pit scouting
   bool isSpecific = false;
   bool isPreScouting = false;
   @override
@@ -131,7 +130,6 @@ class _StatusScreenState extends State<StatusScreen> {
                                   match: data.scheduleMatch,
                                   teamForQuery: data.team,
                                 )
-                              //TODO: edit specific
                               : DashboardScaffold(body: Container()),
                         ),
                       );
