@@ -49,7 +49,6 @@ class EditTechnicalMatch extends StatelessWidget {
       );
 }
 
-//TODO add auto stuff
 const String query = """
 query FetchTechnicalMatch(\$team_id: Int!, \$match_type_id: Int!, \$match_number: Int!, \$is_rematch: Boolean!) {
   technical_match(where: {schedule_match: {match_type: {id: {_eq: \$match_type_id}}, match_number: {_eq: \$match_number}}, is_rematch: {_eq: \$is_rematch}, team_id: {_eq: \$team_id}}) {
@@ -81,6 +80,9 @@ query FetchTechnicalMatch(\$team_id: Int!, \$match_type_id: Int!, \$match_number
       robot_field_status {
         id
       }
+      autonomous_options {
+        id
+      }
       harmony_with
       scouter_name
   }
@@ -100,6 +102,9 @@ Future<InputViewVars> fetchTechnicalMatch(
       parserFn: (final Map<String, dynamic> data) {
         final dynamic technicalMatch = data["technical_match"][0];
         return InputViewVars.all(
+          autonomousOptions: IdProvider.of(context)
+              .autoOptions
+              .idToEnum[technicalMatch["autonomous_options"]["id"] as int]!,
           delivery: technicalMatch["delivery"] as int,
           trapsMissed: technicalMatch["traps_missed"] as int,
           isRematch: scheduleMatch.matchIdentifier.isRematch,

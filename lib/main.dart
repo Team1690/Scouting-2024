@@ -56,7 +56,9 @@ void main() async {
   final Map<ShootingRange, int> shootingRange =
       nameToIdToEnumToId(ShootingRange.values, enums["shooting_range"]!);
   final Map<AutonomousOptions, int> autoOptions = nameToIdToEnumToId(
-      AutonomousOptions.values, enums["autonomous_options"]!);
+    AutonomousOptions.values,
+    enums["autonomous_options"]!,
+  );
   final List<ScheduleMatch> matches = await fetchMatches(
     IdTable<MatchType>(
       matchTypes,
