@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/autonomous_options_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
@@ -46,6 +47,7 @@ class IdProvider extends InheritedWidget {
     required final Map<RobotFieldStatus, int> robotFieldStatusIds,
     required final Map<FaultStatus, int> faultStatus,
     required final Map<ShootingRange, int> shootingRange,
+    required final Map<AutonomousOptions, int> autoOptions,
   }) : this._inner(
           child: child,
           climb: IdTable<Climb>(climbIds),
@@ -55,6 +57,7 @@ class IdProvider extends InheritedWidget {
           robotFieldStatus: IdTable<RobotFieldStatus>(robotFieldStatusIds),
           faultStatus: IdTable<FaultStatus>(faultStatus),
           shootingRange: IdTable<ShootingRange>(shootingRange),
+          autoOptions: IdTable<AutonomousOptions>(autoOptions),
         );
 
   IdProvider._inner({
@@ -66,6 +69,7 @@ class IdProvider extends InheritedWidget {
     required this.robotFieldStatus,
     required this.faultStatus,
     required this.shootingRange,
+    required this.autoOptions,
   });
   final IdTable<RobotFieldStatus> robotFieldStatus;
   final IdTable<MatchType> matchType;
@@ -74,6 +78,7 @@ class IdProvider extends InheritedWidget {
   final IdTable<DriveMotor> drivemotor;
   final IdTable<FaultStatus> faultStatus;
   final IdTable<ShootingRange> shootingRange;
+  final IdTable<AutonomousOptions> autoOptions;
 
   @override
   bool updateShouldNotify(final IdProvider oldWidget) =>
@@ -83,7 +88,8 @@ class IdProvider extends InheritedWidget {
       driveTrain != oldWidget.driveTrain ||
       drivemotor != oldWidget.drivemotor ||
       faultStatus != oldWidget.faultStatus ||
-      shootingRange != oldWidget.shootingRange;
+      shootingRange != oldWidget.shootingRange ||
+      autoOptions != oldWidget.autoOptions;
 
   static IdProvider of(final BuildContext context) {
     final IdProvider? result =

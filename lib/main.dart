@@ -2,6 +2,7 @@ import "dart:io";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:scouting_frontend/models/enums/autonomous_options_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
@@ -35,6 +36,7 @@ void main() async {
     "robot_field_status",
     "fault_status",
     "shooting_range",
+    "autonomous_options",
   ], <String>[
     "match_type",
   ]);
@@ -53,6 +55,8 @@ void main() async {
       nameToIdToEnumToId(FaultStatus.values, enums["fault_status"]!);
   final Map<ShootingRange, int> shootingRange =
       nameToIdToEnumToId(ShootingRange.values, enums["shooting_range"]!);
+  final Map<AutonomousOptions, int> autoOptions = nameToIdToEnumToId(
+      AutonomousOptions.values, enums["autonomous_options"]!);
   final List<ScheduleMatch> matches = await fetchMatches(
     IdTable<MatchType>(
       matchTypes,
@@ -76,6 +80,7 @@ void main() async {
       shootingRange: shootingRange,
       shifts: shifts,
       scouters: scouters,
+      autoOptions: autoOptions,
     ),
   );
 }

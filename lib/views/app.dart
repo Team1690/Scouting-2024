@@ -1,3 +1,4 @@
+import "package:scouting_frontend/models/enums/autonomous_options_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/enums/drive_motor_enum.dart";
 import "package:scouting_frontend/models/enums/drive_train_enum.dart";
@@ -30,6 +31,7 @@ class App extends StatelessWidget {
     required this.matchTypeIds,
     required this.faultStatus,
     required this.shootingRange,
+    required this.autoOptions,
     required this.shifts,
     required this.scouters,
   });
@@ -43,6 +45,7 @@ class App extends StatelessWidget {
   final Map<MatchType, int> matchTypeIds;
   final Map<FaultStatus, int> faultStatus;
   final Map<ShootingRange, int> shootingRange;
+  final Map<AutonomousOptions, int> autoOptions;
   final List<ScoutingShift> shifts;
   final List<String> scouters;
 
@@ -52,6 +55,7 @@ class App extends StatelessWidget {
         child: MatchesProvider(
           matches: matches,
           child: IdProvider(
+            autoOptions: autoOptions,
             matchTypeIds: matchTypeIds,
             climbIds: climbIds,
             drivemotorIds: driveMotorIds,
