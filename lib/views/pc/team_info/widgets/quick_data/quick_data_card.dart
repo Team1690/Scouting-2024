@@ -34,12 +34,6 @@ class QuickDataCard extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
-                            "Median Tele Amp: ${data.medianData.teleAmp.toStringAsFixed(2)}",
-                          ),
-                          Text(
-                            "Avg Tele Amp: ${data.avgData.autoSpeaker.toStringAsFixed(2)}",
-                          ),
-                          Text(
                             "Avg Total Amp: ${(data.avgData.ampGamepieces).toStringAsFixed(2)}",
                           ),
                           Text(
@@ -49,10 +43,7 @@ class QuickDataCard extends StatelessWidget {
                             "Min Total Amp: ${data.minData.ampGamepieces.toStringAsFixed(2)}",
                           ),
                           Text(
-                            "Avg Tele Amp Missed ${data.avgData.teleAmpMissed.toStringAsFixed(2)}",
-                          ),
-                          Text(
-                            "Median Tele Amp Missed: ${data.medianData.teleAmpMissed.toStringAsFixed(2)}",
+                            "Avg Amp Missed ${data.avgData.missedAmp.toStringAsFixed(2)}",
                           ),
                         ],
                       ),
@@ -61,18 +52,6 @@ class QuickDataCard extends StatelessWidget {
                           const Text(
                             "Speaker",
                             style: TextStyle(fontSize: 18),
-                          ),
-                          Text(
-                            "Median Auto Speaker: ${data.medianData.autoSpeaker.toStringAsFixed(2)}",
-                          ),
-                          Text(
-                            "Median Tele Speaker: ${data.medianData.teleSpeaker.toStringAsFixed(2)}",
-                          ),
-                          Text(
-                            "Avg Auto Speaker: ${data.avgData.autoSpeaker.toStringAsFixed(2)}",
-                          ),
-                          Text(
-                            "Avg Tele Speaker: ${data.avgData.teleSpeaker.toStringAsFixed(2)}",
                           ),
                           Text(
                             "Avg Total Speaker: ${data.avgData.speakerGamepieces.toStringAsFixed(2)}",
@@ -84,61 +63,14 @@ class QuickDataCard extends StatelessWidget {
                             "Min Total Speaker: ${data.minData.speakerGamepieces.toStringAsFixed(2)}",
                           ),
                           Text(
-                            "Avg Auto Speaker Missed: ${data.avgData.autoSpeakerMissed.toStringAsFixed(2)}",
-                          ),
-                          Text(
-                            "Avg Tele Speaker Missed ${data.avgData.teleSpeakerMissed.toStringAsFixed(2)}",
-                          ),
-                          Text(
-                            "Median auto Speaker Missed: ${data.medianData.autoSpeakerMissed.toStringAsFixed(2)}",
-                          ),
-                          Text(
-                            "Median Tele Speaker Missed: ${data.medianData.teleSpeakerMissed.toStringAsFixed(2)}",
+                            "Avg Speaker Missed ${data.avgData.missedSpeaker.toStringAsFixed(2)}",
                           ),
                         ],
                       ),
                       Column(
                         children: <Widget>[
                           const Text(
-                            "Misc",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(
-                            "Median Gamepiece Points: ${data.medianData.gamePiecesPoints.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Median Gamepiece: ${data.medianData.gamepieces.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Avg Gamepiece Points: ${data.gamepiecePoints.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Avg Gamepieces: ${data.gamepiecesScored.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Possible Traps: ${data.trapAmount ?? "No Data"}",
-                          ),
-                          Text(
-                            "Avg Trap Amount: ${data.avgData.trapAmount.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Avg Trap Amount: ${data.avgData.delivery.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Trap Success Rate: ${data.trapSuccessRate.isNaN ? "No Data" : "${data.trapSuccessRate.toStringAsFixed(1)}%"}",
-                          ),
-                          Text(
-                            "Median Trap Amount: ${data.medianData.trapAmount}",
-                          ),
-                          Text(
-                            "Median Delivery: ${data.medianData.delivery}",
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          const Text(
-                            "Climb",
+                            "Endgame",
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
@@ -156,6 +88,12 @@ class QuickDataCard extends StatelessWidget {
                           Text(
                             "Matches Climbed 3: ${data.matchesClimbedTriple}",
                           ),
+                          Text(
+                            "Avg Trap Amount: ${data.avgData.trapAmount.toStringAsFixed(1)}",
+                          ),
+                          Text(
+                            "Avg Trap Missed: ${data.avgData.delivery.toStringAsFixed(1)}",
+                          ),
                         ],
                       ),
                       Column(
@@ -172,6 +110,23 @@ class QuickDataCard extends StatelessWidget {
                           ),
                           Text(
                             "3rd Picklist Position: ${data.thirdPicklistIndex + 1}",
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          const Text(
+                            "Misc",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          Text(
+                            "Avg Gamepiece Points: ${data.avgData.gamePiecesPoints.toStringAsFixed(1)}",
+                          ),
+                          Text(
+                            "Avg Gamepieces: ${data.avgData.gamepieces.toStringAsFixed(1)}",
+                          ),
+                          Text(
+                            "Matches Played: ${data.amoutOfMatches.toStringAsFixed(1)}",
                           ),
                         ],
                       ),

@@ -71,6 +71,9 @@ subscription FetchTeams(\$ids: [Int!]) {
       robot_field_status {
         id
       }
+      autonomous_options {
+        id
+      }
       harmony_with
       scouter_name
       id

@@ -4,7 +4,8 @@ enum AutonomousOptions implements IdEnum {
   onlyClose("Only Close"),
   onlyMiddle("Only Middle Amp Side"),
   closeAndMiddle("Close And Middle"),
-  feederSide("Only Middle Feeder Side");
+  feederSide("Only Middle Feeder Side"),
+  other("Other");
 
   const AutonomousOptions(this.title);
 

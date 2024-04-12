@@ -1,8 +1,7 @@
 import "package:scouting_frontend/models/data/technical_data.dart";
 
 class QuickData {
-  QuickData({
-    required this.medianData,
+  const QuickData({
     required this.avgData,
     required this.maxData,
     required this.minData,
@@ -15,16 +14,11 @@ class QuickData {
     required this.matchesClimbedTriple,
     required this.climbPercentage,
     required this.canHarmony,
-    required this.gamepiecePoints,
-    required this.gamepiecesScored,
-    required this.trapAmount,
-    required this.trapSuccessRate,
   });
   final int amoutOfMatches;
   final int firstPicklistIndex;
   final int secondPicklistIndex;
   final int thirdPicklistIndex;
-  final TechnicalData<double> medianData;
   final TechnicalData<double> avgData;
   final TechnicalData<int> maxData;
   final TechnicalData<int> minData;
@@ -33,8 +27,4 @@ class QuickData {
   final int matchesClimbedTriple;
   final double climbPercentage;
   final bool? canHarmony;
-  final double gamepiecePoints;
-  final double gamepiecesScored;
-  final int? trapAmount;
-  final double trapSuccessRate;
 }

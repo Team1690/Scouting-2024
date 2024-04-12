@@ -1,3 +1,4 @@
+import "package:scouting_frontend/models/enums/autonomous_options_enum.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
@@ -14,6 +15,7 @@ class TechnicalMatchData {
     required this.harmonyWith,
     required this.climb,
     required this.matchIdentifier,
+    required this.auto,
   });
   final int id;
   final RobotFieldStatus robotFieldStatus;
@@ -23,6 +25,7 @@ class TechnicalMatchData {
   final Climb climb;
   final int scheduleMatchId;
   final String scouterName;
+  final AutonomousOptions auto;
 
   static TechnicalMatchData parse(
     final dynamic match,
@@ -39,5 +42,7 @@ class TechnicalMatchData {
         scheduleMatchId: match["schedule_match"]["id"] as int,
         data: TechnicalData.parse(match),
         scouterName: match["scouter_name"] as String,
+        auto: idProvider
+            .autoOptions.idToEnum[match["autonomous_options"]["id"] as int]!,
       );
 }

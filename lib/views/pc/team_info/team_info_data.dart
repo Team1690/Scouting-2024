@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:scouting_frontend/models/data/team_data/team_data_extensions.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_single_team.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/views/pc/team_info/widgets/auto_data/auto_data_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data_card.dart";
@@ -30,7 +32,15 @@ class TeamInfoData extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                       flex: 5,
-                      child: QuickDataCard(data: data.quickData),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(child: QuickDataCard(data: data.quickData)),
+                          const SizedBox(
+                            width: defaultPadding,
+                          ),
+                          Expanded(child: AutoDataCard(data: data.autoData)),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: defaultPadding),
                     Expanded(
