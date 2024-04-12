@@ -80,10 +80,11 @@ class _StatusScreenState extends State<StatusScreen> {
                       .map((final TeamData e) => e.matches)
                       .flattened
                       .where(
-                        (final MatchData element) =>
-                            element.scheduleMatch.matchIdentifier.type ==
-                                MatchType.pre ||
-                            !isPreScouting,
+                        (final MatchData element) => isPreScouting
+                            ? element.scheduleMatch.matchIdentifier.type ==
+                                MatchType.pre
+                            : element.scheduleMatch.matchIdentifier.type !=
+                                MatchType.pre,
                       )
                       .toList(),
                   groupBy: (final MatchData matchData) => isPreScouting
