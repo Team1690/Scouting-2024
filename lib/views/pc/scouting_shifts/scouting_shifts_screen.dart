@@ -78,21 +78,34 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
                             ],
                             backgroundColor: bgColor,
                           ),
-                          ...shiftData.map(
-                            (final List<ScoutingShift> e) => ListTile(
-                              title: Row(
-                                children: <Widget>[
-                                  Text(
-                                    "${e.first.matchIdentifier.toString()} : ",
-                                  ),
-                                  ...e.map(
-                                    (final ScoutingShift e) => Text(
-                                      "${e.name} ${e.team.number} ,,, ",
+                          DataTable(
+                            columns: const <DataColumn>[
+                              DataColumn(label: Text("Match")),
+                              DataColumn(label: Text("R1")),
+                              DataColumn(label: Text("R2")),
+                              DataColumn(label: Text("R3")),
+                              DataColumn(label: Text("B1")),
+                              DataColumn(label: Text("B2")),
+                              DataColumn(label: Text("B3")),
+                            ],
+                            rows: <DataRow>[
+                              ...shiftData.map(
+                                (final List<ScoutingShift> e) => DataRow(
+                                  cells: <DataCell>[
+                                    DataCell(
+                                      Text(e.first.matchIdentifier.toString()),
                                     ),
-                                  ),
-                                ],
+                                    ...e.map(
+                                      (final ScoutingShift e) => DataCell(
+                                        Text(
+                                          "${e.name} ${e.team.number} ",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ],
                       );
