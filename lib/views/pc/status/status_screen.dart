@@ -135,7 +135,7 @@ class _StatusScreenState extends State<StatusScreen> {
                         ),
                       );
                     },
-                    onLongPress: () => !isSpecific
+                    onSecondaryLongPress: () => !isSpecific
                         ? delete(
                             context,
                             data.technicalMatchData!.id,
