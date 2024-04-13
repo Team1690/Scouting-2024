@@ -197,7 +197,8 @@ class _ChangeMatchState extends State<ChangeMatch> {
                   resetForm: () {},
                   validate: () => formKey.currentState!.validate(),
                   onSubmissionSuccess: () async {
-                    if (widget.initialVars == null) {
+                    if (widget.initialVars == null &&
+                        vars.matchType != MatchType.quals) {
                       final List<List<String>> scouterBatches =
                           ScouterProvider.of(context)
                               .scouters

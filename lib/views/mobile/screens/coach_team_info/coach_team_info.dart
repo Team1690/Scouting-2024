@@ -3,10 +3,12 @@ import "package:scouting_frontend/models/data/team_data/team_data_extensions.dar
 import "package:scouting_frontend/models/fetch_functions/fetch_single_team.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
+import "package:scouting_frontend/models/team_info_models/auto_data.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/card.dart";
+import "package:scouting_frontend/views/pc/team_info/widgets/auto_data/auto_data_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/gamechart/gamechart_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/pit/pit_scouting_card.dart";
 import "package:scouting_frontend/views/pc/team_info/widgets/quick_data/quick_data_card.dart";
@@ -70,6 +72,17 @@ class CoachTeamInfo extends StatelessWidget {
                           child: Text("No data"),
                         ),
                       ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: data.matches.technicalMatchExists.isEmpty
+                      ? const DashboardCard(
+                          title: "Auto Data",
+                          body: Center(
+                            child: Text("No data"),
+                          ),
+                        )
+                      : AutoDataCard(data: data.autoData),
                 ),
               ],
             ),
