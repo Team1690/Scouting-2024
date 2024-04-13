@@ -30,4 +30,9 @@ class ScoutingShift {
         team: LightTeam.fromJson(shift["team"]),
         scheduleId: shift["schedule_match"]["id"] as int,
       );
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        "scouter_name": name,
+        "team_id": team.id,
+        "schedule_id": scheduleId,
+      };
 }
