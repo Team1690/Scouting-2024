@@ -36,4 +36,10 @@ class MatchIdentifier {
         number: match["schedule_match"]["match_number"] as int,
         isRematch: isRematch ?? match["is_rematch"] as bool,
       );
+
+  int compareTo(final MatchIdentifier other) {
+    final int cmp = type.order.compareTo(other.type.order);
+    if (cmp != 0) return cmp;
+    return number.compareTo(other.number);
+  }
 }

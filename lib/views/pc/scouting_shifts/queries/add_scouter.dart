@@ -9,13 +9,11 @@ mutation MyMutation(\$scouter_name: String!) {
 }
 """;
 
-void addScouter(final String name) {
-  getClient().mutate(
-    MutationOptions<void>(
-      document: gql(addScouterMutation),
-      variables: <String, String>{
-        "scouter_name": name,
-      },
-    ),
-  );
-}
+Future<void> addScouter(final String name) => getClient().mutate(
+      MutationOptions<void>(
+        document: gql(addScouterMutation),
+        variables: <String, String>{
+          "scouter_name": name,
+        },
+      ),
+    );

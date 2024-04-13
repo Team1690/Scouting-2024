@@ -1,13 +1,21 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
+import "package:scouting_frontend/models/match_identifier.dart";
+import "package:scouting_frontend/models/providers/id_providers.dart";
+import "package:scouting_frontend/models/providers/scouter_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/net/fetch_matches.dart";
+import "package:scouting_frontend/net/fetch_shifts.dart";
 import "package:scouting_frontend/views/common/team_selection_future.dart";
 import "package:scouting_frontend/views/mobile/section_divider.dart";
 import "package:scouting_frontend/views/mobile/submit_buttons/submit/submit_button.dart";
 import "package:scouting_frontend/views/pc/matches/matches_vars.dart";
 import "package:orbit_standard_library/orbit_standard_library.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/queries/add_shift.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 
 class ChangeMatch extends StatefulWidget {
   const ChangeMatch([this.initialVars]);
@@ -188,6 +196,95 @@ class _ChangeMatchState extends State<ChangeMatch> {
                   mutation: widget.initialVars == null ? insert : update,
                   resetForm: () {},
                   validate: () => formKey.currentState!.validate(),
+                  onSubmissionSuccess: () async {
+                    if (widget.initialVars == null) {
+                      final List<List<String>> scouterBatches =
+                          ScouterProvider.of(context)
+                              .scouters
+                              .slices(6)
+                              .where(
+                                (final List<String> element) =>
+                                    element.length == 6,
+                              )
+                              .toList();
+                      final List<ScoutingShift> allShifts =
+                          await fetchShifts(IdProvider.of(context).matchType);
+                      final Map<int, List<ScoutingShift>> orderedAllShifts =
+                          Map<int, List<ScoutingShift>>.fromEntries(
+                        allShifts
+                            .groupListsBy(
+                              (final ScoutingShift element) =>
+                                  element.scheduleId,
+                            )
+                            .entries
+                            .sorted(
+                              (
+                                final MapEntry<int, List<ScoutingShift>> a,
+                                final MapEntry<int, List<ScoutingShift>> b,
+                              ) =>
+                                  a.value.first.matchIdentifier.compareTo(
+                                b.value.first.matchIdentifier,
+                              ),
+                            ),
+                      );
+                      final MatchIdentifier currentMatch = MatchIdentifier(
+                        type: vars.matchType!,
+                        number: vars.matchNumber!,
+                        isRematch: false,
+                      );
+                      int getIndex() {
+                        int currentIndex = 0;
+                        orderedAllShifts.values.forEachIndexed((
+                          final int index,
+                          final List<ScoutingShift> element,
+                        ) {
+                          if (element.first.matchIdentifier
+                                  .compareTo(currentMatch) ==
+                              1) {
+                            currentIndex = index + 1;
+                          } else if (element.first.matchIdentifier
+                                  .compareTo(currentMatch) ==
+                              -1) {
+                            currentIndex = index - 1;
+                          }
+                        });
+                        return currentIndex;
+                      }
+
+                      final int index = getIndex();
+                      final ScheduleMatch match =
+                          await fetchMatches(IdProvider.of(context).matchType)
+                              .then(
+                        (final List<ScheduleMatch> value) => value.firstWhere(
+                          (final ScheduleMatch element) =>
+                              element.matchIdentifier == currentMatch,
+                        ),
+                      );
+                      final List<String> scouters = scouterBatches.firstWhere(
+                        (final List<String> element) => element.contains(
+                          index <= 0
+                              ? orderedAllShifts.values.first.first.name
+                              : orderedAllShifts.values
+                                  .toList()[index - 1]
+                                  .first
+                                  .name,
+                        ),
+                      );
+                      final List<ScoutingShift> shifts = match.redAlliance
+                          .followedBy(match.blueAlliance)
+                          .mapIndexed(
+                            (final int index, final LightTeam element) =>
+                                ScoutingShift(
+                              name: scouters[index],
+                              matchIdentifier: currentMatch,
+                              team: element,
+                              scheduleId: match.id,
+                            ),
+                          )
+                          .toList();
+                      addShifts(shifts);
+                    }
+                  },
                 ),
               ],
             ),
