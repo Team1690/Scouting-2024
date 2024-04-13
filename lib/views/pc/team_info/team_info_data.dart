@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:scouting_frontend/models/data/team_data/team_data_extensions.dart";
 import "package:scouting_frontend/models/fetch_functions/fetch_single_team.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
