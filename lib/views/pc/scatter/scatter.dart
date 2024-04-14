@@ -14,7 +14,12 @@ class Scatter extends StatefulWidget {
 }
 
 class _ScatterState extends State<Scatter> {
-  bool isPoints = true;
+  final Map<String, int> graphTypes = <String, int>{
+    "Scored": 0,
+    "Total": 1,
+    "Points": 2,
+  };
+  int currentIndex = 0;
   bool normalize = false;
   @override
   Widget build(final BuildContext context) {
@@ -23,30 +28,22 @@ class _ScatterState extends State<Scatter> {
       title: "",
       titleWidgets: <Widget>[
         ToggleButtons(
-          children: <Widget>[
-            const Text("Points"),
-            const Text("Sum"),
-          ]
+          children: graphTypes.keys
               .map(
-                (final Widget text) => Padding(
+                (final String text) => Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 30,
                   ),
-                  child: text,
+                  child: Text(text),
                 ),
               )
               .toList(),
-          isSelected: <bool>[isPoints, !isPoints],
+          isSelected: List<bool>.generate(
+              3, (final int index) => index == currentIndex),
           onPressed: (final int pressedIndex) {
-            if (pressedIndex == 0) {
-              setState(() {
-                isPoints = true;
-              });
-            } else if (pressedIndex == 1) {
-              setState(() {
-                isPoints = false;
-              });
-            }
+            setState(() {
+              currentIndex = pressedIndex;
+            });
           },
         ),
         IconButton(
@@ -86,33 +83,49 @@ class _ScatterState extends State<Scatter> {
                       .toList();
                   return ScatterChart(
                     ScatterChartData(
-                      scatterSpots: report
-                          .map(
-                            (final AllTeamData e) => isPoints
-                                ? ScatterSpot(
-                                    normalize
-                                        ? e.aggregateData.avgData
-                                                .gamePiecesPoints -
-                                            e.aggregateData.meanDeviationData
-                                                .gamePiecesPoints
-                                        : e.aggregateData.avgData
-                                            .gamePiecesPoints,
-                                    e.aggregateData.meanDeviationData
-                                        .gamePiecesPoints,
-                                    color: e.team.color,
-                                  )
-                                : ScatterSpot(
-                                    normalize
-                                        ? e.aggregateData.avgData.gamepieces -
-                                            e.aggregateData.meanDeviationData
-                                                .gamepieces
-                                        : e.aggregateData.avgData.gamepieces,
-                                    e.aggregateData.meanDeviationData
-                                        .gamepieces,
-                                    color: e.team.color,
-                                  ),
-                          )
-                          .toList(),
+                      scatterSpots: report.map(
+                        (final AllTeamData e) {
+                          print(
+                            e.aggregateData.avgData.gamepiecesWthDelivery,
+                          );
+                          return currentIndex == graphTypes["Points"]
+                              ? ScatterSpot(
+                                  normalize
+                                      ? e.aggregateData.avgData
+                                              .gamePiecesPoints -
+                                          e.aggregateData.meanDeviationData
+                                              .gamePiecesPoints
+                                      : e.aggregateData.avgData
+                                          .gamePiecesPoints,
+                                  e.aggregateData.meanDeviationData
+                                      .gamePiecesPoints,
+                                  color: e.team.color,
+                                )
+                              : currentIndex == graphTypes["Scored"]
+                                  ? ScatterSpot(
+                                      normalize
+                                          ? e.aggregateData.avgData.gamepieces -
+                                              e.aggregateData.meanDeviationData
+                                                  .gamepieces
+                                          : e.aggregateData.avgData.gamepieces,
+                                      e.aggregateData.meanDeviationData
+                                          .gamepieces,
+                                      color: e.team.color,
+                                    )
+                                  : ScatterSpot(
+                                      normalize
+                                          ? e.aggregateData.avgData
+                                                  .gamepiecesWthDelivery -
+                                              e.aggregateData.meanDeviationData
+                                                  .gamepiecesWthDelivery
+                                          : e.aggregateData.avgData
+                                              .gamepiecesWthDelivery,
+                                      e.aggregateData.meanDeviationData
+                                          .gamepiecesWthDelivery,
+                                      color: e.team.color,
+                                    );
+                        },
+                      ).toList(),
                       scatterTouchData: ScatterTouchData(
                         touchCallback: (
                           final FlTouchEvent event,
@@ -146,11 +159,13 @@ class _ScatterState extends State<Scatter> {
                         ),
                         bottomTitles: AxisTitles(
                           axisNameSize: 26,
-                          axisNameWidget: isPoints
+                          axisNameWidget: currentIndex == graphTypes["Points"]
                               ? const Text(
-                                  "Average gamepiece points",
+                                  "Average Gamepiece Points",
                                 )
-                              : const Text("Average gamepieces"),
+                              : currentIndex == graphTypes["Scored"]
+                                  ? const Text("Average Gamepieces Scored")
+                                  : const Text("Average Total Gamepieces"),
                           sideTitles: SideTitles(
                             getTitlesWidget: (
                               final double title,
@@ -165,13 +180,15 @@ class _ScatterState extends State<Scatter> {
                         ),
                         leftTitles: AxisTitles(
                           axisNameSize: 26,
-                          axisNameWidget: isPoints
+                          axisNameWidget: currentIndex == graphTypes["Points"]
                               ? const Text(
-                                  "Gamepiece points standard deviation",
+                                  "Gamepiece Points Standard Deviation",
                                 )
-                              : const Text(
-                                  "Gamepieces standard deviation",
-                                ),
+                              : currentIndex == graphTypes["Scored"]
+                                  ? const Text(
+                                      "gamepieces Scored Standard Deviation")
+                                  : const Text(
+                                      "Total Gamepieces Standard Deviation"),
                           sideTitles: SideTitles(
                             getTitlesWidget: (
                               final double title,
@@ -209,24 +226,34 @@ class _ScatterState extends State<Scatter> {
                       minY: 0,
                       maxX: report
                           .map(
-                            (final AllTeamData e) => isPoints
+                            (final AllTeamData e) => currentIndex ==
+                                    graphTypes["Points"]
                                 ? (e.aggregateData.avgData.gamePiecesPoints + 1)
                                     .roundToDouble()
-                                : (e.aggregateData.avgData.gamepieces + 1)
-                                    .roundToDouble(),
+                                : currentIndex == graphTypes["Scored"]
+                                    ? (e.aggregateData.avgData.gamepieces + 1)
+                                    : (e.aggregateData.avgData
+                                                .gamepiecesWthDelivery +
+                                            1)
+                                        .roundToDouble(),
                           )
                           .max,
                       maxY: report
                           .map(
-                            (final AllTeamData e) => isPoints
-                                ? (e.aggregateData.meanDeviationData
-                                            .gamePiecesPoints +
-                                        1)
-                                    .roundToDouble()
-                                : (e.aggregateData.meanDeviationData
-                                            .gamepieces +
-                                        1)
-                                    .roundToDouble(),
+                            (final AllTeamData e) =>
+                                currentIndex == graphTypes["Points"]
+                                    ? (e.aggregateData.meanDeviationData
+                                                .gamePiecesPoints +
+                                            1)
+                                        .roundToDouble()
+                                    : currentIndex == graphTypes["Scored"]
+                                        ? (e.aggregateData.meanDeviationData
+                                                    .gamepieces +
+                                                1)
+                                            .roundToDouble()
+                                        : (e.aggregateData.meanDeviationData
+                                                .gamepiecesWthDelivery +
+                                            1),
                           )
                           .max,
                     ),
