@@ -79,6 +79,7 @@ subscription FetchAllTeams {
       auto_speaker_missed
       trap_amount
       traps_missed
+      delivery
       robot_field_status {
         id
       }
