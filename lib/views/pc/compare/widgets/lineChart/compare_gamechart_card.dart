@@ -47,7 +47,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   teamData.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.data.gamepieces.toInt(),
+                                            match.data.gamepieces,
                                       )
                                       .toList(),
                             )
@@ -59,11 +59,28 @@ class CompareGamechartCard extends StatelessWidget {
                         teamDatas: data.toList(),
                         data: data
                             .map(
+                              (final TeamData teamData) =>
+                                  teamData.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.data.gamepieces +
+                                            match.data.delivery,
+                                      )
+                                      .toList(),
+                            )
+                            .toList(),
+                        colors: colors,
+                        title: "Gamepieces + Delivery",
+                      ),
+                      CompareLineChart(
+                        teamDatas: data.toList(),
+                        data: data
+                            .map(
                               (final TeamData element) =>
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.data.gamePiecesPoints.toInt(),
+                                            match.data.gamePiecesPoints,
                                       )
                                       .toList(),
                             )
@@ -79,7 +96,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.data.totalMissed.toInt(),
+                                            match.data.totalMissed,
                                       )
                                       .toList(),
                             )
@@ -95,7 +112,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.data.autoGamepieces.toInt(),
+                                            match.data.autoGamepieces,
                                       )
                                       .toList(),
                             )
@@ -111,7 +128,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.data.teleGamepieces.toInt(),
+                                            match.data.teleGamepieces,
                                       )
                                       .toList(),
                             )
@@ -127,7 +144,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.data.ampGamepieces.toInt(),
+                                            match.data.ampGamepieces,
                                       )
                                       .toList(),
                             )
@@ -139,13 +156,13 @@ class CompareGamechartCard extends StatelessWidget {
                         teamDatas: data.toList(),
                         data: data
                             .map(
-                              (final TeamData element) => element
-                                  .technicalMatches
-                                  .map(
-                                    (final TechnicalMatchData match) =>
-                                        match.data.speakerGamepieces.toInt(),
-                                  )
-                                  .toList(),
+                              (final TeamData element) =>
+                                  element.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.data.speakerGamepieces,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
                         colors: colors,
@@ -159,7 +176,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.data.trapAmount.toInt(),
+                                            match.data.trapAmount,
                                       )
                                       .toList(),
                             )
@@ -191,7 +208,7 @@ class CompareGamechartCard extends StatelessWidget {
                                   element.technicalMatches
                                       .map(
                                         (final TechnicalMatchData match) =>
-                                            match.data.delivery.toInt(),
+                                            match.data.delivery,
                                       )
                                       .toList(),
                             )

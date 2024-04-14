@@ -126,6 +126,12 @@ class QuickDataCard extends StatelessWidget {
                             "Avg Gamepieces: ${data.avgData.gamepieces.toStringAsFixed(1)}",
                           ),
                           Text(
+                            "Avg Delivery: ${data.avgData.delivery.toStringAsFixed(1)}",
+                          ),
+                          Text(
+                            "Avg Gamepieces + Delivery: ${data.avgData.gamepiecesWthDelivery.toStringAsFixed(1)}",
+                          ),
+                          Text(
                             "Matches Played: ${data.amoutOfMatches.toStringAsFixed(1)}",
                           ),
                         ],

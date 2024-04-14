@@ -26,5 +26,7 @@ extension CardGetters on TeamData {
                   (e.scheduleMatch.matchIdentifier, e.technicalMatchData!.auto),
             )
             .toList(),
+        minData: aggregateData.minData,
+        maxData: aggregateData.maxData,
       );
 }
