@@ -53,7 +53,7 @@ class CompareGamechartCard extends StatelessWidget {
                             )
                             .toList(),
                         colors: colors,
-                        title: "Total Gamepieces",
+                        title: "Gamepieces Scored",
                       ),
                       CompareLineChart(
                         teamDatas: data.toList(),
@@ -70,7 +70,7 @@ class CompareGamechartCard extends StatelessWidget {
                             )
                             .toList(),
                         colors: colors,
-                        title: "Gamepieces + Delivery",
+                        title: "Total Gamepieces",
                       ),
                       CompareLineChart(
                         teamDatas: data.toList(),
