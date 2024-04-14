@@ -81,6 +81,9 @@ subscription FetchAllTeams {
       robot_field_status {
         id
       }
+      autonomous_options {
+        id
+      }
     }
   }
 }
