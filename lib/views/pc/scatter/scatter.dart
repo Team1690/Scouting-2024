@@ -39,7 +39,9 @@ class _ScatterState extends State<Scatter> {
               )
               .toList(),
           isSelected: List<bool>.generate(
-              3, (final int index) => index == currentIndex),
+            3,
+            (final int index) => index == currentIndex,
+          ),
           onPressed: (final int pressedIndex) {
             setState(() {
               currentIndex = pressedIndex;
@@ -83,49 +85,55 @@ class _ScatterState extends State<Scatter> {
                       .toList();
                   return ScatterChart(
                     ScatterChartData(
-                      scatterSpots: report.map(
-                        (final AllTeamData e) {
-                          print(
-                            e.aggregateData.avgData.gamepiecesWthDelivery,
-                          );
-                          return currentIndex == graphTypes["Points"]
-                              ? ScatterSpot(
-                                  normalize
-                                      ? e.aggregateData.avgData
-                                              .gamePiecesPoints -
-                                          e.aggregateData.meanDeviationData
-                                              .gamePiecesPoints
-                                      : e.aggregateData.avgData
-                                          .gamePiecesPoints,
-                                  e.aggregateData.meanDeviationData
-                                      .gamePiecesPoints,
-                                  color: e.team.color,
-                                )
-                              : currentIndex == graphTypes["Scored"]
-                                  ? ScatterSpot(
-                                      normalize
-                                          ? e.aggregateData.avgData.gamepieces -
-                                              e.aggregateData.meanDeviationData
-                                                  .gamepieces
-                                          : e.aggregateData.avgData.gamepieces,
-                                      e.aggregateData.meanDeviationData
-                                          .gamepieces,
-                                      color: e.team.color,
-                                    )
-                                  : ScatterSpot(
-                                      normalize
-                                          ? e.aggregateData.avgData
-                                                  .gamepiecesWthDelivery -
-                                              e.aggregateData.meanDeviationData
-                                                  .gamepiecesWthDelivery
-                                          : e.aggregateData.avgData
-                                              .gamepiecesWthDelivery,
-                                      e.aggregateData.meanDeviationData
-                                          .gamepiecesWthDelivery,
-                                      color: e.team.color,
-                                    );
-                        },
-                      ).toList(),
+                      scatterSpots: report
+                          .map(
+                            (final AllTeamData e) =>
+                                currentIndex == graphTypes["Points"]
+                                    ? ScatterSpot(
+                                        normalize
+                                            ? e.aggregateData.avgData
+                                                    .gamePiecesPoints -
+                                                e
+                                                    .aggregateData
+                                                    .meanDeviationData
+                                                    .gamePiecesPoints
+                                            : e.aggregateData.avgData
+                                                .gamePiecesPoints,
+                                        e.aggregateData.meanDeviationData
+                                            .gamePiecesPoints,
+                                        color: e.team.color,
+                                      )
+                                    : currentIndex == graphTypes["Scored"]
+                                        ? ScatterSpot(
+                                            normalize
+                                                ? e.aggregateData.avgData
+                                                        .gamepieces -
+                                                    e
+                                                        .aggregateData
+                                                        .meanDeviationData
+                                                        .gamepieces
+                                                : e.aggregateData.avgData
+                                                    .gamepieces,
+                                            e.aggregateData.meanDeviationData
+                                                .gamepieces,
+                                            color: e.team.color,
+                                          )
+                                        : ScatterSpot(
+                                            normalize
+                                                ? e.aggregateData.avgData
+                                                        .gamepiecesWthDelivery -
+                                                    e
+                                                        .aggregateData
+                                                        .meanDeviationData
+                                                        .gamepiecesWthDelivery
+                                                : e.aggregateData.avgData
+                                                    .gamepiecesWthDelivery,
+                                            e.aggregateData.meanDeviationData
+                                                .gamepiecesWthDelivery,
+                                            color: e.team.color,
+                                          ),
+                          )
+                          .toList(),
                       scatterTouchData: ScatterTouchData(
                         touchCallback: (
                           final FlTouchEvent event,
@@ -186,9 +194,11 @@ class _ScatterState extends State<Scatter> {
                                 )
                               : currentIndex == graphTypes["Scored"]
                                   ? const Text(
-                                      "gamepieces Scored Standard Deviation")
+                                      "gamepieces Scored Standard Deviation",
+                                    )
                                   : const Text(
-                                      "Total Gamepieces Standard Deviation"),
+                                      "Total Gamepieces Standard Deviation",
+                                    ),
                           sideTitles: SideTitles(
                             getTitlesWidget: (
                               final double title,
