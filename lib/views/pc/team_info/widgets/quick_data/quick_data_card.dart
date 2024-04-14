@@ -30,6 +30,29 @@ class QuickDataCard extends StatelessWidget {
                       Column(
                         children: <Widget>[
                           const Text(
+                            "Misc",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          Text(
+                            "Avg Gamepiece Points: ${data.avgData.gamePiecesPoints.toStringAsFixed(1)}",
+                          ),
+                          Text(
+                            "Avg Gamepieces: ${data.avgData.gamepieces.toStringAsFixed(1)}",
+                          ),
+                          Text(
+                            "Avg Delivery: ${data.avgData.delivery.toStringAsFixed(1)}",
+                          ),
+                          Text(
+                            "Avg Gamepieces + Delivery: ${data.avgData.gamepiecesWthDelivery.toStringAsFixed(1)}",
+                          ),
+                          Text(
+                            "Matches Played: ${data.amoutOfMatches.toStringAsFixed(1)}",
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          const Text(
                             "Amp",
                             style: TextStyle(fontSize: 18),
                           ),
@@ -110,29 +133,6 @@ class QuickDataCard extends StatelessWidget {
                           ),
                           Text(
                             "3rd Picklist Position: ${data.thirdPicklistIndex + 1}",
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          const Text(
-                            "Misc",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Text(
-                            "Avg Gamepiece Points: ${data.avgData.gamePiecesPoints.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Avg Gamepieces: ${data.avgData.gamepieces.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Avg Delivery: ${data.avgData.delivery.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Avg Gamepieces + Delivery: ${data.avgData.gamepiecesWthDelivery.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Matches Played: ${data.amoutOfMatches.toStringAsFixed(1)}",
                           ),
                         ],
                       ),
