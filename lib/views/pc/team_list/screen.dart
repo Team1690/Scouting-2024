@@ -114,6 +114,18 @@ class TeamList extends StatelessWidget {
                                 type.title,
                               ),
                               column(
+                                "${type.title} Gamepieces Delivered",
+                                (final AllTeamData team) =>
+                                    type.data(team).delivery,
+                                type.title,
+                              ),
+                              column(
+                                "${type.title} Total Gamepieces",
+                                (final AllTeamData team) =>
+                                    type.data(team).gamepiecesWthDelivery,
+                                type.title,
+                              ),
+                              column(
                                 "${type.title} Gamepieces Missed",
                                 (final AllTeamData team) =>
                                     type.data(team).totalMissed,
@@ -298,6 +310,10 @@ class TeamList extends StatelessWidget {
                                           team.aggregateData.medianData
                                               .gamepieces,
                                           team.aggregateData.medianData
+                                              .delivery,
+                                          team.aggregateData.medianData
+                                              .gamepiecesWthDelivery,
+                                          team.aggregateData.medianData
                                               .totalMissed,
                                           team.aggregateData.medianData
                                               .gamePiecesPoints,
@@ -310,6 +326,9 @@ class TeamList extends StatelessWidget {
                                           team.aggregateData.maxData
                                               .teleGamepieces,
                                           team.aggregateData.maxData.gamepieces,
+                                          team.aggregateData.maxData.delivery,
+                                          team.aggregateData.maxData
+                                              .gamepiecesWthDelivery,
                                           team.aggregateData.maxData
                                               .totalMissed,
                                           team.aggregateData.maxData
@@ -323,6 +342,9 @@ class TeamList extends StatelessWidget {
                                           team.aggregateData.minData
                                               .teleGamepieces,
                                           team.aggregateData.minData.gamepieces,
+                                          team.aggregateData.minData.delivery,
+                                          team.aggregateData.minData
+                                              .gamepiecesWthDelivery,
                                           team.aggregateData.minData
                                               .totalMissed,
                                           team.aggregateData.minData
