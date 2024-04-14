@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:graphql/client.dart";
 import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
+import "package:scouting_frontend/models/data/specific_match_data.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/team_model.dart";
@@ -81,7 +82,23 @@ subscription FetchAllTeams {
       robot_field_status {
         id
       }
-      autonomous_options {
+      autonomous_options{
+        id
+      }
+    }
+    specific_matches {
+      id
+      amp_rating
+      climb_rating
+      defense_amount_id
+      defense_rating
+      driving_rating
+      general_rating
+      intake_rating
+      speaker_rating
+      scouter_name
+      team_id
+      schedule_match {
         id
       }
     }
@@ -111,11 +128,21 @@ Stream<List<AllTeamData>> fetchAllTeams(final BuildContext context) =>
                           ),
                         )
                         .toList();
+                final List<SpecificMatchData> specificMatches =
+                    (team["specific_matches"] as List<dynamic>)
+                        .map(
+                          (final dynamic match) => SpecificMatchData.parse(
+                            match,
+                            idProvider,
+                          ),
+                        )
+                        .toList();
                 final List<dynamic> faultTable =
                     (team["faults"] as List<dynamic>);
                 final dynamic pitTable = team["pit"];
 
                 return AllTeamData(
+                  specificMatches: specificMatches,
                   team: LightTeam.fromJson(team),
                   firstPicklistIndex: (team["first_picklist_index"] as int),
                   secondPicklistIndex: (team["second_picklist_index"] as int),
