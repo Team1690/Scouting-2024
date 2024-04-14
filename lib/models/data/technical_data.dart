@@ -45,6 +45,7 @@ class TechnicalData<T extends num> {
   T get ampPoints => teleAmpPoints;
   T get speakerPoints => autoSpeakerPoints + teleSpeakerPoints as T;
   T get gamePiecesPoints => autoPoints + telePoints as T;
+  T get gamepiecesWthDelivery => (gamepieces + delivery) as T;
 
   static TechnicalData<T> parse<T extends num>(
     final dynamic table,

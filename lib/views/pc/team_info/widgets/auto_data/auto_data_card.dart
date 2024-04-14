@@ -23,6 +23,13 @@ class AutoDataCard extends StatelessWidget {
                   Text(
                     "Avg Auto Gamepieces: ${(data.avgData.autoGamepieces).toStringAsFixed(2)}",
                   ),
+                  Text(
+                    "Min Auto Gamepieces: ${(data.minData.autoGamepieces).toStringAsFixed(2)}",
+                  ),
+                  Text(
+                    "Max Auto Gamepieces: ${(data.maxData.autoGamepieces).toStringAsFixed(2)}",
+                  ),
+                  const Divider(),
                   ...data.autos.map(
                     (final (MatchIdentifier, AutonomousOptions) e) => Text(
                       "Match - ${e.$1} : ${e.$2.title}",
