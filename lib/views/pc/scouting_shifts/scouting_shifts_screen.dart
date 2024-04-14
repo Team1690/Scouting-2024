@@ -1,9 +1,12 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
+import "package:scouting_frontend/models/providers/matches_provider.dart";
+import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/views/pc/scouting_shifts/change_scouter.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/initial_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/delete_all_scouters.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/queries/fetch_scouters.dart";
@@ -95,8 +98,46 @@ class _ScoutingShiftsScreenState extends State<ScoutingShiftsScreen> {
                                     DataCell(
                                       Text(e.first.matchIdentifier.toString()),
                                     ),
-                                    ...e.map(
+                                    ...e.sorted((
+                                      final ScoutingShift a,
+                                      final ScoutingShift b,
+                                    ) {
+                                      final List<ScheduleMatch> matches =
+                                          MatchesProvider.of(context).matches;
+                                      final ScheduleMatch match =
+                                          matches.firstWhere(
+                                        (final ScheduleMatch element) =>
+                                            element.matchIdentifier ==
+                                            a.matchIdentifier,
+                                      );
+                                      final bool cmp = match.blueAlliance
+                                              .contains(a.team) &&
+                                          match.redAlliance.contains(b.team);
+                                      final bool same = match.blueAlliance
+                                                  .contains(a.team) &&
+                                              match.blueAlliance
+                                                  .contains(b.team) ||
+                                          match.redAlliance.contains(a.team) &&
+                                              match.redAlliance
+                                                  .contains(b.team);
+                                      if (same) {
+                                        return a.team.number
+                                            .compareTo(b.team.number);
+                                      }
+                                      return cmp ? 1 : -1;
+                                    }).map(
                                       (final ScoutingShift e) => DataCell(
+                                        onDoubleTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder:
+                                                (final BuildContext context) =>
+                                                    ChangeScouter(
+                                              scouters: scouters,
+                                              scoutingShift: e,
+                                            ),
+                                          );
+                                        },
                                         Text(
                                           "${e.name} ${e.team.number} ",
                                         ),
