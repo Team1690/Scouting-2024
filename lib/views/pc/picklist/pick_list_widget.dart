@@ -100,13 +100,13 @@ class _PickListState extends State<PickList> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
+                                  Text(
+                                    "Avg Delivered: ${pickListTeam.aggregateData.avgData.delivery}",
+                                  ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
-                                      Text(
-                                        "Avg Delivered: ${pickListTeam.aggregateData.avgData.delivery}",
-                                      ),
                                       Icon(
                                         pickListTeam.faultMessages.isEmpty
                                             ? Icons.check
