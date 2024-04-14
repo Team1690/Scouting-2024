@@ -1,3 +1,4 @@
+import "package:scouting_frontend/models/data/specific_match_data.dart";
 import "package:scouting_frontend/models/enums/climb_enum.dart";
 import "package:scouting_frontend/models/data/pit_data/pit_data.dart";
 import "package:scouting_frontend/models/data/technical_match_data.dart";
@@ -16,6 +17,7 @@ class AllTeamData {
     required this.taken,
     required this.aggregateData,
     required this.faultMessages,
+    required this.specificMatches,
   });
 
   //TODO: make const + add copywith
@@ -28,6 +30,7 @@ class AllTeamData {
   final PitData? pitData;
   final List<TechnicalMatchData> technicalMatches;
   final List<String> faultMessages;
+  final List<SpecificMatchData> specificMatches;
 
   int get brokenMatches => technicalMatches
       .where(
