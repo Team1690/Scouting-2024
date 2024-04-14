@@ -127,6 +127,8 @@ Future<InputViewVars> fetchTechnicalMatch(
           harmonyWith: technicalMatch["harmony_with"] as int,
           trapAmount: technicalMatch["trap_amount"] as int,
           scoutedTeam: teamForQuery,
+          broughtGamepieceToWing:
+              technicalMatch["brought_gamepiece_to_wing"] as int,
           faultMessage: "",
         );
       },

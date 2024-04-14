@@ -29,7 +29,8 @@ class InputViewVars implements HasuraVars {
         trapsMissed = 0,
         scoutedTeam = null,
         faultMessage = null,
-        autonomousOptions = null;
+        autonomousOptions = null,
+        broughtGamepieceToWing = 0;
   InputViewVars.all({
     required this.faultMessage,
     required this.delivery,
@@ -44,6 +45,7 @@ class InputViewVars implements HasuraVars {
     required this.teleSpeakerMissed,
     required this.autoAmp,
     required this.autoAmpMissed,
+    required this.broughtGamepieceToWing,
     required this.autoSpeaker,
     required this.autoSpeakerMissed,
     required this.climb,
@@ -77,6 +79,7 @@ class InputViewVars implements HasuraVars {
     final int Function()? delivery,
     final String? Function()? faultMessage,
     final AutonomousOptions Function()? autonomousOptions,
+    final int Function()? broughtGamepieceToWing,
   }) =>
       InputViewVars.all(
         faultMessage: faultMessage != null ? faultMessage() : this.faultMessage,
@@ -110,6 +113,9 @@ class InputViewVars implements HasuraVars {
         autonomousOptions: autonomousOptions != null
             ? autonomousOptions()
             : this.autonomousOptions,
+        broughtGamepieceToWing: broughtGamepieceToWing != null
+            ? broughtGamepieceToWing()
+            : this.broughtGamepieceToWing,
       );
 
   final int delivery;
@@ -132,6 +138,7 @@ class InputViewVars implements HasuraVars {
   final LightTeam? scoutedTeam;
   final String? faultMessage;
   final AutonomousOptions? autonomousOptions;
+  final int broughtGamepieceToWing;
 
   @override
   Map<String, dynamic> toJson(final BuildContext context) => <String, dynamic>{
@@ -157,5 +164,6 @@ class InputViewVars implements HasuraVars {
         "delivery": delivery,
         "autonomous_options_id":
             IdProvider.of(context).autoOptions.enumToId[autonomousOptions]!,
+        "brought_gamepiece_to_wing": broughtGamepieceToWing,
       };
 }
