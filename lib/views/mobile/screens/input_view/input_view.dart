@@ -221,23 +221,13 @@ class _UserInputState extends State<UserInput> {
                         height: 15,
                       ),
                       SectionDivider(label: "Teleoperated"),
-                      MatchModeGamePieceCounter(
-                        flickerScreen: flickerScreen,
-                        match: match,
-                        onNewMatch: (final InputViewVars match) {
-                          setState(() {
-                            this.match = match;
-                          });
-                        },
-                        matchMode: MatchMode.tele,
-                      ),
                       Row(
                         children: <Widget>[
                           const VerticalDivider(),
                           Expanded(
                             child: Counter(
-                              label: "Delivery",
-                              icon: Icons.delivery_dining,
+                              label: "Brought to wing",
+                              icon: Icons.near_me_outlined,
                               onChange: (final int delivery) {
                                 setState(() {
                                   match = match.copyWith(
@@ -249,6 +239,16 @@ class _UserInputState extends State<UserInput> {
                             ),
                           ),
                         ],
+                      ),
+                      MatchModeGamePieceCounter(
+                        flickerScreen: flickerScreen,
+                        match: match,
+                        onNewMatch: (final InputViewVars match) {
+                          setState(() {
+                            this.match = match;
+                          });
+                        },
+                        matchMode: MatchMode.tele,
                       ),
                       Climbing(
                         match: match,

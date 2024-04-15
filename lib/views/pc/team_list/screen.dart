@@ -114,7 +114,7 @@ class TeamList extends StatelessWidget {
                                 type.title,
                               ),
                               column(
-                                "${type.title} Gamepieces Delivered",
+                                "${type.title} Gamepieces brought to wing",
                                 (final AllTeamData team) =>
                                     type.data(team).delivery,
                                 type.title,

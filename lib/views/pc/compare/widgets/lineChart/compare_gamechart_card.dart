@@ -214,7 +214,7 @@ class CompareGamechartCard extends StatelessWidget {
                             )
                             .toList(),
                         colors: colors,
-                        title: "Total Delivery",
+                        title: "Brought to wing",
                       ),
                     ],
                   ),

@@ -62,7 +62,7 @@ class Gamechart extends StatelessWidget {
                         p0.technicalMatchData!.data.gamePiecesPoints,
                   ),
                   PointsLineChart(
-                    title: "Delivered Gamepieces",
+                    title: "Gamepieces brought to wing",
                     data: (final MatchData p0) =>
                         p0.technicalMatchData!.data.delivery,
                     matches: data.matches,

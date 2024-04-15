@@ -69,7 +69,7 @@ class GamepiecesLineChart extends StatelessWidget {
                           ),
                           if (deliveryData != null)
                             const TextSpan(
-                              text: " Delivered ",
+                              text: " Brought to wing ",
                               style: TextStyle(color: Colors.yellow),
                             ),
                         ],
