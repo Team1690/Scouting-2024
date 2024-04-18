@@ -43,6 +43,26 @@ class CompareGamechartCard extends StatelessWidget {
                         teamDatas: data.toList(),
                         data: data
                             .map(
+                              (final TeamData teamData) => teamData
+                                  .technicalMatches
+                                  .map(
+                                    (final TechnicalMatchData match) =>
+                                        ((match.data.teleGamepieces +
+                                                        match.data.delivery) /
+                                                    2 +
+                                                match.data.autoGamepieces)
+                                            .round(),
+                                  )
+                                  .toList(),
+                            )
+                            .toList(),
+                        colors: colors,
+                        title: "Cycle Score",
+                      ),
+                      CompareLineChart(
+                        teamDatas: data.toList(),
+                        data: data
+                            .map(
                               (final TeamData teamData) =>
                                   teamData.technicalMatches
                                       .map(
@@ -54,23 +74,6 @@ class CompareGamechartCard extends StatelessWidget {
                             .toList(),
                         colors: colors,
                         title: "Gamepieces Scored",
-                      ),
-                      CompareLineChart(
-                        teamDatas: data.toList(),
-                        data: data
-                            .map(
-                              (final TeamData teamData) =>
-                                  teamData.technicalMatches
-                                      .map(
-                                        (final TechnicalMatchData match) =>
-                                            match.data.gamepieces +
-                                            match.data.delivery,
-                                      )
-                                      .toList(),
-                            )
-                            .toList(),
-                        colors: colors,
-                        title: "Total Gamepieces",
                       ),
                       CompareLineChart(
                         teamDatas: data.toList(),

@@ -31,6 +31,18 @@ class Gamechart extends StatelessWidget {
                     deliveryData: (final MatchData p0) =>
                         p0.technicalMatchData!.data.delivery,
                   ),
+                  PointsLineChart(
+                    title: "Cycle Score",
+                    matches: data.matches,
+                    data: (final MatchData match) => (((match
+                                        .technicalMatchData!
+                                        .data
+                                        .teleGamepieces +
+                                    match.technicalMatchData!.data.delivery) /
+                                2)
+                            .round() +
+                        match.technicalMatchData!.data.autoGamepieces),
+                  ),
                   GamepiecesLineChart(
                     title: "Auto Gamepieces",
                     matches: data.matches,
