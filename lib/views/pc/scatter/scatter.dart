@@ -23,7 +23,7 @@ class Scatter extends StatefulWidget {
 }
 
 class _ScatterState extends State<Scatter> {
-  ScatterType currentIndex = ScatterType.cycleScore;
+  ScatterType currentGraph = ScatterType.cycleScore;
   bool normalize = false;
   @override
   Widget build(final BuildContext context) {
@@ -43,11 +43,11 @@ class _ScatterState extends State<Scatter> {
               )
               .toList(),
           isSelected: ScatterType.values
-              .map((final ScatterType e) => e == currentIndex)
+              .map((final ScatterType e) => e == currentGraph)
               .toList(),
           onPressed: (final int pressedIndex) {
             setState(() {
-              currentIndex = ScatterType.values[pressedIndex];
+              currentGraph = ScatterType.values[pressedIndex];
             });
           },
         ),
@@ -90,7 +90,7 @@ class _ScatterState extends State<Scatter> {
                     ScatterChartData(
                       scatterSpots: report
                           .map(
-                            (final AllTeamData e) => switch (currentIndex) {
+                            (final AllTeamData e) => switch (currentGraph) {
                               ScatterType.cycleScore => ScatterSpot(
                                   normalize
                                       ? e.aggregateData.avgData.cycleScore -
@@ -145,7 +145,7 @@ class _ScatterState extends State<Scatter> {
                         ),
                         bottomTitles: AxisTitles(
                           axisNameSize: 26,
-                          axisNameWidget: switch (currentIndex) {
+                          axisNameWidget: switch (currentGraph) {
                             ScatterType.cycleScore => const Text(
                                 "Average Cycle Score",
                               ),
@@ -166,7 +166,7 @@ class _ScatterState extends State<Scatter> {
                         ),
                         leftTitles: AxisTitles(
                           axisNameSize: 26,
-                          axisNameWidget: switch (currentIndex) {
+                          axisNameWidget: switch (currentGraph) {
                             ScatterType.cycleScore => const Text(
                                 "Cycle score Standard Deviation",
                               ),
@@ -211,7 +211,7 @@ class _ScatterState extends State<Scatter> {
                       minY: 0,
                       maxX: report
                           .map(
-                            (final AllTeamData e) => switch (currentIndex) {
+                            (final AllTeamData e) => switch (currentGraph) {
                               ScatterType.cycleScore =>
                                 (e.aggregateData.avgData.cycleScore + 1)
                                     .roundToDouble(),
@@ -222,7 +222,7 @@ class _ScatterState extends State<Scatter> {
                           .max,
                       maxY: report
                           .map(
-                            (final AllTeamData e) => switch (currentIndex) {
+                            (final AllTeamData e) => switch (currentGraph) {
                               ScatterType.cycleScore =>
                                 (e.aggregateData.meanDeviationData.cycleScore +
                                         1)
