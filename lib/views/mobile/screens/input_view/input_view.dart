@@ -230,6 +230,7 @@ class _UserInputState extends State<UserInput> {
                               icon: Icons.near_me_outlined,
                               onChange: (final int delivery) {
                                 setState(() {
+                                  flickerScreen(delivery, match.delivery);
                                   match = match.copyWith(
                                     delivery: always(delivery),
                                   );
