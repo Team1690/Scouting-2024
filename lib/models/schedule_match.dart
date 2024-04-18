@@ -1,7 +1,6 @@
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/models/providers/id_providers.dart";
 import "package:scouting_frontend/models/match_identifier.dart";
-import "package:scouting_frontend/models/providers/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/net/fetch_matches.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";

@@ -99,8 +99,13 @@ subscription FetchAllTeams {
       speaker_rating
       scouter_name
       team_id
+      is_rematch
       schedule_match {
         id
+        match_number
+        match_type {
+          id
+        }
       }
     }
   }
