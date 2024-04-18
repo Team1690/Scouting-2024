@@ -26,7 +26,7 @@ class SpecificSummaryTextField extends StatelessWidget {
             enabled: isEnabled,
             style: const TextStyle(),
             cursorColor: Colors.blue,
-            maxLines: null,
+            maxLines: 3,
             textDirection: TextDirection.rtl,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
