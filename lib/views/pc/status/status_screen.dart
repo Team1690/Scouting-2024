@@ -200,7 +200,10 @@ class _StatusScreenState extends State<StatusScreen> {
                   ),
                   isMissingValidator: (final MatchData matchData) =>
                       ((matchData.technicalMatchData == null && !isSpecific) ||
-                          (matchData.specificMatchData == null && isSpecific)),
+                          (matchData.specificMatchData == null &&
+                              isSpecific)) &&
+                      matchData.scheduleMatch.matchIdentifier.type !=
+                          MatchType.practice,
                   orderRowByCompare: (final MatchData p0, final MatchData p1) =>
                       p0.isBlueAlliance && !p1.isBlueAlliance ? 1 : -1,
                 ),
