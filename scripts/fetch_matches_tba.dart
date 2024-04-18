@@ -113,7 +113,7 @@ void main(final List<String> args) async {
 
 const String mutation = """
 mutation InsertMatches(\$matches: [schedule_matches_insert_input!]!) {
-  insert_schedule_matches(objects: \$matches, on_conflict: {constraint: schedule_matches_match_number_match_type_id_key, update_columns: happened}) {
+  insert_schedule_matches(objects: \$matches, on_conflict: {constraint: schedule_matches_match_number_match_type_id_key }) {
     affected_rows
   }
 }
@@ -165,7 +165,6 @@ Future<QueryResult<void>> sendMatches(
     (final Match e) => <String, dynamic>{
       "match_number": e.number,
       "match_type_id": matchTypeId,
-      "happened": e.happened,
       for (int i = 0; i < 3; i++)
         "blue_${i}_id": teams
             .where(
