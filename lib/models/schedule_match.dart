@@ -48,5 +48,5 @@ class ScheduleMatch {
     final LightTeam team,
     final List<ScoutingShift> shifts,
   ) =>
-      "${team.number} ${team.name} - ${redAlliance.contains(team) ? "Red ${redAlliance.indexOf(team)}" : "Blue ${blueAlliance.indexOf(team)}"}";
+      "${team.number} ${team.name} - ${redAlliance.contains(team) ? "Red ${redAlliance.indexOf(team) + 1}" : "Blue ${blueAlliance.indexOf(team) + 1}"}";
 }
