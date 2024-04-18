@@ -318,6 +318,7 @@ class _UserInputState extends State<UserInput> {
                               match = match.copyWith(
                                 faultMessage: always("Didn't work on field"),
                               );
+                              faultMessageController.text = match.faultMessage!;
                             }
                           });
                         },
