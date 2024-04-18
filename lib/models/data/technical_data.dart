@@ -46,6 +46,8 @@ class TechnicalData<T extends num> {
   T get speakerPoints => autoSpeakerPoints + teleSpeakerPoints as T;
   T get gamePiecesPoints => autoPoints + telePoints as T;
   T get gamepiecesWthDelivery => (gamepieces + delivery) as T;
+  T get cycleScore =>
+      (autoGamepieces + ((teleGamepieces + delivery) / 2).ceil()).numericCast();
 
   static TechnicalData<T> parse<T extends num>(
     final dynamic table,

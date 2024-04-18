@@ -96,6 +96,12 @@ class TeamList extends StatelessWidget {
                         List<DataColumn> columnList(final AggregateType type) =>
                             <DataColumn>[
                               column(
+                                "${type.title} Cycle Score",
+                                (final AllTeamData team) =>
+                                    type.data(team).cycleScore,
+                                type.title,
+                              ),
+                              column(
                                 "${type.title} Auto Gamepieces",
                                 (final AllTeamData team) =>
                                     type.data(team).autoGamepieces,
@@ -298,11 +304,13 @@ class TeamList extends StatelessWidget {
                                                     color: Colors.white,
                                                   ),
                                                 ),
-                                              ),
+                                              )
                                             ],
                                           ),
                                         ),
                                         ...<double>[
+                                          team.aggregateData.medianData
+                                              .cycleScore,
                                           team.aggregateData.medianData
                                               .autoGamepieces,
                                           team.aggregateData.medianData
@@ -321,6 +329,7 @@ class TeamList extends StatelessWidget {
                                               .climbingPoints,
                                         ].map(show),
                                         ...<int>[
+                                          team.aggregateData.maxData.cycleScore,
                                           team.aggregateData.maxData
                                               .autoGamepieces,
                                           team.aggregateData.maxData
@@ -337,6 +346,7 @@ class TeamList extends StatelessWidget {
                                               .climbingPoints,
                                         ].map(show),
                                         ...<int>[
+                                          team.aggregateData.minData.cycleScore,
                                           team.aggregateData.minData
                                               .autoGamepieces,
                                           team.aggregateData.minData

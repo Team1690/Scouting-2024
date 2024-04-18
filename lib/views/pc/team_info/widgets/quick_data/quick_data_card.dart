@@ -34,6 +34,9 @@ class QuickDataCard extends StatelessWidget {
                             style: TextStyle(fontSize: 18),
                           ),
                           Text(
+                            "Avg Cycle Score: ${data.avgData.cycleScore.toStringAsFixed(1)}",
+                          ),
+                          Text(
                             "Avg Gamepiece Points: ${data.avgData.gamePiecesPoints.toStringAsFixed(1)}",
                           ),
                           Text(
@@ -41,9 +44,6 @@ class QuickDataCard extends StatelessWidget {
                           ),
                           Text(
                             "Avg Brought to wing: ${data.avgData.delivery.toStringAsFixed(1)}",
-                          ),
-                          Text(
-                            "Avg Total Gamepieces: ${data.avgData.gamepiecesWthDelivery.toStringAsFixed(1)}",
                           ),
                           Text(
                             "Matches Played: ${data.amoutOfMatches.toStringAsFixed(1)}",
