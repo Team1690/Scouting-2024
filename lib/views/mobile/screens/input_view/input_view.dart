@@ -313,6 +313,12 @@ class _UserInputState extends State<UserInput> {
                                 robotFieldStatusIndexToEnum[i]!,
                               ),
                             );
+                            if (match.robotFieldStatus ==
+                                RobotFieldStatus.didntWorkOnField) {
+                              match = match.copyWith(
+                                faultMessage: always("Didn't work on field"),
+                              );
+                            }
                           });
                         },
                         selected: <RobotFieldStatus, int>{
