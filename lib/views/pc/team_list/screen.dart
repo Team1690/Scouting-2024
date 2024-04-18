@@ -304,7 +304,7 @@ class TeamList extends StatelessWidget {
                                                     color: Colors.white,
                                                   ),
                                                 ),
-                                              )
+                                              ),
                                             ],
                                           ),
                                         ),
