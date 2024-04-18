@@ -98,10 +98,7 @@ class TeamList extends StatelessWidget {
                               column(
                                 "${type.title} Cycle Score",
                                 (final AllTeamData team) =>
-                                    type.data(team).autoGamepieces +
-                                    (type.data(team).teleGamepieces +
-                                            type.data(team).delivery) /
-                                        2,
+                                    type.data(team).cycleScore,
                                 type.title,
                               ),
                               column(
@@ -307,23 +304,13 @@ class TeamList extends StatelessWidget {
                                                     color: Colors.white,
                                                   ),
                                                 ),
-                                              ),
+                                              )
                                             ],
                                           ),
                                         ),
                                         ...<double>[
-                                          double.parse((team
-                                                      .aggregateData
-                                                      .medianData
-                                                      .autoGamepieces +
-                                                  (team.aggregateData.medianData
-                                                              .teleGamepieces +
-                                                          team
-                                                              .aggregateData
-                                                              .medianData
-                                                              .delivery) /
-                                                      2)
-                                              .toStringAsFixed(2)),
+                                          team.aggregateData.medianData
+                                              .cycleScore,
                                           team.aggregateData.medianData
                                               .autoGamepieces,
                                           team.aggregateData.medianData
@@ -342,16 +329,7 @@ class TeamList extends StatelessWidget {
                                               .climbingPoints,
                                         ].map(show),
                                         ...<int>[
-                                          (team.aggregateData.maxData
-                                                      .autoGamepieces +
-                                                  (team.aggregateData.maxData
-                                                              .teleGamepieces +
-                                                          team
-                                                              .aggregateData
-                                                              .maxData
-                                                              .delivery) /
-                                                      2)
-                                              .round(),
+                                          team.aggregateData.maxData.cycleScore,
                                           team.aggregateData.maxData
                                               .autoGamepieces,
                                           team.aggregateData.maxData
@@ -368,16 +346,7 @@ class TeamList extends StatelessWidget {
                                               .climbingPoints,
                                         ].map(show),
                                         ...<int>[
-                                          (team.aggregateData.minData
-                                                      .autoGamepieces +
-                                                  (team.aggregateData.minData
-                                                              .teleGamepieces +
-                                                          team
-                                                              .aggregateData
-                                                              .minData
-                                                              .delivery) /
-                                                      2)
-                                              .round(),
+                                          team.aggregateData.minData.cycleScore,
                                           team.aggregateData.minData
                                               .autoGamepieces,
                                           team.aggregateData.minData

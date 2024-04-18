@@ -184,6 +184,12 @@ class CalculatedTechnicalData<T extends num> implements TechnicalData<T> {
         (final TechnicalData<int> techData) => techData.gamepiecesWthDelivery,
       );
 
+  @override
+  T get cycleScore => calculateFieldAggregateData(
+        technicalDatas,
+        (final TechnicalData<int> techData) => techData.cycleScore,
+      );
+
   T caclulateOnListOfField(
     final int Function(int, int) combine,
     final List<int> Function(TechnicalData<int>) getFields,

@@ -43,17 +43,13 @@ class CompareGamechartCard extends StatelessWidget {
                         teamDatas: data.toList(),
                         data: data
                             .map(
-                              (final TeamData teamData) => teamData
-                                  .technicalMatches
-                                  .map(
-                                    (final TechnicalMatchData match) =>
-                                        ((match.data.teleGamepieces +
-                                                        match.data.delivery) /
-                                                    2 +
-                                                match.data.autoGamepieces)
-                                            .round(),
-                                  )
-                                  .toList(),
+                              (final TeamData teamData) =>
+                                  teamData.technicalMatches
+                                      .map(
+                                        (final TechnicalMatchData match) =>
+                                            match.data.cycleScore,
+                                      )
+                                      .toList(),
                             )
                             .toList(),
                         colors: colors,
