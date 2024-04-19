@@ -25,12 +25,29 @@ class Scatter extends StatefulWidget {
 class _ScatterState extends State<Scatter> {
   ScatterType currentGraph = ScatterType.cycleScore;
   bool normalize = false;
+  late final Stream<List<AllTeamData>> stream = fetchAllTeams(context);
+  String? highlight;
+
   @override
   Widget build(final BuildContext context) {
     String? tooltip;
     return DashboardCard(
       title: "",
       titleWidgets: <Widget>[
+        SizedBox(
+          width: 100,
+          child: TextField(
+            onChanged: (final String value) {
+              setState(() {
+                if (value.isNotEmpty && int.tryParse(value) != null) {
+                  highlight = value;
+                } else {
+                  highlight = null;
+                }
+              });
+            },
+          ),
+        ),
         ToggleButtons(
           children: ScatterType.values
               .map(
@@ -65,7 +82,7 @@ class _ScatterState extends State<Scatter> {
           Expanded(
             flex: 1,
             child: StreamBuilder<List<AllTeamData>>(
-              stream: fetchAllTeams(context),
+              stream: stream,
               builder: (
                 final BuildContext context,
                 final AsyncSnapshot<List<AllTeamData>> snapshot,
@@ -88,30 +105,37 @@ class _ScatterState extends State<Scatter> {
                       .toList();
                   return ScatterChart(
                     ScatterChartData(
-                      scatterSpots: report
-                          .map(
-                            (final AllTeamData e) => switch (currentGraph) {
-                              ScatterType.cycleScore => ScatterSpot(
-                                  normalize
-                                      ? e.aggregateData.avgData.cycleScore -
-                                          e.aggregateData.meanDeviationData
-                                              .cycleScore
-                                      : e.aggregateData.avgData.cycleScore,
-                                  e.aggregateData.meanDeviationData.cycleScore,
-                                  color: e.team.color,
-                                ),
-                              ScatterType.scored => ScatterSpot(
-                                  normalize
-                                      ? e.aggregateData.avgData.gamepieces -
-                                          e.aggregateData.meanDeviationData
-                                              .gamepieces
-                                      : e.aggregateData.avgData.gamepieces,
-                                  e.aggregateData.meanDeviationData.gamepieces,
-                                  color: e.team.color,
-                                )
-                            },
-                          )
-                          .toList(),
+                      scatterSpots: report.map(
+                        (final AllTeamData e) {
+                          final color = highlight == null ||
+                                  e.team.number
+                                      .toString()
+                                      .startsWith(highlight!)
+                              ? e.team.color
+                              : Colors.grey.withAlpha(70);
+
+                          return switch (currentGraph) {
+                            ScatterType.cycleScore => ScatterSpot(
+                                normalize
+                                    ? e.aggregateData.avgData.cycleScore -
+                                        e.aggregateData.meanDeviationData
+                                            .cycleScore
+                                    : e.aggregateData.avgData.cycleScore,
+                                e.aggregateData.meanDeviationData.cycleScore,
+                                color: color,
+                              ),
+                            ScatterType.scored => ScatterSpot(
+                                normalize
+                                    ? e.aggregateData.avgData.gamepieces -
+                                        e.aggregateData.meanDeviationData
+                                            .gamepieces
+                                    : e.aggregateData.avgData.gamepieces,
+                                e.aggregateData.meanDeviationData.gamepieces,
+                                color: color,
+                              )
+                          };
+                        },
+                      ).toList(),
                       scatterTouchData: ScatterTouchData(
                         touchCallback: (
                           final FlTouchEvent event,
