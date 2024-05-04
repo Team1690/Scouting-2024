@@ -51,7 +51,7 @@ class _PickListState extends State<PickList> {
     );
     return Container(
       child: ReorderableListView(
-        buildDefaultDragHandles: widget.viewMode ? false : true,
+        buildDefaultDragHandles: !widget.viewMode,
         primary: false,
         children: widget.uiList
             .map(
@@ -199,12 +199,14 @@ class _PickListState extends State<PickList> {
                                 .toList(),
                           ),
                           trailing: const SizedBox(),
-                          leading: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              widget.viewMode
-                                  ? Container()
-                                  : SizedBox(
+                          leading: widget.viewMode
+                              ? const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                )
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    SizedBox(
                                       width: 50,
                                       child: TextFormField(
                                         minLines: 1,
@@ -232,12 +234,10 @@ class _PickListState extends State<PickList> {
                                         }),
                                       ),
                                     ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              widget.viewMode
-                                  ? Container()
-                                  : FlutterSwitch(
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    FlutterSwitch(
                                       value: pickListTeam.taken,
                                       activeColor: Colors.red,
                                       inactiveColor: primaryColor,
@@ -248,8 +248,8 @@ class _PickListState extends State<PickList> {
                                         widget.onReorder(widget.uiList);
                                       },
                                     ),
-                            ],
-                          ),
+                                  ],
+                                ),
                         )
                       : GestureDetector(
                           onDoubleTap: () {
@@ -277,17 +277,21 @@ class _PickListState extends State<PickList> {
                               ],
                             ),
                             trailing: const SizedBox(),
-                            leading: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                widget.viewMode
-                                    ? Container()
-                                    : SizedBox(
+                            leading: widget.viewMode
+                                ? const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                  )
+                                : Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      SizedBox(
                                         width: 36,
                                         child: TextFormField(
                                           minLines: 1,
                                           maxLines: 1,
-                                          style: const TextStyle(fontSize: 10),
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                          ),
                                           controller: controllers[
                                               widget.screen.getIndex(
                                             pickListTeam,
@@ -301,7 +305,9 @@ class _PickListState extends State<PickList> {
                                                 pickListTeam,
                                               ),
                                               int.tryParse(value).mapNullable(
-                                                    (final int parsedInt) =>
+                                                    (
+                                                      final int parsedInt,
+                                                    ) =>
                                                         (parsedInt - 1) %
                                                         widget.uiList.length,
                                                   ) ??
@@ -312,12 +318,10 @@ class _PickListState extends State<PickList> {
                                           }),
                                         ),
                                       ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                widget.viewMode
-                                    ? Container()
-                                    : FlutterSwitch(
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      FlutterSwitch(
                                         value: pickListTeam.taken,
                                         activeColor: Colors.red,
                                         inactiveColor: primaryColor,
@@ -328,8 +332,8 @@ class _PickListState extends State<PickList> {
                                           widget.onReorder(widget.uiList);
                                         },
                                       ),
-                              ],
-                            ),
+                                    ],
+                                  ),
                           ),
                         ),
                 ),

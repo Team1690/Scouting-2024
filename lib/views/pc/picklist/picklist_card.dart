@@ -7,19 +7,18 @@ import "package:scouting_frontend/views/pc/picklist/password.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
 
-// ignore: must_be_immutable
 class PicklistCard extends StatefulWidget {
   PicklistCard({
     required this.initialData,
-    required this.viewMode,
   });
   final List<AllTeamData> initialData;
-  bool viewMode;
+
   @override
   State<PicklistCard> createState() => _PicklistCardState();
 }
 
 class _PicklistCardState extends State<PicklistCard> {
+  bool viewMode = true;
   late List<AllTeamData> data = widget.initialData;
   CurrentPickList currentPickList = CurrentPickList.first;
   @override
@@ -85,7 +84,7 @@ class _PicklistCardState extends State<PicklistCard> {
                     },
                   ),
                   IconButton(
-                    onPressed: widget.viewMode
+                    onPressed: viewMode
                         ? null
                         : () {
                             save(List<AllTeamData>.from(data), context);
@@ -94,7 +93,7 @@ class _PicklistCardState extends State<PicklistCard> {
                   ),
                   IconButton(
                     tooltip: "Sort taken",
-                    onPressed: widget.viewMode
+                    onPressed: viewMode
                         ? null
                         : () {
                             setState(() {
@@ -121,7 +120,7 @@ class _PicklistCardState extends State<PicklistCard> {
               Row(
                 children: <Widget>[
                   TextButton(
-                    onPressed: widget.viewMode
+                    onPressed: viewMode
                         ? null
                         : () async {
                             final List<AllTeamData>? newAllTeamData =
@@ -143,17 +142,17 @@ class _PicklistCardState extends State<PicklistCard> {
                   ),
                   TextButton(
                     onPressed: () async {
-                      final bool? viewMode = await showDialog<bool>(
+                      final bool? newViewMode = await showDialog<bool>(
                         context: context,
                         builder: (final BuildContext context) => Password(
-                          viewMode: widget.viewMode,
+                          viewMode: viewMode,
                         ),
                       );
                       setState(() {
-                        widget.viewMode = viewMode ?? widget.viewMode;
+                        viewMode = newViewMode ?? viewMode;
                       });
                     },
-                    child: widget.viewMode
+                    child: viewMode
                         ? const Text(
                             "View Mode",
                             style: TextStyle(color: Colors.red),
@@ -177,7 +176,7 @@ class _PicklistCardState extends State<PicklistCard> {
             data = list;
           }),
           screen: currentPickList,
-          viewMode: widget.viewMode,
+          viewMode: viewMode,
         ),
       );
 }

@@ -1,20 +1,13 @@
 import "package:flutter/material.dart";
 
-// ignore: must_be_immutable
-class Password extends StatefulWidget {
+class Password extends StatelessWidget {
   Password({
     super.key,
     required this.viewMode,
   });
-  bool viewMode;
+  final bool viewMode;
+  final TextEditingController controller = TextEditingController();
 
-  @override
-  State<Password> createState() => _PasswordState();
-}
-
-class _PasswordState extends State<Password> {
-  TextEditingController controller = TextEditingController();
-  bool viewMode = false;
   @override
   Widget build(final BuildContext context) => AlertDialog(
         title: const Text("Enter Password"),
@@ -31,10 +24,7 @@ class _PasswordState extends State<Password> {
             TextButton(
               onPressed: () {
                 if (controller.text == "0961") {
-                  setState(() {
-                    viewMode = !widget.viewMode;
-                  });
-                  Navigator.of(context).pop(viewMode);
+                  Navigator.of(context).pop(!viewMode);
                 }
               },
               child: const Text("Submit", style: TextStyle(color: Colors.blue)),
