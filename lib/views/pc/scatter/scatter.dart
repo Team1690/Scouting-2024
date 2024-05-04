@@ -107,7 +107,7 @@ class _ScatterState extends State<Scatter> {
                     ScatterChartData(
                       scatterSpots: report.map(
                         (final AllTeamData e) {
-                          final color = highlight == null ||
+                          final Color color = highlight == null ||
                                   e.team.number
                                       .toString()
                                       .startsWith(highlight!)

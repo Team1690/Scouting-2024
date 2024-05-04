@@ -8,7 +8,10 @@ import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/mobile/side_nav_bar.dart";
 import "package:scouting_frontend/views/pc/picklist/picklist_card.dart";
 
+// ignore: must_be_immutable
 class PickListScreen extends StatelessWidget {
+  bool viewMode = true;
+
   @override
   Widget build(final BuildContext context) => isPC(context)
       ? DashboardScaffold(
@@ -48,6 +51,7 @@ class PickListScreen extends StatelessWidget {
             }
             return PicklistCard(
               initialData: snapshot.data!,
+              viewMode: viewMode,
             );
           },
         ),
