@@ -30,7 +30,7 @@ class _PasswordState extends State<Password> {
             ),
             TextButton(
               onPressed: () {
-                if (controller.text == "password") {
+                if (controller.text == "0961") {
                   setState(() {
                     viewMode = !widget.viewMode;
                   });
