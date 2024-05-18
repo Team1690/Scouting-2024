@@ -3,11 +3,12 @@ import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/models/data/all_team_data.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/pc/picklist/auto_picklist_popup.dart";
+import "package:scouting_frontend/views/pc/picklist/password.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_widget.dart";
 
 class PicklistCard extends StatefulWidget {
-  const PicklistCard({
+  PicklistCard({
     required this.initialData,
   });
   final List<AllTeamData> initialData;
@@ -17,6 +18,7 @@ class PicklistCard extends StatefulWidget {
 }
 
 class _PicklistCardState extends State<PicklistCard> {
+  bool viewMode = true;
   late List<AllTeamData> data = widget.initialData;
   CurrentPickList currentPickList = CurrentPickList.first;
   @override
@@ -82,49 +84,87 @@ class _PicklistCardState extends State<PicklistCard> {
                     },
                   ),
                   IconButton(
-                    onPressed: () =>
-                        save(List<AllTeamData>.from(data), context),
+                    onPressed: viewMode
+                        ? null
+                        : () {
+                            save(List<AllTeamData>.from(data), context);
+                          },
                     icon: const Icon(Icons.save),
                   ),
                   IconButton(
                     tooltip: "Sort taken",
-                    onPressed: () {
-                      setState(() {
-                        final List<AllTeamData> teamsUntaken = data
-                            .where(
-                              (final AllTeamData element) => !element.taken,
-                            )
-                            .toList();
-                        final Iterable<AllTeamData> teamsTaken = data.where(
-                          (final AllTeamData element) => element.taken,
-                        );
-                        data = (teamsUntaken..addAll(teamsTaken));
-                        for (int i = 0; i < data.length; i++) {
-                          currentPickList.setIndex(data[i], i);
-                        }
-                      });
-                    },
+                    onPressed: viewMode
+                        ? null
+                        : () {
+                            setState(() {
+                              final List<AllTeamData> teamsUntaken = data
+                                  .where(
+                                    (final AllTeamData element) =>
+                                        !element.taken,
+                                  )
+                                  .toList();
+                              final Iterable<AllTeamData> teamsTaken =
+                                  data.where(
+                                (final AllTeamData element) => element.taken,
+                              );
+                              data = (teamsUntaken..addAll(teamsTaken));
+                              for (int i = 0; i < data.length; i++) {
+                                currentPickList.setIndex(data[i], i);
+                              }
+                            });
+                          },
                     icon: const Icon(Icons.sort),
                   ),
                 ],
               ),
-              TextButton(
-                onPressed: () async {
-                  final List<AllTeamData>? newAllTeamData =
-                      await showDialog<List<AllTeamData>>(
-                    context: context,
-                    builder: (final BuildContext context) => AutoPickListPopUp(
-                      currentPickList: currentPickList,
-                      teamsToSort: widget.initialData,
-                    ),
-                  );
-                  if (newAllTeamData != null) {
-                    setState(() {
-                      data = newAllTeamData;
-                    });
-                  }
-                },
-                child: const Text("Sort By"),
+              Row(
+                children: <Widget>[
+                  TextButton(
+                    onPressed: viewMode
+                        ? null
+                        : () async {
+                            final List<AllTeamData>? newAllTeamData =
+                                await showDialog<List<AllTeamData>>(
+                              context: context,
+                              builder: (final BuildContext context) =>
+                                  AutoPickListPopUp(
+                                currentPickList: currentPickList,
+                                teamsToSort: widget.initialData,
+                              ),
+                            );
+                            if (newAllTeamData != null) {
+                              setState(() {
+                                data = newAllTeamData;
+                              });
+                            }
+                          },
+                    child: const Text("Sort By"),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      final bool? newViewMode = await showDialog<bool>(
+                        context: context,
+                        builder: (final BuildContext context) => Password(
+                          viewMode: viewMode,
+                        ),
+                      );
+                      setState(() {
+                        viewMode = newViewMode ?? viewMode;
+                      });
+                    },
+                    child: viewMode
+                        ? const Text(
+                            "View Mode",
+                            style: TextStyle(color: Colors.red),
+                          )
+                        : const Text(
+                            "Edit Mode",
+                            style: TextStyle(
+                              color: Colors.green,
+                            ),
+                          ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -136,6 +176,7 @@ class _PicklistCardState extends State<PicklistCard> {
             data = list;
           }),
           screen: currentPickList,
+          viewMode: viewMode,
         ),
       );
 }

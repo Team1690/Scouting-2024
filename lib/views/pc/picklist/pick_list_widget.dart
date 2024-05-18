@@ -13,6 +13,7 @@ class PickList extends StatefulWidget {
     required this.uiList,
     required this.screen,
     required this.onReorder,
+    required this.viewMode,
   }) {
     uiList.sort(
       (final AllTeamData a, final AllTeamData b) =>
@@ -21,6 +22,7 @@ class PickList extends StatefulWidget {
   }
   final CurrentPickList screen;
   final void Function(List<AllTeamData> list) onReorder;
+  final bool viewMode;
 
   @override
   State<PickList> createState() => _PickListState();
@@ -49,7 +51,7 @@ class _PickListState extends State<PickList> {
     );
     return Container(
       child: ReorderableListView(
-        buildDefaultDragHandles: true,
+        buildDefaultDragHandles: !widget.viewMode,
         primary: false,
         children: widget.uiList
             .map(
@@ -167,7 +169,7 @@ class _PickListState extends State<PickList> {
                               ),
                               Expanded(
                                 child: Text(
-                                  "Worked: ${pickListTeam.workedPercentage == double.negativeInfinity ? "No Data" : ("${pickListTeam.workedPercentage.toStringAsFixed(2)}%")}",
+                                  "Worked: ${pickListTeam.workedPercentage == double.negativeInfinity ? "No Data" : ("${pickListTeam.workedPercentage.toStringAsFixed(0)}%")}",
                                 ),
                               ),
                               Expanded(
@@ -197,52 +199,57 @@ class _PickListState extends State<PickList> {
                                 .toList(),
                           ),
                           trailing: const SizedBox(),
-                          leading: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              SizedBox(
-                                width: 50,
-                                child: TextFormField(
-                                  minLines: 1,
-                                  maxLines: 1,
-                                  style: const TextStyle(fontSize: 18),
-                                  controller: controllers[
-                                      widget.screen.getIndex(pickListTeam)],
-                                  keyboardType: TextInputType.number,
-                                  onFieldSubmitted: (final String value) =>
-                                      setState(() {
-                                    reorderData(
-                                      widget.screen.getIndex(
-                                        pickListTeam,
+                          leading: widget.viewMode
+                              ? const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                )
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 50,
+                                      child: TextFormField(
+                                        minLines: 1,
+                                        maxLines: 1,
+                                        style: const TextStyle(fontSize: 18),
+                                        controller: controllers[widget.screen
+                                            .getIndex(pickListTeam)],
+                                        keyboardType: TextInputType.number,
+                                        onFieldSubmitted:
+                                            (final String value) =>
+                                                setState(() {
+                                          reorderData(
+                                            widget.screen.getIndex(
+                                              pickListTeam,
+                                            ),
+                                            int.tryParse(value).mapNullable(
+                                                  (final int parsedInt) =>
+                                                      (parsedInt - 1) %
+                                                      widget.uiList.length,
+                                                ) ??
+                                                widget.screen.getIndex(
+                                                  pickListTeam,
+                                                ),
+                                          );
+                                        }),
                                       ),
-                                      int.tryParse(value).mapNullable(
-                                            (final int parsedInt) =>
-                                                (parsedInt - 1) %
-                                                widget.uiList.length,
-                                          ) ??
-                                          widget.screen.getIndex(
-                                            pickListTeam,
-                                          ),
-                                    );
-                                  }),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    FlutterSwitch(
+                                      value: pickListTeam.taken,
+                                      activeColor: Colors.red,
+                                      inactiveColor: primaryColor,
+                                      height: 25,
+                                      width: 100,
+                                      onToggle: (final bool val) {
+                                        pickListTeam.taken = val;
+                                        widget.onReorder(widget.uiList);
+                                      },
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              FlutterSwitch(
-                                value: pickListTeam.taken,
-                                activeColor: Colors.red,
-                                inactiveColor: primaryColor,
-                                height: 25,
-                                width: 100,
-                                onToggle: (final bool val) {
-                                  pickListTeam.taken = val;
-                                  widget.onReorder(widget.uiList);
-                                },
-                              ),
-                            ],
-                          ),
                         )
                       : GestureDetector(
                           onDoubleTap: () {
@@ -264,60 +271,69 @@ class _PickListState extends State<PickList> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    "Worked: ${pickListTeam.workedPercentage == double.negativeInfinity ? "No Data" : ("${pickListTeam.workedPercentage.toStringAsFixed(2)}%")}",
+                                    "Worked: ${pickListTeam.workedPercentage == double.negativeInfinity ? "No Data" : ("${pickListTeam.workedPercentage.toStringAsFixed(0)}%")}",
                                   ),
                                 ),
                               ],
                             ),
                             trailing: const SizedBox(),
-                            leading: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 36,
-                                  child: TextFormField(
-                                    minLines: 1,
-                                    maxLines: 1,
-                                    style: const TextStyle(fontSize: 10),
-                                    controller:
-                                        controllers[widget.screen.getIndex(
-                                      pickListTeam,
-                                    )],
-                                    keyboardType: TextInputType.number,
-                                    onFieldSubmitted: (final String value) =>
-                                        setState(() {
-                                      reorderData(
-                                        widget.screen.getIndex(
-                                          pickListTeam,
+                            leading: widget.viewMode
+                                ? const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                  )
+                                : Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: 36,
+                                        child: TextFormField(
+                                          minLines: 1,
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                          ),
+                                          controller: controllers[
+                                              widget.screen.getIndex(
+                                            pickListTeam,
+                                          )],
+                                          keyboardType: TextInputType.number,
+                                          onFieldSubmitted:
+                                              (final String value) =>
+                                                  setState(() {
+                                            reorderData(
+                                              widget.screen.getIndex(
+                                                pickListTeam,
+                                              ),
+                                              int.tryParse(value).mapNullable(
+                                                    (
+                                                      final int parsedInt,
+                                                    ) =>
+                                                        (parsedInt - 1) %
+                                                        widget.uiList.length,
+                                                  ) ??
+                                                  widget.screen.getIndex(
+                                                    pickListTeam,
+                                                  ),
+                                            );
+                                          }),
                                         ),
-                                        int.tryParse(value).mapNullable(
-                                              (final int parsedInt) =>
-                                                  (parsedInt - 1) %
-                                                  widget.uiList.length,
-                                            ) ??
-                                            widget.screen.getIndex(
-                                              pickListTeam,
-                                            ),
-                                      );
-                                    }),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      FlutterSwitch(
+                                        value: pickListTeam.taken,
+                                        activeColor: Colors.red,
+                                        inactiveColor: primaryColor,
+                                        height: 25,
+                                        width: 50,
+                                        onToggle: (final bool val) {
+                                          pickListTeam.taken = val;
+                                          widget.onReorder(widget.uiList);
+                                        },
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                FlutterSwitch(
-                                  value: pickListTeam.taken,
-                                  activeColor: Colors.red,
-                                  inactiveColor: primaryColor,
-                                  height: 25,
-                                  width: 50,
-                                  onToggle: (final bool val) {
-                                    pickListTeam.taken = val;
-                                    widget.onReorder(widget.uiList);
-                                  },
-                                ),
-                              ],
-                            ),
                           ),
                         ),
                 ),
