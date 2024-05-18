@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:flutter_typeahead/flutter_typeahead.dart";
 import "package:scouting_frontend/models/team_model.dart";
+import "package:scouting_frontend/views/common/validated_auto_coplete.dart";
 
 class TeamsSearchBox extends StatelessWidget {
   TeamsSearchBox({
@@ -19,81 +18,48 @@ class TeamsSearchBox extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: TypeAheadFormField<LightTeam>(
-          validator: (final String? selectedTeam) {
-            if (dontValidate) {
-              return null;
-            }
-            if (selectedTeam == "") {
-              return "Please pick a team";
-            }
-            return null;
-          },
-          textFieldConfiguration: TextFieldConfiguration(
-            onSubmitted: (final String number) {
-              try {
-                final LightTeam team = teams.firstWhere(
-                  (final LightTeam team) => team.number.toString() == number,
-                );
-                onChange(team);
-                typeAheadController.text = buildSuggestion(team);
-              } on StateError catch (_) {
-                //ignored
-              }
-            },
-            onTap: typeAheadController.clear,
-            controller: typeAheadController,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(),
-              hintText: "Search Team",
-            ),
-          ),
-          suggestionsCallback: (final String pattern) => teams
-              .where(
-                (final LightTeam team) =>
-                    team.number.toString().startsWith(pattern),
-              )
-              .toList()
-            ..sort(
-              (final LightTeam firstTeam, final LightTeam secondTeam) =>
-                  firstTeam.number.compareTo(secondTeam.number),
-            ),
-          itemBuilder: (final BuildContext context, final LightTeam team) =>
-              buildSuggestion(team).isNotEmpty
-                  ? ListTile(title: Text(buildSuggestion(team)))
-                  : Container(),
-          transitionBuilder: (
-            final BuildContext context,
-            final Widget suggestionsBox,
-            final AnimationController? controller,
-          ) =>
-              FadeTransition(
-            child: suggestionsBox,
-            opacity: CurvedAnimation(
-              parent: controller!,
-              curve: Curves.fastOutSlowIn,
-            ),
-          ),
-          noItemsFoundBuilder: (final BuildContext context) => Container(
-            height: 60,
-            child: const Center(
-              child: Text(
+        child: teams.isEmpty
+            ? const Text(
                 "No Teams Found",
                 style: TextStyle(fontSize: 16),
+              )
+            : ValidatedAutocomplete<LightTeam>(
+                validator: (final LightTeam? team) {
+                  final String? selectedTeam = team?.name;
+                  if (dontValidate) {
+                    return null;
+                  }
+                  if (selectedTeam == "") {
+                    return "Please pick a team";
+                  }
+                  return null;
+                },
+                onSelected: (final LightTeam team) {
+                  typeAheadController.text = buildSuggestion(team);
+                  onChange(
+                    team,
+                  );
+                },
+                decoration: const InputDecoration(
+                  hintText: "Enter Team",
+                ),
+                optionsBuilder: (final TextEditingValue textEditingValue) =>
+                    teams
+                        .where(
+                          (final LightTeam team) => team.number
+                              .toString()
+                              .startsWith(textEditingValue.text),
+                        )
+                        .toList()
+                      ..sort(
+                        (
+                          final LightTeam firstTeam,
+                          final LightTeam secondTeam,
+                        ) =>
+                            firstTeam.number.compareTo(secondTeam.number),
+                      ),
+                displayStringForOption: (final LightTeam option) =>
+                    "${option.name}  ${option.number}",
               ),
-            ),
-          ),
-          onSuggestionSelected: (final LightTeam team) {
-            typeAheadController.text = buildSuggestion(team);
-            onChange(
-              team,
-            );
-          },
-        ),
       );
 }

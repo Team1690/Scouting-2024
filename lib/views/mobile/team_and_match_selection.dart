@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
-import "package:flutter_typeahead/flutter_typeahead.dart";
 import "package:scouting_frontend/models/providers/shifts_provider.dart";
 import "package:scouting_frontend/models/schedule_match.dart";
 import "package:scouting_frontend/models/providers/matches_provider.dart";
 import "package:scouting_frontend/models/team_model.dart";
 import "package:scouting_frontend/views/common/teams_search_box.dart";
 import "package:scouting_frontend/models/providers/team_provider.dart";
+import "package:scouting_frontend/views/common/validated_auto_coplete.dart";
 import "package:scouting_frontend/views/pc/scouting_shifts/scouting_shift.dart";
 
 class TeamAndMatchSelection extends StatefulWidget {
@@ -109,82 +109,43 @@ class MatchSearchBox extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: TypeAheadFormField<ScheduleMatch>(
-          validator: (final String? selectedMatch) {
-            if (selectedMatch == "") {
-              return "Please pick a match";
-            }
-            return null;
-          },
-          textFieldConfiguration: TextFieldConfiguration(
-            onSubmitted: (final String number) {
-              try {
-                final ScheduleMatch match = matches.firstWhere(
-                  (final ScheduleMatch match) =>
-                      match.matchIdentifier.number.toString() == number,
-                );
-                onChange(match);
-                typeAheadController.text =
-                    "${match.matchIdentifier.type.title} ${match.matchIdentifier.number}";
-              } on StateError catch (_) {
-                //ignoed
-              }
-            },
-            onTap: typeAheadController.clear,
-            controller: typeAheadController,
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(),
-              hintText: "Search Match",
-            ),
-          ),
-          suggestionsCallback: (final String pattern) => matches.where(
-            (final ScheduleMatch match) =>
-                match.matchIdentifier.number.toString().startsWith(pattern),
-          ),
-          itemBuilder:
-              (final BuildContext context, final ScheduleMatch suggestion) =>
-                  ListTile(
-            title: Text(
-              "${suggestion.matchIdentifier.type.title} ${suggestion.matchIdentifier.number}",
-            ),
-          ),
-          transitionBuilder: (
-            final BuildContext context,
-            final Widget suggestionsBox,
-            final AnimationController? controller,
-          ) =>
-              FadeTransition(
-            child: suggestionsBox,
-            opacity: CurvedAnimation(
-              parent: controller!,
-              curve: Curves.fastOutSlowIn,
-            ),
-          ),
-          noItemsFoundBuilder: (final BuildContext context) => Container(
-            height: 60,
-            child: const Center(
-              child: Text(
+        child: matches.isEmpty
+            ? const Text(
                 "No Matches Found",
                 style: TextStyle(fontSize: 16),
-              ),
-            ),
-          ),
-          onSuggestionSelected: (final ScheduleMatch suggestion) {
-            typeAheadController.text =
-                "${suggestion.matchIdentifier.type.title} ${suggestion.matchIdentifier.number}";
+              )
+            : ValidatedAutocomplete<ScheduleMatch>(
+                validator: (final ScheduleMatch? selectedMatch) {
+                  if (selectedMatch == null) {
+                    return "Please pick a match";
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  hintText: "Enter Match",
+                ),
+                onSelected: (final ScheduleMatch suggestion) {
+                  typeAheadController.text =
+                      "${suggestion.matchIdentifier.type.title} ${suggestion.matchIdentifier.number}";
 
-            onChange(
-              matches[matches.indexWhere(
-                (final ScheduleMatch match) =>
-                    match.matchIdentifier.number ==
-                        suggestion.matchIdentifier.number &&
-                    match.matchIdentifier.type ==
-                        suggestion.matchIdentifier.type,
-              )],
-            );
-          },
-        ),
+                  onChange(
+                    matches[matches.indexWhere(
+                      (final ScheduleMatch match) =>
+                          match.matchIdentifier.number ==
+                              suggestion.matchIdentifier.number &&
+                          match.matchIdentifier.type ==
+                              suggestion.matchIdentifier.type,
+                    )],
+                  );
+                },
+                optionsBuilder: (final TextEditingValue textEditingValue) =>
+                    matches.where(
+                  (final ScheduleMatch match) => match.matchIdentifier.number
+                      .toString()
+                      .startsWith(textEditingValue.text),
+                ),
+                displayStringForOption: (final ScheduleMatch suggestion) =>
+                    "${suggestion.matchIdentifier.type.title} ${suggestion.matchIdentifier.number}",
+              ),
       );
 }

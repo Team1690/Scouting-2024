@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_typeahead/flutter_typeahead.dart";
+import "package:scouting_frontend/views/common/validated_auto_coplete.dart";
 
 class ScouterSearchBox extends StatelessWidget {
   const ScouterSearchBox({
@@ -15,48 +15,23 @@ class ScouterSearchBox extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => SingleChildScrollView(
-        child: TypeAheadFormField<String>(
-          hideOnEmpty: true,
-          minCharsForSuggestions: 1,
+        child: ValidatedAutocomplete<String>(
           validator: (final String? selectedScouter) =>
               selectedScouter != null && selectedScouter.isNotEmpty
                   ? null
                   : "Please enter your name",
-          textFieldConfiguration: TextFieldConfiguration(
-            onChanged: onChanged,
-            onTap: typeAheadController.clear,
-            controller: typeAheadController,
-            keyboardType: TextInputType.name,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.person),
-              border: OutlineInputBorder(),
-              hintText: "Scouter name",
-            ),
+          decoration: const InputDecoration(
+            hintText: "Enter Scouter Name",
           ),
-          onSuggestionSelected: (final String suggestion) {
+          onSelected: (final String suggestion) {
             typeAheadController.text = suggestion;
             onChanged(suggestion);
           },
-          itemBuilder: (final BuildContext context, final String suggestion) =>
-              ListTile(
-            title: Text(
-              suggestion,
-            ),
+          optionsBuilder: (final TextEditingValue textEditingValue) =>
+              scouters.where(
+            (final String element) => element.startsWith(textEditingValue.text),
           ),
-          transitionBuilder: (
-            final BuildContext context,
-            final Widget suggestionsBox,
-            final AnimationController? controller,
-          ) =>
-              FadeTransition(
-            child: suggestionsBox,
-            opacity: CurvedAnimation(
-              parent: controller!,
-              curve: Curves.fastOutSlowIn,
-            ),
-          ),
-          suggestionsCallback: (final String pattern) => scouters
-              .where((final String element) => element.startsWith(pattern)),
+          displayStringForOption: (final String scouter) => scouter,
         ),
       );
 }
