@@ -29,7 +29,8 @@ class ScouterSearchBox extends StatelessWidget {
           },
           optionsBuilder: (final TextEditingValue textEditingValue) =>
               scouters.where(
-            (final String element) => element.startsWith(textEditingValue.text),
+            (final String element) =>
+                element.toLowerCase().startsWith(textEditingValue.text),
           ),
           displayStringForOption: (final String scouter) => scouter,
         ),
