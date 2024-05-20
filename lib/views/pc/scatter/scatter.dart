@@ -122,7 +122,7 @@ class _ScatterState extends State<Scatter> {
                                             .cycleScore
                                     : e.aggregateData.avgData.cycleScore,
                                 e.aggregateData.meanDeviationData.cycleScore,
-                                color: color,
+                                dotPainter: FlDotCirclePainter(color: color),
                               ),
                             ScatterType.scored => ScatterSpot(
                                 normalize
@@ -131,7 +131,7 @@ class _ScatterState extends State<Scatter> {
                                             .gamepieces
                                     : e.aggregateData.avgData.gamepieces,
                                 e.aggregateData.meanDeviationData.gamepieces,
-                                color: color,
+                                dotPainter: FlDotCirclePainter(color: color),
                               )
                           };
                         },
@@ -150,7 +150,8 @@ class _ScatterState extends State<Scatter> {
                         enabled: true,
                         handleBuiltInTouches: true,
                         touchTooltipData: ScatterTouchTooltipData(
-                          tooltipBgColor: bgColor,
+                          getTooltipColor: (final ScatterSpot scatterSpot) =>
+                              bgColor,
                           getTooltipItems: (final ScatterSpot touchedBarSpot) =>
                               ScatterTooltipItem(
                             tooltip!,
@@ -161,10 +162,10 @@ class _ScatterState extends State<Scatter> {
                       ),
                       titlesData: FlTitlesData(
                         show: true,
-                        topTitles: AxisTitles(
+                        topTitles: const AxisTitles(
                           sideTitles: SideTitles(showTitles: false),
                         ),
-                        rightTitles: AxisTitles(
+                        rightTitles: const AxisTitles(
                           sideTitles: SideTitles(showTitles: false),
                         ),
                         bottomTitles: AxisTitles(

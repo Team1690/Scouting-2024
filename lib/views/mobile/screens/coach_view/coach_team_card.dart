@@ -20,11 +20,11 @@ class CoachTeamCard extends StatelessWidget {
         padding: const EdgeInsets.all(defaultPadding / 4),
         child: ElevatedButton(
           style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all(Size.infinite),
-            shape: MaterialStateProperty.all(
+            minimumSize: WidgetStateProperty.all(Size.infinite),
+            shape: WidgetStateProperty.all(
               const RoundedRectangleBorder(borderRadius: defaultBorderRadius),
             ),
-            backgroundColor: MaterialStateProperty.all<Color>(
+            backgroundColor: WidgetStateProperty.all<Color>(
               isBlue ? Colors.blue : Colors.red,
             ),
           ),

@@ -85,7 +85,7 @@ class MatchesScreen extends StatelessWidget {
                                       ),
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(
+                                            WidgetStateProperty.all(
                                           secondaryColor,
                                         ),
                                       ),
@@ -114,7 +114,7 @@ class MatchesScreen extends StatelessWidget {
                                       ),
                                       style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all(
+                                            WidgetStateProperty.all(
                                           secondaryColor,
                                         ),
                                       ),
