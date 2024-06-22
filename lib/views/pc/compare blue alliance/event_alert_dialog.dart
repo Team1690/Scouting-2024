@@ -55,6 +55,13 @@ class _EventAlertDialogState extends State<EventAlertDialog> {
                 onPressed: (final int i) {
                   setState(() {
                     isIsrael = !isIsrael;
+                    isIsrael
+                        ? usComp.updateAll(
+                            (final String key, bool value) => value = false,
+                          )
+                        : israelComp.updateAll(
+                            (final String key, bool value) => value = false,
+                          );
                   });
                 },
                 titles: const <String>[" Is Israel? "],
@@ -63,25 +70,27 @@ class _EventAlertDialogState extends State<EventAlertDialog> {
           ),
           isIsrael
               ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: PitToggle(
-                      onPressed: (final int index) {
-                        setState(() {
-                          israelComp.forEach(
-                            (final String key, final bool value) => !value,
-                          );
-                          final List<String> keys = israelComp.keys.toList();
-                          final String key = keys[index];
-                          israelComp[key] = !israelComp[key]!;
-                        });
-                      },
-                      isSelected: israelComp.values.toList(),
-                      titles: const <String>[
-                        " Dcmp? ",
-                        " Ios? "
-                            " District? ",
-                      ],
+                  child: Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: PitToggle(
+                        onPressed: (final int index) {
+                          setState(() {
+                            israelComp.updateAll(
+                              (final String key, bool value) => value = false,
+                            );
+                            final List<String> keys = israelComp.keys.toList();
+                            final String key = keys[index];
+                            israelComp[key] = !israelComp[key]!;
+                          });
+                        },
+                        isSelected: israelComp.values.toList(),
+                        titles: const <String>[
+                          " Dcmp? ",
+                          " Ios? ",
+                          " District? ",
+                        ],
+                      ),
                     ),
                   ),
                 )
@@ -91,12 +100,12 @@ class _EventAlertDialogState extends State<EventAlertDialog> {
                     child: PitToggle(
                       onPressed: (final int index) {
                         setState(() {
-                          usComp.forEach(
-                            (final String key, final bool value) => !value,
+                          usComp.updateAll(
+                            (final String key, bool value) => value = false,
                           );
                           final List<String> keys = usComp.keys.toList();
                           final String key = keys[index];
-                          usComp[key] = usComp[key]!;
+                          usComp[key] = !usComp[key]!;
                         });
                       },
                       isSelected: usComp.values.toList(),
@@ -108,15 +117,15 @@ class _EventAlertDialogState extends State<EventAlertDialog> {
                     ),
                   ),
                 ),
-          usComp["worlds"]!
+          usComp["worlds"]! && !isIsrael
               ? Center(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: PitToggle(
                       onPressed: (final int index) {
                         setState(() {
-                          whatSubDivision.forEach(
-                            (final String key, final bool value) => !value,
+                          whatSubDivision.updateAll(
+                            (final String key, bool value) => value = false,
                           );
                           final List<String> keys =
                               whatSubDivision.keys.toList();
@@ -147,8 +156,8 @@ class _EventAlertDialogState extends State<EventAlertDialog> {
                     child: PitToggle(
                       onPressed: (final int index) {
                         setState(() {
-                          districtNum.forEach(
-                            (final String key, final bool value) => !value,
+                          districtNum.updateAll(
+                            (final String key, bool value) => value = false,
                           );
                           final List<String> keys = districtNum.keys.toList();
                           final String key = keys[index];
