@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:scouting_frontend/views/common/navbar_tile.dart";
 import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/views/pc/compare%20blue%20alliance/blue_alliance_compare_screen.dart";
 import "package:scouting_frontend/views/pc/matches/matches_screen.dart";
 import "package:scouting_frontend/views/pc/scatter/scatters_screen.dart";
 import "package:scouting_frontend/views/pc/picklist/pick_list_screen.dart";
@@ -61,6 +62,11 @@ class NavigationTab extends StatelessWidget {
               icon: Icons.add_circle_outline,
               title: "Matches",
               widget: MatchesScreen.new,
+            ),
+            const NavbarTile(
+              icon: Icons.query_stats,
+              title: "Blue Alliance Compare",
+              widget: BlueAllianceCompareScreen.new,
             ),
           ],
         ),

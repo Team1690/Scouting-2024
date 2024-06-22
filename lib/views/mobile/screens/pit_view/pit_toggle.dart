@@ -5,25 +5,23 @@ class PitToggle extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.isSelected,
-    required this.title,
+    required this.titles,
   });
 
-  final void Function() onPressed;
-  final bool isSelected;
-  final String title;
+  final void Function(int) onPressed;
+  final List<bool> isSelected;
+  final List<String> titles;
 
   @override
   Widget build(final BuildContext context) => ToggleButtons(
+        // You know what I think of balls
         fillColor: const Color.fromARGB(10, 244, 67, 54),
         selectedColor: Colors.blue,
         selectedBorderColor: Colors.blue,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(title),
-          ),
+          ...titles.map(Text.new),
         ],
-        isSelected: <bool>[isSelected],
-        onPressed: (final int i) => onPressed(),
+        isSelected: isSelected,
+        onPressed: onPressed,
       );
 }

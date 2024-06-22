@@ -14,6 +14,7 @@ Future<List<BlueAllianceMatchData>?> getWebsiteData(final String event) async {
   final List<BlueAllianceMatchData> matchesData =
       (jsonDecode(response.body) as List<dynamic>).map((final dynamic element) {
     final dynamic alliances = element["alliances"];
+    final int matchNumber = alliances["match_number"] as int;
     final int blueNotesAutoSpeaker =
         alliances["blue"]["autoSpeakerNoteCount"] as int;
     final int redNotesAutoSpeaker =
@@ -46,6 +47,7 @@ Future<List<BlueAllianceMatchData>?> getWebsiteData(final String event) async {
         redNotesTeleAmplifiedSpeaker * 2;
 
     return BlueAllianceMatchData(
+      matchNumber: matchNumber,
       blueScore: blueScoreWithoutAmplified,
       redScore: redScoreWithoutAmplified,
       blueNotesAutoSpeaker: blueNotesAutoSpeaker,
