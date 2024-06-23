@@ -7,38 +7,42 @@ Map<String, String> headers = <String, String>{
   "X-TBA-Auth-Key":
       "tzBu6k8gHLajGvKeMNsuWEoGaqYHWmDwaKmKreYAsw0fjScxYbDKZWGvLOTPwmRX",
 };
-Future<List<BlueAllianceMatchData>?> getWebsiteData(final String event) async {
+Future<List<BlueAllianceMatchData>?> getWebsiteData(
+  final String event,
+) async {
   final Uri url =
       Uri.parse("https://www.thebluealliance.com/api/v3/event/$event/matches");
   final http.Response response = await http.get(url, headers: headers);
   final List<BlueAllianceMatchData> matchesData =
       (jsonDecode(response.body) as List<dynamic>).map((final dynamic element) {
-    final dynamic alliances = element["alliances"];
-    final int matchNumber = alliances["match_number"] as int;
+    final dynamic scoreBreakdown = element["score_breakdown"] as dynamic;
+    final int matchNumber = element["match_number"] as int;
     final int blueNotesAutoSpeaker =
-        alliances["blue"]["autoSpeakerNoteCount"] as int;
+        scoreBreakdown["blue"]["autoSpeakerNoteCount"] as int;
     final int redNotesAutoSpeaker =
-        alliances["red"]["autoSpeakerNoteCount"] as int;
-    final int blueNotesTeleAmp = alliances["blue"]["teleopAmpNoteCount"] as int;
-    final int redNotesTeleAmp = alliances["red"]["teleopAmpNoteCount"] as int;
+        scoreBreakdown["red"]["autoSpeakerNoteCount"] as int;
+    final int blueNotesTeleAmp =
+        scoreBreakdown["blue"]["teleopAmpNoteCount"] as int;
+    final int redNotesTeleAmp =
+        scoreBreakdown["red"]["teleopAmpNoteCount"] as int;
     final int blueNotesTeleAmplifiedSpeaker =
-        alliances["blue"]["teleopSpeakerNoteAmplifiedCount"] as int;
+        scoreBreakdown["blue"]["teleopSpeakerNoteAmplifiedCount"] as int;
     final int blueNotesTeleSpeaker =
-        alliances["blue"]["teleopSpeakerNoteCount"] as int;
+        scoreBreakdown["blue"]["teleopSpeakerNoteCount"] as int;
     final int totalBlueNotesTeleSpeaker =
         blueNotesTeleSpeaker + blueNotesTeleAmplifiedSpeaker;
     final int redNotesTeleAmplifiedSpeaker =
-        alliances["red"]["teleopSpeakerNoteAmplifiedCount"] as int;
+        scoreBreakdown["red"]["teleopSpeakerNoteAmplifiedCount"] as int;
     final int redNotesTeleSpeaker =
-        alliances["red"]["teleopSpeakerNoteCount"] as int;
+        scoreBreakdown["red"]["teleopSpeakerNoteCount"] as int;
     final int totalRedNotesTeleSpeaker =
         redNotesTeleSpeaker + redNotesTeleAmplifiedSpeaker;
     final int blueTeleopSpeakerNoteAmplifiedPoints =
-        alliances["blue"]["teleopSpeakerNoteAmplifiedPoints"] as int;
+        scoreBreakdown["blue"]["teleopSpeakerNoteAmplifiedPoints"] as int;
     final int redTeleopSpeakerNoteAmplifiedPoints =
-        alliances["red"]["teleopSpeakerNoteAmplifiedPoints"] as int;
-    final int blueScore = alliances["blue"]["score"] as int;
-    final int redScore = alliances["red"]["score"] as int;
+        scoreBreakdown["red"]["teleopSpeakerNoteAmplifiedPoints"] as int;
+    final int blueScore = element["alliances"]["blue"]["score"] as int;
+    final int redScore = element["alliances"]["red"]["score"] as int;
     final int blueScoreWithoutAmplified = blueScore -
         blueTeleopSpeakerNoteAmplifiedPoints +
         blueNotesTeleAmplifiedSpeaker * 2;
