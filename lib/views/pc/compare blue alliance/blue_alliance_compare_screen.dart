@@ -1,12 +1,10 @@
 import "package:flutter/material.dart";
-import "package:scouting_frontend/models/providers/id_providers.dart";
-import "package:scouting_frontend/models/schedule_match.dart";
-import "package:scouting_frontend/net/fetch_matches.dart";
 import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/card.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
+import "package:scouting_frontend/views/pc/compare%20blue%20alliance/blue_alliance_match.dart";
 import "package:scouting_frontend/views/pc/compare%20blue%20alliance/blue_alliance_match_data.dart";
-import "package:scouting_frontend/views/pc/compare%20blue%20alliance/event_alert_dialog.dart";
+import "package:scouting_frontend/views/pc/status/edit_technical_match.dart";
 
 class BlueAllianceCompareScreen extends StatelessWidget {
   @override
@@ -30,11 +28,12 @@ class BlueAllianceCompareScreen extends StatelessWidget {
               icon: const Icon(Icons.query_stats),
             ),
           ],
-          body: StreamBuilder<List<ScheduleMatch>>(
-            stream: fetchMatchesSubscription(IdProvider.of(context).matchType),
+          body: StreamBuilder<List<(BlueAllianceMatchData, List<String>)>>(
+            stream: fetchAlliancesMatch(context),
             builder: (
               final BuildContext context,
-              final AsyncSnapshot<List<ScheduleMatch>> snapshot,
+              final AsyncSnapshot<List<(BlueAllianceMatchData, List<String>)>>
+                  snapshot,
             ) =>
                 snapshot.mapSnapshot(
               onWaiting: () => const Center(
@@ -44,7 +43,9 @@ class BlueAllianceCompareScreen extends StatelessWidget {
               onNoData: () => const Center(
                 child: Text("No data"),
               ),
-              onSuccess: (final List<ScheduleMatch> data) => const Center(),
+              onSuccess:
+                  (final List<(BlueAllianceMatchData, List<String>)> data) =>
+                      const Center(),
             ),
           ),
         ),

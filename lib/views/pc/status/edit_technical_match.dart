@@ -8,6 +8,7 @@ import "package:scouting_frontend/net/hasura_helper.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
 import "package:scouting_frontend/views/mobile/screens/input_view/input_view.dart";
+import "package:scouting_frontend/views/pc/compare%20blue%20alliance/blue_alliance_match_data.dart";
 
 class EditTechnicalMatch extends StatelessWidget {
   const EditTechnicalMatch({
@@ -143,3 +144,112 @@ Future<InputViewVars> fetchTechnicalMatch(
   );
   return result.mapQueryResult();
 }
+
+String subscription = """
+subscription technical_matches {
+  schedule_matches {
+    technical_matches {
+      auto_amp
+      auto_speaker
+      scouter_name
+      tele_amp
+      tele_speaker
+    }
+    match_number
+  }
+}
+""";
+
+Stream<List<(BlueAllianceMatchData, List<String>)>> fetchAlliancesMatch(
+  final BuildContext context,
+) =>
+    getClient()
+        .subscribe(
+          SubscriptionOptions<List<(BlueAllianceMatchData, List<String>)>>(
+            document: gql(subscription),
+            parserFn: (final Map<String, dynamic> data) {
+              final List<dynamic> scheduleMatches =
+                  data["schedule_matches"] as List<dynamic>;
+
+              return scheduleMatches.where((scheduleMatch) {
+                final List<dynamic> technicalMatches =
+                    scheduleMatch["technical_matches"] as List<dynamic>;
+                return technicalMatches.length == 6;
+              }).map((final scheduleMatch) {
+                final List<dynamic> technicalMatches =
+                    scheduleMatch["technical_matches"] as List<dynamic>;
+
+                final int teleAmpBlue0 = technicalMatches[0]["tele_amp"] as int;
+                final int teleAmpBlue1 = technicalMatches[1]["tele_amp"] as int;
+                final int teleAmpBlue2 = technicalMatches[2]["tele_amp"] as int;
+                final int teleAmpBlue =
+                    teleAmpBlue0 + teleAmpBlue1 + teleAmpBlue2;
+                final int teleAmpRede3 = technicalMatches[3]["tele_amp"] as int;
+                final int teleAmpRed4 = technicalMatches[4]["tele_amp"] as int;
+                final int teleAmpRed5 = technicalMatches[5]["tele_amp"] as int;
+                final int teleAmpRed = teleAmpRede3 + teleAmpRed4 + teleAmpRed5;
+                final int autoSpeakerBlue0 =
+                    technicalMatches[0]["auto_speaker"] as int;
+                final int autoSpeakerBlue1 =
+                    technicalMatches[1]["auto_speaker"] as int;
+                final int autoSpeakerBlue2 =
+                    technicalMatches[2]["auto_speaker"] as int;
+                final int autoSpeakerBlue =
+                    autoSpeakerBlue0 + autoSpeakerBlue1 + autoSpeakerBlue2;
+                final int autoSpeakerRed3 =
+                    technicalMatches[3]["auto_speaker"] as int;
+                final int autoSpeakerRed4 =
+                    technicalMatches[4]["auto_speaker"] as int;
+                final int autoSpeakerRed5 =
+                    technicalMatches[5]["auto_speaker"] as int;
+                final int autoSpeakerRed =
+                    autoSpeakerRed3 + autoSpeakerRed4 + autoSpeakerRed5;
+                final int teleSpeakerblue0 =
+                    technicalMatches[0]["tele_speaker"] as int;
+                final int teleSpeakerBlue1 =
+                    technicalMatches[1]["tele_speaker"] as int;
+                final int teleSpeakerBlue2 =
+                    technicalMatches[2]["tele_speaker"] as int;
+                final int teleSpeakerBlue =
+                    teleSpeakerblue0 + teleSpeakerBlue1 + teleSpeakerBlue2;
+                final int teleSpeakerRed3 =
+                    technicalMatches[3]["tele_speaker"] as int;
+                final int teleSpeakerRed4 =
+                    technicalMatches[4]["tele_speaker"] as int;
+                final int teleSpeakerRed5 =
+                    technicalMatches[5]["tele_speaker"] as int;
+                final int teleSpeakerRed =
+                    teleSpeakerRed3 + teleSpeakerRed4 + teleSpeakerRed5;
+                final List<String> scouterName = technicalMatches
+                    .map(
+                      (final dynamic match) => match["scouter_name"] as String,
+                    )
+                    .toList();
+                final int matchNumber = scheduleMatch["match_number"] as int;
+                return (
+                  BlueAllianceMatchData(
+                    blueScore:
+                        teleAmpBlue + (teleSpeakerBlue + autoSpeakerBlue) * 2,
+                    redScore:
+                        (teleSpeakerRed + autoSpeakerRed) * 2 + teleAmpRed,
+                    blueNotesAutoSpeaker: autoSpeakerBlue,
+                    redNotesAutoSpeaker: autoSpeakerRed,
+                    blueNotesTeleAmp: teleAmpBlue,
+                    redNotesTeleAmp: teleAmpRed,
+                    totalBlueNotesTeleSpeaker: teleSpeakerBlue,
+                    totalRedNotesTeleSpeaker: teleSpeakerRed,
+                    matchNumber: matchNumber,
+                  ),
+                  scouterName,
+                );
+              }).toList();
+            },
+          ),
+        )
+        .map(
+          (
+            final QueryResult<List<(BlueAllianceMatchData, List<String>)>>
+                event,
+          ) =>
+              event.mapQueryResult(),
+        );

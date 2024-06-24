@@ -7,15 +7,14 @@ Map<String, String> headers = <String, String>{
   "X-TBA-Auth-Key":
       "tzBu6k8gHLajGvKeMNsuWEoGaqYHWmDwaKmKreYAsw0fjScxYbDKZWGvLOTPwmRX",
 };
-Future<List<BlueAllianceMatchData>?> getWebsiteData(
-  final String event,
-) async {
+Future<List<BlueAllianceMatchData>?> getWebsiteData(final String? event) async {
   final Uri url =
       Uri.parse("https://www.thebluealliance.com/api/v3/event/$event/matches");
   final http.Response response = await http.get(url, headers: headers);
   final List<BlueAllianceMatchData> matchesData =
       (jsonDecode(response.body) as List<dynamic>).map((final dynamic element) {
-    final dynamic scoreBreakdown = element["score_breakdown"] as dynamic;
+    final dynamic alliances = element["alliances"];
+    final dynamic scoreBreakdown = element["score_breakdown"];
     final int matchNumber = element["match_number"] as int;
     final int blueNotesAutoSpeaker =
         scoreBreakdown["blue"]["autoSpeakerNoteCount"] as int;
@@ -41,8 +40,8 @@ Future<List<BlueAllianceMatchData>?> getWebsiteData(
         scoreBreakdown["blue"]["teleopSpeakerNoteAmplifiedPoints"] as int;
     final int redTeleopSpeakerNoteAmplifiedPoints =
         scoreBreakdown["red"]["teleopSpeakerNoteAmplifiedPoints"] as int;
-    final int blueScore = element["alliances"]["blue"]["score"] as int;
-    final int redScore = element["alliances"]["red"]["score"] as int;
+    final int blueScore = alliances["blue"]["score"] as int;
+    final int redScore = alliances["red"]["score"] as int;
     final int blueScoreWithoutAmplified = blueScore -
         blueTeleopSpeakerNoteAmplifiedPoints +
         blueNotesTeleAmplifiedSpeaker * 2;

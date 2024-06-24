@@ -81,34 +81,31 @@ class _EventAlertDialogState extends State<EventAlertDialog> {
             ),
             isIsrael
                 ? Center(
-                    child: Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: PitToggle(
-                          onPressed: (final int index) {
-                            setState(() {
-                              !israelComp["de"]!
-                                  ? districtNum.updateAll(
-                                      (final String key, bool value) =>
-                                          value = false,
-                                    )
-                                  : null;
-                              israelComp.updateAll(
-                                (final String key, bool value) => value = false,
-                              );
-                              final List<String> keys =
-                                  israelComp.keys.toList();
-                              final String key = keys[index];
-                              israelComp[key] = !israelComp[key]!;
-                            });
-                          },
-                          isSelected: israelComp.values.toList(),
-                          titles: const <String>[
-                            " Dcmp? ",
-                            " Ios? ",
-                            " District? ",
-                          ],
-                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: PitToggle(
+                        onPressed: (final int index) {
+                          setState(() {
+                            !israelComp["de"]!
+                                ? districtNum.updateAll(
+                                    (final String key, bool value) =>
+                                        value = false,
+                                  )
+                                : null;
+                            israelComp.updateAll(
+                              (final String key, bool value) => value = false,
+                            );
+                            final List<String> keys = israelComp.keys.toList();
+                            final String key = keys[index];
+                            israelComp[key] = !israelComp[key]!;
+                          });
+                        },
+                        isSelected: israelComp.values.toList(),
+                        titles: const <String>[
+                          " Dcmp? ",
+                          " Ios? ",
+                          " District? ",
+                        ],
                       ),
                     ),
                   )
