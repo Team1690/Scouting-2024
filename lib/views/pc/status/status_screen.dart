@@ -1,10 +1,12 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:scouting_frontend/models/data/team_data/team_data.dart";
 import "package:scouting_frontend/models/data/team_match_data.dart";
 import "package:scouting_frontend/models/enums/match_type_enum.dart";
 import "package:scouting_frontend/views/common/dashboard_scaffold.dart";
 import "package:scouting_frontend/views/constants.dart";
+import "package:scouting_frontend/views/pc/compare%20blue%20alliance/blue_alliance_compare_screen.dart";
 import "package:scouting_frontend/views/pc/matches/delete.dart";
 import "package:scouting_frontend/views/pc/status/edit_technical_match.dart";
 import "package:scouting_frontend/views/pc/status/widgets/status_list.dart";
@@ -118,9 +120,16 @@ class _StatusScreenState extends State<StatusScreen> {
                         context,
                         MaterialPageRoute<void>(
                           builder: (final BuildContext context) =>
-                              TeamInfoScreen(initialTeam: data.team),
+                              BlueAllianceCompareScreen(),
                         ),
                       );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute<void>(
+                      //     builder: (final BuildContext context) =>
+                      //         TeamInfoScreen(initialTeam: data.team),
+                      //   ),
+                      // );
                     },
                     onDoubleTap: () {
                       Navigator.push(
@@ -167,16 +176,17 @@ class _StatusScreenState extends State<StatusScreen> {
                                   : Colors.red,
                             ),
                           ),
-                          if (!isSpecific)
-                            Text(
-                              data.technicalMatchData!.data.gamePiecesPoints
-                                  .toString(),
-                              style: TextStyle(
-                                color: data.isBlueAlliance
-                                    ? Colors.blue
-                                    : Colors.red,
-                              ),
-                            ),
+                          !isSpecific
+                              ? Text(
+                                  data.technicalMatchData!.data.gamePiecesPoints
+                                      .toString(),
+                                  style: TextStyle(
+                                    color: data.isBlueAlliance
+                                        ? Colors.blue
+                                        : Colors.red,
+                                  ),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),

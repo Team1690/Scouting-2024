@@ -6,9 +6,11 @@ class BlueAllianceMatchData {
     required this.redNotesAutoSpeaker,
     required this.blueNotesTeleAmp,
     required this.redNotesTeleAmp,
-    required this.totalBlueNotesTeleSpeaker,
-    required this.totalRedNotesTeleSpeaker,
+    required this.blueNotesTeleSpeaker,
+    required this.redNotesTeleSpeaker,
     required this.matchNumber,
+    required this.blueNotesSpeaker,
+    required this.redNotesSpeaker,
   });
   final int blueScore;
   final int redScore;
@@ -16,7 +18,9 @@ class BlueAllianceMatchData {
   final int redNotesAutoSpeaker;
   final int blueNotesTeleAmp;
   final int redNotesTeleAmp;
-  final int totalBlueNotesTeleSpeaker;
-  final int totalRedNotesTeleSpeaker;
+  final int blueNotesTeleSpeaker;
+  final int redNotesTeleSpeaker;
   final int matchNumber;
+  final int blueNotesSpeaker;
+  final int redNotesSpeaker;
 }

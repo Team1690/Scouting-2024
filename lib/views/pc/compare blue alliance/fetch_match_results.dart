@@ -26,16 +26,16 @@ Future<List<BlueAllianceMatchData>?> getWebsiteData(final String? event) async {
         scoreBreakdown["red"]["teleopAmpNoteCount"] as int;
     final int blueNotesTeleAmplifiedSpeaker =
         scoreBreakdown["blue"]["teleopSpeakerNoteAmplifiedCount"] as int;
-    final int blueNotesTeleSpeaker =
+    final int blueNotesTeleSpeakerWithoutAmplified =
         scoreBreakdown["blue"]["teleopSpeakerNoteCount"] as int;
-    final int totalBlueNotesTeleSpeaker =
-        blueNotesTeleSpeaker + blueNotesTeleAmplifiedSpeaker;
+    final int blueNotesTeleSpeaker =
+        blueNotesTeleSpeakerWithoutAmplified + blueNotesTeleAmplifiedSpeaker;
     final int redNotesTeleAmplifiedSpeaker =
         scoreBreakdown["red"]["teleopSpeakerNoteAmplifiedCount"] as int;
-    final int redNotesTeleSpeaker =
+    final int redNotesTeleSpeakerWithoutAmplified =
         scoreBreakdown["red"]["teleopSpeakerNoteCount"] as int;
-    final int totalRedNotesTeleSpeaker =
-        redNotesTeleSpeaker + redNotesTeleAmplifiedSpeaker;
+    final int redNotesTeleSpeaker =
+        redNotesTeleSpeakerWithoutAmplified + redNotesTeleAmplifiedSpeaker;
     final int blueTeleopSpeakerNoteAmplifiedPoints =
         scoreBreakdown["blue"]["teleopSpeakerNoteAmplifiedPoints"] as int;
     final int redTeleopSpeakerNoteAmplifiedPoints =
@@ -48,6 +48,8 @@ Future<List<BlueAllianceMatchData>?> getWebsiteData(final String? event) async {
     final int redScoreWithoutAmplified = redScore -
         redTeleopSpeakerNoteAmplifiedPoints +
         redNotesTeleAmplifiedSpeaker * 2;
+    final int blueNotesSpeaker = blueNotesTeleSpeaker + blueNotesAutoSpeaker;
+    final int redNotesSpeaker = redNotesTeleSpeaker + redNotesAutoSpeaker;
 
     return BlueAllianceMatchData(
       matchNumber: matchNumber,
@@ -57,8 +59,10 @@ Future<List<BlueAllianceMatchData>?> getWebsiteData(final String? event) async {
       redNotesAutoSpeaker: redNotesAutoSpeaker,
       blueNotesTeleAmp: blueNotesTeleAmp,
       redNotesTeleAmp: redNotesTeleAmp,
-      totalBlueNotesTeleSpeaker: totalBlueNotesTeleSpeaker,
-      totalRedNotesTeleSpeaker: totalRedNotesTeleSpeaker,
+      blueNotesTeleSpeaker: blueNotesTeleSpeaker,
+      redNotesTeleSpeaker: redNotesTeleSpeaker,
+      blueNotesSpeaker: blueNotesSpeaker,
+      redNotesSpeaker: redNotesSpeaker,
     );
   }).toList();
   return matchesData;
